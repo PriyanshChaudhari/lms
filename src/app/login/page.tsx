@@ -1,7 +1,8 @@
 "use client"
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import React from 'react'
+import React, { useState, ChangeEvent } from 'react'
+
 
 
 const LoginPage = () => {
@@ -10,55 +11,92 @@ const LoginPage = () => {
         password: ""
     })
 
-    const onLogin = async () => {
-
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
     }
+    
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setUser({
+            ...user,
+            [e.target.name]: e.target.value,
+        });
+    }
+
     return (
-        <div className="flex items-center justify-center min-h-screen  dark:bg-gradient-to-r dark:from-slate-900 via-slate-500 to-slate-900">
-            <div className="bg-neutral-900 p-10 rounded-[0.5rem] shadow-custom shadow-blue-800">
-                <form className="space-y-6 text-white">
-                    <div className='text-5xl font-semibold'>Login,</div>
-                    <div>
-                        <label className="block mb-2 text-lg font-medium text-slate-100" htmlFor="username">
-                            Username
-                        </label>
-                        <input
-                            className="w-full px-3 py-2 border rounded-lg text-black font-medium focus:outline-none focus:ring-1 focus:ring-slate-200 focus:border-transparent"
-                            type="text"
-                            name="username"
-                            id="username"
-                            value={user.username}
-                            onChange={(e) => setUser({ ...user, username: e.target.value })}
-                            placeholder='username'
-                            required
-                        />
+
+        <div className="font-rubik flex justify-center items-center min-h-screen bg-gradient-to-r from-gray-100 via-gray-300 to-gray-100 dark:from-slate-900 dark:via-slate-500 dark:to-slate-900" style={{ paddingTop: '2rem', marginTop: '4rem' }}>
+
+                <div className='flex-row flex-wrap justify-center my-auto '>
+                    <div className="flex-row dark:bg-neutral-900 dark:shadow-blue-800 rounded-[0.5rem] shadow-custom dark:shadow-custom bg-[#ffffff] sm:m-2" style={{ position: 'relative', padding: '4rem', width: '100%', minWidth: '20rem', marginBottom: '3rem' }}>
+                        <div className="head text-xl sm:text-4xl  font-bold flex justify-center mb-8 text-gray-900 dark:text-gray-200">
+                            Login your Account
+                        </div>
+
+                        <div className="sub-head text-sm flex-col flex-wrap">
+                            <div style={{ maxWidth: '20rem', margin: '0 auto' }}>
+                                <div style={{ marginBottom: '1.2rem' }}>
+                                    <label htmlFor="fname" className='text-gray-900 dark:text-gray-200' style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500',  marginBottom: '0.5rem' }}>
+                                        Enter Username <span style={{ color: '#ef4444' }}>*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="fname"
+                                        className='bg-gray-200 dark:bg-gray-300 text-gray-900'
+                                        name="username"
+                                        value={user.username}
+                                        onChange={handleChange}
+                                        style={{ width: '100%', padding: '0.75rem', border: '1px solid #d1d5db', borderRadius: '0.375rem', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)', fontSize: '0.875rem', outline: 'none', transition: 'border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out' }}
+                                        placeholder="Enter Your Username"
+                                        required
+                                    />
+                                </div>
+
+
+                                <div style={{ marginBottom: '1.2rem' }}>
+                                    <label htmlFor="lname" className='text-gray-900 dark:text-gray-200' style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem' }}>
+                                        Password  <span style={{ color: '#ef4444' }}>*</span>
+                                    </label>
+                                    <input
+                                        type="password"
+                                        id="password"
+                                        name="password"
+                                        className='bg-gray-200 dark:bg-gray-300 text-gray-900'
+                                        value={user.password}
+                                        onChange={handleChange}
+                                        style={{ width: '100%', padding: '0.75rem', border: '1px solid #d1d5db', borderRadius: '0.375rem', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)', fontSize: '0.875rem', outline: 'none', transition: 'border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out' }}
+                                        placeholder="Enter Password"
+                                        required
+                                    />
+
+                                </div>
+
+                                <div style={{ marginBottom: '1.2rem' }}>
+                                    <Link href='/forgot-password' className='text-red-600 text-right font-medium'>forgot password?</Link>
+                                
+                                </div>
+
+
+                            </div>
+
+                           
+
+                            <div className='mt-2 mx-3'>
+                                <button
+                                  className='bg-blue-500'
+                                    type="submit"
+                                   onClick={handleSubmit}   
+                                    style={{ width: '100%', padding: '0.75rem', color: '#ffffff', borderRadius: '0.375rem', fontSize: '0.875rem', fontWeight: '500', cursor: 'pointer', transition: 'background-color 0.2s ease-in-out' }}
+                                >
+                                    Submit
+                                </button>
+                            </div>
+
+                        </div>
                     </div>
-                    <div>
-                        <label className="block mb-2 text-lg font-medium text-slate-100" htmlFor="password">
-                            Password
-                        </label>
-                        <input
-                            className="w-full px-3 py-2 border rounded-lg text-black font-medium focus:outline-none focus:ring-1 focus:ring-slate-200 focus:border-transparent"
-                            type="password"
-                            name="password"
-                            id="password"
-                            value={user.password}
-                            onChange={(e) => setUser({ ...user, password: e.target.value })}
-                            placeholder='password'
-                            required
-                        />
-                    </div>
-                    <div className='text-right hover:text-slate-400'>
-                        <Link href='/forgot-password'>Forgot Password?</Link>
-                    </div>
-                    <div className="flex items-center justify-between">
-                        <Button onClick={onLogin} variant="outline" type="submit" className='transition-all duration-300 ease-in-out'>
-                            Login
-                        </Button>
-                    </div>
-                </form>
-            </div >
-        </div >
+
+
+                </div>
+            </div>
 
     )
 }
