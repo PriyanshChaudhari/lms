@@ -32,7 +32,7 @@ const Navbar: React.FC = () => {
       <div className="mx-auto text-center flex w-5/6 justify-between font-bold text-black dark:text-white">
     
         <div className="text-3xl space-x-1  sm:text-2xl font-extrabold">
-          Yatharth
+          Moodle
         </div>
 
         <div className="hidden sm:flex space-x-10 items-center gap-6 text-md font-semibold">
