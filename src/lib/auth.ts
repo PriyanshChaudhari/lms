@@ -2,7 +2,7 @@
 
 import bcrypt from 'bcrypt';
 // import { getFirestore } from 'firebase-admin/firestore';
-import { db } from '@/firebase/firebaseConfig';
+import { db } from '@/lib/firebase';
 import { doc, getDoc } from "firebase/firestore";
 
 // Initialize Firestore
@@ -21,7 +21,7 @@ export async function signInWithPRN(prn: string, password: string) {
             console.log('No user found with PRN:', prn);
             return null;
         }
-        
+
         const userData = userDoc.data();
         if (!userData) {
             console.log('User data is missing.');
@@ -33,7 +33,7 @@ export async function signInWithPRN(prn: string, password: string) {
         const storedPasswordHash = userData.passwordHash;
 
         console.log("Stored password hash: ", storedPasswordHash);
-        
+
         // Validate the password
         if (storedPasswordHash && await bcrypt.compare(password, storedPasswordHash)) {
             return {

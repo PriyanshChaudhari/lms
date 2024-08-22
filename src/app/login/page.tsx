@@ -11,7 +11,7 @@ const LoginPage = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-    
+
         try {
             const res = await fetch('/api/auth/signIn', {
                 method: 'POST',
@@ -23,10 +23,10 @@ const LoginPage = () => {
                     password: user.password,
                 }),
             });
-    
             if (res.ok) {
                 const data = await res.json();
                 console.log('User signed in:', data.user);
+                localStorage.setItem('authToken', data.token);
                 window.location.href = '/';
             } else {
                 const data = await res.json();
@@ -37,7 +37,7 @@ const LoginPage = () => {
             alert('An unexpected error occurred');
         }
     };
-    
+
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setUser({
@@ -50,14 +50,15 @@ const LoginPage = () => {
         <div className="font-rubik flex justify-center items-center min-h-screen bg-gradient-to-r from-gray-100 via-gray-300 to-gray-100 dark:from-slate-900 dark:via-slate-500 dark:to-slate-900" style={{ paddingTop: '2rem', marginTop: '4rem' }}>
             <div className='flex-row flex-wrap justify-center my-auto '>
                 <div className="flex-row dark:bg-neutral-900 dark:shadow-blue-800 rounded-[0.5rem] shadow-custom dark:shadow-custom bg-[#ffffff] sm:m-2" style={{ position: 'relative', padding: '4rem', width: '100%', minWidth: '20rem', marginBottom: '3rem' }}>
-                    <div className="head text-xl sm:text-4xl  font-bold flex justify-center mb-8 text-gray-900 dark:text-gray-200">
-                        Login your Account
+                    <div className="head text-xl sm:text-4xl  font-bold flex justify-between mb-8 text-gray-900 dark:text-gray-200 ">
+                        Log in
+                        <div>icon</div>
                     </div>
 
                     <div className="sub-head text-sm flex-col flex-wrap">
                         <div style={{ maxWidth: '20rem', margin: '0 auto' }}>
                             <div style={{ marginBottom: '1.2rem' }}>
-                                <label htmlFor="prn" className='text-gray-900 dark:text-gray-200' style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500',  marginBottom: '0.5rem' }}>
+                                <label htmlFor="prn" className='text-gray-900 dark:text-gray-200' style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem' }}>
                                     Enter prn <span style={{ color: '#ef4444' }}>*</span>
                                 </label>
                                 <input
@@ -95,7 +96,7 @@ const LoginPage = () => {
                             </div>
                         </div>
 
-                        <div className='mt-2 mx-3'>
+                        <div className='mt-2 '>
                             <button
                                 className='bg-blue-500'
                                 type="submit"

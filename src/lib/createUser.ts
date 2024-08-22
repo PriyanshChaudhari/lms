@@ -1,4 +1,4 @@
-import { db } from "@/firebase/firebaseConfig";
+import { db } from "@/firebase/firebase";
 import { doc, setDoc } from "firebase/firestore";
 import bcrypt from "bcrypt";
 
