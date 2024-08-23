@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 export async function POST(request: Request) {
     try {
         const { prn, password } = await request.json();
-        console.log("Received PRN: " + prn + ", Password: " + password);
+        console.log("Received PRN: " + prn + ", Password: " + password + "by user");
 
         // Validate inputs
         if (!prn || !password) {

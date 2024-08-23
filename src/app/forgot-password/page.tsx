@@ -1,17 +1,38 @@
-"use client"
-import { useState, FormEvent } from 'react';
-import { sendPasswordReset } from '@/lib/auth';
+"use client";
+import { useState } from 'react';
 
-const ForgotPassword = () => {
+export default function ForgotPassword() {
     const [username, setUsername] = useState<string>('');
     const [message, setMessage] = useState<string>('');
 
-    const handleSubmit = async (e: FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Await the result of sendPasswordReset and set the message
-        const resultMessage = await sendPasswordReset(username);
-        setMessage(resultMessage);
+
+        try {
+            const response = await fetch('/api/auth/request-password-reset', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ prn: username }),
+            });
+
+            // Check if the response is OK and handle accordingly
+            if (!response.ok) {
+                const errorText = await response.text(); // Use text() to handle cases where JSON might be missing
+                const errorMessage = errorText || 'An error occurred';
+                setMessage(errorMessage);
+                return;
+            }
+
+            const data = await response.json();
+            setMessage(data.message);
+        } catch (error) {
+            console.error('Error handling submit:', error);
+            setMessage('An error occurred while processing your request.');
+        }
     };
+
 
     return (
         <div>
@@ -30,6 +51,4 @@ const ForgotPassword = () => {
             {message && <p>{message}</p>}
         </div>
     );
-};
-
-export default ForgotPassword;
+}

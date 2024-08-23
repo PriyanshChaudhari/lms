@@ -46,7 +46,6 @@ export async function signInWithPRN(prn: string, password: string) {
 }
 
 // Create a function to handle sending the password reset email:
-// services/authService.ts
 import { auth } from './firebaseConfig';
 import { sendPasswordResetEmail } from 'firebase/auth';
 

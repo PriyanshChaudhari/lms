@@ -25,9 +25,9 @@ const LoginPage = () => {
             });
             if (res.ok) {
                 const data = await res.json();
-                console.log('User signed in:', data.user);
+                console.log('User signed in:', data.message);
                 localStorage.setItem('authToken', data.token);
-                window.location.href = '/';
+                // window.location.href = '/';
             } else {
                 const data = await res.json();
                 alert(data.message || 'Sign-in failed');
