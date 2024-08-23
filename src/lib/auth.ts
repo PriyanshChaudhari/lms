@@ -1,8 +1,6 @@
-// lib/auth.ts
-
 import bcrypt from 'bcrypt';
 // import { getFirestore } from 'firebase-admin/firestore';
-import { db } from '@/lib/firebase';
+import { db } from '@/lib/firebaseConfig';
 import { doc, getDoc } from "firebase/firestore";
 
 // Initialize Firestore
@@ -49,3 +47,4 @@ export async function signInWithPRN(prn: string, password: string) {
         return null;
     }
 }
+
