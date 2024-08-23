@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { BsSun, BsMoon } from 'react-icons/bs'
 import LogoutButton from '@/components/ui/logoutButton'
+import { ModeToggle } from '../Theme/toggleTheme'
 
 const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -41,14 +42,15 @@ const Navbar: React.FC = () => {
           <Link href="#about" className="hover:text-gray-500 dark:hover:text-gray-300 text-black dark:text-gray-200">About</Link>
           <Link href="#contact" className="hover:text-gray-500 dark:hover:text-gray-300 text-black dark:text-gray-200">Contact</Link>
           <Link href="#notifications" className="hover:text-gray-500 dark:hover:text-gray-300 text-black dark:text-gray-200">Notifications</Link>
-          <Link
+          {/* <Link
             href="#"
             onClick={toggleDarkMode}
 
             className={`transition ease-in-out duration-300 rounded-md  ${isDarkMode ? 'text-gray-200' : 'text-black'}`}
           >
             {isDarkMode ? <BsSun className='text-xl' /> : <BsMoon className='text-xl' />}
-          </Link>
+          </Link> */}
+          <ModeToggle />
           <LogoutButton />
         </div>
 
@@ -76,14 +78,16 @@ const Navbar: React.FC = () => {
               <Link href="#notifications" className="block p-4 text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>Notifications</Link>
             </li>
             <li className=' flex justify-center'>
-              <Link
+              {/* <Link
                 href="#"
                 onClick={toggleDarkMode}
 
                 className={`transition ease-in-out duration-300 rounded-md  ${isDarkMode ? 'text-gray-200' : 'text-black'}`}
               >
                 {isDarkMode ? <BsSun className='text-xl' /> : <BsMoon className='text-xl' />}
-              </Link>
+              </Link> */}
+              <ModeToggle />
+
             </li>
           </ul>
         </div>

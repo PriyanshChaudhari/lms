@@ -1,3 +1,4 @@
+import Navbar from "@/components/Navbar/navbar";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import Image from "next/image";
