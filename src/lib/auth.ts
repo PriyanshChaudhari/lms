@@ -4,16 +4,16 @@ import { db } from '@/lib/firebaseConfig';
 import { doc, getDoc } from "firebase/firestore";
 
 // Assume a function to verify the PRN and password with Firestore
-export async function signInWithPRN(prn: string, password: string) {
+export async function signInWithPRN(userId: string, password: string) {
     try {
-        // // Retrieve the user document by PRN
-        // const userDoc = await db.collection('users').doc(prn).get();
-        const userDocRef = doc(db, "users", prn);
+        // // Retrieve the user document by userId
+        // const userDoc = await db.collection('users').doc(userId).get();
+        const userDocRef = doc(db, "users", userId);
         const userDoc = await getDoc(userDocRef);
 
 
         if (!userDoc.exists) {
-            console.log('No user found with PRN:', prn);
+            console.log('No user found with userId:', userId);
             return null;
         }
 
@@ -24,7 +24,7 @@ export async function signInWithPRN(prn: string, password: string) {
         }
 
         const userEmail = userData.email;
-        const userPRN = userData.prn;
+        const userIdFromDB = userDoc.id;
         const storedPasswordHash = userData.passwordHash;
 
         console.log("Stored password hash: ", storedPasswordHash);
@@ -32,7 +32,7 @@ export async function signInWithPRN(prn: string, password: string) {
         // Validate the password
         if (storedPasswordHash && await bcrypt.compare(password, storedPasswordHash)) {
             return {
-                prn: userPRN,
+                userId: userIdFromDB,
                 email: userEmail,
             };
         } else {
@@ -49,16 +49,16 @@ export async function signInWithPRN(prn: string, password: string) {
 import { auth } from './firebaseConfig';
 import { sendPasswordResetEmail } from 'firebase/auth';
 
-export const sendPasswordReset = async (prn: string): Promise<string> => {
+export const sendPasswordReset = async (userId: string): Promise<string> => {
     try {
-        const email = await getUserEmailByPRN(prn);
+        const email = await getUserEmailByPRN(userId);
         console.log('Email retrieved:', email); // Verify that email is correctly retrieved
 
         if (email) {
             await sendPasswordResetEmail(auth, email);
-            return 'If an account with that PRN exists, a password reset link has been sent.';
+            return 'If an account with that userId exists, a password reset link has been sent.';
         } else {
-            return 'No account found with that PRN.';
+            return 'No account found with that userId.';
         }
     } catch (error) {
         console.error('Error sending password reset email:', error);

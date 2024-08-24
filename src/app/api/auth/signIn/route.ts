@@ -4,35 +4,36 @@ import jwt from "jsonwebtoken";
 
 export async function POST(request: Request) {
     try {
-        const { prn, password } = await request.json();
-        console.log("Received PRN: " + prn + ", Password: " + password + "by user");
+        const { userId, password } = await request.json();
+        console.log("Received userId: " + userId + ", Password: " + password + "by user");
 
         // Validate inputs
-        if (!prn || !password) {
+        if (!userId || !password) {
             return NextResponse.json(
-                { message: "PRN and password are required" },
+                { message: "userId and password are required" },
                 { status: 400 }
             );
         }
 
-        const user = await signInWithPRN(prn, password);
+        const user = await signInWithPRN(userId, password);
         const SECRET_KEY = process.env.JWT_SECRET;
         if (!SECRET_KEY) {
             throw new Error("JWT_SECRET environment variable is not defined");
         }
 
-        if (user) {
+        if (user && user?.userId == userId) {
+            console.log("Sign-in successful for userId: " + user.userId);
             // Generate a session token or JWT if needed, then send it to the client
-            const token = jwt.sign({ prn: user.prn }, SECRET_KEY, {
+            const token = jwt.sign({ userId: user.userId }, SECRET_KEY, {
                 expiresIn: "1h",
             });
             console.log(token)
             return NextResponse.json({ message: "Login successful", token });
             // return NextResponse.json({ user }, { status: 200 });
         } else {
-            console.log("Sign-in failed for PRN: " + prn);
+            console.log("Sign-in failed for userId: " + userId);
             return NextResponse.json(
-                { message: "Invalid PRN or password" },
+                { message: "Invalid userId or password" },
                 { status: 401 }
             );
         }

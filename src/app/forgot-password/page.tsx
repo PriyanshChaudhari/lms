@@ -2,7 +2,7 @@
 import { useState } from 'react';
 
 export default function ForgotPassword() {
-    const [username, setUsername] = useState<string>('');
+    const [userId, setUserId] = useState<string>('');
     const [message, setMessage] = useState<string>('');
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -14,7 +14,7 @@ export default function ForgotPassword() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ prn: username }),
+                body: JSON.stringify({ userId: userId }),
             });
 
             // Check if the response is OK and handle accordingly
@@ -38,12 +38,12 @@ export default function ForgotPassword() {
         <div>
             <h1>Forgot Password</h1>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="username">Username:</label>
+                <label htmlFor="userId">UserId:</label>
                 <input
                     type="text"
-                    id="username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    id="userId"
+                    value={userId}
+                    onChange={(e) => setUserId(e.target.value)}
                     required
                 />
                 <button type="submit">Send Reset Link</button>

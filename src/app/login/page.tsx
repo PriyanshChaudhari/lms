@@ -5,7 +5,7 @@ import React, { useState, ChangeEvent } from 'react';
 
 const LoginPage = () => {
     const [user, setUser] = React.useState({
-        prn: "",
+        userId: "",
         password: ""
     });
 
@@ -19,7 +19,7 @@ const LoginPage = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    prn: user.prn,
+                    userId: user.userId,
                     password: user.password,
                 }),
             });
@@ -63,10 +63,10 @@ const LoginPage = () => {
                                 </label>
                                 <input
                                     type="text"
-                                    id="prn"
+                                    id="userId"
                                     className='bg-gray-200 dark:bg-gray-300 text-gray-900'
-                                    name="prn"
-                                    value={user.prn}
+                                    name="userId"
+                                    value={user.userId}
                                     onChange={handleChange}
                                     style={{ width: '100%', padding: '0.75rem', border: '1px solid #d1d5db', borderRadius: '0.375rem', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)', fontSize: '0.875rem', outline: 'none', transition: 'border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out' }}
                                     placeholder="Enter Your prn"
