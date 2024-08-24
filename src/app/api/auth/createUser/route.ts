@@ -6,15 +6,15 @@ import { createUserWithPRN } from '@/lib/createUser'; // Update the import path 
 export async function POST(request: Request) {
     try {
         // Parse the request body
-        const { prn, password, email } = await request.json();
+        const { userId, password, email } = await request.json();
 
         // Validate inputs
-        if (!prn || !password) {
+        if (!userId || !password) {
             return NextResponse.json({ message: 'PRN and password are required' }, { status: 400 });
         }
 
         // Call the createUser function from lib/createUser.ts
-        const userRecord = await createUserWithPRN(prn, password, email);
+        const userRecord = await createUserWithPRN(userId, password, email);
 
         // Return the created user record as a response
         return NextResponse.json({ user: userRecord }, { status: 201 });

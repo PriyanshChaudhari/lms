@@ -8,12 +8,12 @@ import { sendPasswordResetEmail } from '@/lib/sendEmail';
 // Handler for POST requests
 export async function POST(req: NextRequest) {
     try {
-        const { prn } = await req.json();
-        if (!prn) {
-            return NextResponse.json({ message: 'PRN is required' }, { status: 400 });
+        const { userId } = await req.json();
+        if (!userId) {
+            return NextResponse.json({ message: 'userId is required' }, { status: 400 });
         }
 
-        const userDocRef = doc(db, 'users', prn);
+        const userDocRef = doc(db, 'users', userId);
         const userDoc = await getDoc(userDocRef);
 
         if (!userDoc.exists()) {
