@@ -40,7 +40,7 @@ const Navbar: React.FC = () => {
         </div>
 
         <div className="hidden sm:flex space-x-10 items-center gap-6 text-md font-semibold">
-          <Link href="#dashboard" className="hover:text-gray-500 dark:hover:text-gray-300 text-black dark:text-gray-200" onClick={() => router.push(`/student/dashboard`)}>Dashboard</Link>
+          <Link href="/student/dashboard" className="hover:text-gray-500 dark:hover:text-gray-300 text-black dark:text-gray-200" >Dashboard</Link>
           <Link href="#about" className="hover:text-gray-500 dark:hover:text-gray-300 text-black dark:text-gray-200">About</Link>
           <Link href="#contact" className="hover:text-gray-500 dark:hover:text-gray-300 text-black dark:text-gray-200">Contact</Link>
           <Link href="#notifications" className="hover:text-gray-500 dark:hover:text-gray-300 text-black dark:text-gray-200">Notifications</Link>
