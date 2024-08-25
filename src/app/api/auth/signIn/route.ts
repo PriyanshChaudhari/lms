@@ -1,13 +1,13 @@
-import { NextResponse } from "next/server";
-import { signInWithPRN } from "@/lib/auth"; // Update the import path based on your project structure
-import jwt from "jsonwebtoken";
+import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/lib/firebaseConfig";
+import { doc, getDoc } from "firebase/firestore";
+import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 
-export async function POST(request: Request) {
+export async function POST(req: NextRequest) {
     try {
-        const { userId, password } = await request.json();
-        console.log("Received userId: " + userId + ", Password: " + password + "by user");
+        const { userId, password } = await req.json();
 
-        // Validate inputs
         if (!userId || !password) {
             return NextResponse.json(
                 { message: "userId and password are required" },
@@ -15,13 +15,14 @@ export async function POST(request: Request) {
             );
         }
 
-        const user = await signInWithPRN(userId, password);
+        const user = await validateUserCredentials(userId, password);
+
         const SECRET_KEY = process.env.JWT_SECRET;
         if (!SECRET_KEY) {
             throw new Error("JWT_SECRET environment variable is not defined");
         }
 
-        if (user && user?.userId == userId) {
+        if (user) {
             console.log("Sign-in successful for userId: " + user.userId);
             // Generate a session token or JWT if needed, then send it to the client
             const token = jwt.sign({ userId: user.userId }, SECRET_KEY, {
@@ -29,7 +30,6 @@ export async function POST(request: Request) {
             });
             console.log(token)
             return NextResponse.json({ message: "Login successful", token });
-            // return NextResponse.json({ user }, { status: 200 });
         } else {
             console.log("Sign-in failed for userId: " + userId);
             return NextResponse.json(
@@ -43,5 +43,40 @@ export async function POST(request: Request) {
             { message: "Internal Server Error" },
             { status: 500 }
         );
+    }
+}
+
+async function validateUserCredentials(userId: string, password: string) {
+    try {
+        const userDocRef = doc(db, 'users', userId)
+        const userDoc = await getDoc(userDocRef)
+
+        if (!userDoc.exists) {
+            console.log("No user with this Username!!")
+            return null
+        }
+        const userData = userDoc.data();
+        if (!userData) {
+            console.log('User data is missing.');
+            return null;
+        }
+
+        const userEmail = userData.email;
+        const userIdFromDB = userDoc.id;
+        const storedPasswordHash = userData.password;
+
+        if (storedPasswordHash && await bcrypt.compare(password, storedPasswordHash)) {
+            return {
+                email: userEmail,
+                userId: userIdFromDB
+            };
+        } else {
+            console.log("Password validation failed.");
+            return null;
+        }
+    }
+    catch (error) {
+        console.error('Error fetching user record:', error);
+        return null;
     }
 }

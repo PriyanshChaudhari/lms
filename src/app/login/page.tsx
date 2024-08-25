@@ -2,6 +2,7 @@
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import React, { useState, ChangeEvent } from 'react';
+import axios from 'axios';
 
 const LoginPage = () => {
     const [user, setUser] = React.useState({
@@ -9,35 +10,49 @@ const LoginPage = () => {
         password: ""
     });
 
+    // const handleSubmit = async (e: React.FormEvent) => {
+    //     e.preventDefault();
+
+    //     try {
+    //         const res = await fetch('/api/auth/signIn', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({
+    //                 userId: user.userId,
+    //                 password: user.password,
+    //             }),
+    //         });
+    //         if (res.ok) {
+    //             const data = await res.json();
+    //             console.log('User signed in:', data.message);
+    //             localStorage.setItem('authToken', data.token);
+    //             // window.location.href = '/';
+    //         } else {
+    //             const data = await res.json();
+    //             alert(data.message || 'Sign-in failed');
+    //         }
+    //     } catch (error) {
+    //         console.error('Error during sign-in:', error);
+    //         alert('An unexpected error occurred');
+    //     }
+    // };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         try {
-            const res = await fetch('/api/auth/signIn', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    userId: user.userId,
-                    password: user.password,
-                }),
-            });
-            if (res.ok) {
-                const data = await res.json();
-                console.log('User signed in:', data.message);
-                localStorage.setItem('authToken', data.token);
-                // window.location.href = '/';
-            } else {
-                const data = await res.json();
-                alert(data.message || 'Sign-in failed');
-            }
+            const res = await axios.post('/api/auth/signIn', user);
+            const data = res.data;
+            console.log('User signed in:', data.message);
+            localStorage.setItem('authToken', data.token);
+            // window.location.href = '/';
         } catch (error) {
             console.error('Error during sign-in:', error);
             alert('An unexpected error occurred');
         }
-    };
-
+    }
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setUser({

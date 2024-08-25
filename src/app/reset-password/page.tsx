@@ -43,7 +43,7 @@ export default function ResetPassword() {
             const hashedPassword = await bcrypt.hash(newPassword, 10);
             console.log(hashedPassword)
             // Update the password in the user's document with the hashed password
-            await updateDoc(userDoc.ref, { passwordHash: hashedPassword });
+            await updateDoc(userDoc.ref, { password: hashedPassword });
 
             setMessage('Password has been reset successfully. You can now log in with your new password.');
         } catch (error) {
