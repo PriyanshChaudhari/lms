@@ -6,15 +6,8 @@ import jwt from 'jsonwebtoken'
 
 export async function POST(req: NextRequest) {
     try {
-<<<<<<< HEAD
         const { userId, password } = await req.json();
 
-=======
-        const { userId, password } = await request.json();
-        console.log("Received userId: " + userId + ", Password: " + password + "by user");
-
-        // Validate inputs
->>>>>>> 8df93ebbe8e1f48c0565a8f231e85cb2519f4ae8
         if (!userId || !password) {
             return NextResponse.json(
                 { message: "userId and password are required" },
@@ -22,22 +15,14 @@ export async function POST(req: NextRequest) {
             );
         }
 
-<<<<<<< HEAD
         const user = await validateUserCredentials(userId, password);
 
-=======
-        const user = await signInWithPRN(userId, password);
->>>>>>> 8df93ebbe8e1f48c0565a8f231e85cb2519f4ae8
         const SECRET_KEY = process.env.JWT_SECRET;
         if (!SECRET_KEY) {
             throw new Error("JWT_SECRET environment variable is not defined");
         }
 
-<<<<<<< HEAD
         if (user) {
-=======
-        if (user && user?.userId == userId) {
->>>>>>> 8df93ebbe8e1f48c0565a8f231e85cb2519f4ae8
             console.log("Sign-in successful for userId: " + user.userId);
             // Generate a session token or JWT if needed, then send it to the client
             const token = jwt.sign({ userId: user.userId }, SECRET_KEY, {

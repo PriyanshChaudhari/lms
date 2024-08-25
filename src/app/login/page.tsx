@@ -43,33 +43,11 @@ const LoginPage = () => {
         e.preventDefault();
 
         try {
-<<<<<<< HEAD
             const res = await axios.post('/api/auth/signIn', user);
             const data = res.data;
             console.log('User signed in:', data.message);
             localStorage.setItem('authToken', data.token);
             // window.location.href = '/';
-=======
-            const res = await fetch('/api/auth/signIn', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    userId: user.userId,
-                    password: user.password,
-                }),
-            });
-            if (res.ok) {
-                const data = await res.json();
-                console.log('User signed in:', data.message);
-                localStorage.setItem('authToken', data.token);
-                // window.location.href = '/';
-            } else {
-                const data = await res.json();
-                alert(data.message || 'Sign-in failed');
-            }
->>>>>>> 8df93ebbe8e1f48c0565a8f231e85cb2519f4ae8
         } catch (error) {
             console.error('Error during sign-in:', error);
             alert('An unexpected error occurred');
