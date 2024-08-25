@@ -17,17 +17,17 @@ const Navbar: React.FC = () => {
     setMobileMenuOpen(false);
   }
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(prevMode => {
-      const newMode = !prevMode;
-      if (newMode) {
-        document.body.classList.add('dark');
-      } else {
-        document.body.classList.remove('dark');
-      }
-      return newMode;
-    });
-  };
+  // const toggleDarkMode = () => {
+  //   setIsDarkMode(prevMode => {
+  //     const newMode = !prevMode;
+  //     if (newMode) {
+  //       document.body.classList.add('dark');
+  //     } else {
+  //       document.body.classList.remove('dark');
+  //     }
+  //     return newMode;
+  //   });
+  // };
 
   return (
     <nav className="dark:bg-gray-800 p-4  bg-gray-100 text-black dark:text-white w-full z-10 top-0 font-rubik" style={{ cursor: 'default' }}>
