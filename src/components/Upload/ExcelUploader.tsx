@@ -27,7 +27,7 @@ const ExcelUploader = () => {
 
           // Send the data to the API
           try {
-            const response = await fetch('/api/auth/createUser/excel', {
+            const response = await fetch('/api/auth/create-user/excel', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(jsonData),

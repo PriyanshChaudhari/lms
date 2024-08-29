@@ -31,6 +31,8 @@
 //         res.status(405).end(`Method ${req.method} Not Allowed`);
 //     }
 // }
+
+// for adding single user using frontend.
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/firebaseConfig';
 import { Timestamp, doc, setDoc } from 'firebase/firestore';
