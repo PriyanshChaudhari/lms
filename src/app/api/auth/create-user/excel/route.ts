@@ -80,7 +80,7 @@ export async function batchUsersCreation(jsonData: UserData[]) {
 
             const passwordHash = await bcrypt.hash(password, 10);
 
-            const userRef = doc(db, "users", userId);
+            const userRef = doc(db, String(process.env.USERS_DB), String(userId));
             batch.set(userRef, {
                 first_name: firstName,
                 last_name: lastName,
