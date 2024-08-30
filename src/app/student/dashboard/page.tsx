@@ -11,12 +11,12 @@ const Dashboard: React.FC = () => {
   //     router.push(`/student/viewcourse/${courseId}`);
   //   }
   return (
-    <div className="flex flex-col h-screen p-5">
+    <div className="flex flex-col lg:h-screen h-full p-5">
       <div className="flex flex-1 gap-10 flex-wrap md:flex-nowrap items-start justify-center border border-gray-300 p-5">
         <div className="w-full md:w-2/3 p-5 border border-gray-300 rounded-lg flex flex-col justify-center items-center h-full max-h-[calc(100vh-2rem)]">
           <h1 className="text-2xl font-bold mb-6">My Courses</h1>
           <div className="flex w-full flex-wrap justify-center gap-5">
-            <div className="border border-gray-300 rounded-xl p-5 w-full max-w-xs shadow-sm cursor-pointer" onClick={() => router.push(`/student/viewsection`)} >
+            <div className="border border-gray-300 rounded-xl hover:bg-slate-100 dark:hover:bg-[#1a1a1a] p-5 w-full max-w-xs shadow-sm cursor-pointer" onClick={() => router.push(`/student/viewsection`)} >
               {/* onClick={() => navigateToEditCourse(1)} */}
               <h3 className="text-lg font-semibold">Course 1</h3>
               <p className="text-sm text-gray-600">Deploy your new project in one-click.</p>
@@ -24,14 +24,14 @@ const Dashboard: React.FC = () => {
                 <div className="bg-blue-500 h-full rounded-full" style={{ width: '50%' }}></div>
               </div>
             </div>
-            <div className="border border-gray-300 rounded-xl p-5 w-full max-w-xs shadow-sm cursor-pointer" onClick={() => router.push(`/student/viewsection`)}>
+            <div className="border border-gray-300 rounded-xl hover:bg-slate-100 dark:hover:bg-[#1a1a1a] p-5 w-full max-w-xs shadow-sm cursor-pointer" onClick={() => router.push(`/student/viewsection`)}>
               <h3 className="text-lg font-semibold">Course 2</h3>
               <p className="text-sm text-gray-600">Deploy your new project in one-click.</p>
               <div className="bg-gray-200 rounded-full h-2 mt-3">
                 <div className="bg-blue-500 h-full rounded-full" style={{ width: '50%' }}></div>
               </div>
             </div>
-            <div className="border border-gray-300 rounded-xl p-5 w-full max-w-xs shadow-sm cursor-pointer" onClick={() => router.push(`/student/viewsection`)}>
+            <div className="border border-gray-300 rounded-xl hover:bg-slate-100 dark:hover:bg-[#1a1a1a] p-5 w-full max-w-xs shadow-sm cursor-pointer" onClick={() => router.push(`/student/viewsection`)}>
               <h3 className="text-lg font-semibold">Course 3</h3>
               <p className="text-sm text-gray-600">Deploy your new project in one-click.</p>
               <div className="bg-gray-200 rounded-full h-2 mt-3">

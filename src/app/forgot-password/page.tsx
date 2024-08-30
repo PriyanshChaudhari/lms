@@ -6,32 +6,45 @@ import React, { useState, ChangeEvent } from 'react';
 export default function ForgotPassword() {
     const [userId, setUserId] = useState<string>('');
     const [message, setMessage] = useState<string>('');
+    const [userIdError, setUserIdError] = useState('');
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        try {
-            const response = await fetch('/api/auth/request-password-reset', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ userId: userId }),
-            });
+        let valid = true;
 
-            // Check if the response is OK and handle accordingly
-            if (!response.ok) {
-                const errorText = await response.text(); // Use text() to handle cases where JSON might be missing
-                const errorMessage = errorText || 'An error occurred';
-                setMessage(errorMessage);
-                return;
+        if (userId.length === 0) {
+            setUserIdError('UserId is required');
+            valid = false;
+        } else {
+            setUserIdError('');
+        }
+
+        if(valid)
+        {
+            try {
+                const response = await fetch('/api/auth/request-password-reset', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ userId: userId }),
+                });
+    
+                // Check if the response is OK and handle accordingly
+                if (!response.ok) {
+                    const errorText = await response.text(); // Use text() to handle cases where JSON might be missing
+                    const errorMessage = errorText || 'An error occurred';
+                    setMessage(errorMessage);
+                    return;
+                }
+    
+                const data = await response.json();
+                setMessage(data.message);
+            } catch (error) {
+                console.error('Error handling submit:', error);
+                setMessage('An error occurred while processing your request.');
             }
-
-            const data = await response.json();
-            setMessage(data.message);
-        } catch (error) {
-            console.error('Error handling submit:', error);
-            setMessage('An error occurred while processing your request.');
         }
     };
 
@@ -63,6 +76,9 @@ export default function ForgotPassword() {
                                     placeholder="Enter Your userId"
                                     required
                                 />
+                                 <div className='flex-row text-sm'>
+                                    {userIdError && <p style={{ color: '#ef4444', marginTop: '0.30rem' }}>{userIdError}</p>}
+                                </div>
                             </div>
 
                         </div>
