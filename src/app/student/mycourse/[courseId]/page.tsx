@@ -1,11 +1,8 @@
-
 "use client"
-
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-const ViewSection: React.FC = () => {
-    const router = useRouter();
+export default function courseDetails({ params }: { params: { courseId: string } }) {
     const [activeSection, setActiveSection] = useState<string>('course');
     const [data, setData] = useState([
         { grade: 'Succelens99@yahoo.com', range: '$316.00', email: 'Succelens99@yahoo.com' },
@@ -13,16 +10,29 @@ const ViewSection: React.FC = () => {
         { grade: 'Succelens99@yahoo.com', range: '$316.00', email: 'Succelens99@yahoo.com' },
         { grade: 'Succelens99@yahoo.com', range: '$316.00', email: 'Succelens99@yahoo.com' },
         { grade: 'Succelens99@yahoo.com', range: '$316.00', email: 'Succelens99@yahoo.com' },
-      ]);
+    ]);
+    const router = useRouter();
+    
+    const handleAssignmentClick = (assignmentId: number, moduleId?: number) => {
+        if (moduleId) {
+            router.push(`/student/mycourse/${params.courseId}/modules/${moduleId}/assignments/${assignmentId}`);
+        } else {
+        router.push(`/student/mycourse/${params.courseId}/assignments/${assignmentId}`);
+        }
+    };
 
+    const handleModuleClick = (moduleId: number) => {
+        router.push(`/student/mycourse/${params.courseId}/modules/${moduleId}`);
+    };
+    
     return (
         <div className="border border-gray-300 m-5">
             <div className="max-w-4xl mx-auto p-5">
-                <h1 className="text-3xl font-bold mb-4">Course 1</h1>
+                <h1 className="text-3xl font-bold mb-4">Course {params.courseId}</h1>
                 <p className="text-lg text-gray-700 mb-6">Description of course 1</p>
 
                 <nav className="mb-6 border border-gray-300 rounded-xl shadow-md p-2">
-                    <ul className="flex flex-col sm:flex-row flex-wrap justify-between space-x-4 list-none p-0">
+                    <ul className="flex justify-between space-x-4 list-none p-0">
                         <li
                             className={` p-3 rounded-xl cursor-pointer ${activeSection === 'course' ? 'bg-gray-400 text-white' : ''}`}
                             onClick={() => setActiveSection('course')}
@@ -59,19 +69,19 @@ const ViewSection: React.FC = () => {
                 <div className="space-y-4">
                     {activeSection === 'course' && (
                         <div className="space-y-4 ">
-                            <div className=" border border-gray-300  dark:text-white  hover:bg-slate-100 dark:hover:bg-[#1a1a1a] rounded-xl p-6 shadow-md h-72 cursor-pointer" onClick={() => router.push(`/student/viewmodule`)}>
+                            <div className="bg-white border border-gray-300 rounded-xl p-6 shadow-md h-72 cursor-pointer" onClick={() => handleModuleClick(1)}>
                                 <h2 className="text-xl font-semibold mb-2">Module One</h2>
                                 <p className="text-sm text-gray-600">The React Framework - created and maintained by @vercel.</p>
                             </div>
-                            <div className=" border border-gray-300 dark:text-white  hover:bg-slate-100 dark:hover:bg-[#1a1a1a] rounded-xl p-6 shadow-md h-72 cursor-pointer" onClick={() => router.push(`/student/viewmodule`)}>
+                            <div className="bg-white border border-gray-300 rounded-xl p-6 shadow-md h-72 cursor-pointer" onClick={() => handleModuleClick(2)}>
                                 <h2 className="text-xl font-semibold mb-2">Module Two</h2>
                                 <p className="text-sm text-gray-600">Advanced concepts of React.</p>
                             </div>
-                            <div className=" border border-gray-300 dark:text-white  hover:bg-slate-100 dark:hover:bg-[#1a1a1a] rounded-xl p-6 shadow-md h-72 cursor-pointer" onClick={() => router.push(`/student/viewmodule`)}>
+                            <div className="bg-white border border-gray-300 rounded-xl p-6 shadow-md h-72 cursor-pointer" onClick={() => handleModuleClick(3)}>
                                 <h2 className="text-xl font-semibold mb-2">Module Three</h2>
                                 <p className="text-sm text-gray-600">Advanced concepts of React.</p>
                             </div>
-                            <div className=" border border-gray-300 dark:text-white  hover:bg-slate-100 dark:hover:bg-[#1a1a1a] rounded-xl p-6 shadow-md h-72 cursor-pointer " onClick={() => router.push(`/student/viewmodule`)}>
+                            <div className="bg-white border border-gray-300 rounded-xl p-6 shadow-md h-72 cursor-pointer " onClick={() => handleModuleClick(4)}>
                                 <h2 className="text-xl font-semibold mb-2">Module Four</h2>
                                 <p className="text-sm text-gray-600">Advanced concepts of React.</p>
                             </div>
@@ -79,7 +89,7 @@ const ViewSection: React.FC = () => {
                     )}
                     {activeSection === 'assignments' && (
                         <div className="space-y-4 ">
-                            <div className=" border border-gray-300 dark:text-white  hover:bg-slate-100 dark:hover:bg-[#1a1a1a] rounded-xl p-6 shadow-md h-72 cursor-pointer" onClick={() => router.push(`/student/viewassignment`)}>
+                            <div className="bg-white border border-gray-300 rounded-xl p-6 shadow-md h-72 cursor-pointer" onClick={() => handleAssignmentClick(1)}>
                                 <h2 className="text-xl font-semibold mb-6">Assignment Title</h2>
                                 <div className="shadow-md  items-center p-5 border border-gray-100 rounded-xl max-w-lg">
                                     <p className="text-sm text-gray-600 mb-4">Courses: Course 1</p>
@@ -88,7 +98,7 @@ const ViewSection: React.FC = () => {
                                 </div>
                             </div>
 
-                            <div className=" border border-gray-300 dark:text-white  hover:bg-slate-100 dark:hover:bg-[#1a1a1a] rounded-xl p-6 shadow-md h-72 cursor-pointer" onClick={() => router.push(`/student/viewassignment`)}>
+                            <div className="bg-white border border-gray-300 rounded-xl p-6 shadow-md h-72 cursor-pointer" onClick={() => handleAssignmentClick(2)}>
                                 <h2 className="text-xl font-semibold mb-6">Assignment Title</h2>
                                 <div className="shadow-md  items-center p-5 border border-gray-100 rounded-xl max-w-lg">
                                     <p className="text-sm text-gray-600 mb-4">Courses: Course 1</p>
@@ -102,7 +112,7 @@ const ViewSection: React.FC = () => {
                     )}
                     {activeSection === 'grades' && (
                         <div className="overflow-x-auto">
-                        <table className="min-w-full  border border-gray-300">
+                        <table className="min-w-full bg-white border border-gray-300">
                           <thead>
                             <tr>
                               <th className="py-2 px-4 border-b">Grade</th>
@@ -124,7 +134,7 @@ const ViewSection: React.FC = () => {
                     )}
                     {activeSection === 'participants' && (
                         <div className="space-y-4 ">
-                        <div className=" border border-gray-300 dark:text-white  hover:bg-slate-100 dark:hover:bg-[#1a1a1a] rounded-xl p-6 shadow-md h-72 cursor-pointer" onClick={() => router.push(`/student/viewparticipants`)}>
+                        <div className="bg-white border border-gray-300 rounded-xl p-6 shadow-md h-72 cursor-pointer" onClick={() => router.push(`/student/viewparticipants`)}>
                             <h2 className="text-xl font-semibold mb-6">Assignment Title</h2>
                             <div className="shadow-md  items-center p-5 border border-gray-100 rounded-xl max-w-lg">
                                 <p className="text-sm text-gray-600 mb-4">Courses: Course 1</p>
@@ -133,7 +143,7 @@ const ViewSection: React.FC = () => {
                             </div>
                         </div>
 
-                        <div className=" border border-gray-300 dark:text-white  hover:bg-slate-100 dark:hover:bg-[#1a1a1a] rounded-xl p-6 shadow-md h-72 cursor-pointer" onClick={() => router.push(`/student/viewparticipants`)}>
+                        <div className="bg-white border border-gray-300 rounded-xl p-6 shadow-md h-72 cursor-pointer" onClick={() => router.push(`/student/viewparticipants`)}>
                             <h2 className="text-xl font-semibold mb-6">Assignment Title</h2>
                             <div className="shadow-md  items-center p-5 border border-gray-100 rounded-xl max-w-lg">
                                 <p className="text-sm text-gray-600 mb-4">Courses: Course 1</p>
@@ -146,7 +156,7 @@ const ViewSection: React.FC = () => {
                     </div>
                     )}
                     {activeSection === 'settings' && (
-                        <div className=" border border-gray-300 rounded-xl p-6 shadow-md h-72">
+                        <div className="bg-white border border-gray-300 rounded-xl p-6 shadow-md h-72">
                             <h2 className="text-xl font-semibold mb-2">Settings</h2>
                             <p className="text-sm text-gray-600">Settings and preferences for this course.</p>
                         </div>
@@ -156,6 +166,4 @@ const ViewSection: React.FC = () => {
         </div>
     );
 };
-
-export default ViewSection;
 

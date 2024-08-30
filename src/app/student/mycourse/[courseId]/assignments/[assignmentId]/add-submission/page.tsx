@@ -1,7 +1,7 @@
 "use client"
 import { useState, ChangeEvent, DragEvent } from 'react';
 
-const AssignmentSubmission = () => {
+export default function AssignmentSubmission(){
     const [files, setFiles] = useState<File[]>([]);
     const [error, setError] = useState<string>('');
 
@@ -79,4 +79,3 @@ const AssignmentSubmission = () => {
     );
 };
 
-export default AssignmentSubmission;
