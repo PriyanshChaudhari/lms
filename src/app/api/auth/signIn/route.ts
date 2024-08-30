@@ -16,20 +16,47 @@ export async function POST(req: NextRequest) {
         }
 
         const user = await validateUserCredentials(userId, password);
-
+        console.log(user)
         const SECRET_KEY = process.env.JWT_SECRET;
         if (!SECRET_KEY) {
             throw new Error("JWT_SECRET environment variable is not defined");
         }
 
         if (user) {
+            const tokenData = {
+                userId: user.userId,
+                email: user.email,
+                role: user.role
+            }
+
+            const token = jwt.sign(tokenData, SECRET_KEY, { expiresIn: '1d' })
+
             console.log("Sign-in successful for userId: " + user.userId);
-            // Generate a session token or JWT if needed, then send it to the client
-            const token = jwt.sign({ userId: user.userId }, SECRET_KEY, {
-                expiresIn: "1h",
-            });
             console.log(token)
-            return NextResponse.json({ message: "Login successful", token });
+            const response = NextResponse.json({
+                message: "Login successful",
+                success: true,
+                role: user.role
+            })
+            response.cookies.set("token", token, {
+                httpOnly: true,
+                path: "/",
+                secure: process.env.NODE_ENV === "production",
+            })
+
+            let redirectUrl = "/";
+            if (user.role === "student") {
+                redirectUrl = "/student/dashboard";
+            } else if (user.role === "teacher") {
+                redirectUrl = "/teacher/dashboard";
+            } else if (user.role === "admin") {
+                redirectUrl = "/admin/dashboard";
+            }
+
+            response.headers.set("Location", redirectUrl);
+
+            return response;
+            // return NextResponse.json({ message: "Login successful", token });
         } else {
             console.log("Sign-in failed for userId: " + userId);
             return NextResponse.json(
@@ -61,14 +88,18 @@ async function validateUserCredentials(userId: string, password: string) {
             return null;
         }
 
-        const userEmail = userData.email;
+        // console.log(userData)
+
         const userIdFromDB = userDoc.id;
+        const userEmail = userData.email;
+        const userRole = userData.role;
         const storedPasswordHash = userData.password;
 
         if (storedPasswordHash && await bcrypt.compare(password, storedPasswordHash)) {
             return {
                 email: userEmail,
-                userId: userIdFromDB
+                userId: userIdFromDB,
+                role: userRole
             };
         } else {
             console.log("Password validation failed.");

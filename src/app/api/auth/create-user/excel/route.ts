@@ -33,7 +33,7 @@
 // }
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/firebaseConfig';
-import { Timestamp, doc, setDoc, writeBatch } from 'firebase/firestore';
+import { Timestamp, doc, getDoc, setDoc, writeBatch } from 'firebase/firestore';
 import bcrypt from 'bcryptjs';
 
 // Define the type for user data
@@ -75,12 +75,20 @@ export async function batchUsersCreation(jsonData: UserData[]) {
                 throw new Error('PRN and password are required');
             }
 
+            const userRef = doc(db, String(process.env.USERS_DB), String(userId));
+            const userSnap = await getDoc(userRef);
+
+            if (userSnap.exists()) {
+                throw new Error(`User with userId ${userId} already exists`);
+            }
+
             const formattedDate = new Date(dob);
+            console.log(formattedDate)
             const firestoreDate = Timestamp.fromDate(formattedDate);
 
             const passwordHash = await bcrypt.hash(password, 10);
 
-            const userRef = doc(db, String(process.env.USERS_DB), String(userId));
+            // const userRef = doc(db, String(process.env.USERS_DB), String(userId));
             batch.set(userRef, {
                 first_name: firstName,
                 last_name: lastName,

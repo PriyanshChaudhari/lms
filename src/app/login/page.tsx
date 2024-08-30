@@ -1,43 +1,15 @@
 "use client";
-import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import React, { useState, ChangeEvent } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 const LoginPage = () => {
+    const router = useRouter()
     const [user, setUser] = React.useState({
         userId: "",
         password: ""
     });
-
-    // const handleSubmit = async (e: React.FormEvent) => {
-    //     e.preventDefault();
-
-    //     try {
-    //         const res = await fetch('/api/auth/signIn', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify({
-    //                 userId: user.userId,
-    //                 password: user.password,
-    //             }),
-    //         });
-    //         if (res.ok) {
-    //             const data = await res.json();
-    //             console.log('User signed in:', data.message);
-    //             localStorage.setItem('authToken', data.token);
-    //             // window.location.href = '/';
-    //         } else {
-    //             const data = await res.json();
-    //             alert(data.message || 'Sign-in failed');
-    //         }
-    //     } catch (error) {
-    //         console.error('Error during sign-in:', error);
-    //         alert('An unexpected error occurred');
-    //     }
-    // };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -45,14 +17,33 @@ const LoginPage = () => {
         try {
             const res = await axios.post('/api/auth/signIn', user);
             const data = res.data;
-            console.log('User signed in:', data.message);
-            localStorage.setItem('authToken', data.token);
-            // window.location.href = '/';
+
+            console.log('Response data:', data);  // Debugging line
+
+            if (data.success) {
+                const { role } = data;
+                console.log("ROLE in LOGIN:" + role)
+
+                if (role === 'student') {
+                    router.push('/student/dashboard');
+                } else if (role === 'teacher') {
+                    router.push('/teacher/dashboard');
+                } else if (role === 'admin') {
+                    router.push('/admin/dashboard');
+                } else {
+                    console.error('Unknown role:', role);
+                    alert('An unexpected error occurred');
+                }
+            } else {
+                console.error('Login failed:', data.message);
+                alert(data.message || 'Login failed');
+            }
         } catch (error) {
             console.error('Error during sign-in:', error);
             alert('An unexpected error occurred');
         }
-    }
+    };
+
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setUser({
