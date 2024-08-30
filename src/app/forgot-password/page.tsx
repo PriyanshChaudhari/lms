@@ -20,8 +20,7 @@ export default function ForgotPassword() {
             setUserIdError('');
         }
 
-        if(valid)
-        {
+        if (valid) {
             try {
                 const response = await fetch('/api/auth/request-password-reset', {
                     method: 'POST',
@@ -30,7 +29,7 @@ export default function ForgotPassword() {
                     },
                     body: JSON.stringify({ userId: userId }),
                 });
-    
+
                 // Check if the response is OK and handle accordingly
                 if (!response.ok) {
                     const errorText = await response.text(); // Use text() to handle cases where JSON might be missing
@@ -38,7 +37,7 @@ export default function ForgotPassword() {
                     setMessage(errorMessage);
                     return;
                 }
-    
+
                 const data = await response.json();
                 setMessage(data.message);
             } catch (error) {
@@ -51,7 +50,7 @@ export default function ForgotPassword() {
 
     return (
 
-        <div className="font-rubik flex justify-center items-center min-h-screen bg-gradient-to-r from-gray-100 via-gray-300 to-gray-100 dark:from-slate-900 dark:via-slate-500 dark:to-slate-900" style={{ paddingTop: '2rem'}}>
+        <div className="font-rubik flex justify-center items-center min-h-screen bg-gradient-to-r from-gray-100 via-gray-300 to-gray-100 dark:from-slate-900 dark:via-slate-500 dark:to-slate-900" style={{ paddingTop: '2rem' }}>
             <div className='flex-row flex-wrap justify-center my-auto '>
                 <div className="flex-row dark:bg-neutral-900 dark:shadow-blue-800 rounded-[0.5rem] shadow-custom dark:shadow-custom bg-[#ffffff] sm:m-2" style={{ position: 'relative', padding: '4rem', width: '100%', minWidth: '20rem', marginBottom: '3rem' }}>
                     <div className="head text-lg sm:text-3xl  font-bold flex justify-between mb-8 text-gray-900 dark:text-gray-200 ">
@@ -76,7 +75,7 @@ export default function ForgotPassword() {
                                     placeholder="Enter Your userId"
                                     required
                                 />
-                                 <div className='flex-row text-sm'>
+                                <div className='flex-row text-sm'>
                                     {userIdError && <p style={{ color: '#ef4444', marginTop: '0.30rem' }}>{userIdError}</p>}
                                 </div>
                             </div>

@@ -11,36 +11,58 @@ const LoginPage = () => {
         password: ""
     });
 
+    const [userIdError, setUserIdError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        try {
-            const res = await axios.post('/api/auth/signIn', user);
-            const data = res.data;
+        let valid = true;
 
-            console.log('Response data:', data);  // Debugging line
+        if (user.userId.length === 0) {
+            setUserIdError('UserId required');
+            valid = false;
+        } else {
+            setUserIdError('');
+        }
 
-            if (data.success) {
-                const { role } = data;
-                console.log("ROLE in LOGIN:" + role)
+        if (user.password.length === 0) {
+            setPasswordError('Password required');
+            valid = false;
+        } else {
+            setPasswordError('');
+        }
 
-                if (role === 'student') {
-                    router.push('/student/dashboard');
-                } else if (role === 'teacher') {
-                    router.push('/teacher/dashboard');
-                } else if (role === 'admin') {
-                    router.push('/admin/dashboard');
+
+        if (valid) {
+            try {
+                const res = await axios.post('/api/auth/signIn', user);
+                const data = res.data;
+
+                console.log('Response data:', data);  // Debugging line
+
+                if (data.success) {
+                    const { role } = data;
+                    console.log("ROLE in LOGIN:" + role)
+
+                    if (role === 'student') {
+                        router.push('/student/dashboard');
+                    } else if (role === 'teacher') {
+                        router.push('/teacher/dashboard');
+                    } else if (role === 'admin') {
+                        router.push('/admin/dashboard');
+                    } else {
+                        console.error('Unknown role:', role);
+                        alert('An unexpected error occurred');
+                    }
                 } else {
-                    console.error('Unknown role:', role);
-                    alert('An unexpected error occurred');
+                    console.error('Login failed:', data.message);
+                    alert(data.message || 'Login failed');
                 }
-            } else {
-                console.error('Login failed:', data.message);
-                alert(data.message || 'Login failed');
+            } catch (error) {
+                console.error('Error during sign-in:', error);
+                alert('An unexpected error occurred');
             }
-        } catch (error) {
-            console.error('Error during sign-in:', error);
-            alert('An unexpected error occurred');
         }
     };
 
@@ -53,7 +75,7 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="font-rubik flex justify-center items-center min-h-screen bg-gradient-to-r from-gray-100 via-gray-300 to-gray-100 dark:from-slate-900 dark:via-slate-500 dark:to-slate-900" style={{ paddingTop: '2rem', marginTop: '4rem' }}>
+        <div className="font-rubik flex justify-center items-center min-h-screen bg-gradient-to-r from-gray-100 via-gray-300 to-gray-100 dark:from-slate-900 dark:via-slate-500 dark:to-slate-900" style={{ paddingTop: '2rem' }}>
             <div className='flex-row flex-wrap justify-center my-auto '>
                 <div className="flex-row dark:bg-neutral-900 dark:shadow-blue-800 rounded-[0.5rem] shadow-custom dark:shadow-custom bg-[#ffffff] sm:m-2" style={{ position: 'relative', padding: '4rem', width: '100%', minWidth: '20rem', marginBottom: '3rem' }}>
                     <div className="head text-xl sm:text-4xl  font-bold flex justify-between mb-8 text-gray-900 dark:text-gray-200 ">
@@ -78,6 +100,9 @@ const LoginPage = () => {
                                     placeholder="Enter Your prn"
                                     required
                                 />
+                                <div className='flex-row text-xs'>
+                                    {userIdError && <p style={{ color: '#ef4444', marginTop: '0.25rem' }}>{userIdError}</p>}
+                                </div>
                             </div>
 
                             <div style={{ marginBottom: '1.2rem' }}>
@@ -95,6 +120,9 @@ const LoginPage = () => {
                                     placeholder="Enter Password"
                                     required
                                 />
+                                <div className='flex-row text-xs'>
+                                    {passwordError && <p style={{ color: '#ef4444', marginTop: '0.25rem' }}>{passwordError}</p>}
+                                </div>
                             </div>
 
                             <div style={{ marginBottom: '1.2rem' }}>
