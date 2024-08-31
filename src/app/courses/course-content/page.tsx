@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import axios from 'axios';
 
 const CreateContent = () => {
@@ -12,13 +12,27 @@ const CreateContent = () => {
         position: ""
     });
 
+    const [courses, setCourses] = useState([]);
     const [errors, setErrors] = useState({
+        course_id: "",
         title: "",
         content_type: "",
         content_url: "",
         text_content: "",
         position: ""
     });
+
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                const res = await axios.get('/api/get/courses');
+                setCourses(res.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchCourses();
+    }, []);
 
     const handleChange = (e: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -28,49 +42,62 @@ const CreateContent = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         let valid = true;
+        const newErrors = {
+            course_id: "",
+            title: "",
+            content_type: "",
+            content_url: "",
+            text_content: "",
+            position: ""
+        };
 
         // Validation
-        if (content.title.trim() === "") {
-            setErrors(prev => ({ ...prev, title: "Title is required" }));
+        if (content.course_id.trim() === "") {
+            newErrors.course_id = "Course is required";
             valid = false;
-        } else {
-            setErrors(prev => ({ ...prev, title: "" }));
+        }
+
+        if (content.title.trim() === "") {
+            newErrors.title = "Title is required";
+            valid = false;
         }
 
         if (content.content_type === "") {
-            setErrors(prev => ({ ...prev, content_type: "Content type is required" }));
+            newErrors.content_type = "Content type is required";
             valid = false;
-        } else {
-            setErrors(prev => ({ ...prev, content_type: "" }));
         }
 
         if (content.content_type === 'video' && content.content_url.trim() === "") {
-            setErrors(prev => ({ ...prev, content_url: "Content URL is required for videos" }));
+            newErrors.content_url = "Content URL is required for videos";
             valid = false;
-        } else {
-            setErrors(prev => ({ ...prev, content_url: "" }));
         }
 
         if (content.content_type === 'article' && content.text_content.trim() === "") {
-            setErrors(prev => ({ ...prev, text_content: "Text content is required for articles" }));
+            newErrors.text_content = "Text content is required for articles";
             valid = false;
-        } else {
-            setErrors(prev => ({ ...prev, text_content: "" }));
         }
 
         if (content.position.trim() === "" || isNaN(Number(content.position))) {
-            setErrors(prev => ({ ...prev, position: "Position must be a valid number" }));
+            newErrors.position = "Position must be a valid number";
             valid = false;
-        } else {
-            setErrors(prev => ({ ...prev, position: "" }));
         }
+
+        setErrors(newErrors);
 
         if (valid) {
             try {
-                const res = await axios.post('/api/content/create', content);
+                const res = await axios.post('/api/courses/course-content', content);
                 console.log(res.data);
                 // Optionally, reset the form
                 setContent({
+                    course_id: "",
+                    title: "",
+                    content_type: "",
+                    content_url: "",
+                    text_content: "",
+                    position: ""
+                });
+                setErrors({
                     course_id: "",
                     title: "",
                     content_type: "",
@@ -88,6 +115,28 @@ const CreateContent = () => {
         <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded shadow-md">
             <h2 className="text-2xl font-bold mb-4">Create Content</h2>
             <form onSubmit={handleSubmit}>
+                <div className="mb-4">
+                    <label htmlFor="course_id" className="block text-sm font-medium text-gray-700">
+                        Course
+                    </label>
+                    <select
+                        id="course_id"
+                        name="course_id"
+                        value={content.course_id}
+                        onChange={handleChange}
+                        className="mt-1 p-2 w-full border border-gray-300 rounded"
+                        required
+                    >
+                        <option value="">Select Course</option>
+                        {courses.map((course: any) => (
+                            <option key={course.id} value={course.id}>
+                                {course.title}
+                            </option>
+                        ))}
+                    </select>
+                    {errors.course_id && <p className="text-red-600 text-sm">{errors.course_id}</p>}
+                </div>
+
                 <div className="mb-4">
                     <label htmlFor="title" className="block text-sm font-medium text-gray-700">
                         Title
@@ -119,14 +168,13 @@ const CreateContent = () => {
                         <option value="">Select Content Type</option>
                         <option value="video">Video</option>
                         <option value="article">Article</option>
-                        <option value="quiz">Quiz</option>
                         <option value="assignment">Assignment</option>
                         <option value="resource">Resource</option>
                     </select>
                     {errors.content_type && <p className="text-red-600 text-sm">{errors.content_type}</p>}
                 </div>
 
-                {content.content_type === 'video' && (
+                {(content.content_type === 'video' || content.content_type === 'assignment' || content.content_type === 'resource') && (
                     <div className="mb-4">
                         <label htmlFor="content_url" className="block text-sm font-medium text-gray-700">
                             Content URL
@@ -138,6 +186,7 @@ const CreateContent = () => {
                             value={content.content_url}
                             onChange={handleChange}
                             className="mt-1 p-2 w-full border border-gray-300 rounded"
+                            required
                         />
                         {errors.content_url && <p className="text-red-600 text-sm">{errors.content_url}</p>}
                     </div>
@@ -154,10 +203,12 @@ const CreateContent = () => {
                             value={content.text_content}
                             onChange={handleChange}
                             className="mt-1 p-2 w-full border border-gray-300 rounded"
+                            required
                         />
                         {errors.text_content && <p className="text-red-600 text-sm">{errors.text_content}</p>}
                     </div>
                 )}
+
 
                 <div className="mb-4">
                     <label htmlFor="position" className="block text-sm font-medium text-gray-700">

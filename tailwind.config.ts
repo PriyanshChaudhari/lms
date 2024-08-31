@@ -7,7 +7,7 @@ const config = {
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
-	],
+  ],
   prefix: "",
   theme: {
     container: {
@@ -18,11 +18,6 @@ const config = {
       },
     },
     extend: {
-      boxShadow: {
-        'custom': `
-          rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
-        `,
-      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

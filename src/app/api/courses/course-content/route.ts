@@ -4,13 +4,14 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
     try {
-        const { title, description, thumbnail, teacher_id, category } = await req.json();
+        const { course_id, title, content_type, content_url, text_content, position } = await req.json();
         const docRef = await addDoc(collection(db, 'course-content'), {
+            course_id,
             title,
-            description,
-            thumbnail,
-            teacher_id,
-            category,
+            content_type,
+            content_url,
+            text_content,
+            position
         })
         return NextResponse.json({ message: 'course-content added' }, { status: 201 })
     } catch (error) {
