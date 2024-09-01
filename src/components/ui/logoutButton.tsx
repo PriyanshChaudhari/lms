@@ -2,12 +2,14 @@
 
 import axios from 'axios';
 import React from 'react';
+import { useRouter } from 'next/navigation'
 
 const LogoutButton: React.FC = () => {
+    const router = useRouter()
     const handleLogout = async () => {
         try {
             const res = await axios.get('/api/auth/logout')
-
+            router.replace('/login')
         }
         catch (error) {
             console.log(error);
