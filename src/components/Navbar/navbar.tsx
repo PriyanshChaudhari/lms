@@ -35,11 +35,11 @@ const Navbar: React.FC = () => {
     <nav className="dark:bg-gray-800 p-4  bg-gray-100 text-black dark:text-white w-full z-10 top-0 font-rubik" style={{ cursor: 'default' }}>
       <div className="mx-auto text-center flex w-5/6 justify-between font-bold text-black dark:text-white">
 
-        <div className="text-3xl space-x-1  sm:text-2xl font-extrabold">
+        <div className="text-3xl space-x-1 flex items-center sm:text-2xl font-extrabold">
           Moodle
         </div>
 
-        <div className="hidden sm:flex space-x-10 items-center gap-6 text-md font-semibold">
+        <div className="hidden sm:flex lg:space-x-10 items-center gap-6 text-md font-semibold">
           <Link href="/student/dashboard" className="hover:text-gray-500 dark:hover:text-gray-300 text-black dark:text-gray-200" >Dashboard</Link>
           <Link href="#about" className="hover:text-gray-500 dark:hover:text-gray-300 text-black dark:text-gray-200">About</Link>
           <Link href="#contact" className="hover:text-gray-500 dark:hover:text-gray-300 text-black dark:text-gray-200">Contact</Link>
