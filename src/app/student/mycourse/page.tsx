@@ -1,4 +1,5 @@
 "use client"
+// mycourse page
 
 import React, { Component } from 'react'
 import { useRouter } from 'next/navigation'
