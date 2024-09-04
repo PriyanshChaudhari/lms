@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, useState, useEffect } from 'react';
+import React, { ChangeEvent, useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
 const CreateCourse = () => {
@@ -11,6 +11,7 @@ const CreateCourse = () => {
         category: ""
     });
 
+    const hasFetchedTeachers = useRef(false);
     const [teachers, setTeachers] = useState<{ id: string; name: string }[]>([]);
 
     useEffect(() => {
@@ -23,8 +24,11 @@ const CreateCourse = () => {
                 console.error('Error fetching teachers:', error);
             }
         };
-
-        fetchTeachers();
+        
+        if (!hasFetchedTeachers.current) {
+            fetchTeachers();
+            hasFetchedTeachers.current = true;
+        }
     }, []);
 
     const handleChange = (e: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) => {
