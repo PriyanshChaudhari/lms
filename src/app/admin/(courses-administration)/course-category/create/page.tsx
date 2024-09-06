@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import React, { ChangeEvent, useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -11,30 +11,27 @@ const CreateCategory = () => {
     const [categories, setCategories] = useState<{ id: string; category_name: string; parent_category_id: string | null }[]>([]);
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
-    useEffect(() => {
-        // Fetch the list of categories when the component mounts
-        const fetchCategories = async () => {
-            try {
-                const res = await axios.get('/api/get/categories');
-                setCategories(res.data);
-            } catch (error) {
-                console.error('Error fetching categories:', error);
-            }
-        };
+    const fetchCategories = async () => {
+        try {
+            const res = await axios.get('/api/get/categories');
+            setCategories(res.data);
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+        }
+    };
 
+    useEffect(() => {
         fetchCategories();
     }, []);
 
     const handleCategoryChange = (index: number, e: ChangeEvent<HTMLSelectElement>) => {
         const { value } = e.target;
-        const updatedSelectedCategories = [...selectedCategories];
+        const updatedSelectedCategories = [...selectedCategories.slice(0, index + 1)];
         updatedSelectedCategories[index] = value;
         setSelectedCategories(updatedSelectedCategories);
 
-        // Update the category's parent_category_id if the last select is changed
-        if (index === selectedCategories.length - 1) {
-            setCategory({ ...category, parent_category_id: value });
-        }
+        // Update the category's parent_category_id
+        setCategory({ ...category, parent_category_id: value });
     };
 
     const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -46,40 +43,48 @@ const CreateCategory = () => {
         e.preventDefault();
 
         try {
-            const res = await axios.post('/api/courses/create-category', category);
+            const res = await axios.post('/api/course-category/create-category', category);
             const data = res.data;
             console.log(data);
 
-            // Optionally, reset the form after successful submission
+            // Reset the form
             setCategory({
                 category_name: "",
                 parent_category_id: ""
             });
             setSelectedCategories([]);
+
+            // Fetch updated categories
+            await fetchCategories();
+
+            // Optionally, show a success message
+            alert("Category created successfully!");
         } catch (error) {
             console.error(error);
+            // Optionally, show an error message
+            alert("Failed to create category. Please try again.");
         }
     };
 
     const renderCategoryDropdowns = () => {
         let availableCategories = categories.filter(cat => !cat.parent_category_id);
+        const dropdowns = [];
 
-        return selectedCategories.map((selectedCategoryId, index) => {
-            const nextLevelCategories = categories.filter(cat => cat.parent_category_id === selectedCategoryId);
-            if (nextLevelCategories.length === 0) return null; // No more subcategories
+        for (let i = 0; i <= selectedCategories.length; i++) {
+            const parentId = i === 0 ? null : selectedCategories[i - 1];
+            availableCategories = categories.filter(cat => cat.parent_category_id === parentId);
 
-            availableCategories = nextLevelCategories;
+            if (availableCategories.length === 0) break;
 
-            return (
-                <div key={index} className="mb-4">
+            dropdowns.push(
+                <div key={i} className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">
-                        {index === 0 ? "Parent Category" : "Subcategory"}
+                        {i === 0 ? "Top-Level Category" : `Subcategory Level ${i}`}
                     </label>
                     <select
-                        value={selectedCategoryId}
-                        onChange={(e) => handleCategoryChange(index, e)}
+                        value={selectedCategories[i] || ""}
+                        onChange={(e) => handleCategoryChange(i, e)}
                         className="mt-1 p-2 w-full border border-gray-300 rounded"
-                        required
                     >
                         <option value="">Select Category</option>
                         {availableCategories.map(cat => (
@@ -90,7 +95,9 @@ const CreateCategory = () => {
                     </select>
                 </div>
             );
-        });
+        }
+
+        return dropdowns;
     };
 
     return (
@@ -112,27 +119,6 @@ const CreateCategory = () => {
                     />
                 </div>
 
-
-
-                {/* Initial top-level category dropdown */}
-                <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700">Top-Level Category</label>
-                    <select
-                        value={selectedCategories[0] || ""}
-                        onChange={(e) => handleCategoryChange(0, e)}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded"
-                        required
-                    >
-                        <option value="">Select Category</option>
-                        {categories.filter(cat => !cat.parent_category_id).map(cat => (
-                            <option key={cat.id} value={cat.id}>
-                                {cat.category_name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                {/* Render the category dropdowns */}
                 {renderCategoryDropdowns()}
 
                 <div>
