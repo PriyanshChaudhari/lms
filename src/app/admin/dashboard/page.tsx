@@ -7,9 +7,9 @@ export default function courseDetails({ params }: { params: { courseId: string }
 
     const router = useRouter();
 
-    const handleModuleClick = (moduleId: number) => {
-        router.push(`/student/mycourse/${params.courseId}/modules/${moduleId}`);
-    };
+    // const handleModuleClick = (moduleId: number) => {
+    //     router.push(`/student/mycourse/${params.courseId}/modules/${moduleId}`);
+    // };
 
     const handleCreateUserClick = () => {
         router.push('/admin/create-user');
@@ -20,11 +20,11 @@ export default function courseDetails({ params }: { params: { courseId: string }
     };
 
     const handleCreateCategoryClick = () => {
-        router.push('/admin/courses/course-category');
+        router.push('/admin/course-category/create');
     };
 
     const handleModifyCategoryClick = () => {
-        router.push('/admin/courses/modify-category');
+        router.push('/admin/course-category/manage');
     };
 
     const handleViewUsersClick = () => {
@@ -84,7 +84,7 @@ export default function courseDetails({ params }: { params: { courseId: string }
                             </div>
 
                             <div className="bg-white border border-gray-300 rounded-xl p-3 shadow-md h-12 " onClick={handleModifyCategoryClick}>
-                                <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">Modify category</h2>
+                                <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">Manage categories</h2>
                             </div>
                         </div>
                     </div>

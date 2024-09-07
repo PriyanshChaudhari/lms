@@ -43,7 +43,7 @@ const CreateCategory = () => {
         e.preventDefault();
 
         try {
-            const res = await axios.post('/api/course-category/create-category', category);
+            const res = await axios.post('/api/course-category/', category);
             const data = res.data;
             console.log(data);
 
