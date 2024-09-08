@@ -55,7 +55,7 @@ const CourseDetails = () => {
 
         const getAssignments = async () => {
             try {
-                const res = await axios.post('/api/get/assignments', { courseId });
+                const res = await axios.post('/api/get/assignments/all-assignments', { courseId });
                 setAssignments(res.data);  // Set as array or empty array
                 console.log(res.data.assignments || []);
             } catch (error) {

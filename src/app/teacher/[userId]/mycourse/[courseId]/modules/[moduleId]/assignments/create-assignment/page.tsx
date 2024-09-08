@@ -1,11 +1,18 @@
 "use client"
 import axios from 'axios';
+import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-export default function AddAssessment() {
+export default function CreateAssignment() {
+    const router = useRouter();
+    const params = useParams();
+    const userId = params.userId as string;
+    const courseId = params.courseId as string;
+    const moduleId = params.moduleId as string;
+
     const [formData, setFormData] = useState({
-        course_id: '',
-        module_id: '',
+        course_id: courseId,
+        module_id: moduleId,
         title: '',
         assessment_type: 'assignment', // default type
         description: '',
@@ -25,20 +32,21 @@ export default function AddAssessment() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('/api/addAssessment', formData);
+            const response = await axios.post('/api/assignments/create-assignment', formData);
             const data = response.data;
 
             if (response) {
                 setMessage('Assessment added successfully!');
                 setFormData({
-                    course_id: '',
-                    module_id: '',
+                    course_id: courseId,
+                    module_id: moduleId,
                     title: '',
                     assessment_type: 'assignment',
                     description: '',
                     total_marks: '',
                     due_date: '',
                 });
+                router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments`)
             } else {
                 setError(data.error || 'Failed to add assessment');
             }
@@ -114,7 +122,7 @@ export default function AddAssessment() {
                     type="submit"
                     className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
                 >
-                    Add Assessment
+                    Create Assignment
                 </button>
             </form>
         </div>

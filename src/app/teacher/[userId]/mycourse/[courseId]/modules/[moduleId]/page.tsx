@@ -52,7 +52,7 @@ export default function ViewModule() {
         router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/content/`);
     }
 
-    const handleContentClick = (contentId) => {
+    const handleContentClick = (contentId: string) => {
         router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/content/${contentId}`);
     }
 
@@ -94,12 +94,21 @@ export default function ViewModule() {
 
                         <button
                             className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600"
+                            onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments`)} // Replace with your add module logic
+                        >
+                            Assignments
+                        </button>
+                        <br />
+                        <br />
+                        <button
+                            className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600"
                             onClick={handleEditModule} // Replace with your add module logic
                         >
                             edit Module
                         </button>
                         <br />
                         <br />
+
                         <button
                             className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600"
                             onClick={handleDeleteModule} // Replace with your add module logic
