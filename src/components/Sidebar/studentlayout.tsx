@@ -8,7 +8,7 @@ const studentlayout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
       <div className="lg:w-1/6 "> {/* Adjust width for the sidebar */}
         <Sidebar />
       </div>
-      <div className="lg:w-5/6"> {/* Adjust width for the content */}
+      <div className="lg:w-5/6 w-full"> {/* Adjust width for the content */}
         {children}
       </div>
     </div>

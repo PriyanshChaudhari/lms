@@ -74,7 +74,7 @@ const Sidebar: React.FC = () => {
         <div className="flex flex-col gap-4 bg-white dark:bg-black border border-gray-300 dark:border-gray-700 p-4">
           <button
             onClick={toggleCoursesVisibility}
-            className="hover:bg-blue-400 text-left dark:hover:bg-slate-600 text-black dark:text-gray-200 p-2 rounded-md bg-blue-500 text-white"
+            className="hover:bg-blue-400 text-left dark:hover:bg-slate-600  dark:text-gray-200 p-2 rounded-md bg-blue-500 text-white"
           >
             My Courses
           </button>
@@ -108,11 +108,19 @@ const Sidebar: React.FC = () => {
                       </div>
                     )}
                   </li>
+                  
                 ))}
+                
               </ul>
 
             </div>
           )}
+          <Link href="#dashboard" className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 rounded-md">
+            Dashboard
+          </Link>
+          <Link href="#notifications" className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 rounded-md">
+            Notificstions
+          </Link>
         </div>
       </aside>
 
@@ -124,7 +132,7 @@ const Sidebar: React.FC = () => {
       </div>
 
       {/* Mobile Sidebar */}
-      <div className={`fixed top-12 left-0 w-64 h-full bg-gray-100 dark:bg-gray-800 text-black dark:text-white transition-transform transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} z-50`}>
+      <div className={`fixed top-18 left-0 w-64 h-full bg-gray-100 dark:bg-gray-800 text-black dark:text-white transition-transform transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} z-50`}>
         <button onClick={closeMobileMenu} className="text-3xl absolute top-4 right-4 focus:outline-none text-black dark:text-white">
           ✕
         </button>
