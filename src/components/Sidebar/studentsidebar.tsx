@@ -1,36 +1,51 @@
-
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 
-// Define course data
+// Define course data with modules
+// Define course data with module IDs
 const course1 = {
   id: 1,
-  name: "React Basics",
-  description: "Learn the fundamentals of React, including components, props, and state management.",
+  name: "Course 1",
+  modules: [
+    { id: 1, name: "Module 1" },
+    { id: 2, name: "Module 2" },
+    { id: 3, name: "Module 3" },
+    { id: 4, name: "Module 4" }
+  ],
 };
 
 const course2 = {
   id: 2,
-  name: "React Hooks",
-  description: "Explore React Hooks, including useState, useEffect, and custom hooks.",
+  name: "Course 2",
+  modules: [
+    { id: 1, name: "Module 1" },
+    { id: 2, name: "Module 2" },
+    { id: 3, name: "Module 3" },
+    { id: 4, name: "Module 4" }
+  ],
 };
 
 const course3 = {
   id: 3,
-  name: "React Context",
-  description: "Learn how to use React Context for global state management.",
+  name: "Course 3",
+  modules: [
+    { id: 1, name: "Module 1" },
+    { id: 2, name: "Module 2" },
+    { id: 3, name: "Module 3" },
+    { id: 4, name: "Module 4" }
+  ],
 };
 
-// Add more courses as needed
 const showCourse = [course1, course2, course3];
+
 
 const Sidebar: React.FC = () => {
   const { theme, setTheme } = useTheme();
-  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isCoursesVisible, setCoursesVisible] = useState(false);
-  const [expandedCourse, setExpandedCourse] = useState<typeof course1 | null>(null);
+  const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
+  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!isMobileMenuOpen);
@@ -48,18 +63,18 @@ const Sidebar: React.FC = () => {
     setCoursesVisible(!isCoursesVisible);
   };
 
-  const handleCourseClick = (course: typeof course1) => {
-    setExpandedCourse(expandedCourse === course ? null : course);
+  const handleCourseClick = (courseId: number) => {
+    setSelectedCourseId(selectedCourseId === courseId ? null : courseId); // Toggle course selection
   };
 
   return (
     <>
       {/* Desktop Sidebar */}
       <aside className="hidden sm:block w-1/4 lg:w-1/6 bg-gray-100 dark:bg-gray-800 p-4 h-full fixed z-50">
-        <div className="flex flex-col gap-6 bg-white dark:bg-black border border-gray-300 dark:border-gray-700 p-4">
+        <div className="flex flex-col gap-4 bg-white dark:bg-black border border-gray-300 dark:border-gray-700 p-4">
           <button
             onClick={toggleCoursesVisibility}
-            className="hover:bg-slate-300 text-left dark:hover:bg-slate-600 text-black dark:text-gray-200 p-2 rounded-md bg-blue-500 text-white"
+            className="hover:bg-blue-400 text-left dark:hover:bg-slate-600 text-black dark:text-gray-200 p-2 rounded-md bg-blue-500 text-white"
           >
             My Courses
           </button>
@@ -67,33 +82,41 @@ const Sidebar: React.FC = () => {
             <div>
               <ul className="list-disc">
                 {showCourse.map((course) => (
-                  <li key={course.id} className="text-black list-none py-1 dark:text-gray-200 cursor-pointer">
-                    
+                  <li
+                    key={course.id}
+                    className="text-black list-none py-1 dark:text-gray-200 cursor-pointer bg-gray-300 dark:bg-gray-700 rounded p-3 my-2"
+                  >
+                    {/* Wrap in Link for redirection */}
                     <Link href={`/student/mycourse/${course.id}`}>
-                      <strong>{course.name}</strong>
-                        <p className="bg-gray-300 dark:bg-gray-400 mt-2 p-2">{course.description}</p>
+                      <span onClick={() => handleCourseClick(course.id)}>
+                        <strong>{course.id}. {course.name}</strong>
+                      </span>
                     </Link>
+
+                    {/* Conditionally render the course description and modules */}
+                    {selectedCourseId === course.id && (
+                      <div className="mt-2 p-2 bg-gray-300 dark:bg-gray-700 rounded">
+                        <ul className="list-disc pl-4 ">
+                          {course.modules.map((module) => (
+                            <Link key={module.id} href={`/student/mycourse/${course.id}/modules/${module.id}`}>
+                              <li className="py-1 text-sm text-black dark:text-white block cursor-pointer">
+                                {module.id}. {module.name}
+                              </li>
+                            </Link>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </li>
                 ))}
               </ul>
+
             </div>
           )}
-          <hr />
-          <Link href="#about" className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 rounded-md">
-            About
-          </Link>
-          <hr />
-          <Link href="#contact" className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 rounded-md">
-            Contact
-          </Link>
-          <hr />
-          <Link href="#notifications" className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 rounded-md">
-            Notifications
-          </Link>
         </div>
       </aside>
 
-      {/* Mobile Toggle Button */}
+      {/* Mobile Sidebar */}
       <div className="md:hidden fixed top-40 left-0 bg-white dark:bg-gray-800 border border-gray-300 rounded-e-full">
         <button onClick={toggleMobileMenu} className="text-xl m-3 focus:outline-none">
           {isMobileMenuOpen ? "✕" : "☰"}
