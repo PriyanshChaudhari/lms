@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import { useTheme } from "next-themes";
 
 // Define course data with modules
 // Define course data with module IDs
@@ -42,10 +41,10 @@ const showCourse = [course1, course2, course3];
 
 
 const Sidebar: React.FC = () => {
-  const { theme, setTheme } = useTheme();
   const [isCoursesVisible, setCoursesVisible] = useState(false);
   const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isSectionVisible, setSectionVisible] = useState(false);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!isMobileMenuOpen);
@@ -55,12 +54,9 @@ const Sidebar: React.FC = () => {
     setMobileMenuOpen(false);
   };
 
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  };
-
   const toggleCoursesVisibility = () => {
     setCoursesVisible(!isCoursesVisible);
+    setSectionVisible(!isSectionVisible);
   };
 
   const handleCourseClick = (courseId: number) => {
@@ -72,10 +68,11 @@ const Sidebar: React.FC = () => {
       {/* Desktop Sidebar */}
       <aside className="hidden sm:block w-1/4 lg:w-1/6 bg-gray-100 dark:bg-gray-800 p-4 h-full fixed z-50">
         <div className="flex flex-col gap-4 bg-white dark:bg-black border border-gray-300 dark:border-gray-700 p-4">
-          <button
-            onClick={toggleCoursesVisibility}
-            className="hover:bg-blue-400 text-left dark:hover:bg-slate-600  dark:text-gray-200 p-2 rounded-md bg-blue-500 text-white"
-          >
+        <button
+              onClick={toggleCoursesVisibility}
+              className={`${isSectionVisible ? 'bg-blue-500 text-white text-left' : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 text-left'
+                } p-2 rounded-md`}
+            >
             My Courses
           </button>
           {isCoursesVisible && (
