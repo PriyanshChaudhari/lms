@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
             description,
             position,
             course_id,
-            created_at,
+            created_at: new Date()
         })
         return NextResponse.json({ message: 'module added' }, { status: 201 })
     } catch (error) {

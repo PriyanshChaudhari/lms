@@ -11,7 +11,8 @@ export async function POST(req: NextRequest) {
             content_type,
             content_url,
             text_content,
-            position
+            position,
+            created_at: new Date(),
         })
         return NextResponse.json({ message: 'course-content added' }, { status: 201 })
     } catch (error) {

@@ -28,7 +28,7 @@ export default function ViewModules() {
     const sortedModules = courseModules.sort((a, b) => a.position - b.position);
 
     const createModule = () => {
-        router.push(`/teacher/${userId}/mycourse/${courseId}/moudles/create-module`)
+        router.push(`/teacher/${userId}/mycourse/${courseId}/modules/create-module`)
     }
 
     const handleModuleClick = (moduleId: string) => {

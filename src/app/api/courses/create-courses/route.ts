@@ -11,6 +11,7 @@ export async function POST(req: NextRequest) {
             thumbnail,
             teacher_id,
             category,
+            created_at: new Date(),
         })
         return NextResponse.json({ message: 'course added' }, { status: 201 })
     } catch (error) {

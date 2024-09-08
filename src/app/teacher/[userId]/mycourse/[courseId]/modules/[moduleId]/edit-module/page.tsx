@@ -3,11 +3,13 @@ import React, { ChangeEvent, useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
 
-const CreateCourse = () => {
-    const params = useParams()
-    const router = useRouter()
+const EditModule = () => {
+    const params = useParams();
+    const router = useRouter();
     const userId = params.userId;
     const courseId = params.courseId;
+    const moduleId = params.moduleId;  // Assuming you pass moduleId in the URL
+
     const [module, setModule] = useState({
         title: "",
         description: "",
@@ -15,21 +17,29 @@ const CreateCourse = () => {
         course_id: courseId
     });
 
-    const [teachers, setTeachers] = useState<{ id: string; name: string }[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    // useEffect(() => {
-    //     // Fetch the list of teachers when the component mounts
-    //     const fetchTeachers = async () => {
-    //         try {
-    //             const res = await axios.get('/api/get/teachers');
-    //             setTeachers(res.data);
-    //         } catch (error) {
-    //             console.error('Error fetching teachers:', error);
-    //         }
-    //     };
+    useEffect(() => {
+        const fetchModule = async () => {
+            try {
+                const res = await axios.post('/api/get/one-module', { moduleId });
+                const data = res.data.content;
 
-    //     fetchTeachers();
-    // }, []);
+                // Pre-fill the form with fetched module data
+                setModule({
+                    title: data.title,
+                    description: data.description,
+                    position: data.position,
+                    course_id: courseId,
+                });
+                setLoading(false);
+            } catch (error) {
+                console.error("Error fetching module:", error);
+            }
+        };
+
+        fetchModule();
+    }, [moduleId, courseId]);
 
     const handleChange = (e: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -40,26 +50,22 @@ const CreateCourse = () => {
         e.preventDefault();
 
         try {
-            const res = await axios.post('/api/courses/create-module', module);
-            const data = res.data;
-            console.log(data);
-
-            // Optionally, you can reset the form after successful submission
-            setModule({
-                title: "",
-                description: "",
-                position: "",
-                course_id: courseId
-            });
-            router.push(`/teacher/${userId}/mycourse/${courseId}/modules`)
+            const res = await axios.put(`/api/put/update-module/${moduleId}`, module);
+            console.log("Module updated:", res.data);
+            // Optionally, you can redirect the user after successful update
+            router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}`);
         } catch (error) {
-            console.error(error);
+            console.error("Error updating module:", error);
         }
     };
 
+    if (loading) {
+        return <p>Loading...</p>;
+    }
+
     return (
         <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded shadow-md">
-            <h2 className="text-2xl font-bold mb-4">Create a New Module</h2>
+            <h2 className="text-2xl font-bold mb-4">Edit Module</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
                     <label htmlFor="title" className="block text-sm font-medium text-gray-700">
@@ -109,7 +115,7 @@ const CreateCourse = () => {
                         type="submit"
                         className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
                     >
-                        Create Module
+                        Update Module
                     </button>
                 </div>
             </form>
@@ -117,4 +123,4 @@ const CreateCourse = () => {
     );
 };
 
-export default CreateCourse;
+export default EditModule;

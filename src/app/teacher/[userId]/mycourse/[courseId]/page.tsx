@@ -83,6 +83,16 @@ const CourseDetails = () => {
 
     const sortedModules = courseModules.sort((a, b) => a.position - b.position);
 
+
+
+    const handleModuleClick = (moduleId: string) => {
+        router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}`);
+    }
+
+    const addModule = () => {
+        router.push(`/teacher/${userId}/mycourse/${courseId}/modules`)
+    }
+
     const handleAssignmentClick = (assignmentId: number, moduleId?: number) => {
         if (moduleId) {
             router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments/${assignmentId}`);
@@ -90,10 +100,6 @@ const CourseDetails = () => {
             router.push(`/teacher/${userId}/mycourse/${courseId}/assignments/${assignmentId}`);
         }
     };
-
-    const handleModuleClick = (moduleId: string) => {
-        router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}`);
-    }
 
     return (
         <div className="border border-gray-300 m-5">
@@ -140,19 +146,36 @@ const CourseDetails = () => {
 
                     {/*modules completed */}
                     {activeSection === 'course' && (
-                        sortedModules.map((module) => (
-                            <div key={module.id} className="space-y-4">
-                                <div
-                                    className="bg-white border flex justify-between border-gray-300 rounded-xl p-4 shadow-md min-h-6 ">
-                                    <h2 className="text-xl font-semibold">{module.title}</h2>
-                                    <h2 className="text-xl font-semibold">{module.description}</h2>
-                                    <h2 className="text-xl font-semibold">{module.position}</h2>
-                                    <div className='px-3 rounded-xl cursor-pointer bg-gray-300  hover:bg-gray-200' onClick={() => handleModuleClick(module.id)} > GO -> </div>
-                                </div>
-
+                        <div className="space-y-4">
+                            {/* Add Module Button */}
+                            <div className="flex justify-end">
+                                <button
+                                    className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600"
+                                    onClick={addModule} // Replace with your add module logic
+                                >
+                                    Add Module
+                                </button>
                             </div>
-                        ))
+
+                            {/* Modules List */}
+                            {sortedModules.map((module) => (
+                                <div key={module.id} className="space-y-4">
+                                    <div className="bg-white border flex justify-between border-gray-300 rounded-xl p-4 shadow-md min-h-6">
+                                        <h2 className="text-xl font-semibold">{module.title}</h2>
+                                        <h2 className="text-xl font-semibold">{module.description}</h2>
+                                        <h2 className="text-xl font-semibold">{module.position}</h2>
+                                        <div
+                                            className="px-3 rounded-xl cursor-pointer bg-gray-300 hover:bg-gray-200"
+                                            onClick={() => handleModuleClick(module.id)}
+                                        >
+                                        GO ->
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     )}
+
 
                     {activeSection === 'assignments' && (
                         <div className="space-y-4">

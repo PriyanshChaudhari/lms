@@ -39,13 +39,24 @@ const MyCourse: React.FC = () => {
         }
     }, [userId]);
 
-    const handleClick = (courseId) => {
+    const handleClick = (courseId: string) => {
         router.push(`/teacher/${userId}/mycourse/${courseId}`);
     };
 
-    const editCourse = () => {
+    const handleEditCourse = (courseId: string) => {
+        router.push(`/teacher/${userId}/mycourse/${courseId}/edit-course`)
+    }
+
+    const handleDeleteCourse = async (courseId: string) => {
+        try {
+            const res = await axios.delete(`/api/delete/delete-course/${courseId}`);
+            console.log(res.data);
+        } catch (error) {
+            console.log(error)
+        }
         router.push(`/teacher/${userId}/mycourse`)
     }
+
     const createCourse = () => {
         router.push(`/teacher/${userId}/mycourse/create-courses`)
     }
@@ -61,7 +72,7 @@ const MyCourse: React.FC = () => {
                             <div className="w-full  p-5  rounded-lg flex flex-col justify-center items-center h-full max-h-[calc(100vh-2rem)]">
                                 <h1 className="text-2xl font-bold mb-6">My Courses</h1>
                                 <div className="flex w-full flex-wrap justify-center gap-5">
-                                    <button className="bg-red-300 hover:bg-red-400" onClick={createCourse}>ADD</button>
+                                    <button className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600" onClick={createCourse}>ADD</button>
 
                                     {courses.map((course) => (
                                         <div key={course.id} className="border border-gray-300 dark:text-white  hover:bg-slate-100 dark:hover:bg-[#1a1a1a] rounded-xl p-5 w-full max-w-xs shadow-sm cursor-pointer" onClick={() => handleClick(course.id)}>
@@ -71,7 +82,10 @@ const MyCourse: React.FC = () => {
                                                 <div className="bg-blue-500 h-full rounded-full" style={{ width: '50%' }}></div>
                                             </div>
 
-                                            <button className="bg-red-300 hover:bg-red-400" onClick={editCourse}>EDIT</button>
+                                            <button className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600" onClick={() => handleEditCourse(course.id)}>Edit Course</button>
+                                            <br />
+                                            <br />
+                                            <button className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600" onClick={() => handleDeleteCourse(course.id)}>Delete Course</button>
                                         </div>
                                     ))}
 

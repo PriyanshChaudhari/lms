@@ -12,6 +12,7 @@ export default function ViewModule() {
     const moduleId = params.moduleId as string;
 
     const [oneModule, setOneModule] = useState([]);
+    const [courseContent, setCourseContent] = useState([])
     const [course, setCourse] = useState({})
 
     useEffect(() => {
@@ -35,7 +36,43 @@ export default function ViewModule() {
             }
         };
         getOneModule()
+
+        const getCourseContent = async () => {
+            try {
+                const res = await axios.post('/api/get/course-content', { moduleId })
+                setCourseContent(res.data.content)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        getCourseContent()
     }, [moduleId, courseId]);
+
+    const addContent = () => {
+        router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/content/`);
+    }
+
+    const handleContentClick = (contentId) => {
+        router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/content/${contentId}`);
+    }
+
+    const sortedContent = courseContent.sort((a, b) => a.position - b.position);
+
+
+    const handleEditModule = () => {
+        router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/edit-module`)
+    }
+
+    const handleDeleteModule = async () => {
+        try {
+            const res = await axios.delete(`/api/delete/delete-module/${moduleId}`);
+            console.log(res.data);
+        } catch (error) {
+            console.log(error)
+        }
+        router.push(`/teacher/${userId}/mycourse/${courseId}/modules`)
+    }
+
 
     return (
         <div className="border border-gray-300 m-5">
@@ -49,12 +86,52 @@ export default function ViewModule() {
                         <li className=" p-3 rounded-xl text-black cursor-pointer">{oneModule.title}</li>
                     </ul>
                 </nav>
+
                 <div className="space-y-4 ">
                     <div className="bg-white border border-gray-300 rounded-xl p-6 shadow-md h-26">
                         <h2 className="text-xl font-semibold mb-2">{oneModule.title}</h2>
                         <p className="text-sm text-gray-600">{oneModule.description}</p>
+
+                        <button
+                            className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600"
+                            onClick={handleEditModule} // Replace with your add module logic
+                        >
+                            edit Module
+                        </button>
+                        <br />
+                        <br />
+                        <button
+                            className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600"
+                            onClick={handleDeleteModule} // Replace with your add module logic
+                        >
+                            Delete Module
+                        </button>
                     </div>
+
+                    <button
+                        className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600"
+                        onClick={addContent} // Replace with your add module logic
+                    >
+                        Add Content
+                    </button>
+
+                    <div>
+                        {sortedContent.map((content) => (
+                            <div key={content.id} className="space-y-4">
+                                <div
+                                    className="bg-white border flex justify-between border-gray-300 rounded-xl p-4 shadow-md min-h-6 ">
+                                    <h2 className="text-xl font-semibold">{content.title}</h2>
+                                    <h2 className="text-xl font-semibold">{content.description}</h2>
+                                    <h2 className="text-xl font-semibold">{content.position}</h2>
+                                    <div className='px-3 rounded-xl cursor-pointer bg-gray-300  hover:bg-gray-200' onClick={() => handleContentClick(content.id)} > GO -> </div>
+                                </div>
+
+                            </div>
+                        ))}
+                    </div>
+
                 </div>
+
             </div>
         </div >
     );

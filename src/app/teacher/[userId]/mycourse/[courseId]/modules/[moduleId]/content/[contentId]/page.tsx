@@ -38,6 +38,20 @@ export default function ViewModule() {
         getOneModule()
     }, [contentId, courseId]);
 
+    const handleEditContent = () => {
+        router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/content/${contentId}/edit-content`)
+    }
+
+    const handleDeleteContent = async () => {
+        try {
+            const res = await axios.delete(`/api/delete/delete-content/${contentId}`);
+            console.log(res.data);
+        } catch (error) {
+            console.log(error)
+        }
+        router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/content`)
+    }
+
     return (
         <div className="border border-gray-300 m-5">
             <div className="max-w-4xl mx-auto p-5">
@@ -53,6 +67,22 @@ export default function ViewModule() {
                 <div className="space-y-4 ">
                     <div className="bg-white border border-gray-300 rounded-xl p-6 shadow-md h-26">
                         <h2 className="text-xl font-semibold mb-2">{oneContent.title}</h2>
+                        <h2 className="text-xl font-semibold mb-2">{oneContent.content_url}</h2>
+                        <h2 className="text-xl font-semibold mb-2">{oneContent.text_content}</h2>
+                        {/* Edit Content Button */}
+                        <button
+                            className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600 mt-2"
+                            onClick={handleEditContent} // Function to handle edit
+                        >
+                            Edit Content
+                        </button>
+                        <p></p>
+                        <button
+                            className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600 mt-2"
+                            onClick={handleDeleteContent} // Function to handle edit
+                        >
+                            Delete Content
+                        </button>
                     </div>
                 </div>
             </div>
