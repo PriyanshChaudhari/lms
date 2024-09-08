@@ -1,19 +1,59 @@
 "use client"
 import axios from 'axios';
-import { useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
 
-export default function AddAssessment() {
+export default function EditAssignment() {
+    const router = useRouter();
+    const params = useParams();
+    const userId = params.userId as string;
+    const courseId = params.courseId as string;
+    const moduleId = params.moduleId as string;
+    const assignmentId = params.assignmentId as string;
+
     const [formData, setFormData] = useState({
-        course_id: '',
-        module_id: '',
+        course_id: courseId,
+        module_id: moduleId,
         title: '',
         assessment_type: 'assignment', // default type
         description: '',
         total_marks: '',
         due_date: '',
     });
+
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
+
+    const convertTimestampToDate = (timestamp) => {
+        if (timestamp?.seconds) {
+            const date = new Date(timestamp.seconds * 1000); // Convert seconds to milliseconds
+            return date.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+        }
+        return '';
+    };
+
+    // Fetch the existing assignment data
+    useEffect(() => {
+        const fetchAssignment = async () => {
+            try {
+                const response = await axios.post('/api/get/assignments/one-assignments', { assignmentId });
+                const data = response.data;
+                console.log(data.due_date)
+                if (response.status === 200) {
+                    setFormData({
+                        ...data,
+                        due_date: convertTimestampToDate(data.due_date)
+                    });
+                } else {
+                    setError('Failed to fetch assignment details');
+                }
+            } catch (error) {
+                setError('An error occurred while fetching the assignment.');
+            }
+        };
+
+        fetchAssignment();
+    }, [assignmentId]);
 
     const handleChange = (e) => {
         setFormData({
@@ -25,22 +65,14 @@ export default function AddAssessment() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('/api/addAssessment', formData);
+            const response = await axios.put(`/api/assignments/${assignmentId}/edit-assignment`, formData);
             const data = response.data;
 
-            if (response) {
-                setMessage('Assessment added successfully!');
-                setFormData({
-                    course_id: '',
-                    module_id: '',
-                    title: '',
-                    assessment_type: 'assignment',
-                    description: '',
-                    total_marks: '',
-                    due_date: '',
-                });
+            if (response.status === 200) {
+                setMessage('Assignment updated successfully!');
+                router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments`);
             } else {
-                setError(data.error || 'Failed to add assessment');
+                setError(data.error || 'Failed to update assignment');
             }
         } catch (error) {
             setError('An error occurred. Please try again.');
@@ -49,11 +81,10 @@ export default function AddAssessment() {
 
     return (
         <div className="max-w-md mx-auto bg-white p-8 shadow-md rounded-md">
-            <h1 className="text-2xl font-bold mb-6">Add New Assessment</h1>
+            <h1 className="text-2xl font-bold mb-6">Edit Assignment</h1>
             {message && <p className="text-green-500">{message}</p>}
             {error && <p className="text-red-500">{error}</p>}
             <form onSubmit={handleSubmit}>
-
                 <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">Title</label>
                     <input
@@ -114,7 +145,7 @@ export default function AddAssessment() {
                     type="submit"
                     className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
                 >
-                    Add Assessment
+                    Update Assignment
                 </button>
             </form>
         </div>

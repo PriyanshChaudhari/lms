@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
     try {
-        const { course_id, title, assessment_type, description, total_marks, due_date } = await req.json();
+        const { course_id, module_id, title, assessment_type, description, total_marks, due_date } = await req.json();
 
         // Validate input fields (optional but recommended)
         // if (!course_id || !title || !assessment_type || !description || !total_marks || !due_date) {
@@ -14,6 +14,7 @@ export async function POST(req: NextRequest) {
         // Create assessment data
         const newAssessment = {
             course_id,
+            module_id,
             title,
             assessment_type,
             description,
