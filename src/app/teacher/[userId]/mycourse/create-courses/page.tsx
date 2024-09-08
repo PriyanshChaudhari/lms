@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, useState, useEffect } from 'react';
+import React, { ChangeEvent, useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
 
@@ -15,21 +15,22 @@ const CreateCourse = () => {
         category: ""
     });
 
+    const hasFetchedTeachers = useRef(false);
     const [teachers, setTeachers] = useState<{ id: string; name: string }[]>([]);
 
-    // useEffect(() => {
-    //     // Fetch the list of teachers when the component mounts
-    //     const fetchTeachers = async () => {
-    //         try {
-    //             const res = await axios.get('/api/get/teachers');
-    //             setTeachers(res.data);
-    //         } catch (error) {
-    //             console.error('Error fetching teachers:', error);
-    //         }
-    //     };
+    useEffect(() => {
+        // Fetch the list of teachers when the component mounts
+        const fetchTeachers = async () => {
+            try {
+                const res = await axios.get('/api/get/teachers');
+                setTeachers(res.data);
+            } catch (error) {
+                console.error('Error fetching teachers:', error);
+            }
+        };
 
-    //     fetchTeachers();
-    // }, []);
+        fetchTeachers();
+    }, []);
 
     const handleChange = (e: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;

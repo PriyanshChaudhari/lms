@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import Link from 'next/link'
 import Image from "next/image";
-import LMS from "@/app/assets/lms-mainpage.jpeg"
+import LMS from "../assets/lms-mainpage.jpg";
 
 export default function Home() {
   return (
@@ -18,7 +18,7 @@ export default function Home() {
         {/* Hero Section */}
         <section
           className="bg-cover bg-center text-black dark:text-gray-100 p-16 text-center"
-          style={{ backgroundImage: `url(${LMS})` }} // Add your own image or use a URL
+        // style={{ backgroundImage: `url(${LMS})` }} // Add your own image or use a URL
         >
           <h2 className="text-5xl font-bold mb-4">Welcome to LMS Portal</h2>
           <p className="text-xl mb-8">
