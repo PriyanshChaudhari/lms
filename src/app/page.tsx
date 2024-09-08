@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import Link from 'next/link'
 import Image from "next/image";
-import LMS from "../assets/lms-mainpage.jpg";
+import LMS from "@/app/assets/lms-mainpage.jpeg"
 
 export default function Home() {
   return (

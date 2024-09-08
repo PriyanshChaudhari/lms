@@ -38,7 +38,6 @@ const LoginPage = () => {
             try {
                 const res = await axios.post('/api/auth/signIn', user);
                 const data = res.data;
-
                 console.log('Response data:', data);  // Debugging line
 
                 if (data.success) {
@@ -46,11 +45,11 @@ const LoginPage = () => {
                     console.log("ROLE in LOGIN:" + role)
 
                     if (role === 'student') {
-                        router.push('/student/dashboard');
+                        router.push(`/student/${user.userId}/dashboard`);
                     } else if (role === 'teacher') {
-                        router.push('/teacher/dashboard');
+                        router.push(`/teacher/${user.userId}/dashboard`);
                     } else if (role === 'admin') {
-                        router.push('/admin/dashboard');
+                        router.push(`/admin/${user.userId}/dashboard`);
                     } else {
                         console.error('Unknown role:', role);
                         alert('An unexpected error occurred');

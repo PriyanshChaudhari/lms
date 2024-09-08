@@ -1,0 +1,88 @@
+// pages/student/dashboard/dashboard.tsx
+"use client";
+
+import React, { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import axios from "axios";
+import CourseCard from "@/components/Teacher/CourseCard";
+
+interface courses {
+    id: string;
+    title: string;
+    description: string;
+    teacher_id: string;
+    category: string;
+}
+
+const MyCourse: React.FC = () => {
+    const [courses, setCourses] = useState<courses[]>([]);
+    const params = useParams();
+    const userId = params.userId;
+    const router = useRouter()
+
+    useEffect(() => {
+        const getTeacherCourses = async () => {
+            try {
+                const res = await axios.get(`/api/teacher/${userId}/dashboard`);
+                if (res.data.success) {
+                    setCourses(res.data.data);
+                } else {
+                    console.error("No courses found");
+                }
+            } catch (error) {
+                console.error("Error fetching courses:", error);
+            }
+        };
+
+        if (userId) {
+            getTeacherCourses();
+        }
+    }, [userId]);
+
+    const handleClick = (courseId) => {
+        router.push(`/teacher/${userId}/mycourse/${courseId}`);
+    };
+
+    const editCourse = () => {
+        router.push(`/teacher/${userId}/mycourse`)
+    }
+    const createCourse = () => {
+        router.push(`/teacher/${userId}/mycourse/create-courses`)
+    }
+
+    return (
+        <div className="flex flex-col lg:h-screen h-full p-5">
+
+            <div className="flex flex-1 gap-10 flex-wrap md:flex-nowrap items-start justify-center border border-gray-300 p-5">
+                <div className="w-full md:w-2/3 p-5 border border-gray-300 rounded-lg flex flex-col justify-center items-center h-full max-h-[calc(100vh-2rem)]">
+                    Dashboard
+                    <div className="flex flex-col h-screen p-5">
+                        <div className="flex flex-1  flex-wrap md:flex-nowrap items-start justify-center border border-gray-300 p-5">
+                            <div className="w-full  p-5  rounded-lg flex flex-col justify-center items-center h-full max-h-[calc(100vh-2rem)]">
+                                <h1 className="text-2xl font-bold mb-6">My Courses</h1>
+                                <div className="flex w-full flex-wrap justify-center gap-5">
+                                    <button className="bg-red-300 hover:bg-red-400" onClick={createCourse}>ADD</button>
+
+                                    {courses.map((course) => (
+                                        <div key={course.id} className="border border-gray-300 dark:text-white  hover:bg-slate-100 dark:hover:bg-[#1a1a1a] rounded-xl p-5 w-full max-w-xs shadow-sm cursor-pointer" onClick={() => handleClick(course.id)}>
+                                            <h3 className="text-lg font-semibold">{course.title}</h3>
+                                            <p className="text-sm text-gray-600">{course.description}</p>
+                                            <div className="bg-gray-200 rounded-full h-2 my-3">
+                                                <div className="bg-blue-500 h-full rounded-full" style={{ width: '50%' }}></div>
+                                            </div>
+
+                                            <button className="bg-red-300 hover:bg-red-400" onClick={editCourse}>EDIT</button>
+                                        </div>
+                                    ))}
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default MyCourse;
