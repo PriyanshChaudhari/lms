@@ -44,8 +44,8 @@ export default function ViewAssignment() {
     };
 
     return (
-        <div className="border border-gray-300 m-5">
-            <div className="max-w-4xl mx-auto p-5">
+        <div className="border border-gray-300 m-5 flex justify-center items-center h-screen">
+            <div className="max-w-4xl mx-auto p-5 w-full">
                 <h1 className="text-3xl font-bold mb-4">{courses.title || 'Course Title'}</h1>
                 <p className="text-lg text-gray-700 mb-6">{courses.description || 'Course Description'}</p>
                 <nav className="mb-6 p-2">
@@ -68,7 +68,7 @@ export default function ViewAssignment() {
                 </nav>
 
                 <div className="space-y-4 ">
-                    <div className="bg-white border border-gray-300 rounded-xl p-6 shadow-md h-26">
+                    <div className=" border border-gray-300 rounded-xl p-6 shadow-md h-26">
                         <h2 className="text-xl font-semibold mb-2">
                             {oneAssignment?.description || 'No description available'}
                         </h2>

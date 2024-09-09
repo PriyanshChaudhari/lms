@@ -56,75 +56,80 @@ export default function CreateAssignment() {
     };
 
     return (
-        <div className="max-w-md mx-auto bg-white p-8 shadow-md rounded-md">
-            <h1 className="text-2xl font-bold mb-6">Add New Assessment</h1>
-            {message && <p className="text-green-500">{message}</p>}
-            {error && <p className="text-red-500">{error}</p>}
-            <form onSubmit={handleSubmit}>
+        <div className='h-screen flex justify-center items-center'>
+            <div className="w-full max-w-md mx-auto dark:bg-gray-800 p-8 shadow-md rounded">
+                <h1 className="text-2xl font-bold mb-6">Add New Assessment</h1>
+                {message && <p className="text-green-500">{message}</p>}
+                {error && <p className="text-red-500">{error}</p>}
+                <form onSubmit={handleSubmit}>
 
-                <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700">Title</label>
-                    <input
-                        type="text"
-                        name="title"
-                        value={formData.title}
-                        onChange={handleChange}
-                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                        required
-                    />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700">Assessment Type</label>
-                    <select
-                        name="assessment_type"
-                        value={formData.assessment_type}
-                        onChange={handleChange}
-                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                        required
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-100">Title</label>
+                        <input
+                            type="text"
+                            name="title"
+                            value={formData.title}
+                            onChange={handleChange}
+                            className="mt-1 block w-full p-2 border border-gray-300 rounded dark:bg-gray-800"
+                            required
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-100">Assessment Type</label>
+                        <select
+                            name="assessment_type"
+                            value={formData.assessment_type}
+                            onChange={handleChange}
+                            className="mt-1 block w-full p-2 border border-gray-300 rounded dark:bg-gray-800"
+                            required
+                        >
+                            <option value="quiz">Quiz</option>
+                            <option value="assignment">Assignment</option>
+                        </select>
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-100">Description</label>
+                        <textarea
+                            name="description"
+                            value={formData.description}
+                            onChange={handleChange}
+                            className="mt-1 block w-full p-2 border border-gray-300 rounded dark:bg-gray-800"
+                            required
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-100">Total Marks</label>
+                        <input
+                            type="number"
+                            name="total_marks"
+                            value={formData.total_marks}
+                            onChange={handleChange}
+                            min={0}
+                            className="mt-1 block w-full p-2 border border-gray-300 rounded dark:bg-gray-800"
+                            required
+                        />
+                    </div>
+                    <div className="mb-6">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-100">Due Date</label>
+                        <input
+                            type="date"
+                            name="due_date"
+                            value={formData.due_date}
+                            onChange={handleChange}
+                            className="mt-1 block w-full p-2 border border-gray-300 rounded dark:bg-gray-800"
+                            min={new Date().toISOString().split("T")[0]}  
+                            required
+                        />
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                     >
-                        <option value="quiz">Quiz</option>
-                        <option value="assignment">Assignment</option>
-                    </select>
-                </div>
-                <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700">Description</label>
-                    <textarea
-                        name="description"
-                        value={formData.description}
-                        onChange={handleChange}
-                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                        required
-                    />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700">Total Marks</label>
-                    <input
-                        type="number"
-                        name="total_marks"
-                        value={formData.total_marks}
-                        onChange={handleChange}
-                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                        required
-                    />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700">Due Date</label>
-                    <input
-                        type="date"
-                        name="due_date"
-                        value={formData.due_date}
-                        onChange={handleChange}
-                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                        required
-                    />
-                </div>
-                <button
-                    type="submit"
-                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-                >
-                    Create Assignment
-                </button>
-            </form>
+                        Create Assignment
+                    </button>
+                </form>
+            </div>
         </div>
     );
 }

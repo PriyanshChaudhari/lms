@@ -120,7 +120,8 @@ const CreateContent = () => {
     };
 
     return (
-        <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded shadow-md">
+       <div className='flex justify-center items-center h-screen'>
+         <div className="w-full max-w-md mx-auto mt-8 p-6 bg-white rounded shadow-md">
             <h2 className="text-2xl font-bold mb-4">Create Content</h2>
             <form onSubmit={handleSubmit}>
                 {/* <div className="mb-4">
@@ -244,6 +245,7 @@ const CreateContent = () => {
                 </div>
             </form>
         </div>
+       </div>
     );
 };
 

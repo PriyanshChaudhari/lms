@@ -71,11 +71,11 @@ export default function ViewModuleAssignments() {
                         assignments.map((ass) => (
                             <div
                                 key={ass.id}
-                                className="bg-white border border-gray-300 rounded-xl p-6 shadow-md min-h-72 cursor-pointer"
+                                className=" border border-gray-300 rounded-xl p-6 shadow-md min-h-72 cursor-pointer"
                                 onClick={() => handleAssignmentClick(moduleId, ass.id)}
                             >
                                 <h2 className="text-xl font-semibold mb-6">Title : {ass.title}</h2>
-                                <div className="shadow-md items-center p-5 border border-gray-100 rounded-xl max-w-lg">
+                                <div className="items-center p-5 ">
                                     <p className="text-sm text-gray-600 mb-4">Description : {ass.description}</p>
                                     <p className="text-sm text-gray-600 mb-4">DeadLine : {formatDate(ass.due_date)}</p>
 

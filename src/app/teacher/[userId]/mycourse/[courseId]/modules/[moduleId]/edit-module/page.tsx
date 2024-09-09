@@ -64,7 +64,8 @@ const EditModule = () => {
     }
 
     return (
-        <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded shadow-md">
+        <div className='h-screen flex justify-center items-center'>
+            <div className="w-full max-w-md mx-auto mt-8 p-6  rounded shadow-md">
             <h2 className="text-2xl font-bold mb-4">Edit Module</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
@@ -119,6 +120,7 @@ const EditModule = () => {
                     </button>
                 </div>
             </form>
+        </div>
         </div>
     );
 };

@@ -37,8 +37,8 @@ export default function AssignmentSubmission(){
     };
 
     return (
-        <div className="border border-gray-300 m-5">
-            <div className="max-w-4xl mx-auto p-5">
+        <div className="border border-gray-300 m-5 flex justify-center items-center h-screen">
+            <div className="w-full max-w-4xl mx-auto p-5">
                 <div className="w-full h-screen flex justify-center items-center max-w-md mx-auto p-4">
                     <div>
                         <h2 className="text-2xl font-semibold mb-4">Upload Assignments</h2>

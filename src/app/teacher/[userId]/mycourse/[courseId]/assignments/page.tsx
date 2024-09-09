@@ -47,8 +47,8 @@ export default function ViewAssignments() {
     };
 
     return (
-        <div className="border border-gray-300 m-5">
-            <div className="max-w-4xl mx-auto p-5">
+        <div className="border border-gray-300 m-5 flex items-center h-screen justify-center">
+            <div className="w-full max-w-4xl mx-auto p-5">
                 <h1 className="text-3xl font-bold mb-4">{courses.title || 'Course Title'}</h1>
                 <p className="text-lg text-gray-700 mb-6">{courses.description || 'Course Description'}</p>
 
@@ -74,7 +74,7 @@ export default function ViewAssignments() {
                         assignments.map((assignment) => (
                             <div
                                 key={assignment.id}
-                                className="bg-white border border-gray-300 rounded-xl p-6 shadow-md h-64 cursor-pointer"
+                                className=" border border-gray-300 rounded-xl p-6 shadow-md h-64 cursor-pointer"
                                 onClick={() => handleAssignmentClick(assignment.id)}
                             >
                                 <h2 className="text-xl font-semibold mb-6">{assignment.title}</h2>

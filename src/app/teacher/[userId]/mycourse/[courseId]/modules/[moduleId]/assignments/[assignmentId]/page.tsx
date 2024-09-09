@@ -95,10 +95,11 @@ export default function ViewModuleAssignment() {
                     </ul>
                 </nav>
                 <div className="space-y-4 ">
-                    <div className="bg-white border border-gray-300 rounded-xl p-6 shadow-md h-26">
+                    <div className=" border border-gray-300 rounded-xl p-6 shadow-md h-26">
                         <h2 className="text-xl font-semibold mb-2">{oneAssignment.title}</h2>
                         <p className="text-sm text-gray-600">Opened : {formatDate(oneAssignment.created_at)}</p>
                         <p className="text-sm text-gray-600">Due date : {formatDate(oneAssignment.due_date)}</p>
+                        <div className='flex justify-start gap-6 items-center'>
                         <button
                             className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600"
                             onClick={handleEditAssignment} // Replace with your add module logic
@@ -113,6 +114,7 @@ export default function ViewModuleAssignment() {
                         >
                             Delete Assignments
                         </button>
+                        </div>
                     </div>
                     <div>
                         <button
