@@ -14,9 +14,34 @@ const CreateCourse = () => {
         teacher_id: userId,
         category: ""
     });
+    const [category, setCategory] = useState({
+        category_name: "",
+        parent_category_id: ""
+    });
+    const [categories, setCategories] = useState<{ id: string; category_name: string; parent_category_id: string | null }[]>([]);
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
     const hasFetchedTeachers = useRef(false);
     const [teachers, setTeachers] = useState<{ id: string; name: string }[]>([]);
+
+    const fetchCategories = async () => {
+        try {
+            const res = await axios.get('/api/get/categories');
+            setCategories(res.data);
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+        }
+    };
+
+    const handleCategoryChange = (index: number, e: ChangeEvent<HTMLSelectElement>) => {
+        const { value } = e.target;
+        const updatedSelectedCategories = [...selectedCategories.slice(0, index + 1)];
+        updatedSelectedCategories[index] = value;
+        setSelectedCategories(updatedSelectedCategories);
+
+        // Update the category's parent_category_id
+        setCategory({ ...category, parent_category_id: value });
+    };
 
     useEffect(() => {
         // Fetch the list of teachers when the component mounts
@@ -32,16 +57,44 @@ const CreateCourse = () => {
         fetchTeachers();
     }, []);
 
+    useEffect(() => {
+        fetchCategories();
+    }, []);
+
     const handleChange = (e: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setCourse({ ...course, [name]: value });
     };
 
+    const updateCategoryInCourse = () => {
+        return new Promise<void>((resolve) => {
+            const selectedCategoryId = selectedCategories[selectedCategories.length - 1];
+            console.log(selectedCategoryId);
+            
+            setCourse((prevCourse) => ({
+                ...prevCourse,
+                category: selectedCategoryId,
+            }));
+    
+            // Since setCourse is async, use a setTimeout to simulate state update completion
+            setTimeout(() => {
+                resolve();
+            }, 0); 
+        });
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        
+        await updateCategoryInCourse();
+        console.log(course.category);
+        
 
         try {
-            const res = await axios.post('/api/courses/create-courses', course);
+            const res = await axios.post('/api/courses/create-courses', {
+                ...course,
+                category: selectedCategories[selectedCategories.length - 1], // Ensure the latest category
+            });
             const data = res.data;
             console.log(data);
 
@@ -57,6 +110,40 @@ const CreateCourse = () => {
         } catch (error) {
             console.error(error);
         }
+    };
+
+    const renderCategoryDropdowns = () => {
+        let availableCategories = categories.filter(cat => !cat.parent_category_id);
+        const dropdowns = [];
+
+        for (let i = 0; i <= selectedCategories.length; i++) {
+            const parentId = i === 0 ? null : selectedCategories[i - 1];
+            availableCategories = categories.filter(cat => cat.parent_category_id === parentId);
+
+            if (availableCategories.length === 0) break;
+
+            dropdowns.push(
+                <div key={i} className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700">
+                        {i === 0 ? "Top-Level Category" : `Subcategory Level ${i}`}
+                    </label>
+                    <select
+                        value={selectedCategories[i] || ""}
+                        onChange={(e) => handleCategoryChange(i, e)}
+                        className="mt-1 p-2 w-full border border-gray-300 rounded"
+                    >
+                        <option value="">Select Category</option>
+                        {availableCategories.map(cat => (
+                            <option key={cat.id} value={cat.id}>
+                                {cat.category_name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            );
+        }
+
+        return dropdowns;
     };
 
     return (
@@ -92,7 +179,7 @@ const CreateCourse = () => {
                     />
                 </div>
 
-                <div className="mb-4">
+                {/* <div className="mb-4">
                     <label htmlFor="thumbnail" className="block text-sm font-medium text-gray-700">
                         Thumbnail URL
                     </label>
@@ -104,7 +191,7 @@ const CreateCourse = () => {
                         onChange={handleChange}
                         className="mt-1 p-2 w-full border border-gray-300 rounded"
                     />
-                </div>
+                </div> */}
 
                 {/* <div className="mb-4">
                     <label htmlFor="teacher_id" className="block text-sm font-medium text-gray-700">
@@ -127,7 +214,7 @@ const CreateCourse = () => {
                     </select>
                 </div> */}
 
-                <div className="mb-4">
+                {/*<div className="mb-4">
                     <label htmlFor="category" className="block text-sm font-medium text-gray-700">
                         Category
                     </label>
@@ -143,9 +230,11 @@ const CreateCourse = () => {
                         <option value="programming">Programming</option>
                         <option value="design">Design</option>
                         <option value="marketing">Marketing</option>
-                        {/* Add more categories as needed */}
+                        {/* Add more categories as needed *\/}
                     </select>
-                </div>
+                </div>*/}
+
+                {renderCategoryDropdowns()}
 
                 <div>
                     <button

@@ -17,14 +17,16 @@ const EditCourse = () => {
         category: ""
     });
 
+    const [categories, setCategories] = useState<{ id: string; category_name: string; parent_category_id: string | null }[]>([]);
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const [loading, setLoading] = useState(true); // To manage loading state
 
-    // Fetch the course data when the component mounts
+    // Fetch the course and categories data when the component mounts
     useEffect(() => {
-        const fetchCourse = async () => {
+        const fetchCourseAndCategories = async () => {
             try {
-                const res = await axios.post(`/api/get/course-details`, { courseId });
-                const courseData = res.data.courseDetails;
+                const courseRes = await axios.post(`/api/get/course-details`, { courseId });
+                const courseData = courseRes.data.courseDetails;
 
                 setCourse({
                     title: courseData.title,
@@ -33,13 +35,21 @@ const EditCourse = () => {
                     teacher_id: courseData.teacher_id || userId,
                     category: courseData.category || ""
                 });
+
+                const categoriesRes = await axios.get('/api/get/categories');
+                setCategories(categoriesRes.data);
+
+                // If the course has a selected category, set the selectedCategories state
+                const categoryPath = getCategoryPath(courseData.category, categoriesRes.data);
+                setSelectedCategories(categoryPath);
+
                 setLoading(false);
             } catch (error) {
-                console.error("Error fetching course:", error);
+                console.error("Error fetching course or categories:", error);
             }
         };
 
-        fetchCourse();
+        fetchCourseAndCategories();
     }, [courseId, userId]);
 
     const handleChange = (e: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) => {
@@ -47,10 +57,22 @@ const EditCourse = () => {
         setCourse({ ...course, [name]: value });
     };
 
+    const handleCategoryChange = (index: number, e: ChangeEvent<HTMLSelectElement>) => {
+        const { value } = e.target;
+        const updatedSelectedCategories = [...selectedCategories.slice(0, index + 1)];
+        updatedSelectedCategories[index] = value;
+        setSelectedCategories(updatedSelectedCategories);
+
+        // Update the category in the course
+        setCourse({ ...course, category: value });
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         try {
+            console.log("Updating course:", course);
+            
             const res = await axios.put(`/api/put/update-course/${courseId}`, course); // Send updated data
             console.log("Course updated:", res.data);
 
@@ -59,6 +81,52 @@ const EditCourse = () => {
         } catch (error) {
             console.error("Error updating course:", error);
         }
+    };
+
+    const renderCategoryDropdowns = () => {
+        let availableCategories = categories.filter(cat => !cat.parent_category_id);
+        const dropdowns = [];
+
+        for (let i = 0; i <= selectedCategories.length; i++) {
+            const parentId = i === 0 ? null : selectedCategories[i - 1];
+            availableCategories = categories.filter(cat => cat.parent_category_id === parentId);
+
+            if (availableCategories.length === 0) break;
+
+            dropdowns.push(
+                <div key={i} className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700">
+                        {i === 0 ? "Top-Level Category" : `Subcategory Level ${i}`}
+                    </label>
+                    <select
+                        value={selectedCategories[i] || ""}
+                        onChange={(e) => handleCategoryChange(i, e)}
+                        className="mt-1 p-2 w-full border border-gray-300 rounded"
+                    >
+                        <option value="">Select Category</option>
+                        {availableCategories.map(cat => (
+                            <option key={cat.id} value={cat.id}>
+                                {cat.category_name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            );
+        }
+
+        return dropdowns;
+    };
+
+    // Helper function to get the category path (i.e., top-level to sub-level) for pre-selection
+    const getCategoryPath = (categoryId: string, categories: { id: string; category_name: string; parent_category_id: string | null }[]) => {
+        const path = [];
+        let currentCategoryId = categoryId;
+        while (currentCategoryId) {
+            path.unshift(currentCategoryId); // Add category at the beginning of the path
+            const category = categories.find(cat => cat.id === currentCategoryId);
+            currentCategoryId = category ? category.parent_category_id : null;
+        }
+        return path;
     };
 
     if (loading) {
@@ -98,7 +166,7 @@ const EditCourse = () => {
                     />
                 </div>
 
-                <div className="mb-4">
+                {/* <div className="mb-4">
                     <label htmlFor="thumbnail" className="block text-sm font-medium text-gray-700">
                         Thumbnail URL
                     </label>
@@ -110,27 +178,9 @@ const EditCourse = () => {
                         onChange={handleChange}
                         className="mt-1 p-2 w-full border border-gray-300 rounded"
                     />
-                </div>
+                </div> */}
 
-                <div className="mb-4">
-                    <label htmlFor="category" className="block text-sm font-medium text-gray-700">
-                        Category
-                    </label>
-                    <select
-                        id="category"
-                        name="category"
-                        value={course.category}
-                        onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded"
-                        required
-                    >
-                        <option value="">Select Category</option>
-                        <option value="programming">Programming</option>
-                        <option value="design">Design</option>
-                        <option value="marketing">Marketing</option>
-                        {/* Add more categories as needed */}
-                    </select>
-                </div>
+                {renderCategoryDropdowns()}
 
                 <div>
                     <button
