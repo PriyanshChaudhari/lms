@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { MoonIcon, SunIcon } from '@radix-ui/react-icons'
 import { useTheme } from 'next-themes'
-import { usePathname } from 'next/navigation'; 
+import { usePathname } from 'next/navigation';
 import axios from 'axios'
 import LoginButton from '@/components/ui/loginButton'
 
@@ -12,6 +12,7 @@ const Navbar: React.FC = () => {
   const { theme, setTheme } = useTheme();
   const pathname = usePathname();
   const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [profilePicUrl, setProfilePicUrl] = useState<string>('');
   const dropdownRef = useRef<HTMLDivElement>(null); // Ref for dropdown
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
@@ -47,6 +48,20 @@ const Navbar: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const fetchProfilePic = async () => {
+      try {
+        const userId = sessionStorage.getItem('userId');
+        const res = await axios.get(`/api/get/one-user?userId=${userId}`); // Adjust the endpoint as needed
+        setProfilePicUrl(res.data.profile_pic);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchProfilePic();
+  }, []);
+
   return (
     <nav className="dark:bg-gray-800 p-4 w-screen bg-gray-100 text-black dark:text-white  z-10 top-0 sticky font-rubik" style={{ cursor: 'default' }}>
       <div className="mx-auto text-center flex w-5/6 justify-between font-bold text-black dark:text-white">
@@ -61,14 +76,14 @@ const Navbar: React.FC = () => {
           {isLoginPage ? (
             pathname === '/login' ? null : <LoginButton /> // Don't show LoginButton on the '/login' page
           ) : (
-            <div className="relative" ref={dropdownRef}> 
+            <div className="relative" ref={dropdownRef}>
               <div className='flex gap-6 items-center'>
                 <p className='hidden sm:block'>Hi! Yatharth</p>
                 <div
                   className="border border-gray-500 text-xs h-8 w-8 rounded-full cursor-pointer"
                   onClick={toggleDropdown}
                 >
-                  <img src="" alt="pfp" className="h-full w-full rounded-full object-cover" />
+                  <img src={profilePicUrl} alt="pfp" className="h-full w-full rounded-full object-cover" />
                 </div>
               </div>
 
