@@ -36,7 +36,6 @@ const CourseCard: React.FC<CourseCardProps> = ({ courses, userId }) => {
                                 <div className="bg-gray-200 rounded-full h-2 mt-3">
                                     <div className="bg-blue-500 h-full rounded-full" style={{ width: '50%' }}></div>
                                 </div>
-                                <div> --> </div>
                             </div>
                         ))}
 

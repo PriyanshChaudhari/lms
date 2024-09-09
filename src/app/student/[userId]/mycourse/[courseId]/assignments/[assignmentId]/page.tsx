@@ -78,7 +78,7 @@ export default function ViewAssignment() {
 
                     <div>
                         <button
-                            className="bg-black text-white rounded-xl p-3 my-5"
+                            className="bg-gray-950 hover:bg-gray-700 text-white rounded-xl px-4 py-2"
                             onClick={() => router.push(`/student/${userId}/mycourse/${courseId}/assignments/${assignmentId}/add-submission`)}
                         >
                             Add Submission
