@@ -14,13 +14,14 @@ const CourseDetails = () => {
     ]);
 
     const [participantData, setParticipantData] = useState([]);
+    const [searchTerm, setSearchTerm] = useState<string>(''); // New state for search term
 
-    const [selectedLetter, setSelectedLetter] = useState<string>('All');
-
-    const filteredParticipants = selectedLetter === 'All'
+    const filteredParticipants = searchTerm === ''
         ? participantData
         : participantData.filter(
-            (item) => item.first_name.startsWith(selectedLetter)
+            (item) =>
+                item.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.last_name.toLowerCase().includes(searchTerm.toLowerCase())
         );
 
     const router = useRouter();
@@ -102,15 +103,15 @@ const CourseDetails = () => {
     };
 
     return (
-        <div className="border border-gray-300 m-5">
-            <div className="max-w-4xl mx-auto p-5">
+        <div className="border border-gray-300 m-5 min-h-screen flex flex-col justify-center items-center">
+            <div className="w-full max-w-4xl mx-auto p-5">
                 <h1 className="text-3xl font-bold mb-4">{courses.title}</h1>
                 <p className="text-lg text-gray-700 mb-6">{courses.description}</p>
 
                 <nav className="mb-6 border border-gray-300 rounded-xl shadow-md p-2">
-                    <ul className="flex justify-between space-x-4 list-none p-0">
+                    <ul className="flex-row sm:flex justify-between space-x-4 list-none p-0">
                         <li
-                            className={` p-3 rounded-xl cursor-pointer ${activeSection === 'course' ? 'bg-gray-400 text-white' : ''}`}
+                            className={` p-3 rounded-xl cursor-pointer  ${activeSection === 'course' ? 'bg-gray-400 text-white' : ''}`}
                             onClick={() => setActiveSection('course')}
                         >
                             Course
@@ -122,7 +123,7 @@ const CourseDetails = () => {
                             Assignments
                         </li>
                         <li
-                            className={` p-3 rounded-xl cursor-pointer ${activeSection === 'grades' ? 'bg-gray-400 text-white' : ''}`}
+                            className={` p-3 rounded-xl cursor-pointer  ${activeSection === 'grades' ? 'bg-gray-400 text-white' : ''}`}
                             onClick={() => setActiveSection('grades')}
                         >
                             Grades
@@ -150,7 +151,7 @@ const CourseDetails = () => {
                             {/* Add Module Button */}
                             <div className="flex justify-end">
                                 <button
-                                    className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600"
+                                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-sm"
                                     onClick={addModule} // Replace with your add module logic
                                 >
                                     Add Module
@@ -160,12 +161,12 @@ const CourseDetails = () => {
                             {/* Modules List */}
                             {sortedModules.map((module) => (
                                 <div key={module.id} className="space-y-4">
-                                    <div className="bg-white border flex justify-between border-gray-300 rounded-xl p-4 shadow-md min-h-6">
+                                    <div className=" border flex justify-between border-gray-300 rounded-xl p-4 shadow-md min-h-6">
                                         <h2 className="text-xl font-semibold">{module.title}</h2>
                                         <h2 className="text-xl font-semibold">{module.description}</h2>
                                         <h2 className="text-xl font-semibold">{module.position}</h2>
                                         <div
-                                            className="px-3 rounded-xl cursor-pointer bg-gray-300 hover:bg-gray-200"
+                                            className="px-3 rounded flex items-center cursor-pointer bg-gray-400 hover:bg-gray-500"
                                             onClick={() => handleModuleClick(module.id)}
                                         >
                                         GO ->
@@ -180,13 +181,13 @@ const CourseDetails = () => {
                     {activeSection === 'assignments' && (
                         <div className="space-y-4">
                             {assignments.map((assignment) => (
-                                <div key={assignment.id} className="bg-white border border-gray-300 rounded-xl p-6 shadow-md h-64 cursor-pointer" onClick={() => handleAssignmentClick(assignment.id)}>
+                                <div key={assignment.id} className=" border border-gray-300 rounded-xl p-6 shadow-md h-64 cursor-pointer" onClick={() => handleAssignmentClick(assignment.id)}>
                                     <h2 className="text-xl font-semibold mb-6">{assignment.title}</h2>
-                                    <div className="shadow-md items-center p-5 border border-gray-100 rounded-xl max-w-lg">
-                                        <p className="text-sm text-gray-600 mb-4">Description : {assignment.description}</p>
-                                        <p className="text-sm text-gray-600 mb-4">Total Marks : {assignment.total_marks}</p>
+                                    <div className=" items-center p-5  rounded-xl ">
+                                        <p className="text-sm text-gray-600 dark:text-gray-300  mb-4">Description : {assignment.description}</p>
+                                        <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">Total Marks : {assignment.total_marks}</p>
 
-                                        <p className="text-sm text-gray-600 mb-4">Due Date : {formatDate(assignment.due_date)}</p>
+                                        <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">Due Date : {formatDate(assignment.due_date)}</p>
                                     </div>
                                 </div>
                             ))}
@@ -196,7 +197,7 @@ const CourseDetails = () => {
 
                     {activeSection === 'grades' && (
                         <div className="overflow-x-auto">
-                            <table className="min-w-full bg-white border border-gray-300">
+                            <table className="min-w-full  border border-gray-300">
                                 <thead>
                                     <tr>
                                         <th className="py-2 px-4 border-b">Grade</th>
@@ -218,58 +219,39 @@ const CourseDetails = () => {
                     )}
 
                     {/* completed */}
+                    {/* Participants Section with Search Bar */}
                     {activeSection === 'participants' && (
                         <div className="space-y-4">
                             <div className="border border-gray-300 dark:text-white rounded-xl p-6 shadow-md cursor-pointer">
-                                {/* <h2 className="text-xl font-semibold mb-6">Course Participants</h2>  */}
-                                <h1 className="text-xl font-bold mb-b">Participants</h1>
-                                <div className="shadow-md items-center p-5 border border-gray-100 rounded-xl">
-                                    <div className="overflow-x-auto mb-4">
-                                        <table className="min-w-full border border-gray-300">
-                                            <tbody>
-                                                <tr className="mt-4">
-                                                    <td className="p-1.5 border border-gray-300 text-sm">Filter by Name</td>
-                                                    {['All', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'].map((letter) => (
-                                                        <td
-                                                            key={letter}
-                                                            className={`p-1.5 border border-gray-300 cursor-pointer text-sm ${selectedLetter === letter ? 'font-bold' : ''}`}
-                                                            onClick={() => setSelectedLetter(letter)}
-                                                        >
-                                                            {letter}
-                                                        </td>
-                                                    ))}
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    {/* <ul>
-                                        {filteredParticipants.map((participant) => (
-                                            <li key={participant.student_id} className="mb-2">
-                                                {participant.first_name} {participant.last_name} ({participant.email})
-
-                                            </li>
-                                        ))}
-                                    </ul> */}
+                                <h1 className="text-xl font-bold mb-b ml-4">Participants</h1>
+                                <div className="items-center p-5">
+                                    <input
+                                        type="text"
+                                        placeholder="Search participants by name"
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                        className="mb-4 p-2 border border-gray-300 rounded w-full"
+                                    />
                                     <div className="overflow-x-auto">
                                         {filteredParticipants.length === 0 ? (
                                             <p>No participants found.</p>
                                         ) : (
-                                            <table className="min-w-full table-auto border-collapse">
+                                            <table className="min-w-full table-auto border-collapse border border-gray-300">
                                                 <thead>
-                                                    <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                                                        <th className="py-3 px-6 text-left">Student ID</th>
-                                                        <th className="py-3 px-6 text-left">First Name</th>
-                                                        <th className="py-3 px-6 text-left">Last Name</th>
-                                                        <th className="py-3 px-6 text-left">Email</th>
+                                                    <tr className="bg-gray-300 dark:bg-gray-400 dark:text-gray-100 text-gray-600 uppercase text-sm leading-normal">
+                                                        <th className="py-3 px-6 text-center">Student ID</th>
+                                                        <th className="py-3 px-6 text-center">First Name</th>
+                                                        <th className="py-3 px-6 text-center">Last Name</th>
+                                                        <th className="py-3 px-6 text-center">Email</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody className="text-gray-600 text-sm font-light">
+                                                <tbody className="text-gray-600 text-sm font-normal">
                                                     {filteredParticipants.map((participant) => (
-                                                        <tr key={participant.student_id} className="border-b border-gray-200 hover:bg-gray-100">
-                                                            <td className="py-3 px-6 text-left whitespace-nowrap">{participant.student_id}</td>
-                                                            <td className="py-3 px-6 text-left">{participant.first_name}</td>
-                                                            <td className="py-3 px-6 text-left">{participant.last_name}</td>
-                                                            <td className="py-3 px-6 text-left">{participant.email}</td>
+                                                        <tr key={participant.student_id}>
+                                                            <td className="py-3 px-6 text-center whitespace-nowrap">{participant.student_id}</td>
+                                                            <td className="py-3 px-6 text-center">{participant.first_name}</td>
+                                                            <td className="py-3 px-6 text-center">{participant.last_name}</td>
+                                                            <td className="py-3 px-6 text-center">{participant.email}</td>
                                                         </tr>
                                                     ))}
                                                 </tbody>
