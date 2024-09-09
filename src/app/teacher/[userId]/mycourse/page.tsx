@@ -62,32 +62,35 @@ const MyCourse: React.FC = () => {
     }
 
     return (
-        <div className="flex flex-col lg:h-screen h-full p-5">
-
+        <div className="flex flex-col p-5">
             <div className="flex flex-1 gap-10 flex-wrap md:flex-nowrap items-start justify-center border border-gray-300 p-5">
-                <div className="w-full md:w-2/3 p-5 border border-gray-300 rounded-lg flex flex-col justify-center items-center h-full max-h-[calc(100vh-2rem)]">
-                    Dashboard
+                <div className="w-full flex flex-col justify-center items-center  max-h-[calc(100vh-2rem)]">
                     <div className="flex flex-col h-screen p-5">
-                        <div className="flex flex-1  flex-wrap md:flex-nowrap items-start justify-center border border-gray-300 p-5">
+                        <div className="flex flex-1  flex-wrap md:flex-nowrap items-start justify-cente">
                             <div className="w-full  p-5  rounded-lg flex flex-col justify-center items-center h-full max-h-[calc(100vh-2rem)]">
-                                <h1 className="text-2xl font-bold mb-6">My Courses</h1>
-                                <div className="flex w-full flex-wrap justify-center gap-5">
-                                    <button className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600" onClick={createCourse}>ADD</button>
+                                <div className="flex justify-center gap-8 mb-10">
+                                    <h1 className="text-2xl font-bold ">My Courses</h1>
+                                    <button className="bg-blue-500 hover:bg-blue-600 rounded text-xs p-2 text-white" onClick={createCourse}>Add New Course</button>
+                                </div>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-5 justify-items-center">
+
 
                                     {courses.map((course) => (
-                                        <div key={course.id} className="border border-gray-300 dark:text-white  hover:bg-slate-100 dark:hover:bg-[#1a1a1a] rounded-xl p-5 w-full max-w-xs shadow-sm cursor-pointer" onClick={() => handleClick(course.id)}>
+                                        <div key={course.id} className="border border-gray-300 dark:text-white  hover:bg-slate-100 dark:hover:bg-[#1a1a1a] rounded-xl p-10 w-full max-w-xs shadow-sm cursor-pointer" onClick={() => handleClick(course.id)}>
                                             <h3 className="text-lg font-semibold">{course.title}</h3>
                                             <p className="text-sm text-gray-600">{course.description}</p>
-                                            <div className="bg-gray-200 rounded-full h-2 my-3">
+                                            <div className="bg-gray-200 rounded-full h-2 my-6 ">
                                                 <div className="bg-blue-500 h-full rounded-full" style={{ width: '50%' }}></div>
                                             </div>
-
-                                            <button className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600" onClick={() => handleEditCourse(course.id)}>Edit Course</button>
-                                            <br />
-                                            <br />
-                                            <button className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600" onClick={() => handleDeleteCourse(course.id)}>Delete Course</button>
+                                            
+                                            <div className="flex justify-center gap-6">
+                                            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-xs" onClick={() => handleEditCourse(course.id)}>Edit Course</button>
+                                            <button className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 text-xs" onClick={() => handleDeleteCourse(course.id)}>Delete Course</button>
+                                            </div>
                                         </div>
                                     ))}
+
+                                    
 
                                 </div>
                             </div>

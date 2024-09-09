@@ -60,11 +60,12 @@ const CreateCourse = () => {
     };
 
     return (
-        <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded shadow-md">
+        <div className=''>
+            <div className="max-w-md mx-auto mt-8 p-6 bg-white dark:bg-gray-800 rounded shadow-md">
             <h2 className="text-2xl font-bold mb-4">Create a New Course</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                    <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-100">
                         Course Title
                     </label>
                     <input
@@ -73,13 +74,13 @@ const CreateCourse = () => {
                         name="title"
                         value={course.title}
                         onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-800"
                         required
                     />
                 </div>
 
                 <div className="mb-4">
-                    <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-100">
                         Description
                     </label>
                     <textarea
@@ -87,13 +88,13 @@ const CreateCourse = () => {
                         name="description"
                         value={course.description}
                         onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-800"
                         required
                     />
                 </div>
 
                 <div className="mb-4">
-                    <label htmlFor="thumbnail" className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="thumbnail" className="block text-sm font-medium text-gray-700 dark:text-gray-100">
                         Thumbnail URL
                     </label>
                     <input
@@ -102,7 +103,7 @@ const CreateCourse = () => {
                         name="thumbnail"
                         value={course.thumbnail}
                         onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-800"
                     />
                 </div>
 
@@ -128,7 +129,7 @@ const CreateCourse = () => {
                 </div> */}
 
                 <div className="mb-4">
-                    <label htmlFor="category" className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-100">
                         Category
                     </label>
                     <select
@@ -136,7 +137,7 @@ const CreateCourse = () => {
                         name="category"
                         value={course.category}
                         onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-800"
                         required
                     >
                         <option value="">Select Category</option>
@@ -147,7 +148,7 @@ const CreateCourse = () => {
                     </select>
                 </div>
 
-                <div>
+                <div className='mt-4'>
                     <button
                         type="submit"
                         className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
@@ -156,6 +157,7 @@ const CreateCourse = () => {
                     </button>
                 </div>
             </form>
+        </div>
         </div>
     );
 };

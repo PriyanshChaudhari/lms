@@ -16,14 +16,15 @@ const CourseDetails = () => {
     ]);
 
     const [participantData, setParticipantData] = useState([]);
+    const [searchTerm, setSearchTerm] = useState<string>(''); // New state for search term
     const [addUser, setAddUser] = useState(false);
 
-    const [selectedLetter, setSelectedLetter] = useState<string>('All');
-
-    const filteredParticipants = selectedLetter === 'All'
+    const filteredParticipants = searchTerm === ''
         ? participantData
         : participantData.filter(
-            (item) => item.first_name.startsWith(selectedLetter)
+            (item) =>
+                item.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.last_name.toLowerCase().includes(searchTerm.toLowerCase())
         );
 
     const router = useRouter();

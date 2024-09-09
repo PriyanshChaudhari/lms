@@ -63,7 +63,7 @@ const Navbar: React.FC = () => {
   }, []);
 
   return (
-    <nav className="dark:bg-gray-800 p-4 w-screen bg-gray-100 text-black dark:text-white  z-10 top-0 sticky font-rubik" style={{ cursor: 'default' }}>
+    <nav className="dark:bg-gray-800 p-4 w-full bg-gray-100 text-black dark:text-white  z-10 top-0 sticky font-rubik" style={{ cursor: 'default' }}>
       <div className="mx-auto text-center flex w-5/6 justify-between font-bold text-black dark:text-white">
         <div className="text-3xl space-x-1 flex items-center sm:text-2xl font-extrabold">
           LMS

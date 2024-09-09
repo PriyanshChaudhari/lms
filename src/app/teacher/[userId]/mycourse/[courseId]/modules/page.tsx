@@ -36,17 +36,20 @@ export default function ViewModules() {
     }
 
     return (
-        <div className="border border-gray-300 m-5">
-            <div className="max-w-4xl mx-auto p-5">
-                <button className='bg-red-300 hover:bg-red-400' onClick={createModule}>Add Module</button>
+        <div className="border border-gray-300 m-5 h-screen flex justify-center items-center">
+            <div className="w-full max-w-4xl  mx-auto p-5">
+               <div className='flex gap-6 items-center my-4'>
+               <h1 className='text-2xl font-bold'>Add new Module</h1>
+               <button className='bg-blue-500 hover:bg-blue-600 rounded p-2 text-white text-sm' onClick={createModule}>Add Module</button>
+               </div>
                 {sortedModules.map((module) => (
                     <div key={module.id} className="space-y-4">
                         <div
-                            className="bg-white border flex justify-between border-gray-300 rounded-xl p-4 shadow-md min-h-6 ">
+                            className="border flex justify-between border-gray-300 my-2 rounded-xl p-4 shadow-md min-h-6 ">
                             <h2 className="text-xl font-semibold">{module.title}</h2>
                             <h2 className="text-xl font-semibold">{module.description}</h2>
                             <h2 className="text-xl font-semibold">{module.position}</h2>
-                            <div className='px-3 rounded-xl cursor-pointer bg-gray-300  hover:bg-gray-200' onClick={() => handleModuleClick(module.id)} > GO -> </div>
+                            <div className='px-3 rounded flex items-center cursor-pointer bg-gray-400  hover:bg-gray-500' onClick={() => handleModuleClick(module.id)} > GO -> </div>
                         </div>
 
                     </div>
