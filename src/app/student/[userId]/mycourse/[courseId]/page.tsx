@@ -28,14 +28,14 @@ const CourseDetails = () => {
     const userId = params.userId as string;
     const courseId = params.courseId as string;
 
-    const [contents, setContents] = useState([]) // Initialize contents as an empty array
     const [courses, setCourses] = useState({})
+    const [courseModules, setCourseModules] = useState([])
     const [assignments, setAssignments] = useState([])
 
     useEffect(() => {
         const getCourse = async () => {
             try {
-                const res = await axios.post('/api/get/course-details', { courseId })
+                const res = await axios.post(`/api/get/course-details`, { courseId })
                 setCourses(res.data.courseDetails)
             } catch (error) {
                 console.log(error)
@@ -43,19 +43,19 @@ const CourseDetails = () => {
         }
         getCourse()
 
-        const getCourseDetails = async () => {
+        const getCourseModules = async () => {
             try {
-                const res = await axios.post('/api/get/course-content', { courseId })
-                setContents(res.data.content)
+                const res = await axios.post('/api/get/course-modules', { courseId })
+                setCourseModules(res.data.content)
             } catch (error) {
                 console.log(error)
             }
         }
-        getCourseDetails()
+        getCourseModules()
 
         const getAssignments = async () => {
             try {
-                const res = await axios.post('/api/get/assignments', { courseId });
+                const res = await axios.post('/api/get/assignments/all-assignments', { courseId });
                 setAssignments(res.data);  // Set as array or empty array
                 console.log(res.data.assignments || []);
             } catch (error) {
@@ -81,19 +81,19 @@ const CourseDetails = () => {
         return date.toLocaleDateString(); // Format the date as a readable string
     };
 
-    const sortedContents = contents.sort((a, b) => a.position - b.position);
+    const sortedModules = courseModules.sort((a, b) => a.position - b.position);
+
+    const handleModuleClick = (moduleId: string) => {
+        router.push(`/student/${userId}/mycourse/${courseId}/modules/${moduleId}`);
+    }
 
     const handleAssignmentClick = (assignmentId: number, moduleId?: number) => {
         if (moduleId) {
-            router.push(`/student/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments/${assignmentId}`);
+            router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments/${assignmentId}`);
         } else {
-            router.push(`/student/${userId}/mycourse/${courseId}/assignments/${assignmentId}`);
+            router.push(`/teacher/${userId}/mycourse/${courseId}/assignments/${assignmentId}`);
         }
     };
-
-    const handleModuleClick = (contentId: string) => {
-        router.push(`/student/${userId}/mycourse/${courseId}/modules/${contentId}`);
-    }
 
     return (
         <div className="border border-gray-300 m-5">
@@ -138,20 +138,29 @@ const CourseDetails = () => {
 
                 <div className="space-y-4">
 
-                    {/* completed */}
+                    {/*all modules of courses */}
                     {activeSection === 'course' && (
-                        sortedContents.map((content) => (
-                            <div key={content.id} className="space-y-4">
-                                <div
-                                    className="bg-white border flex justify-between border-gray-300 rounded-xl p-4 shadow-md min-h-6 ">
-                                    <h2 className="text-xl font-semibold">{content.title}</h2>
-                                    <div className='px-3 rounded-xl cursor-pointer bg-gray-300  hover:bg-gray-200' onClick={() => handleModuleClick(content.id)} > GO -> </div>
+                        <div className="space-y-4">
+                            {/* Modules List */}
+                            {sortedModules.map((module) => (
+                                <div key={module.id} className="space-y-4">
+                                    <div className="bg-white border flex justify-between border-gray-300 rounded-xl p-4 shadow-md min-h-6">
+                                        <h2 className="text-xl font-semibold">{module.title}</h2>
+                                        <h2 className="text-xl font-semibold">{module.description}</h2>
+                                        <h2 className="text-xl font-semibold">{module.position}</h2>
+                                        <div
+                                            className="px-3 rounded-xl cursor-pointer bg-gray-300 hover:bg-gray-200"
+                                            onClick={() => handleModuleClick(module.id)}
+                                        >
+                                        GO ->
+                                        </div>
+                                    </div>
                                 </div>
-
-                            </div>
-                        ))
+                            ))}
+                        </div>
                     )}
 
+                    {/* assignment of all modules */}
                     {activeSection === 'assignments' && (
                         <div className="space-y-4">
                             {assignments.map((assignment) => (

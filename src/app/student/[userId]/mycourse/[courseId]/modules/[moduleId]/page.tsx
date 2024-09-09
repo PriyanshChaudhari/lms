@@ -9,9 +9,10 @@ export default function ViewModule() {
     const params = useParams();
     const userId = params.userId as string;
     const courseId = params.courseId as string;
-    const contentId = params.moduleId as string;
+    const moduleId = params.moduleId as string;
 
-    const [courseContent, setCourseContent] = useState({});
+    const [oneModule, setOneModule] = useState([]);
+    const [courseContent, setCourseContent] = useState([])
     const [course, setCourse] = useState({})
 
     useEffect(() => {
@@ -25,17 +26,33 @@ export default function ViewModule() {
         }
         getCourseDetails()
 
-        const fetchCourseContent = async () => {
+        const getOneModule = async () => {
             try {
-                const res = await axios.post('/api/get/content', { contentId })
-                console.log(res.data.contentDetails)
-                setCourseContent(res.data.contentDetails);
+                const res = await axios.post('/api/get/one-module', { moduleId })
+                // console.log(res.data.content)
+                setOneModule(res.data.content);
             } catch (error) {
-                console.error("Error fetching course content: ", error);
+                console.error("Error fetching course module: ", error);
             }
         };
-        fetchCourseContent()
-    }, [contentId, courseId]);
+        getOneModule()
+
+        const getCourseContent = async () => {
+            try {
+                const res = await axios.post('/api/get/course-content', { moduleId })
+                setCourseContent(res.data.content)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        getCourseContent()
+    }, [moduleId, courseId]);
+
+    const handleContentClick = (contentId: string) => {
+        router.push(`/student/${userId}/mycourse/${courseId}/modules/${moduleId}/content/${contentId}`);
+    }
+
+    const sortedContent = courseContent.sort((a, b) => a.position - b.position);
 
     return (
         <div className="border border-gray-300 m-5">
@@ -46,17 +63,39 @@ export default function ViewModule() {
                     <ul className="flex justify-start space-x-4 list-none p-0">
                         <li className=" p-3 rounded-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/student/${userId}/mycourse/${courseId}`)}>{course.title}</li>
                         <li className=" p-3 rounded-xl text-black cursor-pointer">/</li>
-                        <li className=" p-3 rounded-xl text-black cursor-pointer">{courseContent.title}</li>
+                        <li className=" p-3 rounded-xl text-black cursor-pointer">{oneModule.title}</li>
                     </ul>
                 </nav>
+
                 <div className="space-y-4 ">
                     <div className="bg-white border border-gray-300 rounded-xl p-6 shadow-md h-26">
-                        <h2 className="text-xl font-semibold mb-2">{courseContent.title}</h2>
-                        <p className="text-sm text-gray-600">{courseContent.content_type}</p>
-                        {courseContent.content_url && <p className="text-sm text-gray-600">{courseContent.content_url}</p>}
-                        {courseContent.text_content && <p className="text-sm text-gray-600">{courseContent.text_content}</p>}
+                        <h2 className="text-xl font-semibold mb-2">{oneModule.title}</h2>
+                        <p className="text-sm text-gray-600">{oneModule.description}</p>
+
+                        <button
+                            className="bg-blue-500 text-white px-4 py-2  mt-2 rounded-xl hover:bg-blue-600"
+                            onClick={() => router.push(`/student/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments`)}
+                        >
+                            Assignments
+                        </button>
                     </div>
+
+                    <div>
+                        {sortedContent.map((content) => (
+                            <div key={content.id} className="space-y-4">
+                                <div
+                                    className="bg-white border flex justify-between border-gray-300 rounded-xl p-4 shadow-md min-h-6 ">
+                                    <h2 className="text-xl font-semibold">{content.title}</h2>
+                                    <h2 className="text-xl font-semibold">{content.description}</h2>
+                                    <h2 className="text-xl font-semibold">{content.position}</h2>
+                                    <div className='px-3 rounded-xl cursor-pointer bg-gray-300  hover:bg-gray-200' onClick={() => handleContentClick(content.id)} > GO -> </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
                 </div>
+
             </div>
         </div >
     );

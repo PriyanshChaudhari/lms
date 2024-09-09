@@ -10,52 +10,47 @@ export default function ViewModules() {
     const params = useParams();
     const userId = params.userId as string;
     const courseId = params.courseId as string;
-    const contentId = params.contentId as string;
 
-    const [courseContent, setCourseContent] = useState<any[]>([]);
-    const [course, setCourse] = useState({})
-
-
-    const handleModuleClick = (moduleId: string) => {
-        router.push(`/student/${userId}/mycourse/${courseId}/modules/${moduleId}`);
-    };
+    const [courseModules, setCourseModules] = useState([])
 
     useEffect(() => {
-        const getCourseDetails = async () => {
+        const getCourseModules = async () => {
             try {
-                const res = await axios.post('/api/get/course-details', { courseId })
-                setCourse(res.data.content)
+                const res = await axios.post('/api/get/course-modules', { courseId })
+                setCourseModules(res.data.content)
             } catch (error) {
                 console.log(error)
             }
         }
-        getCourseDetails()
+        getCourseModules()
+    }, [courseId]);
 
-        const fetchCourseContent = async () => {
-            try {
-                const res = await axios.post('/api/get/course-content', { contentId })
-                setCourseContent(res.data.content);
-            } catch (error) {
-                console.error("Error fetching course content: ", error);
-            }
-        };
-        fetchCourseContent()
-    }, [contentId, courseId]);
+    const sortedModules = courseModules.sort((a, b) => a.position - b.position);
 
+    const createModule = () => {
+        router.push(`/teacher/${userId}/mycourse/${courseId}/modules/create-module`)
+    }
+
+    const handleModuleClick = (moduleId: string) => {
+        router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}`);
+    }
 
     return (
         <div className="border border-gray-300 m-5">
             <div className="max-w-4xl mx-auto p-5">
-                <h1 className="text-3xl font-bold mb-4">{course.title}</h1>
-                <p className="text-lg text-gray-700 mb-6">{course.description}</p>
-                <div className="space-y-4 ">
+                <button className='bg-red-300 hover:bg-red-400' onClick={createModule}>Add Module</button>
+                {sortedModules.map((module) => (
+                    <div key={module.id} className="space-y-4">
+                        <div
+                            className="bg-white border flex justify-between border-gray-300 rounded-xl p-4 shadow-md min-h-6 ">
+                            <h2 className="text-xl font-semibold">{module.title}</h2>
+                            <h2 className="text-xl font-semibold">{module.description}</h2>
+                            <h2 className="text-xl font-semibold">{module.position}</h2>
+                            <div className='px-3 rounded-xl cursor-pointer bg-gray-300  hover:bg-gray-200' onClick={() => handleModuleClick(module.id)} > GO -> </div>
+                        </div>
 
-                    <div className="bg-white border border-gray-300 rounded-xl p-6 shadow-md h-72 cursor-pointer" >
-                        <h2 className="text-xl font-semibold mb-2">{courseContent?.title}</h2>
-                        <p className="text-sm text-gray-600">The React Framework - created and maintained by @vercel.</p>
                     </div>
-
-                </div>
+                ))}
             </div>
         </div>
     );

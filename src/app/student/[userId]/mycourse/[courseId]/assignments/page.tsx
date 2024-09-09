@@ -32,9 +32,9 @@ export default function ViewAssignments() {
 
         const getAssignments = async () => {
             try {
-                const res = await axios.post('/api/get/assignments', { courseId });
+                const res = await axios.post('/api/get/assignments/all-assignments', { courseId });
                 setAssignments(res.data || []);  // Ensure it sets an array
-                console.log(res.data.assignments);
+                console.log(res.data);
             } catch (error) {
                 console.error(error);
             }
@@ -42,7 +42,7 @@ export default function ViewAssignments() {
         getAssignments();
     }, [courseId]);
 
-    const handleAssignmentClick = (assignmentId) => {
+    const handleAssignmentClick = (assignmentId: string) => {
         router.push(`/student/${userId}/mycourse/${courseId}/assignments/${assignmentId}`);
     };
 
@@ -54,9 +54,9 @@ export default function ViewAssignments() {
 
                 <nav className="mb-6 p-2">
                     <ul className="flex justify-start space-x-4 list-none p-0">
-                        <li className="p-3 rounded-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/student/${userId}/mycourse/${courseId}`)}>{courses.title || 'Course Title'}</li>
-                        {/* <li className="p-3 rounded-xl text-black cursor-pointer">/</li> */}
-                        {/* {params.moduleId ? (
+                        <li className="p-3 rounded-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}`)}>{courses.title || 'Course Title'}</li>
+                        <li className="p-3 rounded-xl text-black cursor-pointer">/</li>
+                        {params.moduleId ? (
                             <>
                                 <li className="p-3 rounded-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/student/${userId}/mycourse/${courseId}/modules/${params.moduleId}`)}>Module {params.moduleId}</li>
                                 <li className="p-3 rounded-xl text-black cursor-pointer">/</li>
@@ -64,9 +64,9 @@ export default function ViewAssignments() {
                         ) : (
                             <>
                                 <li className="p-3 rounded-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/student/${userId}/mycourse/${courseId}/assignments`)}>Assignments</li>
-                                <li className="p-3 rounded-xl text-black cursor-pointer">/</li>
+                                {/* <li className="p-3 rounded-xl text-black cursor-pointer">/</li> */}
                             </>
-                        )} */}
+                        )}
                     </ul>
                 </nav>
                 <div className="space-y-4">

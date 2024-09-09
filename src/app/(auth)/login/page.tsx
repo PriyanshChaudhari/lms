@@ -41,8 +41,10 @@ const LoginPage = () => {
                 console.log('Response data:', data);  // Debugging line
 
                 if (data.success) {
-                    const { role } = data;
+                    const { role, userId } = data;
                     console.log("ROLE in LOGIN:" + role)
+
+                    sessionStorage.setItem('userId', userId);
 
                     if (role === 'student') {
                         router.push(`/student/${user.userId}/dashboard`);
