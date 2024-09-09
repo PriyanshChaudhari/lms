@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import axios from 'axios';
+import ExcelUploader from '@/components/Upload/ExcelUploader';
+import EnrollmentForm from '@/components/Upload/AddOneUser';
 
 const CourseDetails = () => {
     const [activeSection, setActiveSection] = useState<string>('course');
@@ -14,6 +16,7 @@ const CourseDetails = () => {
     ]);
 
     const [participantData, setParticipantData] = useState([]);
+    const [addUser, setAddUser] = useState(false);
 
     const [selectedLetter, setSelectedLetter] = useState<string>('All');
 
@@ -120,6 +123,11 @@ const CourseDetails = () => {
                             onClick={() => setActiveSection('assignments')}
                         >
                             Assignments
+                            {assignments.length > 0 && (
+                                <span className="ml-2 bg-gray-300 text-gray-700 text-xs font-semibold px-2 py-1 rounded-full">
+                                    {assignments.length}
+                                </span>
+                            )}
                         </li>
                         <li
                             className={` p-3 rounded-xl cursor-pointer ${activeSection === 'grades' ? 'bg-gray-400 text-white' : ''}`}
@@ -132,6 +140,11 @@ const CourseDetails = () => {
                             onClick={() => setActiveSection('participants')}
                         >
                             Participants
+                            {participantData.length > 0 && (
+                                <span className="ml-2 bg-gray-300 text-gray-700 text-xs font-semibold px-2 py-1 rounded-full">
+                                    {participantData.length}
+                                </span>
+                            )}
                         </li>
                         <li
                             className={` p-3 rounded-xl cursor-pointer ${activeSection === 'settings' ? 'bg-gray-400 text-white' : ''}`}
@@ -222,7 +235,13 @@ const CourseDetails = () => {
                         <div className="space-y-4">
                             <div className="border border-gray-300 dark:text-white rounded-xl p-6 shadow-md cursor-pointer">
                                 {/* <h2 className="text-xl font-semibold mb-6">Course Participants</h2>  */}
-                                <h1 className="text-xl font-bold mb-b">Participants</h1>
+                                <div className='flex justify-between mb-3  items-center'>
+                                    <h1 className="text-xl font-bold mb-b">Participants</h1>
+                                    <button className='bg-gray-950 hover:bg-gray-700 px-4 py-2 text-white rounded-xl' onClick={() => setAddUser(!addUser)}
+                                    >Add Participants</button>
+                                </div>
+                                {/* {<ExcelUploader />} */}
+                                {addUser && <EnrollmentForm courseId={courseId} />}
                                 <div className="shadow-md items-center p-5 border border-gray-100 rounded-xl">
                                     <div className="overflow-x-auto mb-4">
                                         <table className="min-w-full border border-gray-300">
@@ -250,6 +269,7 @@ const CourseDetails = () => {
                                             </li>
                                         ))}
                                     </ul> */}
+                                    <div>ADD</div>
                                     <div className="overflow-x-auto">
                                         {filteredParticipants.length === 0 ? (
                                             <p>No participants found.</p>

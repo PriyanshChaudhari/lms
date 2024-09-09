@@ -114,6 +114,11 @@ const CourseDetails = () => {
                             onClick={() => setActiveSection('assignments')}
                         >
                             Assignments
+                            {assignments.length > 0 && (
+                                <span className="ml-2 bg-gray-300 text-gray-700 text-xs font-semibold px-2 py-1 rounded-full">
+                                    {assignments.length}
+                                </span>
+                            )}
                         </li>
                         <li
                             className={` p-3 rounded-xl cursor-pointer ${activeSection === 'grades' ? 'bg-gray-400 text-white' : ''}`}
@@ -126,6 +131,12 @@ const CourseDetails = () => {
                             onClick={() => setActiveSection('participants')}
                         >
                             Participants
+                            {participantData.length > 0 && (
+                                <span className="ml-2 bg-gray-300 text-gray-700 text-xs font-semibold px-2 py-1 rounded-full">
+                                    {participantData.length}
+                                </span>
+                            )}
+
                         </li>
                         <li
                             className={` p-3 rounded-xl cursor-pointer ${activeSection === 'settings' ? 'bg-gray-400 text-white' : ''}`}

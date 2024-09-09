@@ -2,9 +2,13 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 
+// interface Props {
+//     courses: string[]; // Type for the single prop
+//     userId: string; // Type for the single prop
+// }
 const CourseCard = ({ courses, userId }) => {
     const router = useRouter()
-    const handleClick = (course_id) => {
+    const handleClick = (course_id: string) => {
         router.push(`/teacher/${userId}/mycourse/${course_id}`);
     };
 
@@ -20,7 +24,7 @@ const CourseCard = ({ courses, userId }) => {
                 <div className="w-full  p-5  rounded-lg flex flex-col justify-center items-center h-full max-h-[calc(100vh-2rem)]">
                     <h1 className="text-2xl font-bold mb-6">My Courses</h1>
                     <div className="flex w-full flex-wrap justify-center gap-5">
-                        <button className="bg-red-300 hover:bg-red-400" onClick={createCourse()}>ADD</button>
+                        <button className="bg-red-300 hover:bg-red-400" onClick={createCourse}>ADD</button>
 
                         {courses.map((course) => (
                             <div key={course.course_id} className="border border-gray-300 dark:text-white  hover:bg-slate-100 dark:hover:bg-[#1a1a1a] rounded-xl p-5 w-full max-w-xs shadow-sm cursor-pointer" onClick={() => handleClick(course.id)}>

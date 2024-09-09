@@ -2,11 +2,14 @@
 import React, { ChangeEvent, useState, useEffect } from 'react';
 import axios from 'axios';
 
-const EnrollmentForm = () => {
+interface Props {
+    courseId: string; // Type for the single prop
+}
+
+const EnrollmentForm = ({ courseId }: Props) => {
     const [enrollment, setEnrollment] = useState({
         student_id: "",
-        course_id: "",
-        enrolled_at: "",
+        course_id: courseId,
         progress: "",
         completion_status: ""
     });
@@ -16,7 +19,6 @@ const EnrollmentForm = () => {
     const [errors, setErrors] = useState({
         student_id: "",
         course_id: "",
-        enrolled_at: "",
         progress: "",
         completion_status: ""
     });
@@ -61,13 +63,6 @@ const EnrollmentForm = () => {
             setErrors(prev => ({ ...prev, course_id: "" }));
         }
 
-        if (enrollment.enrolled_at === "") {
-            setErrors(prev => ({ ...prev, enrolled_at: "Enrollment date is required" }));
-            valid = false;
-        } else {
-            setErrors(prev => ({ ...prev, enrolled_at: "" }));
-        }
-
         if (enrollment.progress === "" || isNaN(Number(enrollment.progress))) {
             setErrors(prev => ({ ...prev, progress: "Progress must be a valid number" }));
             valid = false;
@@ -89,8 +84,7 @@ const EnrollmentForm = () => {
                 // Optionally, reset the form
                 setEnrollment({
                     student_id: "",
-                    course_id: "",
-                    enrolled_at: "",
+                    course_id: courseId,
                     progress: "",
                     completion_status: ""
                 });
@@ -126,7 +120,7 @@ const EnrollmentForm = () => {
                     {errors.student_id && <p className="text-red-600 text-sm">{errors.student_id}</p>}
                 </div>
 
-                <div className="mb-4">
+                {/* <div className="mb-4">
                     <label htmlFor="course_id" className="block text-sm font-medium text-gray-700">
                         Course
                     </label>
@@ -146,23 +140,7 @@ const EnrollmentForm = () => {
                         ))}
                     </select>
                     {errors.course_id && <p className="text-red-600 text-sm">{errors.course_id}</p>}
-                </div>
-
-                <div className="mb-4">
-                    <label htmlFor="enrolled_at" className="block text-sm font-medium text-gray-700">
-                        Enrollment Date
-                    </label>
-                    <input
-                        type="date"
-                        id="enrolled_at"
-                        name="enrolled_at"
-                        value={enrollment.enrolled_at}
-                        onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded"
-                        required
-                    />
-                    {errors.enrolled_at && <p className="text-red-600 text-sm">{errors.enrolled_at}</p>}
-                </div>
+                </div> */}
 
                 <div className="mb-4">
                     <label htmlFor="progress" className="block text-sm font-medium text-gray-700">
