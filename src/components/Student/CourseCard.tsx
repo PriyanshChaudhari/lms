@@ -2,10 +2,23 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 
-const CourseCard = ({ courses, userId }) => {
+interface Course {
+    course_id: string;
+    title: string;
+    description: string;
+    teacher_id: string;
+    category: string;
+}
+
+interface CourseCardProps {
+    courses: Course[];  // An array of courses
+    userId: string;     // A string for userId
+}
+
+const CourseCard: React.FC<CourseCardProps> = ({ courses, userId }) => {
     const router = useRouter()
-    console.log(userId)
-    const handleClick = (course_id) => {
+
+    const handleClick = (course_id: string) => {
         router.push(`/student/${userId}/mycourse/${course_id}`);
     };
 
@@ -17,13 +30,13 @@ const CourseCard = ({ courses, userId }) => {
                     <div className="flex w-full flex-wrap justify-center gap-5">
 
                         {courses.map((course) => (
-                            <div key={course.course_id} className="border border-gray-300 dark:text-white  hover:bg-slate-100 dark:hover:bg-[#1a1a1a] rounded-xl p-5 w-full max-w-xs shadow-sm cursor-pointer" onClick={() => handleClick(course.course_id)}>
-                                <h3 className="text-lg font-semibold">{course.title}</h3>
+                            <div key={course.course_id} className="border border-gray-300 dark:text-white  hover:bg-slate-100 dark:hover:bg-[#1a1a1a] rounded-xl p-5 w-full max-w-xs shadow-sm cursor-pointer">
+                                <h2 onClick={() => handleClick(course.course_id)} className="text-lg font-semibold hover:underline">{course.title}</h2>
                                 <p className="text-sm text-gray-600">{course.description}</p>
-                                <p className="text-sm text-gray-600">{course.category}</p>
                                 <div className="bg-gray-200 rounded-full h-2 mt-3">
                                     <div className="bg-blue-500 h-full rounded-full" style={{ width: '50%' }}></div>
                                 </div>
+                                <div> --> </div>
                             </div>
                         ))}
 

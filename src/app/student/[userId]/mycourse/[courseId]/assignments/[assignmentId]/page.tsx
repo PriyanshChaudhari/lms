@@ -12,7 +12,7 @@ export default function ViewAssignment() {
     const assignmentId = params.assignmentId;
 
     const [courses, setCourses] = useState({});
-    const [oneAssignment, setOneAssignment] = useState(null); // Initialize as null
+    const [oneAssignment, setOneAssignment] = useState({}); // Initialize as null
 
     useEffect(() => {
         const getCourse = async () => {
@@ -27,7 +27,7 @@ export default function ViewAssignment() {
 
         const getOneAssignment = async () => {
             try {
-                const res = await axios.post('/api/get/one-assignments', { assignmentId });
+                const res = await axios.post('/api/get/assignments/one-assignments', { assignmentId });
                 setOneAssignment(res.data);
                 console.log("One" + res.data)
             } catch (error) {
@@ -54,12 +54,12 @@ export default function ViewAssignment() {
                         <li className="p-3 rounded-xl text-black cursor-pointer">/</li>
                         {params.moduleId ? (
                             <>
-                                <li className="p-3 rounded-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/student/${userId}/mycourse/${courseId}/modules/${params.moduleId}`)}>Module {params.moduleId}</li>
+                                <li className="p-3 rounded-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${params.moduleId}`)}>Module {params.moduleId}</li>
                                 <li className="p-3 rounded-xl text-black cursor-pointer">/</li>
                             </>
                         ) : (
                             <>
-                                <li className="p-3 rounded-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/student/${userId}/mycourse/${courseId}/assignments`)}>Assignments</li>
+                                <li className="p-3 rounded-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}/assignments`)}>Assignments</li>
                                 <li className="p-3 rounded-xl text-black cursor-pointer">/</li>
                             </>
                         )}
