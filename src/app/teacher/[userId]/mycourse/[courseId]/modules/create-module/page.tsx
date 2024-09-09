@@ -58,11 +58,12 @@ const CreateCourse = () => {
     };
 
     return (
-        <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded shadow-md">
+        <div className='h-screen flex justify-center items-center'>
+            <div className="w-full max-w-md mx-auto mt-8 p-6 rounded border dark:bg-gray-800 border-gray-100 shadow-md">
             <h2 className="text-2xl font-bold mb-4">Create a New Module</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                    <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-2 ">
                         Module Title
                     </label>
                     <input
@@ -71,13 +72,13 @@ const CreateCourse = () => {
                         name="title"
                         value={module.title}
                         onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-800"
                         required
                     />
                 </div>
 
                 <div className="mb-4">
-                    <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-2 ">
                         Description
                     </label>
                     <textarea
@@ -85,13 +86,13 @@ const CreateCourse = () => {
                         name="description"
                         value={module.description}
                         onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-800"
                         required
                     />
                 </div>
 
                 <div className="mb-4">
-                    <label htmlFor="position" className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="position" className="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-2">
                         Position
                     </label>
                     <input
@@ -100,11 +101,11 @@ const CreateCourse = () => {
                         name="position"
                         value={module.position}
                         onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-800"
                     />
                 </div>
 
-                <div>
+                <div className='mt-8'>
                     <button
                         type="submit"
                         className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
@@ -113,6 +114,7 @@ const CreateCourse = () => {
                     </button>
                 </div>
             </form>
+        </div>
         </div>
     );
 };

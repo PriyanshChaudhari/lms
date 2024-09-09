@@ -2,6 +2,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 
+
 const CourseCard = ({ courses, userId }) => {
     const router = useRouter()
     const handleClick = (course_id) => {
