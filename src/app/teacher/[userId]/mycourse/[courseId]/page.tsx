@@ -17,6 +17,7 @@ const CourseDetails = () => {
 
     const [participantData, setParticipantData] = useState([]);
     const [searchTerm, setSearchTerm] = useState<string>(''); // New state for search term
+
     const [addUser, setAddUser] = useState(false);
 
     const filteredParticipants = searchTerm === ''
@@ -106,8 +107,8 @@ const CourseDetails = () => {
     };
 
     return (
-        <div className="border border-gray-300 m-5">
-            <div className="max-w-4xl mx-auto p-5">
+        <div className="border border-gray-300 m-5 h-screen flex justify-center items-center">
+            <div className="w-full max-w-4xl mx-auto p-5">
                 <h1 className="text-3xl font-bold mb-4">{courses.title}</h1>
                 <p className="text-lg text-gray-700 mb-6">{courses.description}</p>
 
@@ -174,12 +175,12 @@ const CourseDetails = () => {
                             {/* Modules List */}
                             {sortedModules.map((module) => (
                                 <div key={module.id} className="space-y-4">
-                                    <div className="bg-white border flex justify-between border-gray-300 rounded-xl p-4 shadow-md min-h-6">
-                                        <h2 className="text-xl font-semibold">{module.title}</h2>
-                                        <h2 className="text-xl font-semibold">{module.description}</h2>
-                                        <h2 className="text-xl font-semibold">{module.position}</h2>
+                                    <div className=" border flex justify-between border-gray-300 rounded-xl p-4 shadow-md min-h-6">
+                                        <h2 className="text-lg font-semibold">{module.title}</h2>
+                                        <h2 className="text-lg font-semibold">{module.description}</h2>
+                                        <h2 className="text-lg font-semibold">{module.position}</h2>
                                         <div
-                                            className="px-3 rounded-xl cursor-pointer bg-gray-300 hover:bg-gray-200"
+                                            className="px-3 rounded flex justify-center items-center cursor-pointer bg-gray-300 hover:bg-gray-400"
                                             onClick={() => handleModuleClick(module.id)}
                                         >
                                         GO ->
@@ -234,73 +235,78 @@ const CourseDetails = () => {
                     {/* completed */}
                     {activeSection === 'participants' && (
                         <div className="space-y-4">
-                            <div className="border border-gray-300 dark:text-white rounded-xl p-6 shadow-md cursor-pointer">
-                                {/* <h2 className="text-xl font-semibold mb-6">Course Participants</h2>  */}
-                                <div className='flex justify-between mb-3  items-center'>
-                                    <h1 className="text-xl font-bold mb-b">Participants</h1>
-                                    <button className='bg-gray-950 hover:bg-gray-700 px-4 py-2 text-white rounded-xl' onClick={() => setAddUser(!addUser)}
-                                    >Add Participants</button>
-                                </div>
-                                {/* {<ExcelUploader />} */}
-                                {addUser && <EnrollmentForm courseId={courseId} />}
-                                <div className="shadow-md items-center p-5 border border-gray-100 rounded-xl">
-                                    <div className="overflow-x-auto mb-4">
-                                        <table className="min-w-full border border-gray-300">
-                                            <tbody>
-                                                <tr className="mt-4">
-                                                    <td className="p-1.5 border border-gray-300 text-sm">Filter by Name</td>
-                                                    {['All', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'].map((letter) => (
-                                                        <td
-                                                            key={letter}
-                                                            className={`p-1.5 border border-gray-300 cursor-pointer text-sm ${selectedLetter === letter ? 'font-bold' : ''}`}
-                                                            onClick={() => setSelectedLetter(letter)}
-                                                        >
-                                                            {letter}
-                                                        </td>
-                                                    ))}
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                            {/* Conditional rendering based on addUser */}
+                            {!addUser ? (
+                                <div className="border border-gray-300 dark:text-white rounded-xl p-6 shadow-md cursor-pointer">
+                                    <div className='flex justify-between mb-3 items-center'>
+                                        <h1 className="text-xl font-bold mb-b">Participants</h1>
+                                        <button
+                                            className='bg-gray-950 dark:bg-gray-400 hover:bg-gray-700 px-4 py-2 text-white rounded'
+                                            onClick={() => setAddUser(true)}  // Show form and hide list
+                                        >
+                                            Add Participants
+                                        </button>
                                     </div>
-                                    {/* <ul>
-                                        {filteredParticipants.map((participant) => (
-                                            <li key={participant.student_id} className="mb-2">
-                                                {participant.first_name} {participant.last_name} ({participant.email})
 
-                                            </li>
-                                        ))}
-                                    </ul> */}
-                                    <div>ADD</div>
-                                    <div className="overflow-x-auto">
-                                        {filteredParticipants.length === 0 ? (
-                                            <p>No participants found.</p>
-                                        ) : (
-                                            <table className="min-w-full table-auto border-collapse">
-                                                <thead>
-                                                    <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                                                        <th className="py-3 px-6 text-left">Student ID</th>
-                                                        <th className="py-3 px-6 text-left">First Name</th>
-                                                        <th className="py-3 px-6 text-left">Last Name</th>
-                                                        <th className="py-3 px-6 text-left">Email</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody className="text-gray-600 text-sm font-light">
-                                                    {filteredParticipants.map((participant) => (
-                                                        <tr key={participant.student_id} className="border-b border-gray-200 hover:bg-gray-100">
-                                                            <td className="py-3 px-6 text-left whitespace-nowrap">{participant.student_id}</td>
-                                                            <td className="py-3 px-6 text-left">{participant.first_name}</td>
-                                                            <td className="py-3 px-6 text-left">{participant.last_name}</td>
-                                                            <td className="py-3 px-6 text-left">{participant.email}</td>
+                                    <div className="shadow-md items-center p-5 border border-gray-100 rounded-xl">
+                                        <div className="overflow-x-auto mb-4">
+                                            <input
+                                                type="text"
+                                                placeholder="Search participants by name"
+                                                value={searchTerm}
+                                                onChange={(e) => setSearchTerm(e.target.value)}
+                                                className="mb-4 p-2 border border-gray-300 rounded w-full"
+                                            />
+                                        </div>
+                                        <div className="overflow-x-auto">
+                                            {filteredParticipants.length === 0 ? (
+                                                <p>No participants found.</p>
+                                            ) : (
+                                                <table className="min-w-full table-auto border-collapse border border-gray-300">
+                                                    <thead>
+                                                        <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                                                            <th className="py-3 px-6 text-center">Student ID</th>
+                                                            <th className="py-3 px-6 text-center">First Name</th>
+                                                            <th className="py-3 px-6 text-center">Last Name</th>
+                                                            <th className="py-3 px-6 text-center">Email</th>
                                                         </tr>
-                                                    ))}
-                                                </tbody>
-                                            </table>
-                                        )}
+                                                    </thead>
+                                                    <tbody className="text-gray-600 text-sm font-normal">
+                                                        {filteredParticipants.map((participant) => (
+                                                            <tr key={participant.student_id} className="border-b border-gray-200 ">
+                                                                <td className="py-3 px-6 text-center whitespace-nowrap">{participant.student_id}</td>
+                                                                <td className="py-3 px-6 text-center">{participant.first_name}</td>
+                                                                <td className="py-3 px-6 text-center">{participant.last_name}</td>
+                                                                <td className="py-3 px-6 text-center">{participant.email}</td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            ) : (
+                                // EnrollmentForm section with a close button
+                                <div className="border border-gray-300 dark:text-white rounded p-6 shadow-md cursor-pointer">
+                                    <div className='flex justify-between mb-3 items-center'>
+                                        <h1 className="text-xl font-bold mb-b">Add Participants</h1>
+                                        <button
+                                            className='bg-red-500 hover:bg-red-700 px-4 py-2 text-white rounded'
+                                            onClick={() => setAddUser(false)}  // Hide form and show list
+                                        >
+                                            Close
+                                        </button>
+                                    </div>
+                                    <div className="mt-4">
+                                        <EnrollmentForm courseId={courseId} />
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     )}
+
+
 
                 </div>
             </div>

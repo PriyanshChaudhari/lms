@@ -38,10 +38,10 @@ export default function ViewModules() {
     return (
         <div className="border border-gray-300 m-5 h-screen flex justify-center items-center">
             <div className="w-full max-w-4xl  mx-auto p-5">
-               <div className='flex gap-6 items-center my-4'>
-               <h1 className='text-2xl font-bold'>Add new Module</h1>
-               <button className='bg-blue-500 hover:bg-blue-600 rounded p-2 text-white text-sm' onClick={createModule}>Add Module</button>
-               </div>
+                <div className='flex gap-6 justify-center items-center mb-6'>
+                    <h1 className='text-2xl font-bold'>Add new Module</h1>
+                    <button className='bg-blue-500 hover:bg-blue-600 rounded p-2 text-white text-sm' onClick={createModule}>Add Module</button>
+                </div>
                 {sortedModules.map((module) => (
                     <div key={module.id} className="space-y-4">
                         <div

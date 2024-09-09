@@ -3,16 +3,19 @@ import React, { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { MoonIcon, SunIcon } from '@radix-ui/react-icons'
 import { useTheme } from 'next-themes'
-import { usePathname } from 'next/navigation';
+import { usePathname,useParams } from 'next/navigation';
 import axios from 'axios'
 import LoginButton from '@/components/ui/loginButton'
 
 
 const Navbar: React.FC = () => {
+  const params = useParams();
+  const userId = params.userId as string;
   const { theme, setTheme } = useTheme();
   const pathname = usePathname();
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [profilePicUrl, setProfilePicUrl] = useState<string>('');
+  const [userName, setUserName] = useState<string>('User');
   const dropdownRef = useRef<HTMLDivElement>(null); // Ref for dropdown
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
@@ -51,9 +54,11 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     const fetchProfilePic = async () => {
       try {
-        const userId = sessionStorage.getItem('userId');
+        // const userId = sessionStorage.getItem('userId');
         const res = await axios.get(`/api/get/one-user?userId=${userId}`); // Adjust the endpoint as needed
+        setUserName(res.data);
         setProfilePicUrl(res.data.profile_pic);
+        console.log(res.data);
       } catch (error) {
         console.log(error);
       }
@@ -78,7 +83,7 @@ const Navbar: React.FC = () => {
           ) : (
             <div className="relative" ref={dropdownRef}>
               <div className='flex gap-6 items-center'>
-                <p className='hidden sm:block'>Hi! Yatharth</p>
+                <p className='hidden sm:block'>Hi! {`${userName.first_name}`}</p>
                 <div
                   className="border border-gray-500 text-xs h-8 w-8 rounded-full cursor-pointer"
                   onClick={toggleDropdown}
