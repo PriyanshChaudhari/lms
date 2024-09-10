@@ -10,8 +10,6 @@ const EnrollmentForm = ({ courseId }: Props) => {
     const [enrollment, setEnrollment] = useState({
         student_id: "",
         course_id: courseId,
-        progress: "",
-        completion_status: ""
     });
 
     const [students, setStudents] = useState<{ id: string, name: string }[]>([]);
@@ -19,8 +17,6 @@ const EnrollmentForm = ({ courseId }: Props) => {
     const [errors, setErrors] = useState({
         student_id: "",
         course_id: "",
-        progress: "",
-        completion_status: ""
     });
 
     useEffect(() => {
@@ -63,20 +59,6 @@ const EnrollmentForm = ({ courseId }: Props) => {
             setErrors(prev => ({ ...prev, course_id: "" }));
         }
 
-        if (enrollment.progress === "" || isNaN(Number(enrollment.progress))) {
-            setErrors(prev => ({ ...prev, progress: "Progress must be a valid number" }));
-            valid = false;
-        } else {
-            setErrors(prev => ({ ...prev, progress: "" }));
-        }
-
-        if (enrollment.completion_status === "") {
-            setErrors(prev => ({ ...prev, completion_status: "Completion status is required" }));
-            valid = false;
-        } else {
-            setErrors(prev => ({ ...prev, completion_status: "" }));
-        }
-
         if (valid) {
             try {
                 const res = await axios.post('/api/enrollment', enrollment);
@@ -85,8 +67,6 @@ const EnrollmentForm = ({ courseId }: Props) => {
                 setEnrollment({
                     student_id: "",
                     course_id: courseId,
-                    progress: "",
-                    completion_status: ""
                 });
             } catch (error) {
                 console.error(error);
@@ -142,7 +122,7 @@ const EnrollmentForm = ({ courseId }: Props) => {
                     {errors.course_id && <p className="text-red-600 text-sm">{errors.course_id}</p>}
                 </div> */}
 
-                <div className="mb-4">
+                {/* <div className="mb-4">
                     <label htmlFor="progress" className="block text-sm font-medium text-gray-700">
                         Progress (%)
                     </label>
@@ -176,7 +156,7 @@ const EnrollmentForm = ({ courseId }: Props) => {
                         <option value="not_started">Not Started</option>
                     </select>
                     {errors.completion_status && <p className="text-red-600 text-sm">{errors.completion_status}</p>}
-                </div>
+                </div> */}
 
                 <div>
                     <button
