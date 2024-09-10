@@ -65,7 +65,7 @@ const ViewUsers = () => {
                                     <td className="border px-4 py-2 text-gray-700 dark:text-gray-300">{user.role}</td>
                                     <td className="border px-4 py-2 text-gray-700 dark:text-gray-300">{formatDate(user.dob)}</td>
                                     <td className="border px-4 py-2 text-gray-700 dark:text-gray-300">
-                                        <img src={user.profile_pic} alt="Profile Pic" className="object-cover rounded-full" />
+                                        <img src={user.profile_pic} alt="Profile Pic" className="border border-gray-300 h-7 w-7 object-cover rounded-full" />
                                     </td>
                                 </tr>
                             ))}

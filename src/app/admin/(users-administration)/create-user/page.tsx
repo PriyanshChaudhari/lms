@@ -1,7 +1,12 @@
 "use client"
 import { useState, ChangeEvent } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 
 const AddUser=()=> {
+    
+    const router = useRouter(); 
+    const params = useParams();
+    const userId = params.userId as string;
     const [user, setUser] = useState({
         userId: "",
         firstName: "",
@@ -12,6 +17,10 @@ const AddUser=()=> {
         profile_pic: "",
         dob: ""
     });
+
+    const handleClick = () => {
+        router.push('/admin/dashboard');
+      };
 
     const handleChange = (e: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -64,7 +73,7 @@ const AddUser=()=> {
                         name="firstName"
                         value={user.firstName}
                         onChange={handleChange}
-                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-md focus:outline-none focus:border-blue-500 dark:focus:border-white"
+                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-md focus:outline-none focus:border-blue-500 dark:focus:border-white capitalize"
                     />
                 </div>
 
@@ -76,7 +85,7 @@ const AddUser=()=> {
                         name="lastName"
                         value={user.lastName}
                         onChange={handleChange}
-                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-md focus:outline-none focus:border-blue-500 dark:focus:border-white"
+                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-md focus:outline-none focus:border-blue-500 dark:focus:border-white capitalize"
                     />
                 </div>
 
@@ -119,7 +128,7 @@ const AddUser=()=> {
                     </select>
                 </div>
 
-                <div className="mb-4">
+                {/* <div className="mb-4">
                     <label htmlFor="profile_pic" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Profile Picture URL:</label>
                     <input
                         type="text"
@@ -129,7 +138,7 @@ const AddUser=()=> {
                         onChange={handleChange}
                         className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-md focus:outline-none focus:border-blue-500"
                     />
-                </div>
+                </div> */}
 
                 <div className="mb-8">
                     <label htmlFor="dob" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Date of Birth:</label>
@@ -138,6 +147,7 @@ const AddUser=()=> {
                         id="dob"
                         name="dob"
                         value={user.dob}
+                        min = {new Date().toISOString().split('T')[0]}
                         onChange={handleChange}
                         className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-md focus:outline-none focus:border-blue-500 dark:focus:border-white "
                     />
@@ -145,6 +155,7 @@ const AddUser=()=> {
 
                 <button
                     type="submit"
+                    onClick={handleClick}
                     className="w-full bg-red-500 text-white font-semibold py-2 rounded-md hover:bg-red-600 transition duration-300"
                 >
                     Submit

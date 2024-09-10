@@ -28,12 +28,12 @@ export default function courseDetails({ params }: { params: { courseId: string }
     };
 
     const handleViewUsersClick = () => {
-        router.push('/admin/courses/view-users');
+        router.push('/admin/view-users');
     };
 
     return (
-        <div className="border border-gray-300 m-5">
-            <div className="max-w-4xl mx-auto p-5">
+        <div className="border border-gray-300 m-5 h-screen flex justify-center items-center">
+            <div className="w-full max-w-4xl mx-auto p-5">
                 <h1 className="text-3xl font-bold mb-4">Course {params.courseId}</h1>
                 <p className="text-lg text-gray-700 mb-6">Description of course 1</p>
 
