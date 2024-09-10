@@ -15,13 +15,18 @@ const CourseDetails = () => {
 
     const [participantData, setParticipantData] = useState([]);
 
-    const [selectedLetter, setSelectedLetter] = useState<string>('All');
+    const [searchTerm, setSearchTerm] = useState<string>(''); // New state for search term
 
-    const filteredParticipants = selectedLetter === 'All'
+    const [addUser, setAddUser] = useState(false);
+
+    const filteredParticipants = searchTerm === ''
         ? participantData
         : participantData.filter(
-            (item) => item.first_name.startsWith(selectedLetter)
+            (item) =>
+                item.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.last_name.toLowerCase().includes(searchTerm.toLowerCase())
         );
+
 
     const router = useRouter();
     const params = useParams();
@@ -224,59 +229,42 @@ const CourseDetails = () => {
                                 {/* <h2 className="text-xl font-semibold mb-6">Course Participants</h2>  */}
                                 <h1 className="text-xl font-bold mb-b">Participants</h1>
                                 <div className="shadow-md items-center p-5 border border-gray-100 rounded-xl">
-                                    <div className="overflow-x-auto mb-4">
-                                        <table className="min-w-full border border-gray-300">
-                                            <tbody>
-                                                <tr className="mt-4">
-                                                    <td className="p-1.5 border border-gray-300 text-sm">Filter by Name</td>
-                                                    {['All', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'].map((letter) => (
-                                                        <td
-                                                            key={letter}
-                                                            className={`p-1.5 border border-gray-300 cursor-pointer text-sm ${selectedLetter === letter ? 'font-bold' : ''}`}
-                                                            onClick={() => setSelectedLetter(letter)}
-                                                        >
-                                                            {letter}
-                                                        </td>
-                                                    ))}
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    {/* <ul>
-                                        {filteredParticipants.map((participant) => (
-                                            <li key={participant.student_id} className="mb-2">
-                                                {participant.first_name} {participant.last_name} ({participant.email})
-
-                                            </li>
-                                        ))}
-                                    </ul> */}
-                                    <div className="overflow-x-auto">
-                                        {filteredParticipants.length === 0 ? (
-                                            <p>No participants found.</p>
-                                        ) : (
-                                            <table className="min-w-full table-auto border-collapse">
-                                                <thead>
-                                                    <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                                                        <th className="py-3 px-6 text-left">Student ID</th>
-                                                        <th className="py-3 px-6 text-left">First Name</th>
-                                                        <th className="py-3 px-6 text-left">Last Name</th>
-                                                        <th className="py-3 px-6 text-left">Email</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody className="text-gray-600 text-sm font-light">
-                                                    {filteredParticipants.map((participant) => (
-                                                        <tr key={participant.student_id} className="border-b border-gray-200 hover:bg-gray-100">
-                                                            <td className="py-3 px-6 text-left whitespace-nowrap">{participant.student_id}</td>
-                                                            <td className="py-3 px-6 text-left">{participant.first_name}</td>
-                                                            <td className="py-3 px-6 text-left">{participant.last_name}</td>
-                                                            <td className="py-3 px-6 text-left">{participant.email}</td>
+                                        <div className="overflow-x-auto mb-4">
+                                            <input
+                                                type="text"
+                                                placeholder="Search participants by name"
+                                                value={searchTerm}
+                                                onChange={(e) => setSearchTerm(e.target.value)}
+                                                className="mb-4 p-2 border border-gray-300 rounded w-full"
+                                            />
+                                        </div>
+                                        <div className="overflow-x-auto">
+                                            {filteredParticipants.length === 0 ? (
+                                                <p>No participants found.</p>
+                                            ) : (
+                                                <table className="min-w-full table-auto border-collapse border border-gray-300">
+                                                    <thead>
+                                                        <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                                                            <th className="py-3 px-6 text-center">Student ID</th>
+                                                            <th className="py-3 px-6 text-center">First Name</th>
+                                                            <th className="py-3 px-6 text-center">Last Name</th>
+                                                            <th className="py-3 px-6 text-center">Email</th>
                                                         </tr>
-                                                    ))}
-                                                </tbody>
-                                            </table>
-                                        )}
+                                                    </thead>
+                                                    <tbody className="text-gray-600 text-sm font-normal">
+                                                        {filteredParticipants.map((participant) => (
+                                                            <tr key={participant.student_id} className="border-b border-gray-200 ">
+                                                                <td className="py-3 px-6 text-center whitespace-nowrap">{participant.student_id}</td>
+                                                                <td className="py-3 px-6 text-center">{participant.first_name}</td>
+                                                                <td className="py-3 px-6 text-center">{participant.last_name}</td>
+                                                                <td className="py-3 px-6 text-center">{participant.email}</td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
                             </div>
                         </div>
                     )}
