@@ -46,9 +46,9 @@ export default function ViewModules() {
                     <div key={module.id} className="space-y-4">
                         <div
                             className="border flex justify-between border-gray-300 my-2 rounded-xl p-4 shadow-md min-h-6 ">
-                            <h2 className="text-xl font-semibold">{module.title}</h2>
-                            <h2 className="text-xl font-semibold">{module.description}</h2>
                             <h2 className="text-xl font-semibold">{module.position}</h2>
+                            <h2 className="text-xl font-semibold">{module.description}</h2>
+                            <h2 className="text-xl font-semibold">{module.title}</h2>
                             <div className='px-3 rounded flex items-center cursor-pointer bg-gray-400  hover:bg-gray-500' onClick={() => handleModuleClick(module.id)} > GO -> </div>
                         </div>
 

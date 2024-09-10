@@ -113,14 +113,15 @@ const CourseDetails = () => {
                 <p className="text-lg text-gray-700 mb-6">{courses.description}</p>
 
                 <nav className="mb-6 border border-gray-300 rounded-xl shadow-md p-2">
-                    <ul className="flex justify-between space-x-4 list-none p-0">
+                    <ul className="flex justify-start space-x-4 list-none p-0">
                         <li
                             className={` p-3 rounded-xl cursor-pointer ${activeSection === 'course' ? 'bg-gray-400 text-white' : ''}`}
                             onClick={() => setActiveSection('course')}
                         >
                             Course
                         </li>
-                        <li
+
+                        {/* <li
                             className={` p-3 rounded-xl cursor-pointer ${activeSection === 'assignments' ? 'bg-gray-400 text-white' : ''}`}
                             onClick={() => setActiveSection('assignments')}
                         >
@@ -130,13 +131,15 @@ const CourseDetails = () => {
                                     {assignments.length}
                                 </span>
                             )}
-                        </li>
-                        <li
+                        </li> */}
+
+                        {/* <li
                             className={` p-3 rounded-xl cursor-pointer ${activeSection === 'grades' ? 'bg-gray-400 text-white' : ''}`}
                             onClick={() => setActiveSection('grades')}
                         >
                             Grades
-                        </li>
+                        </li> */}
+
                         <li
                             className={` p-3 rounded-xl cursor-pointer ${activeSection === 'participants' ? 'bg-gray-400 text-white' : ''}`}
                             onClick={() => setActiveSection('participants')}
@@ -148,12 +151,13 @@ const CourseDetails = () => {
                                 </span>
                             )}
                         </li>
-                        <li
+
+                        {/* <li
                             className={` p-3 rounded-xl cursor-pointer ${activeSection === 'settings' ? 'bg-gray-400 text-white' : ''}`}
                             onClick={() => setActiveSection('settings')}
                         >
                             Settings
-                        </li>
+                        </li> */}
                     </ul>
                 </nav>
 
@@ -175,10 +179,10 @@ const CourseDetails = () => {
                             {/* Modules List */}
                             {sortedModules.map((module) => (
                                 <div key={module.id} className="space-y-4">
-                                    <div className=" border flex justify-between border-gray-300 rounded-xl p-4 shadow-md min-h-6">
+                                    <div className="border flex justify-between border-gray-300 rounded-xl p-4 shadow-md min-h-6">
+                                        <h2 className="text-lg font-semibold">{module.position}</h2>
                                         <h2 className="text-lg font-semibold">{module.title}</h2>
                                         <h2 className="text-lg font-semibold">{module.description}</h2>
-                                        <h2 className="text-lg font-semibold">{module.position}</h2>
                                         <div
                                             className="px-3 rounded flex justify-center items-center cursor-pointer bg-gray-300 hover:bg-gray-400"
                                             onClick={() => handleModuleClick(module.id)}

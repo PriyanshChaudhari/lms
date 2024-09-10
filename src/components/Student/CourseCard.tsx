@@ -33,9 +33,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ courses, userId }) => {
                             <div key={course.course_id} className="border border-gray-300 dark:text-white  hover:bg-slate-100 dark:hover:bg-[#1a1a1a] rounded-xl p-5 w-full max-w-xs shadow-sm cursor-pointer">
                                 <h2 onClick={() => handleClick(course.course_id)} className="text-lg font-semibold hover:underline">{course.title}</h2>
                                 <p className="text-sm text-gray-600">{course.description}</p>
-                                <div className="bg-gray-200 rounded-full h-2 mt-3">
-                                    <div className="bg-blue-500 h-full rounded-full" style={{ width: '50%' }}></div>
-                                </div>
+
                             </div>
                         ))}
 
