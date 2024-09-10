@@ -72,12 +72,12 @@ export default function ViewModule() {
                         <h2 className="text-xl font-semibold mb-2">{oneModule.title}</h2>
                         <p className="text-sm text-gray-600">{oneModule.description}</p>
 
-                        <button
+                        {/* <button
                             className="bg-blue-500 text-white px-4 py-2  mt-2 rounded-xl hover:bg-blue-600"
                             onClick={() => router.push(`/student/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments`)}
                         >
                             Assignments
-                        </button>
+                        </button> */}
                     </div>
 
                     <div>

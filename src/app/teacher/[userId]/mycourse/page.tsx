@@ -74,11 +74,12 @@ const MyCourse: React.FC = () => {
                                     <div className="text-2xl font-bold ">My Courses</div>
                                     <button className="bg-blue-500 hover:bg-blue-600 rounded text-xs p-2 text-white mt-2" onClick={createCourse}>Add New Course</button>
                                 </div>
+
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-5 justify-items-center">
 
 
                                     {courses.map((course) => (
-                                        <div key={course.id} className="border border-gray-300 dark:text-white  hover:bg-slate-100 dark:hover:bg-[#1a1a1a] rounded p-6 w-full max-w-xs shadow-sm cursor-pointer">
+                                        <div key={course.course_id} className="border border-gray-300 dark:text-white  hover:bg-slate-100 dark:hover:bg-[#1a1a1a] rounded-xl p-5 w-full max-w-xs shadow-sm cursor-pointer">
                                             <img src={`${course.thumbnail}`} className="rounded mb-4"></img>
                                             <h3 className="text-lg font-semibold mb-2 underline" onClick={() => handleClick(course.id)}>{course.title}</h3>
                                             <p className="text-sm text-gray-600 mb-4">{course.description}</p>
