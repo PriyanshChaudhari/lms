@@ -37,6 +37,12 @@ const Sidebar: React.FC = () => {
       <div >
         <aside className="hidden sm:block w-1/4 lg:w-1/6 bg-gray-100 dark:bg-gray-800 p-4 h-full fixed z-50">
           <div className="flex flex-col gap-6 bg-white dark:bg-black border border-gray-300 dark:border-gray-700 p-4">
+            <Link
+              href="/admin/dashboard"
+              className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 rounded-md"
+            >
+              Dashboard
+            </Link>
             <button
               onClick={toggleUserSection}
               className={`${isUserSectionVisible ? 'bg-blue-500 text-white text-left' : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 text-left'
@@ -47,6 +53,7 @@ const Sidebar: React.FC = () => {
 
             {isUserSectionOpen && (
               <div className="flex flex-col gap-2">
+
                 <Link
                   href="/admin/create-user"
                   className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 dark:bg-gray-800 rounded bg-gray-300 text-sm"
@@ -60,14 +67,14 @@ const Sidebar: React.FC = () => {
                   Upload User Data
                 </Link>
                 <Link
-                  href="/admin/courses/view-users"
+                  href="/admin/view-users"
                   className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 dark:bg-gray-800 rounded bg-gray-300 text-sm"
                 >
                   View Users
                 </Link>
               </div>
             )}
-             <button
+            <button
               onClick={toggleCourseSection}
               className={`${isCourseSectionVisible ? 'bg-blue-500 text-white text-left' : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 text-left'
                 } p-2 rounded-md`}
@@ -77,7 +84,7 @@ const Sidebar: React.FC = () => {
             {isCourseSectionOpen && (
               <div className="flex flex-col gap-2  ">
                 <Link
-                  href="/admin/courses/course-category"
+                  href="/admin/course-category/create"
                   className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 dark:bg-gray-800 rounded bg-gray-300 text-sm"
                 >
                   Add Category
@@ -92,12 +99,7 @@ const Sidebar: React.FC = () => {
               </div>
             )}
 
-            <Link
-              href="#dashboard"
-              className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 rounded-md"
-            >
-              Dashboard
-            </Link>
+
             <Link
               href="#notifications"
               className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 rounded-md"
@@ -125,8 +127,13 @@ const Sidebar: React.FC = () => {
           </button>
           <ul className="font-medium space-y-4 mt-12">
             <li>
+              <Link href="/admin/dashboard" className="block p-4 text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
+                Dashboard
+              </Link>
+            </li>
+            <li>
               <Link
-                href="/admin/courses/view-users"
+                href="/admin/view-users"
                 className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 rounded-md"
               >
                 View Users
@@ -143,8 +150,8 @@ const Sidebar: React.FC = () => {
               </Link>
             </li>
             <li>
-              <Link href="/admin/courses/course-category" className="block p-4 text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
-                Courses Category
+              <Link href="/admin/course-category/create" className="block p-4 text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
+                Add Courses Category
               </Link>
             </li>
 
@@ -154,11 +161,7 @@ const Sidebar: React.FC = () => {
                 Manage Category
               </Link>
             </li>
-            <li>
-              <Link href="#dashboard" className="block p-4 text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
-                Dashboard
-              </Link>
-            </li>
+
             <li>
               <Link href="#notifications" className="block p-4 text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
                 Notifications

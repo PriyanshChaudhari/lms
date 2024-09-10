@@ -52,19 +52,38 @@ const Navbar: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const fetchProfilePic = async () => {
+    
+    const fetchProfileName = async () => {
       try {
         // const userId = sessionStorage.getItem('userId');
         const res = await axios.get(`/api/get/one-user?userId=${userId}`); // Adjust the endpoint as needed
         setUserName(res.data);
-        setProfilePicUrl(res.data.profile_pic);
         console.log(res.data);
       } catch (error) {
         console.log(error);
       }
+      
+    };
+
+    fetchProfileName();
+
+    const fetchProfilePic = async () => {
+
+      try {
+        // const userId = sessionStorage.getItem('userId');
+        const res = await axios.get(`/api/get/one-user?userId=${userId}`); // Adjust the endpoint as needed
+        setProfilePicUrl(res.data);
+
+        console.log(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+
     };
 
     fetchProfilePic();
+
+    
   }, []);
 
   return (
@@ -95,8 +114,8 @@ const Navbar: React.FC = () => {
               {isDropdownOpen && (
                 <div className="absolute top-full right-0 mt-2 w-44 bg-white dark:bg-gray-800 border border-gray-300 rounded-xl shadow-lg">
                   <ul className="list-none p-2">
-                    <li className="p-2 text-sm hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer">Dashboard</li>
-                    <li className="p-2 text-sm hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer">Profile</li>
+                    {/* <li className="p-2 text-sm hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"><Link href='/admin/dashboard'>Dashboard</Link></li> */}
+                    {/* <li className="p-2 text-sm hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer">Profile</li> */}
                     <li className="text-sm cursor-pointer">
                       <button className='text-red-500 hover:text-red-600 p-2 rounded-xl' onClick={handleLogout}>Log Out</button>
                     </li>
