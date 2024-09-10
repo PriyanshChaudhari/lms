@@ -20,10 +20,6 @@ export async function GET(req: NextRequest) {
 
         const userData = userDoc.data();
 
-        if (userData.role !== "student") {
-            return NextResponse.json({ error: "User is not a student" }, { status: 400 });
-        }
-
         // Return the user data as JSON
         return NextResponse.json({ id: userDoc.id, ...userData });
     } catch (error: any) {

@@ -10,13 +10,14 @@ import LoginButton from '@/components/ui/loginButton'
 
 const Navbar: React.FC = () => {
   const params = useParams();
-  const userId = params.userId as string;
+  // const userId = params.userId as string;
   const { theme, setTheme } = useTheme();
   const pathname = usePathname();
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [profilePicUrl, setProfilePicUrl] = useState<string>('');
   const [userName, setUserName] = useState<string>('User');
   const dropdownRef = useRef<HTMLDivElement>(null); // Ref for dropdown
+  const userId = sessionStorage.getItem('userId');
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
   };
@@ -51,11 +52,13 @@ const Navbar: React.FC = () => {
     };
   }, []);
 
+
+
   useEffect(() => {
     
     const fetchProfileName = async () => {
       try {
-        // const userId = sessionStorage.getItem('userId');
+        const userId = sessionStorage.getItem('userId');
         const res = await axios.get(`/api/get/one-user?userId=${userId}`); // Adjust the endpoint as needed
         setUserName(res.data);
         console.log(res.data);
@@ -70,7 +73,7 @@ const Navbar: React.FC = () => {
     const fetchProfilePic = async () => {
 
       try {
-        // const userId = sessionStorage.getItem('userId');
+
         const res = await axios.get(`/api/get/one-user?userId=${userId}`); // Adjust the endpoint as needed
         setProfilePicUrl(res.data);
 
@@ -102,12 +105,12 @@ const Navbar: React.FC = () => {
           ) : (
             <div className="relative" ref={dropdownRef}>
               <div className='flex gap-6 items-center'>
-                <p className='hidden sm:block'>Hi! {`${userName.first_name}`}</p>
+                {/* <p className='hidden sm:block'>Hi! {`${userName.first_name}`}</p> */}
                 <div
                   className="border border-gray-500 text-xs h-8 w-8 rounded-full cursor-pointer"
                   onClick={toggleDropdown}
                 >
-                  <img src={profilePicUrl} alt="pfp" className="h-full w-full rounded-full object-cover" />
+                  <img src="https://firebasestorage.googleapis.com/v0/b/minor-project-01-5a5b7.appspot.com/o/users%2F8021000004%2Fprofile_pic.png?alt=media&token=061a7885-4080-41d2-bb21-d2131be8f098" alt="pfp" className="h-full w-full rounded-full object-cover" />
                 </div>
               </div>
 

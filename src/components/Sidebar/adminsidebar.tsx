@@ -66,12 +66,12 @@ const Sidebar: React.FC = () => {
                 >
                   Upload User Data
                 </Link>
-                <Link
+                {/* <Link
                   href="/admin/view-users"
                   className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 dark:bg-gray-800 rounded bg-gray-300 text-sm"
                 >
                   View Users
-                </Link>
+                </Link> */}
               </div>
             )}
             <button
@@ -100,12 +100,12 @@ const Sidebar: React.FC = () => {
             )}
 
 
-            <Link
+            {/* <Link
               href="#notifications"
               className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 rounded-md"
             >
               Notifications
-            </Link>
+            </Link> */}
 
           </div>
 
@@ -132,12 +132,12 @@ const Sidebar: React.FC = () => {
               </Link>
             </li>
             <li>
-              <Link
+              {/* <Link
                 href="/admin/view-users"
                 className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 rounded-md"
               >
                 View Users
-              </Link>
+              </Link> */}
             </li>
             <li>
               <Link href="/admin/create-user" className="block p-4 text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>

@@ -44,13 +44,15 @@ interface UserData {
     firstName: string;
     lastName: string;
     role: string;
-    profile_pic: string;
-    dob: string; // Assuming dob is a string in the input JSON
+    // profile_pic: string;
+    // dob: string; // Assuming dob is a string in the input JSON
 }
 
 export async function POST(req: NextRequest) {
     try {
         const jsonData = await req.json();
+        console.log(jsonData);
+        
 
         // Call the batch creation function
         const userRecords = await batchUsersCreation(jsonData);
@@ -68,7 +70,7 @@ export async function batchUsersCreation(jsonData: UserData[]) {
 
     try {
         for (const user of jsonData) {
-            const { userId, password, email, firstName, lastName, role, profile_pic, dob } = user;
+            const { userId, password, email, firstName, lastName, role, /*profile_pic, dob*/ } = user;
 
             // Validate inputs
             if (!userId || !password) {
@@ -82,9 +84,9 @@ export async function batchUsersCreation(jsonData: UserData[]) {
                 throw new Error(`User with userId ${userId} already exists`);
             }
 
-            const formattedDate = new Date(dob);
-            console.log(formattedDate)
-            const firestoreDate = Timestamp.fromDate(formattedDate);
+            // const formattedDate = new Date(dob);
+            // console.log(formattedDate)
+            // const firestoreDate = Timestamp.fromDate(formattedDate);
 
             const passwordHash = await bcrypt.hash(password, 10);
 
@@ -95,8 +97,8 @@ export async function batchUsersCreation(jsonData: UserData[]) {
                 email: email || `${userId}@example.com`, // Use a dummy email if not provided
                 password: passwordHash,
                 role: role,
-                profile_pic: profile_pic,
-                dob: firestoreDate
+                // profile_pic: profile_pic,
+                // dob: firestoreDate
             });
         }
 

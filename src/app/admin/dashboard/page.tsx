@@ -68,9 +68,9 @@ export default function courseDetails({ params }: { params: { courseId: string }
                                     <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">Upload Users</h2>
                                 </div>
 
-                                <div className="bg-white border border-gray-300 rounded-xl p-3 shadow-md h-12 " onClick={handleViewUsersClick}>
+                                {/* <div className="bg-white border border-gray-300 rounded-xl p-3 shadow-md h-12 " onClick={handleViewUsersClick}>
                                     <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">View Users</h2>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     )}

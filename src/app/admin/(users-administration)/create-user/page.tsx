@@ -2,9 +2,9 @@
 import { useState, ChangeEvent } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 
-const AddUser=()=> {
-    
-    const router = useRouter(); 
+const AddUser = () => {
+
+    const router = useRouter();
     const params = useParams();
     const userId = params.userId as string;
     const [user, setUser] = useState({
@@ -14,13 +14,13 @@ const AddUser=()=> {
         email: "",
         password: "",
         role: "student",
-        profile_pic: "",
-        dob: ""
+        // profile_pic: "",
+        // dob: ""
     });
 
     const handleClick = () => {
         router.push('/admin/dashboard');
-      };
+    };
 
     const handleChange = (e: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -48,10 +48,10 @@ const AddUser=()=> {
 
     return (
         <div className="bg-gray-300 dark:bg-black min-h-screen flex items-center justify-center p-6">
-            
+
             <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md w-full max-w-xl">
                 <div className="mb-4">
-                <h2 className="text-2xl font-semibold mb-4 text-black dark:text-gray-300 text-center">Add User</h2>
+                    <h2 className="text-2xl font-semibold mb-4 text-black dark:text-gray-300 text-center">Add User</h2>
                 </div>
                 <div className="mb-4">
                     <label htmlFor="userId" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">User ID:</label>
@@ -140,7 +140,7 @@ const AddUser=()=> {
                     />
                 </div> */}
 
-                <div className="mb-8">
+                {/* <div className="mb-8">
                     <label htmlFor="dob" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Date of Birth:</label>
                     <input
                         type="date"
@@ -151,7 +151,7 @@ const AddUser=()=> {
                         onChange={handleChange}
                         className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-md focus:outline-none focus:border-blue-500 dark:focus:border-white "
                     />
-                </div>
+                </div> */}
 
                 <button
                     type="submit"

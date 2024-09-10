@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 const ExcelUploader = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -10,6 +12,11 @@ const ExcelUploader = () => {
       setFile(e.target.files[0]);
       setError(''); // Clear error when a new file is selected
     }
+  };
+
+  const router = useRouter();
+  const handleClick = () => {
+    router.push('/admin/dashboard');
   };
 
   const handleFileUpload = async () => {
@@ -30,15 +37,24 @@ const ExcelUploader = () => {
         const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
         try {
-          const response = await fetch('/api/auth/create-user/excel', {
-            method: 'POST',
+          console.log(jsonData);
+          
+          // const response = await fetch('/api/auth/create-user/excel', {
+          //   method: 'POST',
+          //   headers: { 'Content-Type': 'application/json' },
+          //   body: JSON.stringify(jsonData),
+          // });
+
+          const response = await axios.post('/api/auth/create-user/excel', jsonData, {
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(jsonData),
           });
 
-          if (response.ok) {
+          if (response.status === 201) {
+            alert('User uploaded successfully');
+            router.push('/admin/dashboard');
             console.log('Data uploaded successfully');
           } else {
+            alert('Failed to upload user');
             console.error('Failed to upload data');
           }
         } catch (error) {
@@ -91,7 +107,10 @@ const ExcelUploader = () => {
               <button
                 type="button"
                 className="bg-gray-300 dark:bg-white text-black border border-gray-300 py-2 px-4 rounded-xl hover:bg-gray-400 dark:hover:bg-gray-100 transition"
-                onClick={() => setFile(null)}
+                onClick={() => {
+                  setFile(null);
+                  handleClick();
+                }}
               >
                 Cancel
               </button>

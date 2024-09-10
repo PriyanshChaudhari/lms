@@ -40,10 +40,10 @@ import bcrypt from 'bcryptjs';
 
 export async function POST(req: NextRequest) {
     try {
-        const { userId, firstName, lastName, email, password, role, profile_pic, dob } = await req.json();
+        const { userId, firstName, lastName, email, password, role, /*profile_pic, dob*/ } = await req.json();
 
-        const formattedDate = new Date(dob);
-        const firestoreDate = Timestamp.fromDate(formattedDate);
+        // const formattedDate = new Date(dob);
+        // const firestoreDate = Timestamp.fromDate(formattedDate);
 
         const passwordHash = await bcrypt.hash(password, 10);
         console.log('passwordHash', passwordHash);
@@ -53,8 +53,8 @@ export async function POST(req: NextRequest) {
             email: email,
             password: passwordHash,
             role: role,
-            profile_pic: profile_pic,
-            dob: firestoreDate
+            // profile_pic: profile_pic,
+            // dob: firestoreDate
         });
         console.log("added");
         return NextResponse.json({ message: 'User created' }, { status: 201 });
