@@ -61,7 +61,7 @@ export default function ViewModuleAssignments() {
                 <div className="space-y-4 ">
                     <div>
                         <button
-                            className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600"
+                            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                             onClick={handleAddAssignment} // Replace with your add module logic
                         >
                             Add Assignments

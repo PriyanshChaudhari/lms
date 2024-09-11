@@ -162,11 +162,11 @@ const Sidebar: React.FC = () => {
               </Link>
             </li>
 
-            <li>
+            {/* <li>
               <Link href="#notifications" className="block p-4 text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
                 Notifications
               </Link>
-            </li>
+            </li> */}
 
           </ul>
         </div>

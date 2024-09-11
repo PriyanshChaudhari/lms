@@ -19,7 +19,7 @@ const AddUser = () => {
     });
 
     const handleClick = () => {
-        router.push('/admin/dashboard');
+        // router.push('/admin/dashboard');
     };
 
     const handleChange = (e: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
@@ -29,22 +29,32 @@ const AddUser = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        try {
-            const response = await fetch('/api/auth/create-user', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(user)
-            });
-            if (response.ok) {
-                console.log('User created successfully');
-            } else {
-                console.error('Error creating user');
-            }
-        } catch (error) {
-            console.error('Error:', error);
+    
+        if (!user.userId || !user.firstName || !user.lastName || !user.email || !user.password) {
+            alert('Please fill in all the required fields');
+            return;
         }
+        else{
+            try {
+                const response = await fetch('/api/auth/create-user', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(user)
+                });
+                if (response.ok) {
+                    console.log('User created successfully');
+                    router.push('/admin/dashboard');
+                } else {
+                    console.error('Error creating user');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    
+        
     };
+    
 
     return (
         <div className="bg-gray-300 dark:bg-black min-h-screen flex items-center justify-center p-6">

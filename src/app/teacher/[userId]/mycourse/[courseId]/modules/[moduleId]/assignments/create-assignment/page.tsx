@@ -29,8 +29,22 @@ export default function CreateAssignment() {
         });
     };
 
+    const validateForm = () => {
+        const { title, description, total_marks, due_date } = formData;
+        if (!title || !description || !total_marks || !due_date) {
+            setError('Please fill in all required fields.');
+            return false;
+        }
+        return true;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!validateForm()) {
+            return; // Exit if validation fails
+        }
+
         try {
             const response = await axios.post('/api/assignments/create-assignment', formData);
             const data = response.data;
@@ -46,7 +60,7 @@ export default function CreateAssignment() {
                     total_marks: '',
                     due_date: '',
                 });
-                router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments`)
+                router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments`);
             } else {
                 setError(data.error || 'Failed to add assessment');
             }
@@ -62,7 +76,6 @@ export default function CreateAssignment() {
                 {message && <p className="text-green-500">{message}</p>}
                 {error && <p className="text-red-500">{error}</p>}
                 <form onSubmit={handleSubmit}>
-
                     <div className="mb-4">
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-100">Title</label>
                         <input

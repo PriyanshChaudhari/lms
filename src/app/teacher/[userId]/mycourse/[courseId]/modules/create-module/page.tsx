@@ -99,6 +99,7 @@ const CreateCourse = () => {
                         type="number"
                         id="position"
                         name="position"
+                        min={1}
                         value={module.position}
                         onChange={handleChange}
                         className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-800"

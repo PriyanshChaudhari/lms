@@ -100,20 +100,20 @@ export default function ViewModuleAssignment() {
                         <p className="text-sm text-gray-600">Opened : {formatDate(oneAssignment.created_at)}</p>
                         <p className="text-sm text-gray-600">Due date : {formatDate(oneAssignment.due_date)}</p>
                         <div className='flex justify-start gap-6 items-center'>
-                        <button
-                            className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600"
+                       <div className='flex justify-center gap-6 mt-4'>
+                       <button
+                            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                             onClick={handleEditAssignment} // Replace with your add module logic
                         >
                             Edit Assignments
                         </button>
-                        <br />
-                        <br />
                         <button
-                            className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600"
+                            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
                             onClick={handleDeleteAssignment} // Replace with your add module logic
                         >
                             Delete Assignments
                         </button>
+                       </div>
                         </div>
                     </div>
                     <div>

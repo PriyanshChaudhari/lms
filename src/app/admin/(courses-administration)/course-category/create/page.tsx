@@ -28,7 +28,7 @@ const CreateCategory = () => {
     }, []);
 
     const handleClick = () =>{
-      router.push('/admin/dashboard');
+    //   router.push('/admin/dashboard');
     }
 
     const handleCategoryChange = (index: number, e: ChangeEvent<HTMLSelectElement>) => {
@@ -66,6 +66,7 @@ const CreateCategory = () => {
 
             // Optionally, show a success message
             alert("Category created successfully!");
+            router.push('/admin/dashboard');
         } catch (error) {
             console.error(error);
             // Optionally, show an error message

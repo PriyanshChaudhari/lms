@@ -16,7 +16,7 @@ const ExcelUploader = () => {
 
   const router = useRouter();
   const handleClick = () => {
-    router.push('/admin/dashboard');
+    // router.push('/admin/dashboard');
   };
 
   const handleFileUpload = async () => {
