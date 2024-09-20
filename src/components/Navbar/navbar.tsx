@@ -10,6 +10,7 @@ import LoginButton from '@/components/ui/loginButton'
 
 const Navbar: React.FC = () => {
   const params = useParams();
+  const DefaultProfilePic = 'https://firebasestorage.googleapis.com/v0/b/minor-project-01-5a5b7.appspot.com/o/users%2F8021000004%2Fprofile_pic.png?alt=media&token=061a7885-4080-41d2-bb21-d2131be8f098';
   // const userId = params.userId as string;
   const { theme, setTheme } = useTheme();
   const pathname = usePathname();
@@ -28,13 +29,26 @@ const Navbar: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      const res = await axios.get('/api/auth/logout')
-      window.location.replace('/login')
-    }
-    catch (error) {
+      await axios.get('/api/auth/logout');
+      sessionStorage.clear(); // Clear session storage on logout
+      setUserName('User'); // Reset username state
+      setProfilePicUrl(DefaultProfilePic); // Reset profile pic state
+      window.location.replace('/login');
+    } catch (error) {
       console.log(error);
     }
   };
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) {
+      return 'Good Morning';
+    } else if (hour < 18) {
+      return 'Good Afternoon';
+    } else {
+      return 'Good Evening';
+    }
+  };  
 
   const isLoginPage = pathname === '/' || pathname === '/login';
 
@@ -52,42 +66,24 @@ const Navbar: React.FC = () => {
     };
   }, []);
 
-
-
+  // Fetch user details whenever the userId changes
   useEffect(() => {
-    
-    const fetchProfileName = async () => {
+    const fetchProfileData = async () => {
       try {
         const userId = sessionStorage.getItem('userId');
-        const res = await axios.get(`/api/get/one-user?userId=${userId}`); // Adjust the endpoint as needed
-        setUserName(res.data);
-        console.log(res.data);
+        if (userId) {
+          const res = await axios.get(`/api/get/one-user?userId=${userId}`);
+          setUserName(res.data); // Update with user data
+          const picUrl = res.data.profile_pic || DefaultProfilePic;
+          setProfilePicUrl(picUrl); // Assuming res.data contains profilePicUrl
+        }
       } catch (error) {
         console.log(error);
       }
-      
     };
 
-    fetchProfileName();
-
-    const fetchProfilePic = async () => {
-
-      try {
-
-        const res = await axios.get(`/api/get/one-user?userId=${userId}`); // Adjust the endpoint as needed
-        setProfilePicUrl(res.data);
-
-        console.log(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-
-    };
-
-    fetchProfilePic();
-
-    
-  }, []);
+    fetchProfileData();
+  }, [userId]);
 
   return (
     <nav className="dark:bg-gray-800 p-4 w-full bg-gray-100 text-black dark:text-white  z-10 top-0 sticky font-rubik" style={{ cursor: 'default' }}>
@@ -105,12 +101,12 @@ const Navbar: React.FC = () => {
           ) : (
             <div className="relative" ref={dropdownRef}>
               <div className='flex gap-6 items-center'>
-                {/* <p className='hidden sm:block'>Hi! {`${userName.first_name}`}</p> */}
+              <p className='hidden sm:block'>{`${getGreeting()},  ${userName.first_name || 'User'}`}</p>
                 <div
                   className="border border-gray-500 text-xs h-8 w-8 rounded-full cursor-pointer"
                   onClick={toggleDropdown}
                 >
-                  <img src="https://firebasestorage.googleapis.com/v0/b/minor-project-01-5a5b7.appspot.com/o/users%2F8021000004%2Fprofile_pic.png?alt=media&token=061a7885-4080-41d2-bb21-d2131be8f098" alt="pfp" className="h-full w-full rounded-full object-cover" />
+                  <img src={profilePicUrl || DefaultProfilePic}  className="h-full w-full rounded-full object-cover" />
                 </div>
               </div>
 

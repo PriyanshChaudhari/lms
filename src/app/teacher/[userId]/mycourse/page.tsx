@@ -70,7 +70,7 @@ const MyCourse: React.FC = () => {
                     <div className="flex flex-col h-screen p-5">
                         <div className="flex flex-1  flex-wrap md:flex-nowrap items-start justify-center">
                             <div className="w-full  p-5  rounded-lg flex flex-col justify-center items-center h-full max-h-[calc(100vh-2rem)]">
-                                <div className="flex-col gap-8 mb-10">
+                                <div className="flex items-center gap-8 mb-10">
                                     <div className="text-2xl font-bold ">My Courses</div>
                                     <button className="bg-blue-500 hover:bg-blue-600 rounded text-xs p-2 text-white mt-2" onClick={createCourse}>Add New Course</button>
                                 </div>
