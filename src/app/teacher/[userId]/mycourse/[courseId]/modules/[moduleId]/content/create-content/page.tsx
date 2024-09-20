@@ -1,7 +1,7 @@
 "use client";
-import React, { ChangeEvent, useEffect, useState } from 'react';
-import axios from 'axios';
-import { useParams, useRouter } from 'next/navigation';
+import React, { ChangeEvent, useState } from "react";
+import axios from "axios";
+import { useParams, useRouter } from "next/navigation";
 
 const CreateContent = () => {
     const router = useRouter();
@@ -14,36 +14,30 @@ const CreateContent = () => {
         module_id: moduleId,
         title: "",
         content_type: "",
-        content_url: "",
         text_content: "",
-        position: ""
+        position: "",
     });
 
-    const [courses, setCourses] = useState([]);
     const [errors, setErrors] = useState({
-        module_id: moduleId,
+        module_id: "",
         title: "",
         content_type: "",
-        content_url: "",
         text_content: "",
-        position: ""
+        position: "",
     });
 
-    // useEffect(() => {
-    //     const fetchCourses = async () => {
-    //         try {
-    //             const res = await axios.get('/api/get/courses');
-    //             setCourses(res.data);
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     };
-    //     fetchCourses();
-    // }, []);
+    const [file, setFile] = useState<File | null>(null);
+    const [showModal, setShowModal] = useState(false);
 
     const handleChange = (e: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setContent({ ...content, [name]: value });
+    };
+
+    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            setFile(e.target.files[0]);
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -53,12 +47,10 @@ const CreateContent = () => {
             module_id: "",
             title: "",
             content_type: "",
-            content_url: "",
             text_content: "",
-            position: ""
+            position: "",
         };
 
-        // Validation
         if (content.module_id.trim() === "") {
             newErrors.module_id = "Course is required";
             valid = false;
@@ -74,12 +66,7 @@ const CreateContent = () => {
             valid = false;
         }
 
-        if (content.content_type === 'video' && content.content_url.trim() === "") {
-            newErrors.content_url = "Content URL is required for videos";
-            valid = false;
-        }
-
-        if (content.content_type === 'article' && content.text_content.trim() === "") {
+        if (content.content_type === "article" && content.text_content.trim() === "") {
             newErrors.text_content = "Text content is required for articles";
             valid = false;
         }
@@ -93,159 +80,167 @@ const CreateContent = () => {
 
         if (valid) {
             try {
-                const res = await axios.post('/api/courses/create-content', content);
+                const formData = new FormData();
+                formData.append("module_id", content.module_id);
+                formData.append("title", content.title);
+                formData.append("content_type", content.content_type);
+                formData.append("text_content", content.text_content);
+                formData.append("position", content.position);
+                if (file) {
+                    formData.append("file", file);
+                }
+
+                const res = await axios.post("/api/courses/create-content", formData, {
+                    headers: { "Content-Type": "multipart/form-data" },
+                });
                 console.log(res.data);
-                // Optionally, reset the form
                 setContent({
                     module_id: "",
                     title: "",
                     content_type: "",
-                    content_url: "",
                     text_content: "",
-                    position: ""
+                    position: "",
                 });
                 setErrors({
                     module_id: "",
                     title: "",
                     content_type: "",
-                    content_url: "",
                     text_content: "",
-                    position: ""
+                    position: "",
                 });
-                router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/content`)
+                setFile(null);
+                setShowModal(false);
+                router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/content`);
             } catch (error) {
                 console.error(error);
             }
         }
     };
 
+    const isFormValid = () => {
+        return (
+              content.title.trim() !== "" &&
+              content.content_type !== "" &&
+              (content.content_type !== "article" || content.text_content.trim() !== "") &&
+              content.position.trim() !== "" &&
+            !isNaN(Number(content.position))
+        );
+    };
+
     return (
-       <div className='flex justify-center items-center h-screen'>
-         <div className="w-full max-w-md mx-auto mt-8 p-6 bg-white rounded shadow-md">
-            <h2 className="text-2xl font-bold mb-4">Create Content</h2>
-            <form onSubmit={handleSubmit}>
-                {/* <div className="mb-4">
-                    <label htmlFor="course_id" className="block text-sm font-medium text-gray-700">
-                        Course
-                    </label>
-                    <select
-                        id="course_id"
-                        name="course_id"
-                        value={content.course_id}
-                        onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded"
-                        required
-                    >
-                        <option value="">Select Course</option>
-                        {courses.map((course: any) => (
-                            <option key={course.id} value={course.id}>
-                                {course.title}
-                            </option>
-                        ))}
-                    </select>
-                    {errors.course_id && <p className="text-red-600 text-sm">{errors.course_id}</p>}
-                </div> */}
+        <div className="flex justify-center items-center h-screen">
+            <div className="w-full max-w-md mx-auto mt-8 p-6 dark:bg-gray-800 rounded shadow-md">
+                <h2 className="text-2xl font-bold mb-4">Create Content</h2>
 
-                <div className="mb-4">
-                    <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-                        Title
-                    </label>
-                    <input
-                        type="text"
-                        id="title"
-                        name="title"
-                        value={content.title}
-                        onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded"
-                        required
-                    />
-                    {errors.title && <p className="text-red-600 text-sm">{errors.title}</p>}
-                </div>
-
-                <div className="mb-4">
-                    <label htmlFor="content_type" className="block text-sm font-medium text-gray-700">
-                        Content Type
-                    </label>
-                    <select
-                        id="content_type"
-                        name="content_type"
-                        value={content.content_type}
-                        onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded"
-                        required
-                    >
-                        <option value="">Select Content Type</option>
-                        <option value="video">Video</option>
-                        <option value="article">Article</option>
-                        <option value="assignment">Assignment</option>
-                        <option value="resource">Resource</option>
-                    </select>
-                    {errors.content_type && <p className="text-red-600 text-sm">{errors.content_type}</p>}
-                </div>
-
-                {(content.content_type === 'video' || content.content_type === 'assignment' || content.content_type === 'resource') && (
+                <form onSubmit={handleSubmit}>
                     <div className="mb-4">
-                        <label htmlFor="content_url" className="block text-sm font-medium text-gray-700">
-                            Content URL
+                        <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-white">
+                            Title
                         </label>
                         <input
                             type="text"
-                            id="content_url"
-                            name="content_url"
-                            value={content.content_url}
+                            id="title"
+                            name="title"
+                            value={content.title}
                             onChange={handleChange}
-                            className="mt-1 p-2 w-full border border-gray-300 rounded"
+                            className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-700"
                             required
                         />
-                        {errors.content_url && <p className="text-red-600 text-sm">{errors.content_url}</p>}
+                        {errors.title && <p className="text-red-600 text-sm">{errors.title}</p>}
                     </div>
-                )}
 
-                {content.content_type === 'article' && (
                     <div className="mb-4">
-                        <label htmlFor="text_content" className="block text-sm font-medium text-gray-700">
-                            Text Content
+                        <label htmlFor="content_type" className="block text-sm font-medium text-gray-700 dark:text-white">
+                            Content Type
                         </label>
-                        <textarea
-                            id="text_content"
-                            name="text_content"
-                            value={content.text_content}
+                        <select
+                            id="content_type"
+                            name="content_type"
+                            value={content.content_type}
                             onChange={handleChange}
-                            className="mt-1 p-2 w-full border border-gray-300 rounded"
+                            className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-700"
+                            required
+                        >
+                            <option value="">Select Content Type</option>
+                            <option value="video">Video</option>
+                            <option value="article">Audio</option>
+                            <option value="assignment">Assignment</option>
+                        </select>
+                        {errors.content_type && <p className="text-red-600 text-sm">{errors.content_type}</p>}
+                    </div>
+
+                    {content.content_type === "article" && (
+                        <div className="mb-4">
+                            <label htmlFor="text_content" className="block text-sm font-medium text-gray-700 dark:text-white">
+                                Text Content
+                            </label>
+                            <textarea
+                                id="text_content"
+                                name="text_content"
+                                value={content.text_content}
+                                onChange={handleChange}
+                                className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-700"
+                                required
+                            />
+                            {errors.text_content && <p className="text-red-600 text-sm">{errors.text_content}</p>}
+                        </div>
+                    )}
+
+                    <div className="mb-4">
+                        <label htmlFor="position" className="block text-sm font-medium text-gray-700 dark:text-white">
+                            Position
+                        </label>
+                        <input
+                            type="number"
+                            id="position"
+                            name="position"
+                            value={content.position}
+                            onChange={handleChange}
+                            min={1}
+                            className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-700"
                             required
                         />
-                        {errors.text_content && <p className="text-red-600 text-sm">{errors.text_content}</p>}
+                        {errors.position && <p className="text-red-600 text-sm">{errors.position}</p>}
+                    </div>
+
+                    <div className="mb-4">
+                        <button
+                            type="button"
+                            onClick={() => setShowModal(true)}
+                            className={`w-full py-2 px-4 rounded ${isFormValid() ? "bg-blue-500 hover:bg-blue-600 text-white" : "bg-gray-300 text-gray-600 cursor-not-allowed"}`}
+                            disabled={!isFormValid()}
+                        >
+                            Upload File
+                        </button>
+                    </div>
+                </form>
+
+                {showModal && (
+                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                        <div className="relative bg-white dark:bg-gray-800 p-6 rounded shadow-md lg:left-32 md:left-32">
+                            <h3 className="text-xl font-bold mb-4">Upload File</h3>
+                            <input type="file" onChange={handleFileChange} />
+                            <div className="flex justify-end mt-4">
+                                <button
+                                    onClick={() => setShowModal(false)}
+                                    className="mr-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+                                >
+                                    Close
+                                </button>
+                                <button
+                                    onClick={handleSubmit}
+                                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                                >
+                                    Create Content
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 )}
 
+            </div>
 
-                <div className="mb-4">
-                    <label htmlFor="position" className="block text-sm font-medium text-gray-700">
-                        Position
-                    </label>
-                    <input
-                        type="number"
-                        id="position"
-                        name="position"
-                        value={content.position}
-                        onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded"
-                        required
-                    />
-                    {errors.position && <p className="text-red-600 text-sm">{errors.position}</p>}
-                </div>
-
-                <div>
-                    <button
-                        type="submit"
-                        className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
-                    >
-                        Create Content
-                    </button>
-                </div>
-            </form>
         </div>
-       </div>
     );
 };
 
