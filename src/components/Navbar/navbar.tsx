@@ -74,7 +74,10 @@ const Navbar: React.FC = () => {
         if (userId) {
           const res = await axios.get(`/api/get/one-user?userId=${userId}`);
           setUserName(res.data); // Update with user data
-          const picUrl = res.data.profile_pic || DefaultProfilePic;
+          let picUrl = res.data.profile_pic;
+          if (picUrl) {
+             picUrl = picUrl.replace('gs://minor-project-01-5a5b7.appspot.com/', 'https://firebasestorage.googleapis.com/v0/b/minor-project-01-5a5b7.appspot.com/o/');
+          }
           setProfilePicUrl(picUrl); // Assuming res.data contains profilePicUrl
         }
       } catch (error) {
