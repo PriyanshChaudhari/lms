@@ -16,7 +16,7 @@ const ViewUsers = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await fetch('/api/get/students');
+            const response = await fetch('/api/get/users');
             const data = await response.json();
             setUsers(data);
             console.log(data);
@@ -30,7 +30,7 @@ const ViewUsers = () => {
         fetchUsers();
     }, []);
 
-    const formatDate = (timestamp:any) => {
+    const formatDate = (timestamp: any) => {
         if (!timestamp) return "N/A"; // Fallback if timestamp is not provided
         const date = new Date(timestamp.seconds * 1000); // Convert seconds to milliseconds
         return date.toLocaleDateString(); // Format the date as a readable string

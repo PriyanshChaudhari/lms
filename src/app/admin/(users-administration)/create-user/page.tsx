@@ -3,10 +3,10 @@ import { useState, ChangeEvent } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 
 const AddUser = () => {
-
     const router = useRouter();
     const params = useParams();
     const userId = params.userId as string;
+
     const [user, setUser] = useState({
         userId: "",
         firstName: "",
@@ -17,6 +17,9 @@ const AddUser = () => {
         // profile_pic: "",
         // dob: ""
     });
+
+    // New state for storing error messages
+    const [error, setError] = useState<string | null>(null);
 
     const handleClick = () => {
         // router.push('/admin/dashboard');
@@ -29,40 +32,46 @@ const AddUser = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-    
+
         if (!user.userId || !user.firstName || !user.lastName || !user.email || !user.password) {
             alert('Please fill in all the required fields');
             return;
-        }
-        else{
+        } else {
             try {
                 const response = await fetch('/api/auth/create-user', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(user)
                 });
+
                 if (response.ok) {
                     console.log('User created successfully');
                     router.push('/admin/dashboard');
                 } else {
-                    console.error('Error creating user');
+                    const data = await response.json();
+                    setError(data.error || 'Error creating user'); // Set error message
                 }
             } catch (error) {
+                setError('Something went wrong. Please try again later.');
                 console.error('Error:', error);
             }
         }
-    
-        
     };
-    
 
     return (
         <div className="bg-gray-300 dark:bg-black min-h-screen flex items-center justify-center p-6">
-
             <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md w-full max-w-xl">
                 <div className="mb-4">
                     <h2 className="text-2xl font-semibold mb-4 text-black dark:text-gray-300 text-center">Add User</h2>
                 </div>
+
+                {/* Error message display */}
+                {error && (
+                    <div className="mb-4 text-red-500 font-semibold text-center">
+                        {error}
+                    </div>
+                )}
+
                 <div className="mb-4">
                     <label htmlFor="userId" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">User ID:</label>
                     <input
@@ -137,31 +146,6 @@ const AddUser = () => {
                         <option value="admin">Admin</option>
                     </select>
                 </div>
-
-                {/* <div className="mb-4">
-                    <label htmlFor="profile_pic" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Profile Picture URL:</label>
-                    <input
-                        type="text"
-                        id="profile_pic"
-                        name="profile_pic"
-                        value={user.profile_pic}
-                        onChange={handleChange}
-                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-md focus:outline-none focus:border-blue-500"
-                    />
-                </div> */}
-
-                {/* <div className="mb-8">
-                    <label htmlFor="dob" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Date of Birth:</label>
-                    <input
-                        type="date"
-                        id="dob"
-                        name="dob"
-                        value={user.dob}
-                        min = {new Date().toISOString().split('T')[0]}
-                        onChange={handleChange}
-                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-md focus:outline-none focus:border-blue-500 dark:focus:border-white "
-                    />
-                </div> */}
 
                 <button
                     type="submit"

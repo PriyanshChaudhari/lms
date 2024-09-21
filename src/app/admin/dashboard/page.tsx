@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-export default function courseDetails({ params }: { params: { courseId: string } }) {
+export default function CourseDetails({ params }: { params: { courseId: string } }) {
     const [activeSection, setActiveSection] = useState<string>('users');
 
     const router = useRouter();
@@ -68,26 +68,26 @@ export default function courseDetails({ params }: { params: { courseId: string }
                                     <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">Upload Users</h2>
                                 </div>
 
-                                {/* <div className="bg-white border border-gray-300 rounded-xl p-3 shadow-md h-12 " onClick={handleViewUsersClick}>
+                                <div className="bg-white border border-gray-300 rounded-xl p-3 shadow-md h-12 " onClick={handleViewUsersClick}>
                                     <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">View Users</h2>
-                                </div> */}
+                                </div>
                             </div>
                         </div>
                     )}
 
                     {activeSection === 'course' && (
                         <div className="space-y-4 ">
-                        <h2 className="text-xl font-semibold">User Management</h2>
-                        <div className="space-y-4 justify-between mb-4">
-                            <div className="bg-white border border-gray-300 rounded-xl p-3 shadow-md h-12" onClick={handleCreateCategoryClick}>
-                                <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">Add Category</h2>
-                            </div>
+                            <h2 className="text-xl font-semibold">User Management</h2>
+                            <div className="space-y-4 justify-between mb-4">
+                                <div className="bg-white border border-gray-300 rounded-xl p-3 shadow-md h-12" onClick={handleCreateCategoryClick}>
+                                    <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">Add Category</h2>
+                                </div>
 
-                            <div className="bg-white border border-gray-300 rounded-xl p-3 shadow-md h-12 " onClick={handleModifyCategoryClick}>
-                                <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">Manage categories</h2>
+                                <div className="bg-white border border-gray-300 rounded-xl p-3 shadow-md h-12 " onClick={handleModifyCategoryClick}>
+                                    <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">Manage categories</h2>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     )}
 
                 </div>
