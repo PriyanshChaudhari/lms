@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import axios from 'axios';
 import ExcelUploader from '@/components/Upload/ExcelUploader';
-import EnrollmentForm from '@/components/Upload/AddOneUser';
+import AddOneStudent from '@/components/Upload/AddOneStudent';
+import AddOneTeacher from '@/components/Upload/AddOneTeacher';
 
 const CourseDetails = () => {
     const [activeSection, setActiveSection] = useState<string>('course');
@@ -18,7 +19,9 @@ const CourseDetails = () => {
     const [participantData, setParticipantData] = useState([]);
     const [searchTerm, setSearchTerm] = useState<string>(''); // New state for search term
 
-    const [addUser, setAddUser] = useState(false);
+    const [addUser, setAddUser] = useState(false);  // Controls showing the add participants section
+    const [showAddStudent, setShowAddStudent] = useState(false);  // Controls showing Add Student form
+    const [showAddTeacher, setShowAddTeacher] = useState(false);  // Controls showing Add Teacher form
 
     const filteredParticipants = searchTerm === ''
         ? participantData
@@ -87,8 +90,6 @@ const CourseDetails = () => {
     };
 
     const sortedModules = courseModules.sort((a, b) => a.position - b.position);
-
-
 
     const handleModuleClick = (moduleId: string) => {
         router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}`);
@@ -246,7 +247,7 @@ const CourseDetails = () => {
                                         <h1 className="text-xl font-bold mb-b">Participants</h1>
                                         <button
                                             className='bg-gray-950 dark:bg-gray-400 hover:bg-gray-700 px-4 py-2 text-white rounded'
-                                            onClick={() => setAddUser(true)}  // Show form and hide list
+                                            onClick={() => setAddUser(true)}  // Show form options and hide list
                                         >
                                             Add Participants
                                         </button>
@@ -273,15 +274,17 @@ const CourseDetails = () => {
                                                             <th className="py-3 px-6 text-center">First Name</th>
                                                             <th className="py-3 px-6 text-center">Last Name</th>
                                                             <th className="py-3 px-6 text-center">Email</th>
+                                                            <th className="py-3 px-6 text-center">Role</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody className="text-gray-600 text-sm font-normal">
                                                         {filteredParticipants.map((participant) => (
-                                                            <tr key={participant.student_id} className="border-b border-gray-200 ">
-                                                                <td className="py-3 px-6 text-center whitespace-nowrap">{participant.student_id}</td>
+                                                            <tr key={participant.user_id} className="border-b border-gray-200 ">
+                                                                <td className="py-3 px-6 text-center whitespace-nowrap">{participant.user_id}</td>
                                                                 <td className="py-3 px-6 text-center">{participant.first_name}</td>
                                                                 <td className="py-3 px-6 text-center">{participant.last_name}</td>
                                                                 <td className="py-3 px-6 text-center">{participant.email}</td>
+                                                                <td className="py-3 px-6 text-center capitalize">{participant.role}</td>
                                                             </tr>
                                                         ))}
                                                     </tbody>
@@ -291,8 +294,9 @@ const CourseDetails = () => {
                                     </div>
                                 </div>
                             ) : (
-                                // EnrollmentForm section with a close button
+                                // Enrollment section for either Student or Teacher with close button
                                 <div className="border border-gray-300 dark:text-white rounded p-6 shadow-md cursor-pointer">
+
                                     <div className='flex justify-between mb-3 items-center'>
                                         <h1 className="text-xl font-bold mb-b">Add Participants</h1>
                                         <button
@@ -302,13 +306,48 @@ const CourseDetails = () => {
                                             Close
                                         </button>
                                     </div>
+
                                     <div className="mt-4">
-                                        <EnrollmentForm courseId={courseId} />
+                                        {/* Buttons to select between Student or Teacher form */}
+                                        <div className="flex space-x-4">
+                                            <button
+                                                className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
+                                                onClick={() => {
+                                                    setShowAddStudent(true);
+                                                    setShowAddTeacher(false);
+                                                }}
+                                            >
+                                                Add Student
+                                            </button>
+                                            <button
+                                                className="bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded"
+                                                onClick={() => {
+                                                    setShowAddStudent(false);
+                                                    setShowAddTeacher(true);
+                                                }}
+                                            >
+                                                Add Teacher
+                                            </button>
+                                        </div>
+
+                                        {/* Conditionally render AddOneStudent or AddOneTeacher form based on state */}
+                                        {showAddStudent && (
+                                            <div className="mt-4">
+                                                <AddOneStudent courseId={courseId} />
+                                            </div>
+                                        )}
+
+                                        {showAddTeacher && (
+                                            <div className="mt-4">
+                                                <AddOneTeacher courseId={courseId} />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             )}
                         </div>
                     )}
+
 
 
 

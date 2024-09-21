@@ -19,14 +19,14 @@ export async function POST(req: NextRequest) {
 
         const participantsPromises = enrollmentSnapshots.docs.map(async (enrollmentDoc) => {
             const enrollmentData = enrollmentDoc.data();
-            const studentId = enrollmentData.student_id;
+            const userId = enrollmentData.user_id;
 
-            const userDocRef = doc(db, 'users', studentId);
+            const userDocRef = doc(db, 'users', userId);
             const userDoc = await getDoc(userDocRef);
 
             if (userDoc.exists()) {
                 return {
-                    student_id: studentId,
+                    user_id: userId,
                     ...userDoc.data(),
                 };
             }
