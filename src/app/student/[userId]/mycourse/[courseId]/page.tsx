@@ -253,8 +253,8 @@ const CourseDetails = () => {
                                                     </thead>
                                                     <tbody className="text-gray-600 text-sm font-normal">
                                                         {filteredParticipants.map((participant) => (
-                                                            <tr key={participant.student_id} className="border-b border-gray-200 ">
-                                                                <td className="py-3 px-6 text-center whitespace-nowrap">{participant.student_id}</td>
+                                                            <tr key={participant.user_id} className="border-b border-gray-200 ">
+                                                                <td className="py-3 px-6 text-center whitespace-nowrap">{participant.user_id}</td>
                                                                 <td className="py-3 px-6 text-center">{participant.first_name}</td>
                                                                 <td className="py-3 px-6 text-center">{participant.last_name}</td>
                                                                 <td className="py-3 px-6 text-center">{participant.email}</td>

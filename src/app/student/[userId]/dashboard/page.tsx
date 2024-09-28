@@ -23,8 +23,8 @@ const Dashboard: React.FC = () => {
     const getStudentCourses = async () => {
       try {
         const res = await axios.post("/api/get/allocated-courses", { userId });
-        setCourses(res.data.courses);
-        console.log(res.data.courses)
+        setCourses(res.data.data);
+        // console.log(res.data.data)
       }
       catch (error) {
         console.error("Error fetching courses:", error);

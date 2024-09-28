@@ -7,7 +7,7 @@ import axios from "axios";
 import CourseCard from "@/components/Teacher/CourseCard";
 
 interface courses {
-    id: string;
+    course_id: string;
     title: string;
     description: string;
     teacher_id: string;
@@ -89,17 +89,17 @@ const MyCourse: React.FC = () => {
                                     <button className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600" onClick={createCourse}>ADD</button>
 
                                     {courses.map((course) => (
-                                        <div key={course.id} className="border border-gray-300 dark:text-white  hover:bg-slate-100 dark:hover:bg-[#1a1a1a] rounded-xl p-5 w-full max-w-xs shadow-sm cursor-pointer" onClick={() => handleClick(course.id)}>
+                                        <div key={course.course_id} className="border border-gray-300 dark:text-white  hover:bg-slate-100 dark:hover:bg-[#1a1a1a] rounded-xl p-5 w-full max-w-xs shadow-sm cursor-pointer" onClick={() => handleClick(course.course_id)}>
                                             <h3 className="text-lg font-semibold">{course.title}</h3>
                                             <p className="text-sm text-gray-600">{course.description}</p>
                                             <div className="bg-gray-200 rounded-full h-2 my-3">
                                                 <div className="bg-blue-500 h-full rounded-full" style={{ width: '50%' }}></div>
                                             </div>
 
-                                            <button className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600" onClick={() => handleEditCourse(course.id)}>Edit Course</button>
+                                            <button className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600" onClick={() => handleEditCourse(course.course_id)}>Edit Course</button>
                                             <br />
                                             <br />
-                                            <button className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600" onClick={() => handleDeleteCourse(course.id)}>Delete Course</button>
+                                            <button className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600" onClick={() => handleDeleteCourse(course.course_id)}>Delete Course</button>
                                         </div>
                                     ))}
 
