@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
         const { userId } = await req.json();
         const enrollmentsQuery = query(
             collection(db, 'enrolled_at'),
-            where('student_id', '==', userId)
+            where('user_id', '==', userId)
         );
         const enrollmentSnapshots = await getDocs(enrollmentsQuery);
 
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
             }
         }
         // console.log(courses)
-        return NextResponse.json({ courses });
+        return NextResponse.json({ success: true, data: courses });
     } catch (error) {
         console.error('Error fetching enrolled courses:', error);
         return NextResponse.json({ error: 'Failed to fetch enrolled courses' }, { status: 500 });

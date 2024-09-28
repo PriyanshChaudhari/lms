@@ -7,7 +7,7 @@ import axios from "axios";
 import CourseCard from "@/components/Teacher/CourseCard";
 
 interface courses {
-    id: string;
+    course_id: string;
     title: string;
     thumbnail: string;
     description: string;
@@ -24,8 +24,10 @@ const MyCourse: React.FC = () => {
     useEffect(() => {
         const getTeacherCourses = async () => {
             try {
-                const res = await axios.get(`/api/teacher/${userId}/dashboard`);
+                // const res = await axios.get(`/api/teacher/${userId}/dashboard`);
+                const res = await axios.post(`/api/get/allocated-courses`, { userId });
                 if (res.data.success) {
+                    console.log(res.data.data)
                     setCourses(res.data.data);
                 } else {
                     console.error("No courses found");
@@ -81,18 +83,16 @@ const MyCourse: React.FC = () => {
                                     {courses.map((course) => (
                                         <div key={course.course_id} className="border border-gray-300 dark:text-white  hover:bg-slate-100 dark:hover:bg-[#1a1a1a] rounded-xl p-5 w-full max-w-xs shadow-sm cursor-pointer">
                                             <img src={`${course.thumbnail}`} className="rounded mb-4"></img>
-                                            <h3 className="text-lg font-semibold mb-2 underline" onClick={() => handleClick(course.id)}>{course.title}</h3>
+                                            <p>{course.course_id}</p>
+                                            <h3 className="text-lg font-semibold mb-2 underline" onClick={() => handleClick(course.course_id)}>{course.title}</h3>
                                             <p className="text-sm text-gray-600 mb-4">{course.description}</p>
 
                                             <div className="flex justify-between gap-6">
-                                                <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-xs" onClick={() => handleEditCourse(course.id)}>Edit Course</button>
-                                                <button className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 text-xs" onClick={() => handleDeleteCourse(course.id)}>Delete Course</button>
+                                                <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-xs" onClick={() => handleEditCourse(course.course_id)}>Edit Course</button>
+                                                <button className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 text-xs" onClick={() => handleDeleteCourse(course.course_id)}>Delete Course</button>
                                             </div>
                                         </div>
                                     ))}
-
-
-
                                 </div>
                             </div>
                         </div>

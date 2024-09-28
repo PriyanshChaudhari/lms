@@ -43,19 +43,19 @@ const CreateCourse = () => {
         setCategory({ ...category, parent_category_id: value });
     };
 
-    useEffect(() => {
-        // Fetch the list of teachers when the component mounts
-        const fetchTeachers = async () => {
-            try {
-                const res = await axios.get('/api/get/teachers');
-                setTeachers(res.data);
-            } catch (error) {
-                console.error('Error fetching teachers:', error);
-            }
-        };
+    // useEffect(() => {
+    //     // Fetch the list of teachers when the component mounts
+    //     const fetchTeachers = async () => {
+    //         try {
+    //             const res = await axios.get('/api/get/teachers');
+    //             setTeachers(res.data);
+    //         } catch (error) {
+    //             console.error('Error fetching teachers:', error);
+    //         }
+    //     };
 
-        fetchTeachers();
-    }, []);
+    //     fetchTeachers();
+    // }, []);
 
     useEffect(() => {
         fetchCategories();
@@ -87,8 +87,7 @@ const CreateCourse = () => {
         e.preventDefault();
         
         await updateCategoryInCourse();
-        console.log(course.category);
-        
+        console.log(course.category);        
 
         try {
             const res = await axios.post('/api/courses/create-courses', {

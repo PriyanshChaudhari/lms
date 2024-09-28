@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
         console.log('Random thumbnail:', randomThumbnail);
         
         // Create the course with the random thumbnail
-        const docRef = await addDoc(collection(db, 'courses'), {
+        const courseRef = await addDoc(collection(db, 'courses'), {
             title,
             description,
             thumbnail: randomThumbnail, // Use the random thumbnail URL here
@@ -28,7 +28,15 @@ export async function POST(req: NextRequest) {
             created_at: new Date(),
         });
 
-        return NextResponse.json({ message: 'Course added' }, { status: 201 });
+        // Use the created course's ID to add the teacher to the enrolled_at table
+        await addDoc(collection(db, 'enrolled_at'), {
+            user_id: teacher_id,
+            role: "teacher",
+            course_id: courseRef.id, // Use the courseRef.id here for the newly created course
+            enrolled_at: new Date(),
+        });
+
+        return NextResponse.json({ message: 'Course added successfully' }, { status: 201 });
     } catch (error) {
         console.error(error);
         return NextResponse.json({ error: 'Failed to create course' }, { status: 500 });
