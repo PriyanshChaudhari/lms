@@ -11,6 +11,7 @@ const CreateContent = () => {
     const moduleId = params.moduleId as string;
 
     const [content, setContent] = useState({
+        course_id: courseId,
         module_id: moduleId,
         title: "",
         content_type: "",
@@ -19,6 +20,7 @@ const CreateContent = () => {
     });
 
     const [errors, setErrors] = useState({
+        course_id: "",
         module_id: "",
         title: "",
         content_type: "",
@@ -81,6 +83,7 @@ const CreateContent = () => {
         if (valid) {
             try {
                 const formData = new FormData();
+                formData.append("course_id", content.course_id);
                 formData.append("module_id", content.module_id);
                 formData.append("title", content.title);
                 formData.append("content_type", content.content_type);
@@ -95,6 +98,7 @@ const CreateContent = () => {
                 });
                 console.log(res.data);
                 setContent({
+                    course_id: "",
                     module_id: "",
                     title: "",
                     content_type: "",
@@ -102,6 +106,7 @@ const CreateContent = () => {
                     position: "",
                 });
                 setErrors({
+                    course_id: "",
                     module_id: "",
                     title: "",
                     content_type: "",
@@ -119,10 +124,10 @@ const CreateContent = () => {
 
     const isFormValid = () => {
         return (
-              content.title.trim() !== "" &&
-              content.content_type !== "" &&
-              (content.content_type !== "article" || content.text_content.trim() !== "") &&
-              content.position.trim() !== "" &&
+            content.title.trim() !== "" &&
+            content.content_type !== "" &&
+            (content.content_type !== "article" || content.text_content.trim() !== "") &&
+            content.position.trim() !== "" &&
             !isNaN(Number(content.position))
         );
     };
