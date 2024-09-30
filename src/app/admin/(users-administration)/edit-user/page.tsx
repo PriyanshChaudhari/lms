@@ -1,6 +1,7 @@
 "use client"
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent} from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import axios from 'axios';
 
 interface User {
     id: string;
@@ -9,7 +10,6 @@ interface User {
     email: string;
     role: string;
     profile_pic: string;
-    dob: string;
 }
 
 const EditUser = () => {
@@ -23,8 +23,7 @@ const EditUser = () => {
         last_name: "",
         email: "",
         role: "",
-        profile_pic: "",
-        dob: ""
+        profile_pic: ""
     });
 
     const [error, setError] = useState<string | null>(null);
@@ -38,21 +37,13 @@ const EditUser = () => {
         }
 
         try {
-            const response = await fetch(`/api/get/users?id=${searchParams.get('id')}`);    
-            if (!response.ok) {
-                throw new Error('Failed to fetch user data');
-            }
-            const data = await response.json();
+            const response = await axios.get(`/api/get/one-user?userId=${userId}`)
+            console.log("response of get one user", response)    
+
+            const data = await response.data;
             if (data && typeof data === 'object') {
-                if (Array.isArray(data)) {
-                    const foundUser = data.find(user => user.id === userId); // Use 'find' to get the matching user
-                    if (foundUser) {
-                        setUser(foundUser);
-                    } else {
-                        setError('User not found');
-                    }
-                }
-                console.log('User data:', user);
+                setUser(data); // Directly set the user data
+                console.log('User data:', data);
             } else {
                 throw new Error('Invalid user data received');
             }
@@ -89,18 +80,15 @@ const EditUser = () => {
         }
 
         try {
-            const response = await fetch('/api/put/update-user', {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(user)
-            });
-
-            if (response.ok) {
+            console.log(user)
+            const response = await axios.put(`/api/put/update-user/${userId}`, user);
+            console.log("response of update user", response)
+        
+            if (response.status === 200) {
                 console.log('User updated successfully');
                 router.push('/admin/dashboard');
             } else {
-                const data = await response.json();
-                setError(data.error || 'Error updating user');
+                setError(response.data.error || 'Error updating user');
             }
         } catch (error) {
             setError('Something went wrong. Please try again later.');
@@ -191,7 +179,7 @@ const EditUser = () => {
                     </select>
                 </div>
 
-                <div className="mb-4">
+                {/* <div className="mb-4">
                     <label htmlFor="dob" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Date of Birth:</label>
                     <input
                         type="date"
@@ -201,7 +189,7 @@ const EditUser = () => {
                         onChange={handleChange}
                         className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-md focus:outline-none focus:border-blue-500 dark:focus:border-white"
                     />
-                </div>
+                </div> */}
 
                 <div className="mb-4">
                     <label htmlFor="profile_pic" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Profile Picture URL:</label>

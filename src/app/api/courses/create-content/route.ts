@@ -4,12 +4,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { app } from '@/lib/firebaseConfig';
 
-async function uploadFile(fileBuffer: Uint8Array, fileName: string, contentType: string, courseId: string, moduleId: string) {
+async function uploadFile(fileBuffer: Uint8Array, fileName: string, contentType: string, title:string , courseId: string, moduleId: string) {
     const storageRef = getStorage(app);
     const fileExtension = fileName.split('.').pop();
-    const newFileName = `course_content_${Date.now()}.${fileExtension}`;
+    const newFileName = `course_content_${title}.${fileExtension}`;
     // Include course_id and module_id in the path
-    const fileRef = ref(storageRef, `courses/content/${courseId}/${moduleId}/${newFileName}`);
+    const fileRef = ref(storageRef, `courses/${courseId}/${moduleId}/course-content/${newFileName}`);
     const metadata = { contentType };
     const uploadTask = uploadBytesResumable(fileRef, fileBuffer, metadata);
 
@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
             const arrayBuffer = await file.arrayBuffer();
             const fileBuffer = new Uint8Array(arrayBuffer);
             // Pass course_id and module_id to uploadFile to include them in the file path
-            content_url = await uploadFile(fileBuffer, file.name, file.type, course_id, module_id) as string;
+            content_url = await uploadFile(fileBuffer, file.name, file.type, title, course_id, module_id) as string;
         }
 
         await addDoc(collection(db, 'course-content'), {
