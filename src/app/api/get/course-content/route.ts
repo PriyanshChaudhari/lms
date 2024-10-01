@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
         }));
 
         // console.log(content)
-        return NextResponse.json({ success: true, content });
+        return NextResponse.json({ success: true, content : content});
     } catch (error) {
         console.error('Error fetching course content:', error);
         return NextResponse.json({ success: false, error: 'Failed to fetch course content' });

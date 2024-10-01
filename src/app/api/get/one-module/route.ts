@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
         }
 
         const moduleData = moduleSnap.data();
-        return NextResponse.json({ content: moduleData }, { status: 200 })
+        return NextResponse.json({ module: moduleData }, { status: 200 })
     }
     catch (error) {
         console.error("Error fetching module details:", error);

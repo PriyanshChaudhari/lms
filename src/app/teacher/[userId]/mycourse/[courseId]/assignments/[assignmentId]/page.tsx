@@ -4,6 +4,23 @@ import React, { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import axios from 'axios';
 
+interface courses {
+    course_id: string;
+    title: string;
+    description: string;
+    teacher_id: string;
+    category: string;
+}
+
+interface assignments {
+    id: string;
+    title: string;
+    due_date: object;
+    created_at: object;
+    description: string;
+    total_marks: number;
+}
+
 export default function ViewAssignment() {
     const router = useRouter();
     const params = useParams();
@@ -11,8 +28,8 @@ export default function ViewAssignment() {
     const courseId = params.courseId;
     const assignmentId = params.assignmentId;
 
-    const [courses, setCourses] = useState({});
-    const [oneAssignment, setOneAssignment] = useState({}); // Initialize as null
+    const [courses, setCourses] = useState<courses | null>(null);
+    const [oneAssignment, setOneAssignment] = useState<assignments | null>(null); // Initialize as null
 
     useEffect(() => {
         const getCourse = async () => {
@@ -28,8 +45,7 @@ export default function ViewAssignment() {
         const getOneAssignment = async () => {
             try {
                 const res = await axios.post('/api/get/assignments/one-assignments', { assignmentId });
-                setOneAssignment(res.data);
-                console.log("One" + res.data)
+                setOneAssignment(res.data.assignment);
             } catch (error) {
                 console.log(error);
             }
@@ -37,7 +53,7 @@ export default function ViewAssignment() {
         getOneAssignment();
     }, [courseId, assignmentId]);
 
-    const formatDate = (timestamp) => {
+    const formatDate = (timestamp: any) => {
         if (!timestamp) return "N/A"; // Fallback if timestamp is not provided
         const date = new Date(timestamp.seconds * 1000); // Convert seconds to milliseconds
         return date.toLocaleDateString(); // Format the date as a readable string
@@ -46,11 +62,11 @@ export default function ViewAssignment() {
     return (
         <div className="border border-gray-300 m-5 flex justify-center items-center h-screen">
             <div className="max-w-4xl mx-auto p-5 w-full">
-                <h1 className="text-3xl font-bold mb-4">{courses.title || 'Course Title'}</h1>
-                <p className="text-lg text-gray-700 mb-6">{courses.description || 'Course Description'}</p>
+                <h1 className="text-3xl font-bold mb-4">{courses?.title || 'Course Title'}</h1>
+                <p className="text-lg text-gray-700 mb-6">{courses?.description || 'Course Description'}</p>
                 <nav className="mb-6 p-2">
                     <ul className="flex justify-start space-x-4 list-none p-0">
-                        <li className="p-3 rounded-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/student/${userId}/mycourse/${courseId}`)}>{courses.title || 'Course Title'}</li>
+                        <li className="p-3 rounded-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}`)}>{courses?.title || 'Course Title'}</li>
                         <li className="p-3 rounded-xl text-black cursor-pointer">/</li>
                         {params.moduleId ? (
                             <>
@@ -79,7 +95,7 @@ export default function ViewAssignment() {
                     <div>
                         <button
                             className="bg-black text-white rounded-xl p-3 my-5"
-                            onClick={() => router.push(`/student/${userId}/mycourse/${courseId}/assignments/${assignmentId}/add-submission`)}
+                            onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}/assignments/${assignmentId}/add-submission`)}
                         >
                             Add Submission
                         </button>

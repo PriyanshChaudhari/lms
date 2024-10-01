@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
         }
 
         const assignmentData = assignmentSnap.data();
-        return NextResponse.json(assignmentData, { status: 200 });
+        return NextResponse.json({ assignment: assignmentData, status: 200 });
     } catch (error) {
         console.error("Error fetching assignment details:", error);
         return NextResponse.json({ error: "Failed to fetch assignment details" }, { status: 500 });

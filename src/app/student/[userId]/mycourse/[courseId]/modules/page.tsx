@@ -4,14 +4,13 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import axios from 'axios';
-
 export default function ViewModules() {
     const router = useRouter();
     const params = useParams();
     const userId = params.userId as string;
     const courseId = params.courseId as string;
 
-    const [courseModules, setCourseModules] = useState([])
+    const [courseModules, setCourseModules] = useState<modules[]>([])
 
     useEffect(() => {
         const getCourseModules = async () => {
@@ -28,11 +27,11 @@ export default function ViewModules() {
     const sortedModules = courseModules.sort((a, b) => a.position - b.position);
 
     const createModule = () => {
-        router.push(`/teacher/${userId}/mycourse/${courseId}/modules/create-module`)
+        router.push(`/student/${userId}/mycourse/${courseId}/modules/create-module`)
     }
 
     const handleModuleClick = (moduleId: string) => {
-        router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}`);
+        router.push(`/student/${userId}/mycourse/${courseId}/modules/${moduleId}`);
     }
 
     return (

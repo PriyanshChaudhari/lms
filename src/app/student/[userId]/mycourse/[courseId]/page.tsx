@@ -3,7 +3,48 @@ import React, { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import axios from 'axios';
 
+interface users {
+    user_id: string;
+    email: string;
+    first_name: string;
+    last_name: string;
+    role: string;
+}
+interface courses {
+    course_id: string;
+    title: string;
+    description: string;
+    teacher_id: string;
+    category: string;
+}
+
+interface modules {
+    id: string;
+    course_id: string;
+    title: string;
+    description: string;
+    position: number;
+}
+
+interface assignments {
+    id: string;
+    title: string;
+    due_date: object;
+    description: string;
+    total_marks: number;
+}
+
 const CourseDetails = () => {
+    const router = useRouter();
+    const params = useParams();
+    const userId = params.userId as string;
+    const courseId = params.courseId as string;
+
+    const [courses, setCourses] = useState<courses | null>(null)
+    const [courseModules, setCourseModules] = useState<modules[]>([])
+    const [assignments, setAssignments] = useState<assignments[]>([])
+    const [participantData, setParticipantData] = useState<users[]>([]);
+
     const [activeSection, setActiveSection] = useState<string>('course');
     const [data, setData] = useState([
         { grade: 'Succelens99@yahoo.com', range: '$316.00', email: 'Succelens99@yahoo.com' },
@@ -12,11 +53,7 @@ const CourseDetails = () => {
         { grade: 'Succelens99@yahoo.com', range: '$316.00', email: 'Succelens99@yahoo.com' },
         { grade: 'Succelens99@yahoo.com', range: '$316.00', email: 'Succelens99@yahoo.com' },
     ]);
-
-    const [participantData, setParticipantData] = useState([]);
-
     const [searchTerm, setSearchTerm] = useState<string>(''); // New state for search term
-
     const [addUser, setAddUser] = useState(false);
 
     const filteredParticipants = searchTerm === ''
@@ -26,16 +63,6 @@ const CourseDetails = () => {
                 item.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 item.last_name.toLowerCase().includes(searchTerm.toLowerCase())
         );
-
-
-    const router = useRouter();
-    const params = useParams();
-    const userId = params.userId as string;
-    const courseId = params.courseId as string;
-
-    const [courses, setCourses] = useState({})
-    const [courseModules, setCourseModules] = useState([])
-    const [assignments, setAssignments] = useState([])
 
     useEffect(() => {
         const getCourse = async () => {
@@ -61,7 +88,7 @@ const CourseDetails = () => {
         const getAssignments = async () => {
             try {
                 const res = await axios.post('/api/get/assignments/all-assignments', { courseId });
-                setAssignments(res.data);  // Set as array or empty array
+                setAssignments(res.data.assignments);  // Set as array or empty array
                 console.log(res.data.assignments || []);
             } catch (error) {
                 console.log(error);
@@ -81,7 +108,7 @@ const CourseDetails = () => {
         getParticipants()
     }, [courseId])
 
-    const formatDate = (timestamp) => {
+    const formatDate = (timestamp: any) => {
         const date = new Date(timestamp.seconds * 1000); // Convert seconds to milliseconds
         return date.toLocaleDateString(); // Format the date as a readable string
     };
@@ -92,19 +119,19 @@ const CourseDetails = () => {
         router.push(`/student/${userId}/mycourse/${courseId}/modules/${moduleId}`);
     }
 
-    const handleAssignmentClick = (assignmentId: number, moduleId?: number) => {
+    const handleAssignmentClick = (assignmentId: string, moduleId?: string) => {
         if (moduleId) {
-            router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments/${assignmentId}`);
+            router.push(`/student/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments/${assignmentId}`);
         } else {
-            router.push(`/teacher/${userId}/mycourse/${courseId}/assignments/${assignmentId}`);
+            router.push(`/student/${userId}/mycourse/${courseId}/assignments/${assignmentId}`);
         }
     };
 
     return (
         <div className="border border-gray-300 m-5">
             <div className="max-w-4xl mx-auto p-5">
-                <h1 className="text-3xl font-bold mb-4">{courses.title}</h1>
-                <p className="text-lg text-gray-700 mb-6">{courses.description}</p>
+                <h1 className="text-3xl font-bold mb-4">{courses?.title}</h1>
+                <p className="text-lg text-gray-700 mb-6">{courses?.description}</p>
 
                 <nav className="mb-6 border border-gray-300 rounded-xl shadow-md p-2">
                     <ul className="flex justify-start space-x-4 list-none p-0">
@@ -115,7 +142,7 @@ const CourseDetails = () => {
                             Course
                         </li>
 
-                        {/* <li
+                        <li
                             className={` p-3 rounded-xl cursor-pointer ${activeSection === 'assignments' ? 'bg-gray-400 text-white' : ''}`}
                             onClick={() => setActiveSection('assignments')}
                         >
@@ -125,7 +152,7 @@ const CourseDetails = () => {
                                     {assignments.length}
                                 </span>
                             )}
-                        </li> */}
+                        </li>
 
                         {/* <li
                             className={` p-3 rounded-xl cursor-pointer ${activeSection === 'grades' ? 'bg-gray-400 text-white' : ''}`}
@@ -229,42 +256,44 @@ const CourseDetails = () => {
                                 {/* <h2 className="text-xl font-semibold mb-6">Course Participants</h2>  */}
                                 <h1 className="text-xl font-bold mb-b">Participants</h1>
                                 <div className="shadow-md items-center p-5 border border-gray-100 rounded-xl">
-                                        <div className="overflow-x-auto mb-4">
-                                            <input
-                                                type="text"
-                                                placeholder="Search participants by name"
-                                                value={searchTerm}
-                                                onChange={(e) => setSearchTerm(e.target.value)}
-                                                className="mb-4 p-2 border border-gray-300 rounded w-full"
-                                            />
-                                        </div>
-                                        <div className="overflow-x-auto">
-                                            {filteredParticipants.length === 0 ? (
-                                                <p>No participants found.</p>
-                                            ) : (
-                                                <table className="min-w-full table-auto border-collapse border border-gray-300">
-                                                    <thead>
-                                                        <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                                                            <th className="py-3 px-6 text-center">Student ID</th>
-                                                            <th className="py-3 px-6 text-center">First Name</th>
-                                                            <th className="py-3 px-6 text-center">Last Name</th>
-                                                            <th className="py-3 px-6 text-center">Email</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody className="text-gray-600 text-sm font-normal">
-                                                        {filteredParticipants.map((participant) => (
-                                                            <tr key={participant.user_id} className="border-b border-gray-200 ">
-                                                                <td className="py-3 px-6 text-center whitespace-nowrap">{participant.user_id}</td>
-                                                                <td className="py-3 px-6 text-center">{participant.first_name}</td>
-                                                                <td className="py-3 px-6 text-center">{participant.last_name}</td>
-                                                                <td className="py-3 px-6 text-center">{participant.email}</td>
-                                                            </tr>
-                                                        ))}
-                                                    </tbody>
-                                                </table>
-                                            )}
-                                        </div>
+                                    <div className="overflow-x-auto mb-4">
+                                        <input
+                                            type="text"
+                                            placeholder="Search participants by name"
+                                            value={searchTerm}
+                                            onChange={(e) => setSearchTerm(e.target.value)}
+                                            className="mb-4 p-2 border border-gray-300 rounded w-full"
+                                        />
                                     </div>
+                                    <div className="overflow-x-auto">
+                                        {filteredParticipants.length === 0 ? (
+                                            <p>No participants found.</p>
+                                        ) : (
+                                            <table className="min-w-full table-auto border-collapse border border-gray-300">
+                                                <thead>
+                                                    <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                                                        <th className="py-3 px-6 text-center">Student ID</th>
+                                                        <th className="py-3 px-6 text-center">First Name</th>
+                                                        <th className="py-3 px-6 text-center">Last Name</th>
+                                                        <th className="py-3 px-6 text-center">Email</th>
+                                                        <th className="py-3 px-6 text-center">Role</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="text-gray-600 text-sm font-normal">
+                                                    {filteredParticipants.map((participant) => (
+                                                        <tr key={participant.user_id} className="border-b border-gray-200 ">
+                                                            <td className="py-3 px-6 text-center whitespace-nowrap">{participant.user_id}</td>
+                                                            <td className="py-3 px-6 text-center">{participant.first_name}</td>
+                                                            <td className="py-3 px-6 text-center">{participant.last_name}</td>
+                                                            <td className="py-3 px-6 text-center">{participant.email}</td>
+                                                            <td className="py-3 px-6 text-center">{participant.role}</td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     )}

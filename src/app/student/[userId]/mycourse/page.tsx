@@ -21,23 +21,7 @@ const MyCourse: React.FC = () => {
     const router = useRouter()
 
     useEffect(() => {
-        // const getTeacherCourses = async () => {
-        //     try {
-        //         const res = await axios.get(`/api/teacher/${userId}/dashboard`);
-        //         if (res.data.success) {
-        //             setCourses(res.data.data);
-        //         } else {
-        //             console.error("No courses found");
-        //         }
-        //     } catch (error) {
-        //         console.error("Error fetching courses:", error);
-        //     }
-        // };
-
-        // if (userId) {
-        //     getTeacherCourses();
-        // }
-        const getStudentCourses = async () => {
+        const getTeacherCourses = async () => {
             try {
                 const res = await axios.post("/api/get/allocated-courses", { userId });
                 setCourses(res.data.courses);
@@ -49,7 +33,7 @@ const MyCourse: React.FC = () => {
         };
 
         if (userId) {
-            getStudentCourses();
+            getTeacherCourses();
         }
     }, [userId]);
 

@@ -6,7 +6,48 @@ import ExcelUploader from '@/components/Upload/ExcelUploader';
 import AddOneStudent from '@/components/Upload/AddOneStudent';
 import AddOneTeacher from '@/components/Upload/AddOneTeacher';
 
+interface users {
+    user_id: string;
+    email: string;
+    first_name: string;
+    last_name: string;
+    role:string;
+}
+interface courses {
+    course_id: string;
+    title: string;
+    description: string;
+    teacher_id: string;
+    category: string;
+}
+
+interface modules {
+    id: string;
+    course_id: string;
+    title: string;
+    description: string;
+    position: number;
+}
+
+interface assignments {
+    id: string;
+    title: string;
+    due_date: object;
+    description: string;
+    total_marks: number;
+}
+
 const CourseDetails = () => {
+    const router = useRouter();
+    const params = useParams();
+    const userId = params.userId as string;
+    const courseId = params.courseId as string;
+
+    const [courses, setCourses] = useState<courses | null>(null)
+    const [courseModules, setCourseModules] = useState<modules[]>([])
+    const [assignments, setAssignments] = useState<assignments[]>([])
+    const [participantData, setParticipantData] = useState<users[]>([]);
+
     const [activeSection, setActiveSection] = useState<string>('course');
     const [data, setData] = useState([
         { grade: 'Succelens99@yahoo.com', range: '$316.00', email: 'Succelens99@yahoo.com' },
@@ -16,7 +57,6 @@ const CourseDetails = () => {
         { grade: 'Succelens99@yahoo.com', range: '$316.00', email: 'Succelens99@yahoo.com' },
     ]);
 
-    const [participantData, setParticipantData] = useState([]);
     const [searchTerm, setSearchTerm] = useState<string>(''); // New state for search term
 
     const [addUser, setAddUser] = useState(false);  // Controls showing the add participants section
@@ -31,14 +71,7 @@ const CourseDetails = () => {
                 item.last_name.toLowerCase().includes(searchTerm.toLowerCase())
         );
 
-    const router = useRouter();
-    const params = useParams();
-    const userId = params.userId as string;
-    const courseId = params.courseId as string;
-
-    const [courses, setCourses] = useState({})
-    const [courseModules, setCourseModules] = useState([])
-    const [assignments, setAssignments] = useState([])
+    
 
     useEffect(() => {
         const getCourse = async () => {
@@ -64,7 +97,7 @@ const CourseDetails = () => {
         const getAssignments = async () => {
             try {
                 const res = await axios.post('/api/get/assignments/all-assignments', { courseId });
-                setAssignments(res.data);  // Set as array or empty array
+                setAssignments(res.data.assignments);  // Set as array or empty array
                 console.log(res.data.assignments || []);
             } catch (error) {
                 console.log(error);
@@ -84,7 +117,7 @@ const CourseDetails = () => {
         getParticipants()
     }, [courseId])
 
-    const formatDate = (timestamp) => {
+    const formatDate = (timestamp:any) => {
         const date = new Date(timestamp.seconds * 1000); // Convert seconds to milliseconds
         return date.toLocaleDateString(); // Format the date as a readable string
     };
@@ -99,7 +132,7 @@ const CourseDetails = () => {
         router.push(`/teacher/${userId}/mycourse/${courseId}/modules`)
     }
 
-    const handleAssignmentClick = (assignmentId: number, moduleId?: number) => {
+    const handleAssignmentClick = (assignmentId: string, moduleId?: string) => {
         if (moduleId) {
             router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments/${assignmentId}`);
         } else {
@@ -110,8 +143,8 @@ const CourseDetails = () => {
     return (
         <div className="border border-gray-300 m-5 h-screen flex justify-center items-center">
             <div className="w-full max-w-4xl mx-auto p-5">
-                <h1 className="text-3xl font-bold mb-4">{courses.title}</h1>
-                <p className="text-lg text-gray-700 mb-6">{courses.description}</p>
+                <h1 className="text-3xl font-bold mb-4">{courses?.title}</h1>
+                <p className="text-lg text-gray-700 mb-6">{courses?.description}</p>
 
                 <nav className="mb-6 border border-gray-300 rounded-xl shadow-md p-2">
                     <ul className="flex justify-start space-x-4 list-none p-0">
@@ -122,7 +155,7 @@ const CourseDetails = () => {
                             Course
                         </li>
 
-                        {/* <li
+                        <li
                             className={` p-3 rounded-xl cursor-pointer ${activeSection === 'assignments' ? 'bg-gray-400 text-white' : ''}`}
                             onClick={() => setActiveSection('assignments')}
                         >
@@ -132,7 +165,7 @@ const CourseDetails = () => {
                                     {assignments.length}
                                 </span>
                             )}
-                        </li> */}
+                        </li>
 
                         {/* <li
                             className={` p-3 rounded-xl cursor-pointer ${activeSection === 'grades' ? 'bg-gray-400 text-white' : ''}`}

@@ -4,6 +4,29 @@ import React, { useEffect, useId, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import axios from 'axios';
 
+interface courses {
+    course_id: string;
+    title: string;
+    description: string;
+    teacher_id: string;
+    category: string;
+}
+
+interface modules {
+    id: string;
+    course_id: string;
+    title: string;
+    description: string;
+    position: number;
+}
+
+interface content {
+    id: string;
+    title: string;
+    description: string;
+    position: number;
+}
+
 export default function ViewModule() {
     const router = useRouter();
     const params = useParams();
@@ -11,9 +34,9 @@ export default function ViewModule() {
     const courseId = params.courseId as string;
     const moduleId = params.moduleId as string;
 
-    const [oneModule, setOneModule] = useState([]);
-    const [courseContent, setCourseContent] = useState([])
-    const [course, setCourse] = useState({})
+    const [oneModule, setOneModule] = useState<modules | null>(null);
+    const [courseContent, setCourseContent] = useState<content[]>([])
+    const [course, setCourse] = useState<courses | null>(null)
 
     useEffect(() => {
         const getCourseDetails = async () => {
@@ -29,8 +52,8 @@ export default function ViewModule() {
         const getOneModule = async () => {
             try {
                 const res = await axios.post('/api/get/one-module', { moduleId })
-                // console.log(res.data.content)
-                setOneModule(res.data.content);
+                // console.log(res.data.module)
+                setOneModule(res.data.module);
             } catch (error) {
                 console.error("Error fetching course module: ", error);
             }
@@ -58,7 +81,6 @@ export default function ViewModule() {
 
     const sortedContent = courseContent.sort((a, b) => a.position - b.position);
 
-
     const handleEditModule = () => {
         router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/edit-module`)
     }
@@ -77,20 +99,20 @@ export default function ViewModule() {
     return (
         <div className="border border-gray-300 m-5 h-screen flex justify-center items-center">
             <div className="w-full max-w-4xl mx-auto">
-                <h1 className="text-3xl font-bold mb-4">{course.title}</h1>
-                <p className="text-lg text-gray-700 mb-6">{course.description}</p>
+                <h1 className="text-3xl font-bold mb-4">{course?.title}</h1>
+                <p className="text-lg text-gray-700 mb-6">{course?.description}</p>
                 <nav className="mb-6 p-2">
                     <ul className="flex justify-start space-x-4 list-none p-0">
-                        <li className=" p-3 rounded-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}`)}>{course.title}</li>
+                        <li className=" p-3 rounded-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}`)}>{course?.title}</li>
                         <li className=" p-3 rounded-xl text-black dark:text-white cursor-pointer">/</li>
-                        <li className=" p-3 rounded-xl text-black dark:text-white cursor-pointer">{oneModule.title}</li>
+                        <li className=" p-3 rounded-xl text-black dark:text-white cursor-pointer">{oneModule?.title}</li>
                     </ul>
                 </nav>
 
                 <div className="space-y-4 my-2">
                     <div className=" border border-gray-300 rounded-xl p-6 shadow-md h-26">
-                        <h2 className="text-xl font-semibold mb-4">{oneModule.title}</h2>
-                        <p className="text-sm text-gray-600 mb-4">{oneModule.description}</p>
+                        <h2 className="text-xl font-semibold mb-4">{oneModule?.title}</h2>
+                        <p className="text-sm text-gray-600 mb-4">{oneModule?.description}</p>
 
                         <div className='flex justify-start gap-10 max-w-lg'>
                             <button
