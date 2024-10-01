@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { MoonIcon, SunIcon } from '@radix-ui/react-icons'
 import { useTheme } from 'next-themes'
-import { usePathname,useParams } from 'next/navigation';
+import { usePathname, useParams } from 'next/navigation';
 import axios from 'axios'
 import LoginButton from '@/components/ui/loginButton'
 
@@ -18,7 +18,7 @@ const Navbar: React.FC = () => {
   const [profilePicUrl, setProfilePicUrl] = useState<string>('');
   const [userName, setUserName] = useState<string>('User');
   const dropdownRef = useRef<HTMLDivElement>(null); // Ref for dropdown
-  const userId = sessionStorage.getItem('userId');
+  const [userId, setUserId] = useState<string | null>(null);
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
   };
@@ -48,9 +48,16 @@ const Navbar: React.FC = () => {
     } else {
       return 'Good Evening';
     }
-  };  
+  };
 
   const isLoginPage = pathname === '/' || pathname === '/login';
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      let sessionUserId = sessionStorage.getItem('userId');
+      setUserId(sessionUserId);
+    }
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -76,7 +83,7 @@ const Navbar: React.FC = () => {
           setUserName(res.data); // Update with user data
           let picUrl = res.data.profile_pic;
           if (picUrl) {
-             picUrl = picUrl.replace('gs://minor-project-01-5a5b7.appspot.com/', 'https://firebasestorage.googleapis.com/v0/b/minor-project-01-5a5b7.appspot.com/o/');
+            picUrl = picUrl.replace('gs://minor-project-01-5a5b7.appspot.com/', 'https://firebasestorage.googleapis.com/v0/b/minor-project-01-5a5b7.appspot.com/o/');
           }
           setProfilePicUrl(picUrl); // Assuming res.data contains profilePicUrl
         }
@@ -104,12 +111,12 @@ const Navbar: React.FC = () => {
           ) : (
             <div className="relative" ref={dropdownRef}>
               <div className='flex gap-6 items-center'>
-              <p className='hidden sm:block'>{`${getGreeting()},  ${userName.first_name || 'User'}`}</p>
+                <p className='hidden sm:block'>{`${getGreeting()},  ${userName.first_name || 'User'}`}</p>
                 <div
                   className="border border-gray-500 text-xs h-8 w-8 rounded-full cursor-pointer"
                   onClick={toggleDropdown}
                 >
-                  <img src={profilePicUrl || DefaultProfilePic}  className="h-full w-full rounded-full object-cover" />
+                  <img src={profilePicUrl || DefaultProfilePic} className="h-full w-full rounded-full object-cover" />
                 </div>
               </div>
 
