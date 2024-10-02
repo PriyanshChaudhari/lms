@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, getDoc, updateDoc, addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { storage, db } from "@/lib/firebaseConfig";  // Adjust the path
+import axios from "axios";
 
 export default function AssignmentSubmission() {
     const [files, setFiles] = useState<File[]>([]);
@@ -65,55 +66,29 @@ export default function AssignmentSubmission() {
 
         setUploading(true);
         try {
-            const uploadedFileUrls: string[] = await Promise.all(
-                files.map(async (file) => {
-                    const storageRef = ref(storage, `assignments/${userId}/${assignmentId}/${file.name}`);
-                    const uploadTask = uploadBytesResumable(storageRef, file);
+            const formData = new FormData();
+            formData.append('student_id', userId);
+            formData.append('assignment_id', assignmentId);
+            formData.append('course_id', courseId);
+            formData.append('module_id', moduleId);
+            files.forEach((file) => {
+                formData.append('files', file);
+            });
 
-                    return new Promise<string>((resolve, reject) => {
-                        uploadTask.on(
-                            "state_changed",
-                            (snapshot) => {
-                                // Progress monitoring if needed
-                            },
-                            (error) => {
-                                reject(error);
-                            },
-                            async () => {
-                                const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-                                resolve(downloadURL);
-                            }
-                        );
-                    });
-                })
-            );
-
-            const submissionData = {
-                student_id: userId,
-                assignment_id: assignmentId,
-                course_id: courseId,
-                module_id: moduleId,
-                submission_date: serverTimestamp(),
-                file_urls: uploadedFileUrls,
-                updated_at: serverTimestamp(),
-            };
-
-            if (submissionExists) {
-                // Update existing submission
-                const submissionRef = doc(db, "submissions", `${userId}_${assignmentId}`);
-                await updateDoc(submissionRef, submissionData);
-                setMessage("Submission updated successfully!");
-            } else {
-                // Create new submission
-                await addDoc(collection(db, "submissions"), {
-                    ...submissionData,
-                    created_at: serverTimestamp(),
-                });
-                setMessage("Submission successful!");
-            }
+            const response = await axios.post('/api/assignments/add-submission', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
 
             setUploading(false);
-            router.push(`/student/${userId}/courses/${courseId}/modules/${moduleId}/assignments`);
+            if (response.status === 200) {
+                setMessage(response.data.message);
+                router.push(`/student/${userId}/courses/${courseId}/modules/${moduleId}/assignments`);
+            } else {
+                setError(response.data.error || 'Error during submission');
+            }
+            // router.push(`/student/${userId}/courses/${courseId}/modules/${moduleId}/assignments`);
         } catch (error) {
             console.error("Error uploading files or saving submission:", error);
             setError("An error occurred during submission. Please try again.");
