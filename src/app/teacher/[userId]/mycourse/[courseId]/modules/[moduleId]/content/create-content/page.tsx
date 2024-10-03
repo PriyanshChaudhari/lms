@@ -115,7 +115,7 @@ const CreateContent = () => {
                 });
                 setFile(null);
                 setShowModal(false);
-                router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/content`);
+                router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/`);
             } catch (error) {
                 console.error(error);
             }

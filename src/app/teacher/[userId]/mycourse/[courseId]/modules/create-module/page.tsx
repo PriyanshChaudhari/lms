@@ -51,7 +51,7 @@ const CreateCourse = () => {
                 position: "",
                 course_id: courseId
             });
-            router.push(`/teacher/${userId}/mycourse/${courseId}/modules`)
+            router.push(`/teacher/${userId}/mycourse/${courseId}/`)
         } catch (error) {
             console.error(error);
         }
