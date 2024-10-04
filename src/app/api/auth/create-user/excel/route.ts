@@ -1,36 +1,3 @@
-// import { NextApiRequest, NextApiResponse } from "next";
-// import { db } from "@/lib/firebaseConfig";
-// import { doc, setDoc } from 'firebase/firestore'
-// import bcrypt from 'bcryptjs'
-
-// export async function POST(req: NextApiRequest, res: NextApiResponse) {
-//     if (req.method === 'POST') {
-//         try {
-//             const { userId, firstName, lastName, email, password, role, profile_pic, dob, } = await req.body;
-
-//             const passwordHash = await bcrypt.hash(password, 10);
-//             console.log('passwordHash', passwordHash)
-//             await setDoc(doc(db, 'users', userId), {
-//                 first_name: firstName,
-//                 last_name: lastName,
-//                 email: email,
-//                 password: passwordHash,
-//                 role: role,
-//                 profile_pic: profile_pic,
-//                 dob: dob
-//             });
-//             console.log("added")
-//             return res.status(201).json({ message: 'User created' });
-//         }
-//         catch (error) {
-//             return res.status(500).json({ error: 'Failed to create user' });
-//         }
-//     }
-//     else {
-//         res.setHeader('Allow', ['POST']);
-//         res.status(405).end(`Method ${req.method} Not Allowed`);
-//     }
-// }
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/firebaseConfig';
 import { Timestamp, doc, getDoc, setDoc, writeBatch } from 'firebase/firestore';
@@ -44,8 +11,6 @@ interface UserData {
     firstName: string;
     lastName: string;
     role: string;
-    // profile_pic: string;
-    // dob: string; // Assuming dob is a string in the input JSON
 }
 
 export async function POST(req: NextRequest) {
@@ -53,7 +18,6 @@ export async function POST(req: NextRequest) {
         const jsonData = await req.json();
         console.log(jsonData);
         
-
         // Call the batch creation function
         const userRecords = await batchUsersCreation(jsonData);
 
@@ -84,21 +48,14 @@ export async function batchUsersCreation(jsonData: UserData[]) {
                 throw new Error(`User with userId ${userId} already exists`);
             }
 
-            // const formattedDate = new Date(dob);
-            // console.log(formattedDate)
-            // const firestoreDate = Timestamp.fromDate(formattedDate);
-
             const passwordHash = await bcrypt.hash(password, 10);
 
-            // const userRef = doc(db, String(process.env.USERS_DB), String(userId));
             batch.set(userRef, {
                 first_name: firstName,
                 last_name: lastName,
-                email: email || `${userId}@example.com`, // Use a dummy email if not provided
-                password: passwordHash,
+                email: email,
+                password_hash: passwordHash,
                 role: role,
-                // profile_pic: profile_pic,
-                // dob: firestoreDate
             });
         }
 

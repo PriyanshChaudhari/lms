@@ -6,7 +6,7 @@ export async function PUT(req: NextRequest, { params }: { params: { userId: stri
     try {
         console.log("start: ", req.body)
         const { userId } = params;
-        const { first_name, last_name, email, role, profile_pic } = await req.json();
+        const { first_name, last_name, email, role, } = await req.json();
         console.log("userId: ", userId);
         const userRef = doc(db, 'users', userId);
         const userSnapshot = await getDoc(userRef);
@@ -20,19 +20,8 @@ export async function PUT(req: NextRequest, { params }: { params: { userId: stri
             first_name: first_name,
             last_name: last_name,
             role: role,
-            profile_pic: profile_pic
         };
         console.log("updated data: ",updateData)
-
-        // if (profile_pic) {
-        //     updateData.profile_pic = profile_pic;
-        // }
-
-        // if (dob) {
-        //     const formattedDate = new Date(dob);
-        //     updateData.dob = Timestamp.fromDate(formattedDate);
-        // }
-
 
         await updateDoc(userRef, updateData);
 

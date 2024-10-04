@@ -11,7 +11,7 @@ const CreateCourse = () => {
     const [module, setModule] = useState({
         title: "",
         description: "",
-        position: "",
+        position: 0,
         course_id: courseId
     });
 
@@ -48,7 +48,7 @@ const CreateCourse = () => {
             setModule({
                 title: "",
                 description: "",
-                position: "",
+                position: 0,
                 course_id: courseId
             });
             router.push(`/teacher/${userId}/mycourse/${courseId}/modules`)

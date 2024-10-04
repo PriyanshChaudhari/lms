@@ -9,7 +9,6 @@ interface User {
     last_name: string;
     email: string;
     role: string;
-    profile_pic: string;
 }
 
 const EditUser = () => {
@@ -23,7 +22,6 @@ const EditUser = () => {
         last_name: "",
         email: "",
         role: "",
-        profile_pic: ""
     });
 
     const [error, setError] = useState<string | null>(null);
@@ -177,30 +175,6 @@ const EditUser = () => {
                         <option value="teacher">Teacher</option>
                         <option value="admin">Admin</option>
                     </select>
-                </div>
-
-                {/* <div className="mb-4">
-                    <label htmlFor="dob" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Date of Birth:</label>
-                    <input
-                        type="date"
-                        id="dob"
-                        name="dob"
-                        value={formatDate(user.dob)}
-                        onChange={handleChange}
-                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-md focus:outline-none focus:border-blue-500 dark:focus:border-white"
-                    />
-                </div> */}
-
-                <div className="mb-4">
-                    <label htmlFor="profile_pic" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Profile Picture URL:</label>
-                    <input
-                        type="text"
-                        id="profile_pic"
-                        name="profile_pic"
-                        value={user.profile_pic}
-                        onChange={handleChange}
-                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-md focus:outline-none focus:border-blue-500 dark:focus:border-white"
-                    />
                 </div>
 
                 <button

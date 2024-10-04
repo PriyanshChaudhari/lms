@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
         const title = formData.get('title') as string;
         const content_type = formData.get('content_type') as string;
         const text_content = formData.get('text_content') as string;
-        const position = formData.get('position') as string;
+        const position = formData.get('position');
         let content_url = '';
 
         const file = formData.get('file') as File | null;

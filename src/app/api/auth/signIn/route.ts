@@ -94,7 +94,7 @@ async function validateUserCredentials(userId: string, password: string) {
         const userIdFromDB = userDoc.id;
         const userEmail = userData.email;
         const userRole = userData.role;
-        const storedPasswordHash = userData.password;
+        const storedPasswordHash = userData.password_hash;
 
         if (storedPasswordHash && await bcrypt.compare(password, storedPasswordHash)) {
             return {

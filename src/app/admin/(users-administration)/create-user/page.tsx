@@ -12,36 +12,49 @@ const AddUser = () => {
         firstName: "",
         lastName: "",
         email: "",
-        password: "",
         role: "student",
-        // profile_pic: "",
-        // dob: ""
     });
 
-    // New state for storing error messages
     const [error, setError] = useState<string | null>(null);
 
-    const handleClick = () => {
-        // router.push('/admin/dashboard');
-    };
 
     const handleChange = (e: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
         const { name, value } = e.target;
         setUser({ ...user, [name]: value });
     };
 
+    const createPassword = (userId: string, firstName: string):string => {
+        const userIdPart = userId.slice(-5);
+
+        const firstNamePart = firstName.slice(0, 3);
+
+        let password = `${userIdPart}${firstNamePart}`;
+        
+        return password;
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!user.userId || !user.firstName || !user.lastName || !user.email || !user.password) {
-            alert('Please fill in all the required fields');
+        createPassword(user.userId, user.firstName);
+
+        if (!user.userId || !user.firstName || !user.lastName || !user.email || !user.role) {
+            let missingFields = [];
+            if (!user.userId) missingFields.push('User ID');
+            if (!user.firstName) missingFields.push('First Name');
+            if (!user.lastName) missingFields.push('Last Name');
+            if (!user.email) missingFields.push('Email');
+            if (!user.role) missingFields.push('Role');
+            alert('Please fill in all the required fields\n Missing fields: ' + missingFields.join(', '));
             return;
         } else {
             try {
+                const userWithPassword = { ...user, password: createPassword(user.userId, user.firstName) };
+                console.log("user: ", userWithPassword);
                 const response = await fetch('/api/auth/create-user', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(user)
+                    body: JSON.stringify(userWithPassword)
                 });
 
                 if (response.ok) {
@@ -121,23 +134,11 @@ const AddUser = () => {
                 </div>
 
                 <div className="mb-4">
-                    <label htmlFor="password" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Password:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={user.password}
-                        onChange={handleChange}
-                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-md focus:outline-none focus:border-blue-500 dark:focus:border-white"
-                    />
-                </div>
-
-                <div className="mb-4">
                     <label htmlFor="role" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Role:</label>
                     <select
                         name="role"
-                        value={user.role}
                         onChange={handleChange}
+                        value={user.role}
                         required
                         className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-md focus:outline-none focus:border-blue-500 dark:focus:border-white"
                     >
@@ -149,7 +150,6 @@ const AddUser = () => {
 
                 <button
                     type="submit"
-                    onClick={handleClick}
                     className="w-full bg-red-500 text-white font-semibold py-2 rounded-md hover:bg-red-600 transition duration-300"
                 >
                     Submit
