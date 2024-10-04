@@ -86,7 +86,7 @@ export default function ViewModule() {
         } catch (error) {
             console.log(error)
         }
-        router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/content`)
+        router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/`)
     }
 
     return (

@@ -4,6 +4,22 @@ import React, { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import axios from 'axios';
 
+interface courses {
+    course_id: string;
+    title: string;
+    description: string;
+    teacher_id: string;
+    category: string;
+}
+
+interface assignments {
+    id: string;
+    title: string;
+    due_date: object;
+    description: string;
+    total_marks: number;
+}
+
 export default function ViewModuleAssignments() {
     const router = useRouter();
     const params = useParams();
@@ -15,8 +31,8 @@ export default function ViewModuleAssignments() {
         router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments/${assignmentId}`);
     };
 
-    const [courses, setCourses] = useState({})
-    const [assignments, setAssignments] = useState([])
+    const [courses, setCourses] = useState<courses | null>(null)
+    const [assignments, setAssignments] = useState<assignments[]>([])
 
     useEffect(() => {
         const getCourse = async () => {
@@ -31,8 +47,8 @@ export default function ViewModuleAssignments() {
 
         const getModuleAssignments = async () => {
             try {
-                const res = await axios.post('/api/get/assignments/module-assignments', { moduleId })
-                setAssignments(res.data)
+                const res = await axios.post('/api/get/assignments/module-assignments', { courseId })
+                setAssignments(res.data.assignments || [])
                 console.log(res.data)
             } catch (error) {
                 console.log(error)
@@ -40,9 +56,9 @@ export default function ViewModuleAssignments() {
         }
         getModuleAssignments();
 
-    }, [moduleId, courseId])
+    }, [courseId])
 
-    const formatDate = (timestamp) => {
+    const formatDate = (timestamp:any) => {
         if (!timestamp) return "N/A"; // Fallback if timestamp is not provided
         const date = new Date(timestamp.seconds * 1000); // Convert seconds to milliseconds
         return date.toLocaleDateString(); // Format the date as a readable string
