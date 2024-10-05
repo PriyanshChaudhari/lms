@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
 import { useRouter } from 'next/navigation';
@@ -6,18 +7,18 @@ import axios from 'axios';
 const ExcelUploader = () => {
   const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string>('');
+  const [isUploaded, setIsUploaded] = useState<boolean>(false);
+
+  const router = useRouter();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setFile(e.target.files[0]);
-      setError(''); // Clear error when a new file is selected
+      setError('');
     }
   };
 
-  const router = useRouter();
-  const handleClick = () => {
-    // router.push('/admin/dashboard');
-  };
+
 
   const handleFileUpload = async () => {
     if (!file) {
@@ -38,12 +39,6 @@ const ExcelUploader = () => {
 
         try {
           console.log(jsonData);
-          
-          // const response = await fetch('/api/auth/create-user/excel', {
-          //   method: 'POST',
-          //   headers: { 'Content-Type': 'application/json' },
-          //   body: JSON.stringify(jsonData),
-          // });
 
           const response = await axios.post('/api/auth/create-user/excel', jsonData, {
             headers: { 'Content-Type': 'application/json' },
@@ -51,7 +46,7 @@ const ExcelUploader = () => {
 
           if (response.status === 201) {
             alert('User uploaded successfully');
-            router.push('/admin/dashboard');
+            setIsUploaded(true);
             console.log('Data uploaded successfully');
           } else {
             alert('Failed to upload user');
@@ -65,57 +60,84 @@ const ExcelUploader = () => {
     reader.readAsArrayBuffer(file);
   };
 
-  return (
-    <div className="border border-gray-300 m-5">
-      <div className="max-w-4xl mx-auto p-5">
-        <div className="w-full h-screen flex justify-center items-center max-w-md mx-auto p-4">
-          <div>
-            <h2 className="text-2xl font-semibold mb-4">Upload Excel File</h2>
-            <p className="mb-6">Select and upload the Excel file of your choice</p>
-
-            <div
-              className="border-2 border-dashed border-gray-400 dark:border-gray-300 lg:p-16 p-6 text-center cursor-pointer hover:border-gray-500 transition"
-            >
-              <input
-                type="file"
-                accept=".xlsx, .xls"
-                onChange={handleFileChange}
-                className="hidden"
-                id="file-upload"
-              />
-              <label htmlFor="file-upload" className="block">
-                <p className="text-gray-600">Choose a file or drag & drop it here</p>
-                <p className="text-gray-500">Excel files (.xlsx, .xls) only</p>
-              </label>
-            </div>
-
-            {file && (
-              <p className="text-center text-gray-600 mt-4">
-                Selected file: <span className="font-medium">{file.name}</span>
-              </p>
-            )}
-
-            {error && <p className="text-red-500 mt-2">{error}</p>}
-
-            <div className="flex justify-between mt-4">
-              <button
-                onClick={handleFileUpload}
-                className="bg-black text-white py-2 px-7 rounded-xl dark:hover:bg-[#1a1a1a] transition"
-              >
-                Upload
-              </button>
-              <button
-                type="button"
-                className="bg-gray-300 dark:bg-white text-black border border-gray-300 py-2 px-4 rounded-xl hover:bg-gray-400 dark:hover:bg-gray-100 transition"
-                onClick={() => {
-                  setFile(null);
-                  handleClick();
-                }}
-              >
-                Cancel
-              </button>
-            </div>
+  if (isUploaded) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full">
+          <div className="text-center">
+            <h2 className="text-2xl font-semibold mb-4">File Uploaded Successfully</h2>
+            <p className="mb-6 text-gray-600">Your Excel file has been uploaded and processed.</p>
+            <p className="text-gray-700">
+              Uploaded file: <span className="font-medium">{file?.name}</span>
+            </p>
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="bg-gray-50 dark:bg-gray-900 p-8 rounded-lg shadow-md max-w-md w-full">
+        <h2 className="text-2xl font-semibold mb-4 text-center">Upload Excel File</h2>
+        <p className="mb-6 text-center text-gray-600">Select and upload the Excel file of your choice</p>
+
+        <div
+          className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition ${
+            file ? 'border-green-500 bg-green-50' : 'border-gray-400 hover:border-gray-500'
+          }`}
+        >
+          {!file && (
+            <input
+              type="file"
+              accept=".xlsx, .xls"
+              onChange={handleFileChange}
+              className="hidden"
+              id="file-upload"
+            />
+          )}
+          <label htmlFor="file-upload" className="block">
+            {file ? (
+              <div className="flex items-center justify-center">
+             
+                <p className="text-green-700">
+                  Selected: <span className="font-medium">{file.name}</span>
+                </p>
+              </div>
+            ) : (
+              <>
+                <p className="text-gray-600">Choose a file or drag & drop it here</p>
+                <p className="text-gray-500 text-sm mt-1">Excel files (.xlsx, .xls) only</p>
+              </>
+            )}
+          </label>
+        </div>
+
+        {error && <p className="text-red-500 mt-2 text-center">{error}</p>}
+
+        <div className="flex justify-between mt-6">
+          <button
+            onClick={handleFileUpload}
+            className={` py-2 px-4 rounded-md transition ${
+              file
+                ? 'bg-green-500 text-white w-1/2 hover:bg-green-600'
+                : 'bg-gray-300 text-gray-500 w-full cursor-not-allowed'
+            }`}
+            disabled={!file}
+          >
+            Upload
+          </button>
+          {file && (
+            <button
+              type="button"
+              className="w-1/2  ml-4 bg-red-100 text-red-600 py-2 px-4 rounded-md hover:bg-red-200 transition"
+              onClick={() => {
+                setFile(null);
+              }}
+            >
+              Cancel
+            </button>
+          )}
         </div>
       </div>
     </div>

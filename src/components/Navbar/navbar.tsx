@@ -3,13 +3,14 @@ import React, { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { MoonIcon, SunIcon } from '@radix-ui/react-icons'
 import { useTheme } from 'next-themes'
-import { usePathname, useParams } from 'next/navigation';
+import { usePathname, useParams,useRouter } from 'next/navigation';
 import axios from 'axios'
 import LoginButton from '@/components/ui/loginButton'
 
 
 const Navbar: React.FC = () => {
   const params = useParams();
+  const router = useRouter();
   const DefaultProfilePic = 'https://firebasestorage.googleapis.com/v0/b/minor-project-01-5a5b7.appspot.com/o/users%2F8021000004%2Fprofile_pic.png?alt=media&token=061a7885-4080-41d2-bb21-d2131be8f098';
   // const userId = params.userId as string;
   const { theme, setTheme } = useTheme();
@@ -19,6 +20,7 @@ const Navbar: React.FC = () => {
   const [userName, setUserName] = useState<string>('User');
   const dropdownRef = useRef<HTMLDivElement>(null); // Ref for dropdown
   const [userId, setUserId] = useState<string | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
   };
@@ -39,6 +41,10 @@ const Navbar: React.FC = () => {
     }
   };
 
+  const navigateToProfile = () => {
+    window.location.replace('/profile');
+  };
+
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) {
@@ -49,6 +55,7 @@ const Navbar: React.FC = () => {
       return 'Good Evening';
     }
   };
+
 
   const isLoginPage = pathname === '/' || pathname === '/login';
 
@@ -81,6 +88,7 @@ const Navbar: React.FC = () => {
         if (userId) {
           const res = await axios.get(`/api/get/one-user?userId=${userId}`);
           setUserName(res.data); // Update with user data
+          setUserRole(res.data.role);
           let picUrl = res.data.profile_pic;
           if (picUrl) {
             picUrl = picUrl.replace('gs://minor-project-01-5a5b7.appspot.com/', 'https://firebasestorage.googleapis.com/v0/b/minor-project-01-5a5b7.appspot.com/o/');
@@ -94,6 +102,22 @@ const Navbar: React.FC = () => {
 
     fetchProfileData();
   }, [userId]);
+
+  const navigateToDashboard = () => {
+
+    if(userRole === 'admin') {
+        router.push('/admin/dashboard');
+    }
+    else if(userRole === 'student') {
+        const studentId = userId;
+        router.push(`/student/${studentId}/dashboard`);
+    }
+    else if(userRole === 'teacher') {
+        const teacherId = userId;
+        router.push(`/teacher/${teacherId}/dashboard`);
+    }
+
+};
 
   return (
     <nav className="dark:bg-gray-800 p-4 w-full bg-gray-100 text-black dark:text-white  z-10 top-0 sticky font-rubik" style={{ cursor: 'default' }}>
@@ -123,10 +147,10 @@ const Navbar: React.FC = () => {
               {isDropdownOpen && (
                 <div className="absolute top-full right-0 mt-2 w-44 bg-white dark:bg-gray-800 border border-gray-300 rounded-xl shadow-lg">
                   <ul className="list-none p-2">
-                    {/* <li className="p-2 text-sm hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"><Link href='/admin/dashboard'>Dashboard</Link></li> */}
-                    {/* <li className="p-2 text-sm hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer">Profile</li> */}
-                    <li className="text-sm cursor-pointer">
-                      <button className='text-red-500 hover:text-red-600 p-2 rounded-xl' onClick={handleLogout}>Log Out</button>
+                    <li className="p-2 text-sm bg-gray-50 dark:bg-gray-700 rounded mb-2 hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer" onClick={navigateToDashboard}>Dashboard</li>
+                    <li className="p-2 text-sm bg-gray-50 dark:bg-gray-700 mb-2 rounded hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer" onClick={navigateToProfile}>Profile</li>
+                    <li className="text-sm bg-gray-50 dark:bg-gray-700 rounded cursor-pointer">
+                      <button className='text-red-500  hover:text-red-600 p-2 rounded-xl' onClick={handleLogout}>Log Out</button>
                     </li>
                   </ul>
                 </div>
