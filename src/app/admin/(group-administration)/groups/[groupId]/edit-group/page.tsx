@@ -49,9 +49,12 @@ const EditGroup = () => {
                 console.error('Group update failed:', res.data.message);
                 setErrorMessage('Failed to update group. Please try again.');
             }
-        } catch (err) {
-            console.error('Error:', err);
-            setErrorMessage('An error occurred while updating the group.');
+        } catch (error: any) {
+            if (error.response && error.response.data && error.response.data.message) {
+                setErrorMessage(error.response.data.message);
+            } else {
+                setErrorMessage('An error occurred while updating the group.');
+            }
         } finally {
             setLoading(false);
         }
@@ -74,7 +77,7 @@ const EditGroup = () => {
                         value={group.group_name}
                         onChange={handleChange}
                         required
-                        className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 uppercase"
                     />
                 </div>
 

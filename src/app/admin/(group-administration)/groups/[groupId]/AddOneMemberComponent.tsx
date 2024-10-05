@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'next/navigation';
 
-const AddUserComponent = () => {
+const AddOneMemberComponent = () => {
     const params = useParams();
     const groupId = params.groupId as string;
 
@@ -24,13 +24,6 @@ const AddUserComponent = () => {
             setFile(e.target.files[0]);
         }
     };
-
-    useEffect(() => {
-        const getGroupMember = async () => {
-            const res = axios.get(`api/`)
-        }
-    }, [groupId])
-
 
     // Handle adding a user
     const handleAddUser = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -54,34 +47,6 @@ const AddUserComponent = () => {
             } else {
                 setErrorMessage('An error occurred while adding the user');
             }
-        }
-    };
-
-    // Handle file upload (bulk add)
-    const handleUploadUsers = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        if (!file) {
-            setErrorMessage('Please select a file');
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append('file', file);
-
-        try {
-            const res = await axios.post('/api/groups/upload-users', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
-            });
-
-            if (res.data.success) {
-                setSuccessMessage('Users added successfully from file');
-                setErrorMessage('');
-                setFile(null);
-            } else {
-                setErrorMessage('Failed to add users from file');
-            }
-        } catch (error) {
-            setErrorMessage('An error occurred while uploading the file');
         }
     };
 
@@ -116,30 +81,8 @@ const AddUserComponent = () => {
                 </button>
             </form>
 
-            {/* Bulk Add Users via File Upload */}
-            <form onSubmit={handleUploadUsers} className="mb-6">
-                <div className="mb-4">
-                    <label htmlFor="file" className="block text-sm font-medium text-gray-700 mb-1">
-                        Add Users by Uploading File (Excel)
-                    </label>
-                    <input
-                        type="file"
-                        id="file"
-                        accept=".xlsx, .csv"
-                        onChange={handleFileChange}
-                        required
-                        className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    />
-                </div>
-                <button
-                    type="submit"
-                    className="w-full bg-blue-600 text-white font-semibold py-2 rounded-md hover:bg-blue-700 transition duration-200"
-                >
-                    Upload Users
-                </button>
-            </form>
         </div>
     );
 };
 
-export default AddUserComponent;
+export default AddOneMemberComponent;

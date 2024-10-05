@@ -1,5 +1,5 @@
 import { db } from "@/lib/firebaseConfig"; // Firestore instance
-import { deleteDoc, doc, getDoc, updateDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest, { params }: { params: { groupId: string } }) {
@@ -34,9 +34,16 @@ export async function PUT(req: NextRequest, { params }: { params: { groupId: str
         }
         const groupRef = doc(db, "groups", groupId);
 
+        const groupQuery = query(collection(db, 'groups'), where('group_name', '==', group_name));
+        const groupSnapshot = await getDocs(groupQuery);
+
+        if (!groupSnapshot.empty) {
+            // Group with the same name already exists
+            return NextResponse.json({ success: false, message: 'Group name already exists' }, { status: 400 });
+        }
         // Prepare the data to update
         const updatedGroup = {
-            group_name,
+            group_name : group_name.toUppercase(),
             updated_at: new Date(),
         };
 

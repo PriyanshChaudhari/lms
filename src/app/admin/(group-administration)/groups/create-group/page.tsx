@@ -30,9 +30,12 @@ const CreateGroup = () => {
                 console.error('Group creation failed:', res.data.message);
                 setErrorMessage('Failed to create group. Please try again.');
             }
-        } catch (err) {
-            console.error('Error:', err);
-            setErrorMessage('An error occurred while creating the group.');
+        } catch (error: any) {
+            if (error.response && error.response.data && error.response.data.message) {
+                setErrorMessage(error.response.data.message);
+            } else {
+                setErrorMessage('An error occurred while updating the group.');
+            }
         } finally {
             setLoading(false); // Reset loading state
         }
@@ -45,7 +48,7 @@ const CreateGroup = () => {
 
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                    <label htmlFor="group_name" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="group_name" className=" block text-sm font-medium text-gray-700 mb-1">
                         Group Name
                     </label>
                     <input
@@ -55,7 +58,8 @@ const CreateGroup = () => {
                         value={group.group_name}
                         onChange={handleChange}
                         required
-                        className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        
+                        className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 uppercase"
                     />
                 </div>
 

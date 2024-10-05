@@ -12,19 +12,20 @@ interface Group {
 const Groups = () => {
     const [groups, setGroups] = useState<Group[]>([]);
     const router = useRouter();
+
+    const getGroups = async () => {
+        try {
+            const res = await axios.get('/api/groups'); // Added leading slash to the API path
+            setGroups(res.data.groups); // Make sure `groups` key exists in the response
+        } catch (error) {
+            console.error('Error fetching groups:', error);
+        }
+    };
+
     useEffect(() => {
-        const getGroups = async () => {
-            try {
-                const res = await axios.get('/api/groups'); // Added leading slash to the API path
-                setGroups(res.data.groups); // Make sure `groups` key exists in the response
-            } catch (error) {
-                console.error('Error fetching groups:', error);
-            }
-        };
+        getGroups();
+    }, [])
 
-        getGroups(); // Call the async function
-
-    });
 
     const handleClick = (groupId: string) => {
         router.push(`/admin/groups/${groupId}`)

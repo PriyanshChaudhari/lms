@@ -1,63 +1,97 @@
 import { NextRequest, NextResponse } from 'next/server';
-import formidable from 'formidable';
-import * as XLSX from 'xlsx';
-import { db } from '@/lib/firebaseConfig'; // Import Firebase Firestore config
-import admin from 'firebase-admin'; // Import Firebase Admin SDK
+import { db } from '@/lib/firebaseConfig';
+import { Timestamp, doc, getDoc, setDoc, writeBatch, query, where, collection, getDocs } from 'firebase/firestore';
 
-export const config = {
-    api: {
-        bodyParser: false, // Disable body parsing to handle multipart form data
-    },
-};
+// Define the type for user data
+interface GroupMembers {
+    userId: string;
+    group_name: string;
+}
 
+// POST endpoint to handle adding group members
 export async function POST(req: NextRequest) {
-    return new Promise((resolve, reject) => {
-        // Set up formidable form to handle file upload
-        const form = new formidable.IncomingForm();
+    try {
+        const jsonData = await req.json();
+        console.log(jsonData);
 
-        form.parse(req, async (err, fields, files) => {
-            if (err) {
-                return resolve(
-                    NextResponse.json({ success: false, message: 'File upload error' }, { status: 500 })
-                );
+        // Call the batch creation function
+        const groupRecords = await batchGroupsCreation(jsonData);
+
+        console.log("Batch Group member creation successful");
+        return NextResponse.json({ message: 'Group member created', group: groupRecords }, { status: 201 });
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json({ error: 'Failed to add group members.' }, { status: 500 });
+    }
+}
+
+// Function to batch process group members creation
+export async function batchGroupsCreation(jsonData: GroupMembers[]) {
+    const batch = writeBatch(db);
+
+    try {
+        for (const user of jsonData) {
+            const { userId, group_name } = user;
+
+            // Validate inputs
+            if (!userId || !group_name) {
+                throw new Error('UserID and group_name are required');
             }
 
-            try {
-                // Get the uploaded file path
-                const filePath = files.file.filepath;
-                const groupId = fields.groupId as string; // Assuming groupId is sent in the form
+            const userDoc = doc(db, 'users', userId);
+            const userSnapshot = await getDoc(userDoc);
 
-                // Read and parse the Excel file using XLSX
-                const workbook = XLSX.readFile(filePath);
-                const sheetName = workbook.SheetNames[0];
-                const worksheet = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
-
-                // Process each row from the Excel file and add users to Firebase
-                await Promise.all(
-                    worksheet.map(async (row: any) => {
-                        const { userId } = row; // Assuming userId is a column in the Excel file
-
-                        // Add the user to the group in Firestore
-                        const groupRef = db.collection('groups').doc(groupId);
-                        const groupMemberRef = groupRef.collection('members').doc(userId);
-
-                        await groupMemberRef.set({
-                            userId: userId,
-                            addedAt: admin.firestore.FieldValue.serverTimestamp(),
-                        });
-                    })
-                );
-
-                // Respond with success if users were added successfully
-                resolve(
-                    NextResponse.json({ success: true, message: 'Users added successfully' }, { status: 200 })
-                );
-            } catch (error) {
-                console.error(error);
-                resolve(
-                    NextResponse.json({ success: false, message: 'Error processing file' }, { status: 500 })
-                );
+            if (!userSnapshot.exists()) {
+                // If the user does not exist in the users table, return an error
+                return NextResponse.json({ success: false, message: 'User not found in the system' }, { status: 404 });
             }
-        });
-    });
+
+            // Fetch the group ID using the group name
+            const groupQuery = query(collection(db, 'groups'), where('group_name', '==', group_name));
+            const groupSnapshot = await getDocs(groupQuery);
+
+            if (groupSnapshot.empty) {
+                throw new Error(`Group with name ${group_name} does not exist`);
+            }
+
+            let groupId = "";
+            groupSnapshot.forEach(doc => {
+                groupId = doc.id; // Assuming groupId is the document ID
+            });
+
+            // Check if user is already in the group
+            const groupMembersQuery = query(
+                collection(db, 'group_members'),
+                where('user_id', '==', userId),
+                where('group_id', '==', groupId)
+            );
+            const groupMembersSnapshot = await getDocs(groupMembersQuery);
+
+            if (!groupMembersSnapshot.empty) {
+                // User already exists in the group, skip adding
+                console.log(`User with userId ${userId} is already in group ${group_name}`);
+                return NextResponse.json({ message: `User with userId ${userId} is already in group ${group_name}` }, { status: 400 });
+            }
+
+            // Add user to the group
+            const newMemberRef = doc(collection(db, 'group_members'));
+            batch.set(newMemberRef, {
+                group_id: groupId,
+                user_id: userId,
+                added_at: Timestamp.now()
+            });
+        }
+
+        // Commit the batch
+        await batch.commit();
+        console.log("Batch group member creation successful");
+
+        return jsonData.map(user => ({
+            userId: user.userId,
+            groupName: user.group_name
+        }));
+    } catch (error) {
+        console.error('Error creating group members in batch:', error);
+        throw new Error('Error creating group members in batch');
+    }
 }

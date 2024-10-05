@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'next/navigation';
-import AddUserComponent from './AddUserComponent';
+import AddOneMemberComponent from './AddOneMemberComponent';
+import ExcelMemberComponent from './ExcelMemberComponent';
 
 interface users {
   userId: string;
@@ -20,6 +21,8 @@ const Group = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [isAddUserVisible, setIsAddUserVisible] = useState(false);
+  const [isAddOneMember, setIsAddOneMember] = useState(false);
+  const [isExcelUpload, setIsExcelUpload] = useState(false);
 
   useEffect(() => {
     // Fetch group members
@@ -63,12 +66,36 @@ const Group = () => {
           onClick={() => setIsAddUserVisible(!isAddUserVisible)}
           className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 transition duration-200"
         >
-          {isAddUserVisible ? 'Cancel' : 'Add User'}
+          {isAddUserVisible ? 'Cancel' : 'Add Members'}
         </button>
+
         {isAddUserVisible && (
-        <AddUserComponent />
-      )}
+          <div className="mt-4">
+            <button
+              onClick={() => {
+                setIsAddOneMember(true);
+                setIsExcelUpload(false);
+              }}
+              className="bg-green-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-green-700 transition duration-200 mr-4"
+            >
+              Add One Member
+            </button>
+            <button
+              onClick={() => {
+                setIsAddOneMember(false);
+                setIsExcelUpload(true);
+              }}
+              className="bg-orange-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-orange-700 transition duration-200"
+            >
+              Upload Excel File
+            </button>
+          </div>
+        )}
+
+        {(isAddUserVisible && isAddOneMember) && <AddOneMemberComponent />}
+        {(isAddUserVisible && isExcelUpload) && <ExcelMemberComponent />}
       </div>
+
       {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}
       {successMessage && <p className="text-green-500 text-center mb-4">{successMessage}</p>}
 
