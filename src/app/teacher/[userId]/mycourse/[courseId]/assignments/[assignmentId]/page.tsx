@@ -1,10 +1,11 @@
 "use client"
 
-import React, { useEffect, useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import Link from 'next/link';
 import axios from 'axios';
 
-interface courses {
+interface Courses {
     course_id: string;
     title: string;
     description: string;
@@ -12,7 +13,7 @@ interface courses {
     category: string;
 }
 
-interface assignments {
+interface Assignments {
     id: string;
     title: string;
     due_date: object;
@@ -21,15 +22,25 @@ interface assignments {
     total_marks: number;
 }
 
+interface Submissions {
+    submission_id: string;
+    student_id: string;
+    student_name: string;
+    submission_date: object;
+    obtained_marks: number;
+    feedback: string;
+    submission_file_urls: string[];
+}
+
 export default function ViewAssignment() {
-    const router = useRouter();
     const params = useParams();
     const userId = params.userId;
     const courseId = params.courseId;
     const assignmentId = params.assignmentId;
 
-    const [courses, setCourses] = useState<courses | null>(null);
-    const [oneAssignment, setOneAssignment] = useState<assignments | null>(null); // Initialize as null
+    const [courses, setCourses] = useState<Courses | null>(null);
+    const [oneAssignment, setOneAssignment] = useState<Assignments | null>(null);
+    const [submissions, setSubmissions] = useState<Submissions[]>([]);
 
     useEffect(() => {
         const getCourse = async () => {
@@ -51,12 +62,22 @@ export default function ViewAssignment() {
             }
         };
         getOneAssignment();
+
+        const getSubmissions = async () => {
+            try {
+                const res = await axios.post('/api/get/assignments/submissions', { assignmentId });
+                setSubmissions(res.data.submissions);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getSubmissions();
     }, [courseId, assignmentId]);
 
     const formatDate = (timestamp: any) => {
-        if (!timestamp) return "N/A"; // Fallback if timestamp is not provided
-        const date = new Date(timestamp.seconds * 1000); // Convert seconds to milliseconds
-        return date.toLocaleDateString(); // Format the date as a readable string
+        if (!timestamp) return "N/A";
+        const date = new Date(timestamp.seconds * 1000);
+        return date.toLocaleDateString();
     };
 
     return (
@@ -66,25 +87,20 @@ export default function ViewAssignment() {
                 <p className="text-lg text-gray-700 mb-6">{courses?.description || 'Course Description'}</p>
                 <nav className="mb-6 p-2">
                     <ul className="flex justify-start space-x-4 list-none p-0">
-                        <li className="p-3 rounded-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}`)}>{courses?.title || 'Course Title'}</li>
+                        <li className="p-3 rounded-xl text-gray-500 cursor-pointer">
+                            <Link href={`/teacher/${userId}/mycourse/${courseId}`}>{courses?.title || 'Course Title'}</Link>
+                        </li>
                         <li className="p-3 rounded-xl text-black cursor-pointer">/</li>
-                        {params.moduleId ? (
-                            <>
-                                <li className="p-3 rounded-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${params.moduleId}`)}>Module {params.moduleId}</li>
-                                <li className="p-3 rounded-xl text-black cursor-pointer">/</li>
-                            </>
-                        ) : (
-                            <>
-                                <li className="p-3 rounded-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}/assignments`)}>Assignments</li>
-                                <li className="p-3 rounded-xl text-black cursor-pointer">/</li>
-                            </>
-                        )}
+                        <li className="p-3 rounded-xl text-gray-500 cursor-pointer">
+                            <Link href={`/teacher/${userId}/mycourse/${courseId}/assignments`}>Assignments</Link>
+                        </li>
+                        <li className="p-3 rounded-xl text-black cursor-pointer">/</li>
                         <li className="p-3 rounded-xl text-black cursor-pointer">{oneAssignment ? oneAssignment.title : 'Assignment Title'}</li>
                     </ul>
                 </nav>
 
-                <div className="space-y-4 ">
-                    <div className=" border border-gray-300 rounded-xl p-6 shadow-md h-26">
+                <div className="space-y-4">
+                    <div className="border border-gray-300 rounded-xl p-6 shadow-md h-26">
                         <h2 className="text-xl font-semibold mb-2">
                             {oneAssignment?.description || 'No description available'}
                         </h2>
@@ -92,13 +108,46 @@ export default function ViewAssignment() {
                         <p className="text-sm text-gray-600">Due date: {oneAssignment ? formatDate(oneAssignment.due_date) : 'N/A'}</p>
                     </div>
 
-                    <div>
-                        <button
-                            className="bg-black text-white rounded-xl p-3 my-5"
-                            onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}/assignments/${assignmentId}/add-submission`)}
-                        >
-                            Add Submission
-                        </button>
+                    {/* Submissions Block */}
+                    <div className="border border-gray-300 rounded-xl p-6 shadow-md">
+                        <h3 className="text-2xl font-semibold mb-4">Student Submissions</h3>
+                        {submissions.length > 0 ? (
+                            <ul className="space-y-2">
+                                {submissions.map((submission) => {
+                                    // const queryParams = {
+                                    //     submissionData: {
+                                    //         studentName: submission.student_name,
+                                    //         submissionDate: formatDate(submission.submission_date),
+                                    //         fileUrl: submission.submission_file_urls
+                                    //     }
+                                    // };
+                                    return (
+                                        <li key={submission.submission_id} className="p-4 border border-gray-200 rounded-lg shadow-sm">
+                                            <p><strong>Student Name:</strong> {submission.student_name}</p>
+                                            <p><strong>Submission Date:</strong> {formatDate(submission.submission_date)}</p>
+                                            <Link
+                                                href={{
+                                                    pathname: `/teacher/${userId}/mycourse/${courseId}/assignments/${assignmentId}/submission/${submission.submission_id}`,
+                                                    query: {
+                                                        submissionData: JSON.stringify({
+                                                            studentName: submission.student_name,
+                                                            submissionDate: formatDate(submission.submission_date),
+                                                            fileUrls: submission.submission_file_urls
+                                                        })
+                                                    }
+                                                }}
+                                                className="text-blue-600 underline"
+                                            >
+                                                View Submission
+                                            </Link>
+
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                        ) : (
+                            <p>No submissions yet.</p>
+                        )}
                     </div>
                 </div>
             </div>
