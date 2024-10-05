@@ -71,8 +71,8 @@ export default function ViewModuleAssignments() {
     return (
         <div className="border border-gray-300 m-5 h-screen justify-center items-center flex">
             <div className="w-full max-w-4xl mx-auto p-5">
-                <h1 className="text-3xl font-bold mb-4">{courses.title}</h1>
-                <p className="text-lg text-gray-700 mb-6">{courses.description}</p>
+                <h1 className="text-3xl font-bold mb-4">{courses?.title}</h1>
+                <p className="text-lg text-gray-700 mb-6">{courses?.description}</p>
 
                 <div className="space-y-4 ">
                     <div>

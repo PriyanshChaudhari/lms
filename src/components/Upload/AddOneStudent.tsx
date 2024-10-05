@@ -108,7 +108,7 @@ const AddOneStudent = ({ courseId }: Props) => {
                         <option value="">Select Student</option>
                         {students.map(student => (
                             <option key={student.id} value={student.id}>
-                                {student.first_name} {student.last_name}
+                                {student.id} {student.first_name} {student.last_name}
                             </option>
                         ))}
                     </select>
