@@ -106,8 +106,9 @@ export default function ViewModule() {
                 <div className="space-y-4 ">
                     <div className="bg-white border border-gray-300 rounded-xl p-6 shadow-md h-26">
                         <h2 className="text-xl font-semibold mb-2">{oneContent?.title}</h2>
-                        <h2 className="text-xl font-semibold mb-2">{oneContent?.content_url}</h2>
+                        <iframe src={oneContent?.content_url} width="100%" height="300px" className='mb-4'></iframe>
                         <h2 className="text-xl font-semibold mb-2">{oneContent?.text_content}</h2>
+                    
                         {/* Edit Content Button */}
                         <button
                             className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600 mt-2"

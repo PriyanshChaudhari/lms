@@ -13,6 +13,7 @@ export default function AssignmentSubmission() {
     const [submissionExists, setSubmissionExists] = useState<boolean>(false);
     const [previousSubmission, setPreviousSubmission] = useState<any>(null);
     const [uploading, setUploading] = useState<boolean>(false);
+    const [isUploaded, setIsUploaded] = useState<boolean>(false);
     const router = useRouter();
     const params = useParams();
     const userId = params.userId as string;
@@ -81,11 +82,12 @@ export default function AssignmentSubmission() {
             });
 
             setUploading(false);
-            if (response.status === 200) {
+            if (response.status === 201) {
                 setMessage(response.data.message);
-                router.push(`/student/${userId}/courses/${courseId}/modules/${moduleId}/assignments`);
+                setIsUploaded(true);
+                // router.push(`/student/${userId}/courses/${courseId}/modules/${moduleId}/assignments`);
             } else {
-                setError(response.data.error || 'Error during submission');
+                setError(response.data.error);
             }
             // router.push(`/student/${userId}/courses/${courseId}/modules/${moduleId}/assignments`);
         } catch (error) {
@@ -99,6 +101,28 @@ export default function AssignmentSubmission() {
         event.preventDefault();
         // Handle drag-and-drop if needed
     };
+
+    if (isUploaded) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full">
+                    <div className="text-center">
+                        <h2 className="text-2xl font-semibold mb-4">Files Uploaded Successfully</h2>
+                        <p className="mb-6 text-gray-600">Your assignment files have been uploaded and processed.</p>
+                        <p className="text-gray-700">
+                            Uploaded files: <span className="font-medium">{files.length} file(s)</span>
+                        </p>
+                        <button
+                            onClick={() => router.push(`/student/${userId}/mycourse/${courseId}/assignments/${assignmentId}`)}
+                            className="mt-6 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition"
+                        >
+                            Back to Assignments
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     if (submissionExists && previousSubmission) {
         return (
