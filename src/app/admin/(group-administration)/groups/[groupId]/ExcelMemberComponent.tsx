@@ -45,7 +45,7 @@ const ExcelMemberComponent = () => {
                     // const response = await axios.post('/api/groups/upload-user', jsonData, {
                     //     headers: { 'Content-Type': 'application/json' },
                     // });
-                    const response = await axios.post('/api/groups/upload-user', jsonData);
+                    const response = await axios.post('/api/groups/upload-users', jsonData);
 
                     if (response.status === 201) {
                         alert('Group member uploaded successfully');

@@ -18,8 +18,10 @@ const Sidebar: React.FC = () => {
 
   const [isUserSectionOpen, setUserSectionOpen] = useState(false);
   const [isCourseSectionOpen, setCourseSectionOpen] = useState(false);
+  const [isGroupSectionOpen, setGroupSectionOpen] = useState(false);
   const [isUserSectionVisible, setUserSectionVisible] = useState(false);
   const [isCourseSectionVisible, setCourseSectionVisible] = useState(false);
+  const [isGroupSectionVisible, setGroupSectionVisible] = useState(false);
 
   const toggleUserSection = () => {
     setUserSectionOpen(!isUserSectionOpen);
@@ -29,6 +31,11 @@ const Sidebar: React.FC = () => {
   const toggleCourseSection = () => {
     setCourseSectionOpen(!isCourseSectionOpen);
     setCourseSectionVisible(!isCourseSectionVisible);
+  };
+
+  const toggleGroupSection = () => {
+    setGroupSectionOpen(!isGroupSectionOpen);
+    setGroupSectionVisible(!isGroupSectionVisible);
   };
 
   return (
@@ -66,12 +73,12 @@ const Sidebar: React.FC = () => {
                 >
                   Upload User Data
                 </Link>
-                {/* <Link
+                <Link
                   href="/admin/view-users"
                   className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 dark:bg-gray-800 rounded bg-gray-300 text-sm"
                 >
                   View Users
-                </Link> */}
+                </Link>
               </div>
             )}
             <button
@@ -79,7 +86,7 @@ const Sidebar: React.FC = () => {
               className={`${isCourseSectionVisible ? 'bg-blue-500 text-white text-left' : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 text-left'
                 } p-2 rounded-md`}
             >
-              Course
+              Course Category
             </button>
             {isCourseSectionOpen && (
               <div className="flex flex-col gap-2  ">
@@ -99,14 +106,30 @@ const Sidebar: React.FC = () => {
               </div>
             )}
 
-
-            {/* <Link
-              href="#notifications"
-              className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 rounded-md"
+            <button
+              onClick={toggleGroupSection}
+              className={`${isGroupSectionVisible ? 'bg-blue-500 text-white text-left' : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 text-left'
+                } p-2 rounded-md`}
             >
-              Notifications
-            </Link> */}
+              Groups
+            </button>
+            {isGroupSectionOpen && (
+              <div className="flex flex-col gap-2  ">
+                <Link
+                  href="/admin/groups/create-group"
+                  className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 dark:bg-gray-800 rounded bg-gray-300 text-sm"
+                >
+                  Create Group
+                </Link>
+                <Link
+                  href="/admin/groups"
+                  className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 dark:bg-gray-800 rounded bg-gray-300 text-sm"
+                >
+                  View Groups
+                </Link>
 
+              </div>
+            )}
           </div>
 
         </aside>
@@ -132,14 +155,6 @@ const Sidebar: React.FC = () => {
               </Link>
             </li>
             <li>
-              {/* <Link
-                href="/admin/view-users"
-                className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 rounded-md"
-              >
-                View Users
-              </Link> */}
-            </li>
-            <li>
               <Link href="/admin/create-user" className="block p-4 text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
                 Enroll User
               </Link>
@@ -150,24 +165,30 @@ const Sidebar: React.FC = () => {
               </Link>
             </li>
             <li>
+              <Link href="/admin/view-users" className="block p-4 text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
+                View Users
+              </Link>
+            </li>
+            <li>
               <Link href="/admin/course-category/create" className="block p-4 text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
                 Add Courses Category
               </Link>
             </li>
-
-
             <li>
               <Link href="/admin/course-category/manage" className="block p-4 text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
                 Manage Category
               </Link>
             </li>
-
-            {/* <li>
-              <Link href="#notifications" className="block p-4 text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
-                Notifications
+            <li>
+              <Link href="/admin/groups/create-group" className="block p-4 text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
+                Create Group
               </Link>
-            </li> */}
-
+            </li>
+            <li>
+              <Link href="/admin/groups" className="block p-4 text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
+                View Groups
+              </Link>
+            </li>
           </ul>
         </div>
       )}
