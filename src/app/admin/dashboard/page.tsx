@@ -32,12 +32,12 @@ export default function CourseDetails({ params }: { params: { courseId: string }
     };
 
     return (
-        <div className="border border-gray-300 m-5 h-screen flex justify-center items-center">
+        <div className="border border-gray-300 m-5 max-h-full flex justify-center items-center">
             <div className="w-full max-w-4xl mx-auto p-5">
-                <h1 className="text-3xl font-bold mb-4">Course {params.courseId}</h1>
-                <p className="text-lg text-gray-700 mb-6">Description of course 1</p>
+                {/* <h1 className="text-3xl font-bold mb-4">Course {params.courseId}</h1>
+                <p className="text-lg text-gray-700 mb-6">Description of course 1</p> */}
 
-                <nav className="mb-6 border border-gray-300 rounded-xl shadow-md p-2">
+                <nav className="mb-6 border {/*border-gray-300*/} rounded-xl shadow-md p-2">
                     <ul className="flex space-x-4 list-none p-0">
                         <li
                             className={` p-3 rounded-xl cursor-pointer ${activeSection === 'users' ? 'bg-gray-400 text-white' : ''}`}
@@ -49,7 +49,13 @@ export default function CourseDetails({ params }: { params: { courseId: string }
                             className={` p-3 rounded-xl cursor-pointer ${activeSection === 'course' ? 'bg-gray-400 text-white' : ''}`}
                             onClick={() => setActiveSection('course')}
                         >
-                            Course
+                            Course Category
+                        </li>
+                        <li
+                            className={` p-3 rounded-xl cursor-pointer ${activeSection === 'groups' ? 'bg-gray-400 text-white' : ''}`}
+                            onClick={() => setActiveSection('groups')}
+                        >
+                            Groups
                         </li>
                     </ul>
                 </nav>
@@ -60,15 +66,15 @@ export default function CourseDetails({ params }: { params: { courseId: string }
                         <div className="space-y-4 ">
                             <h2 className="text-xl font-semibold">User Management</h2>
                             <div className="space-y-4 justify-between mb-4">
-                                <div className="bg-white border border-gray-300 rounded-xl p-3 shadow-md h-12" onClick={handleCreateUserClick}>
+                                <div className="bg-white border {/*border-gray-300*/} rounded-xl p-3 shadow-md h-12" onClick={handleCreateUserClick}>
                                     <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">Add User</h2>
                                 </div>
 
-                                <div className="bg-white border border-gray-300 rounded-xl p-3 shadow-md h-12 " onClick={handleUploadUsersClick}>
+                                <div className="bg-white border {/*border-gray-300*/} rounded-xl p-3 shadow-md h-12 " onClick={handleUploadUsersClick}>
                                     <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">Upload Users</h2>
                                 </div>
 
-                                <div className="bg-white border border-gray-300 rounded-xl p-3 shadow-md h-12 " onClick={handleViewUsersClick}>
+                                <div className="bg-white border {/*border-gray-300*/} rounded-xl p-3 shadow-md h-12 " onClick={handleViewUsersClick}>
                                     <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">View Users</h2>
                                 </div>
                             </div>
@@ -77,7 +83,7 @@ export default function CourseDetails({ params }: { params: { courseId: string }
 
                     {activeSection === 'course' && (
                         <div className="space-y-4 ">
-                            <h2 className="text-xl font-semibold">User Management</h2>
+                            <h2 className="text-xl font-semibold">Course Categegory Management</h2>
                             <div className="space-y-4 justify-between mb-4">
                                 <div className="bg-white border border-gray-300 rounded-xl p-3 shadow-md h-12" onClick={handleCreateCategoryClick}>
                                     <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">Add Category</h2>
@@ -90,6 +96,24 @@ export default function CourseDetails({ params }: { params: { courseId: string }
                         </div>
                     )}
 
+
+                    {activeSection === 'groups' && (
+                        <div className="space-y-16">
+                            <div className="space-y-4 ">
+                                <h2 className="text-xl font-semibold">Group Management</h2>
+                                <div className="space-y-4 justify-between mb-4">
+                                    <div className="bg-white border border-gray-300 rounded-xl p-3 shadow-md h-12" onClick={() => { router.push('/admin/groups/create-group') }}>
+                                        <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">Create Group</h2>
+                                    </div>
+
+                                    <div className="bg-white border border-gray-300 rounded-xl p-3 shadow-md h-12 " onClick={() => { router.push('/admin/groups') }}>
+                                        <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">View Groups</h2>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
