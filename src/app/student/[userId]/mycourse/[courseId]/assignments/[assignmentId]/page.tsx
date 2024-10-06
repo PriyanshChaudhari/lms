@@ -30,6 +30,7 @@ export default function ViewAssignment() {
 
     const [courses, setCourses] = useState<courses | null>(null);
     const [oneAssignment, setOneAssignment] = useState<assignments | null>(null); // Initialize as null
+    const [submissionExists, setSubmissionExists] = useState<boolean>(false);
 
     useEffect(() => {
         const getCourse = async () => {
@@ -46,17 +47,27 @@ export default function ViewAssignment() {
             try {
                 const res = await axios.post('/api/get/assignments/one-assignments', { assignmentId });
                 setOneAssignment(res.data.assignment);
+
+                const submissionRes = await axios.post('/api/get/assignments/check-submission', { userId, assignmentId });
+                setSubmissionExists(submissionRes.data.exists);
             } catch (error) {
                 console.log(error);
             }
         };
         getOneAssignment();
-    }, [courseId, assignmentId]);
+    }, [courseId, assignmentId, userId]);
 
-    const formatDate = (timestamp:any) => {
+    const formatDate = (timestamp: any) => {
         if (!timestamp) return "N/A"; // Fallback if timestamp is not provided
         const date = new Date(timestamp.seconds * 1000); // Convert seconds to milliseconds
         return date.toLocaleDateString(); // Format the date as a readable string
+    };
+
+    const isPastDue = (dueDate: any) => {
+        if (!dueDate) return false;
+        const currentDate = new Date();
+        const due = new Date(dueDate.seconds * 1000);
+        return currentDate > due;
     };
 
     return (
@@ -92,14 +103,25 @@ export default function ViewAssignment() {
                         <p className="text-sm text-gray-600">Due date: {oneAssignment ? formatDate(oneAssignment.due_date) : 'N/A'}</p>
                     </div>
 
-                    <div>
+                    {/* <div>
                         <button
                             className="bg-gray-950 hover:bg-gray-700 text-white rounded-xl px-4 py-2"
                             onClick={() => router.push(`/student/${userId}/mycourse/${courseId}/assignments/${assignmentId}/add-submission`)}
                         >
                             Add Submission
                         </button>
-                    </div>
+                    </div> */}
+
+                    {!isPastDue(oneAssignment?.due_date) && (
+                        <div>
+                            <button
+                                className="bg-gray-950 hover:bg-gray-700 text-white rounded-xl px-4 py-2"
+                                onClick={() => router.push(`/student/${userId}/mycourse/${courseId}/assignments/${assignmentId}/${submissionExists ? 'edit-submission' : 'add-submission'}`)}
+                            >
+                                {submissionExists ? "Edit Submission" : "Add Submission"}
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
