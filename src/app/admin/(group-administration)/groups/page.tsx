@@ -49,27 +49,68 @@ const Groups = () => {
     }
 
     return (
-        <div>
-            <button onClick={handleCreateGroup} className='bg-blue-500 hover:bg-blue-600 m-2 p-2'>Create Group</button>
-            <h1>Groups</h1>
-            <table className='bg-red-100'>
+        // <div>
+        //     <button onClick={handleCreateGroup} className='bg-blue-500 hover:bg-blue-600 m-2 p-2'>Create Group</button>
+        //     <h1>Groups</h1>
+        //     <table className='bg-red-100'>
+        //         <thead>
+        //             <tr>
+        //                 <th>Name</th>
+        //                 <td></td>
+        //                 <td></td>
+        //             </tr>
+        //         </thead>
+        //         <tbody>
+        //             {groups.map(group => (
+        //                 <tr key={group.id}>
+        //                     <td onClick={() => handleClick(group.id)}>{group.group_name}</td>
+        //                     <button onClick={() => handleEditGroup(group.id)}>Edit group</button>
+        //                     <button onClick={() => handleDeleteGroup(group.id)}>Delete group</button>
+        //                 </tr>
+        //             ))}
+        //         </tbody>
+        //     </table>
+        // </div>
+
+
+        <div className="flex justify-content items-center  h-screen ">
+            <div className="w-full max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md">
+            <h1 className="text-2xl font-semibold text-center mb-6">Group Management</h1>
+            <div className="text-center mb-4">
+                <button
+                    onClick={handleCreateGroup}
+                    className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 transition duration-200"
+                >
+                    Create Group
+                </button>
+            </div>
+
+
+            {/* Display group members */}
+            <table className="min-w-full bg-white border border-gray-300 rounded-lg">
                 <thead>
-                    <tr>
-                        <th>Name</th>
-                        <td></td>
-                        <td></td>
+                    <tr className="text-center">
+                        <th className="px-4 py-2 border-b font-semibold ">Name</th>
+                        <th className="px-4 py-2 border-b font-semibold ">Edit Group</th>
+                        <th className="px-4 py-2 border-b font-semibold ">Delete Group</th>
                     </tr>
                 </thead>
+               
+
                 <tbody>
                     {groups.map(group => (
-                        <tr key={group.id}>
-                            <td onClick={() => handleClick(group.id)}>{group.group_name}</td>
-                            <button onClick={() => handleEditGroup(group.id)}>Edit group</button>
-                            <button onClick={() => handleDeleteGroup(group.id)}>Delete group</button>
+                        <tr key={group.id} className="text-center">
+                            <td onClick={() => handleClick(group.id)} className="px-4 py-2 border-b underline">{group.group_name}</td>
+                            <td className="px-4 py-2 border-b"><button onClick={() => handleEditGroup(group.id)}>Edit group</button></td> 
+                            <td className="px-4 py-2 border-b"><button className='bg-red-500 hover:bg-red-600 text-sm text-white p-1 rounded' onClick={() => handleDeleteGroup(group.id)}>Delete</button></td> 
                         </tr>
                     ))}
                 </tbody>
+
             </table>
+
+
+        </div>
         </div>
     );
 };

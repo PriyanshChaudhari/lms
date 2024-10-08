@@ -1,31 +1,25 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'next/navigation';
 
-const AddOneMemberComponent = () => {
+interface AddOneMemberComponentProps {
+  onClose: () => void;
+}
+
+const AddOneMemberComponent: React.FC<AddOneMemberComponentProps> = ({ onClose }) => {
     const params = useParams();
     const groupId = params.groupId as string;
 
     const [user, setUser] = useState({ groupId: groupId, userId: '' });
-    const [file, setFile] = useState<File | null>(null);
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
 
-    // Handle user input change
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUser({ ...user, [e.target.name]: e.target.value });
     };
 
-    // Handle file input change
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            setFile(e.target.files[0]);
-        }
-    };
-
-    // Handle adding a user
     const handleAddUser = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
@@ -51,36 +45,45 @@ const AddOneMemberComponent = () => {
     };
 
     return (
-        <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md">
-            <h1 className="text-2xl font-semibold text-center mb-6">Group Management</h1>
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="relative w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md lg:left-32 md:left-32">
+                <h1 className="text-2xl font-semibold text-center mb-6">Add Group Member</h1>
 
-            {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}
-            {successMessage && <p className="text-green-500 text-center mb-4">{successMessage}</p>}
+                {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}
+                {successMessage && <p className="text-green-500 text-center mb-4">{successMessage}</p>}
 
-            {/* Add User Form */}
-            <form onSubmit={handleAddUser} className="mb-6">
-                <div className="mb-4">
-                    <label htmlFor="userId" className="block text-sm font-medium text-gray-700 mb-1">
-                        Add User by Id
-                    </label>
-                    <input
-                        type="text"
-                        id="userId"
-                        name="userId"
-                        value={user.userId}
-                        onChange={handleChange}
-                        required
-                        className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    />
-                </div>
-                <button
-                    type="submit"
-                    className="w-full bg-blue-600 text-white font-semibold py-2 rounded-md hover:bg-blue-700 transition duration-200"
-                >
-                    Add User
-                </button>
-            </form>
-
+                <form onSubmit={handleAddUser} className="mb-6">
+                    <div className="mb-4">
+                        <label htmlFor="userId" className="block text-sm font-medium text-gray-700 mb-2">
+                            Add User by Id
+                        </label>
+                        <input
+                            type="text"
+                            id="userId"
+                            name="userId"
+                            value={user.userId}
+                            onChange={handleChange}
+                            required
+                            className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-2"
+                        />
+                    </div>
+                    <div className="flex gap-2 justify-center">
+                        <button
+                            type="submit"
+                            className="w-1/2 bg-blue-600 text-white font-semibold py-2 rounded hover:bg-blue-700 transition duration-200"
+                        >
+                            Add User
+                        </button>
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="w-1/2 bg-red-600 text-white font-semibold py-2 rounded hover:bg-red-700 transition duration-200"
+                        >
+                            Close
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };
