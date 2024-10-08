@@ -44,7 +44,9 @@ export async function batchGroupsCreation(jsonData: GroupMembers[]) {
             const userExists = await checkIfUserExists(userId);
             console.log("checkIfUserExists returned")
             if (!userExists) {
-                return NextResponse.json({ success: false, message: `User with userId ${userId} not found in the system` }, { status: 404 });
+                // return NextResponse.json({ success: false, message: `User with userId ${userId} not found in the system` }, { status: 404 });
+                console.log(`User with userId ${userId} not found in the system`)
+                continue;
             }
 
             // Get the group ID using the group name
@@ -64,11 +66,11 @@ export async function batchGroupsCreation(jsonData: GroupMembers[]) {
             console.log("validation funcs end")
             console.log(groupId, userId);
             // Add user to the group
-            const newMemberRef = doc(db, String('group_members'), String(`${groupId}_${userId}`));
+            const newMemberRef = doc(collection(db, 'group_members')); // Auto-generates an ID
             batch.set(newMemberRef, {
                 group_id: groupId,
                 user_id: String(userId),
-                added_at: Timestamp.now(),
+                added_at: new Date(),
             });
         }
 
@@ -100,17 +102,17 @@ async function getGroupIdFromGroupName(group_name: string): Promise<string | nul
     console.log("getGIDFromGName start")
     const groupQuery = query(collection(db, 'groups'), where('group_name', '==', group_name));
     const groupSnapshot = await getDocs(groupQuery);
-    
+
     if (groupSnapshot.empty) {
         console.log("getGIDFromGName end")
         return null;
     }
-    
+
     let groupId = '';
     groupSnapshot.forEach(doc => {
         groupId = doc.id; // Assuming groupId is the document ID
     });
-    
+
     console.log("getGIDFromGName end")
     return groupId;
 }

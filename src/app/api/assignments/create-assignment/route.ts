@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { app } from '@/lib/firebaseConfig';
 
-async function uploadFile(fileBuffer: Uint8Array, fileName: string, contentType: string, title:string , courseId: string, moduleId: string) {
+async function uploadFile(fileBuffer: Uint8Array, fileName: string, contentType: string, title: string, courseId: string, moduleId: string) {
     const storageRef = getStorage(app);
     const fileExtension = fileName.split('.').pop();
     const newFileName = `assignment_${title}.${fileExtension}`;
@@ -14,7 +14,7 @@ async function uploadFile(fileBuffer: Uint8Array, fileName: string, contentType:
 
     return new Promise((resolve, reject) => {
         uploadTask.on('state_changed',
-            () => {},
+            () => { },
             (error) => reject(error),
             async () => {
                 const fileUrl = await getDownloadURL(fileRef);
@@ -44,7 +44,6 @@ export async function POST(req: NextRequest) {
         }
 
         const newAssessment = {
-            course_id,
             module_id,
             title,
             assessment_type,

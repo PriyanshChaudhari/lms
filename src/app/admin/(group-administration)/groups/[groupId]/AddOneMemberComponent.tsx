@@ -29,7 +29,7 @@ const AddOneMemberComponent = () => {
     const handleAddUser = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            const res = await axios.post('/api/groups/add-user', user);
+            const res = await axios.post('/api/groups/add-member', user);
 
             if (res.data.success) {
                 setSuccessMessage('User added successfully');

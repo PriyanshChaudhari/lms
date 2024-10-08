@@ -3,7 +3,7 @@ import * as XLSX from 'xlsx';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
-const ExcelMemberComponent = () => {
+const ExcelRemoveMemberComponent = () => {
     const [file, setFile] = useState<File | null>(null);
     const [error, setError] = useState<string>('');
 
@@ -21,27 +21,28 @@ const ExcelMemberComponent = () => {
             setError('Please select a file to upload.');
             return;
         }
-
+    
         const reader = new FileReader();
         reader.onload = async (e: ProgressEvent<FileReader>) => {
             const result = e.target?.result;
-
+    
             if (result && typeof result !== 'string') {
                 const data = new Uint8Array(result);
                 const workbook = XLSX.read(data, { type: 'array' });
                 const sheetName = workbook.SheetNames[0];
                 const worksheet = workbook.Sheets[sheetName];
-                const jsonData = XLSX.utils.sheet_to_json(worksheet); // This should return an array
-
+                const jsonData = XLSX.utils.sheet_to_json(worksheet);
+    
                 try {
-                    // Send the members array as payload
+                    // Switch to POST or PATCH request instead of DELETE
                     const response = await axios.post('/api/groups/remove-members', {
-                        members: jsonData, // Ensure jsonData is an array
+                        members: jsonData,
                     });
-
+    
                     if (response.status === 201) {
                         alert('Group members removed successfully');
                         router.push('/admin/dashboard');
+                        console.log('Data removed successfully');
                     } else {
                         alert('Failed to remove group members');
                         console.error('Failed to remove data');
@@ -53,14 +54,14 @@ const ExcelMemberComponent = () => {
         };
         reader.readAsArrayBuffer(file);
     };
-
+    
 
     return (
         <div className="border border-gray-300 m-5">
             <div className="max-w-4xl mx-auto p-5">
                 <div className="w-full h-screen flex justify-center items-center max-w-md mx-auto p-4">
                     <div>
-                        <h2 className="text-2xl font-semibold mb-4">Upload Excel File</h2>
+                        <h2 className="text-2xl font-semibold mb-4">Upload Excel File to remove</h2>
                         <p className="mb-6">Select and upload the Excel file of your choice</p>
 
                         <div
@@ -71,9 +72,9 @@ const ExcelMemberComponent = () => {
                                 accept=".xlsx, .xls"
                                 onChange={handleFileChange}
                                 className="hidden"
-                                id="file-upload"
+                                id="file-remove"
                             />
-                            <label htmlFor="file-upload" className="block">
+                            <label htmlFor="file-remove" className="block">
                                 <p className="text-gray-600">Choose a file or drag & drop it here</p>
                                 <p className="text-gray-500">Excel files (.xlsx, .xls) only</p>
                             </label>
@@ -92,7 +93,7 @@ const ExcelMemberComponent = () => {
                                 onClick={handleFileUpload}
                                 className="bg-black text-white py-2 px-7 rounded-xl dark:hover:bg-[#1a1a1a] transition"
                             >
-                                Upload
+                                remove
                             </button>
                             <button
                                 type="button"
@@ -111,4 +112,4 @@ const ExcelMemberComponent = () => {
     );
 }
 
-export default ExcelMemberComponent
+export default ExcelRemoveMemberComponent

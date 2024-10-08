@@ -1,6 +1,6 @@
 "use client";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { useParams, useRouter } from "next/navigation";
 
 export default function ReviewSubmission() {
@@ -36,14 +36,14 @@ export default function ReviewSubmission() {
         fetchSubmissionDetails();
     }, [submissionId]);
 
-    const handleChange = (e) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setSubmission({
             ...submission,
             [e.target.name]: e.target.value,
         });
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
             const response = await axios.put(`/api/submissions/${submissionId}/grade`, {

@@ -8,7 +8,7 @@ export async function POST(req: Request) {
         const { moduleId } = await req.json();
 
         if (!moduleId) {
-            return NextResponse.json({ error: "courseId is required" }, { status: 400 });
+            return NextResponse.json({ error: "moduleId is required" }, { status: 400 });
         }
 
         // Query to get the assignments based on courseId
@@ -23,6 +23,7 @@ export async function POST(req: Request) {
 
         // If no documents are found
         if (snapshot.empty) {
+            console.log('No documents found for the given moduleId');
             return NextResponse.json({ message: 'No assignments found' }, { status: 404 });
         }
 
@@ -32,8 +33,10 @@ export async function POST(req: Request) {
             ...doc.data(),
         }));
 
+        console.log('Assignments found:', assignments); 
+
         // Return the array of assignments
-        return NextResponse.json(assignments, { status: 200 });
+        return NextResponse.json({assignments,  status: 200 });
     } catch (error) {
         console.error('Error fetching assignments:', error);
         return NextResponse.json({ error: 'Failed to fetch assignments' }, { status: 500 });

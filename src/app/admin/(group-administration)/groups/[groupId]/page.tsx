@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useParams } from 'next/navigation';
 import AddOneMemberComponent from './AddOneMemberComponent';
 import ExcelMemberComponent from './ExcelMemberComponent';
+import ExcelRemoveMemberComponent from './ExcelRemoveMemberComponent';
 
 interface users {
   userId: string;
@@ -20,9 +21,10 @@ const Group = () => {
   const [users, setUsers] = useState<users[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  const [isAddUserVisible, setIsAddUserVisible] = useState(false);
+  const [isManageUserVisible, setIsManageUserVisible] = useState(false);
   const [isAddOneMember, setIsAddOneMember] = useState(false);
   const [isExcelUpload, setIsExcelUpload] = useState(false);
+  const [isRemoveExcelUpload, setIsRemoveExcelUpload] = useState(false);
 
   useEffect(() => {
     // Fetch group members
@@ -45,7 +47,7 @@ const Group = () => {
   // Handle removing a user
   const handleRemoveUser = async (userId: string) => {
     try {
-      const res = await axios.post('/api/groups/remove-user', { groupId, userId });
+      const res = await axios.post('/api/groups/remove-member', { groupId, userId });
       if (res.data.success) {
         setSuccessMessage('User removed successfully');
         setUsers(users.filter(user => user.userId !== userId));
@@ -63,18 +65,19 @@ const Group = () => {
       <h1 className="text-2xl font-semibold text-center mb-6">Group Management</h1>
       <div className="text-center mb-4">
         <button
-          onClick={() => setIsAddUserVisible(!isAddUserVisible)}
+          onClick={() => setIsManageUserVisible(!isManageUserVisible)}
           className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 transition duration-200"
         >
-          {isAddUserVisible ? 'Cancel' : 'Add Members'}
+          {isManageUserVisible ? 'Cancel' : 'Manage Members'}
         </button>
 
-        {isAddUserVisible && (
+        {isManageUserVisible && (
           <div className="mt-4">
             <button
               onClick={() => {
                 setIsAddOneMember(true);
                 setIsExcelUpload(false);
+                setIsRemoveExcelUpload(false);
               }}
               className="bg-green-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-green-700 transition duration-200 mr-4"
             >
@@ -84,16 +87,29 @@ const Group = () => {
               onClick={() => {
                 setIsAddOneMember(false);
                 setIsExcelUpload(true);
+                setIsRemoveExcelUpload(false);
               }}
-              className="bg-orange-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-orange-700 transition duration-200"
+              className="bg-orange-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-orange-700 transition duration-200 mr-4"
             >
               Upload Excel File
+            </button>
+
+            <button
+              onClick={() => {
+                setIsAddOneMember(false);
+                setIsExcelUpload(false);
+                setIsRemoveExcelUpload(true);
+              }}
+              className="bg-red-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-red-700 transition duration-200"
+            >
+              Upload Excel File to remove members
             </button>
           </div>
         )}
 
-        {(isAddUserVisible && isAddOneMember) && <AddOneMemberComponent />}
-        {(isAddUserVisible && isExcelUpload) && <ExcelMemberComponent />}
+        {(isManageUserVisible && isAddOneMember) && <AddOneMemberComponent />}
+        {(isManageUserVisible && isExcelUpload) && <ExcelMemberComponent />}
+        {(isManageUserVisible && isRemoveExcelUpload) && <ExcelRemoveMemberComponent />}
       </div>
 
       {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}

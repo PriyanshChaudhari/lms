@@ -1,11 +1,25 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/firebaseConfig'; // Your Firebase config
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 
-export async function POST(req: Request) {
+// Define types for submission and user data
+interface Submission {
+    submission_id: string;
+    assignment_id: string;
+    user_id: string;
+    [key: string]: any; // Additional fields in submission document
+    user?: User | null; // Optional user data
+}
+
+interface User {
+    id: string;
+    [key: string]: any; // Additional fields in user document
+}
+
+export async function POST(req: Request): Promise<NextResponse> {
     try {
         // Parse JSON body to get assignmentId
-        const { assignmentId } = await req.json();
+        const { assignmentId }: { assignmentId: string } = await req.json();
 
         if (!assignmentId) {
             return NextResponse.json({ error: "assignmentId is required" }, { status: 400 });
@@ -25,13 +39,33 @@ export async function POST(req: Request) {
         }
 
         // Map through the submissions snapshot and return an array of submissions
-        const submissions = submissionsSnapshot.docs.map(doc => ({
-            submission_id: doc.id,
-            ...doc.data(),
-        }));
+        const submissions: Submission[] = await Promise.all(
+            submissionsSnapshot.docs.map(async (docSnapshot) => {
+                const submissionData: Submission = {
+                    submission_id: docSnapshot.id,
+                    ...docSnapshot.data(),
+                };
 
-        // Return the array of submissions
-        return NextResponse.json({ submissions: submissions, status: 200 });
+                // Assuming each submission has a user_id field
+                const userDocRef = doc(db, 'users', submissionData.user_id); // Use submission's user_id
+                const userDoc = await getDoc(userDocRef);
+
+                if (userDoc.exists()) {
+                    const userData: User = {
+                        id: userDoc.id,
+                        ...userDoc.data(),
+                    };
+                    submissionData.user = userData; // Add user data to the submission
+                } else {
+                    submissionData.user = null; // Handle case where user doesn't exist
+                }
+
+                return submissionData;
+            })
+        );
+
+        // Return the array of submissions with user data
+        return NextResponse.json({ submissions, status: 200 });
     } catch (error) {
         console.error('Error fetching submissions:', error);
         return NextResponse.json({ error: 'Failed to fetch submissions' }, { status: 500 });

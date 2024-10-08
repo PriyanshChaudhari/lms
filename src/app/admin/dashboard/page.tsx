@@ -31,6 +31,10 @@ export default function CourseDetails({ params }: { params: { courseId: string }
         router.push('/admin/view-users');
     };
 
+    const handleDeleteUsersClick= () => {
+        router.push('/admin/delete-users');
+    };
+
     return (
         <div className="border border-gray-300 m-5 max-h-full flex justify-center items-center">
             <div className="w-full max-w-4xl mx-auto p-5">
@@ -76,6 +80,10 @@ export default function CourseDetails({ params }: { params: { courseId: string }
 
                                 <div className="bg-white border {/*border-gray-300*/} rounded-xl p-3 shadow-md h-12 " onClick={handleViewUsersClick}>
                                     <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">View Users</h2>
+                                </div>
+
+                                <div className="bg-white border {/*border-gray-300*/} rounded-xl p-3 shadow-md h-12 " onClick={handleDeleteUsersClick}>
+                                    <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">Delete Users</h2>
                                 </div>
                             </div>
                         </div>

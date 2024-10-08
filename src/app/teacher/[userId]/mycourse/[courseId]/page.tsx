@@ -11,7 +11,7 @@ interface users {
     email: string;
     first_name: string;
     last_name: string;
-    role:string;
+    role: string;
 }
 interface courses {
     course_id: string;
@@ -33,6 +33,7 @@ interface assignments {
     id: string;
     title: string;
     due_date: object;
+    module_id: string;
     description: string;
     total_marks: number;
 }
@@ -71,7 +72,7 @@ const CourseDetails = () => {
                 item.last_name.toLowerCase().includes(searchTerm.toLowerCase())
         );
 
-    
+
 
     useEffect(() => {
         const getCourse = async () => {
@@ -117,7 +118,7 @@ const CourseDetails = () => {
         getParticipants()
     }, [courseId])
 
-    const formatDate = (timestamp:any) => {
+    const formatDate = (timestamp: any) => {
         const date = new Date(timestamp.seconds * 1000); // Convert seconds to milliseconds
         return date.toLocaleDateString(); // Format the date as a readable string
     };
@@ -132,12 +133,8 @@ const CourseDetails = () => {
         router.push(`/teacher/${userId}/mycourse/${courseId}/modules`)
     }
 
-    const handleAssignmentClick = (assignmentId: string, moduleId?: string) => {
-        if (moduleId) {
-            router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments/${assignmentId}`);
-        } else {
-            router.push(`/teacher/${userId}/mycourse/${courseId}/assignments/${assignmentId}`);
-        }
+    const handleAssignmentClick = (assignmentId: string, moduleId: string) => {
+        router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments/${assignmentId}`);
     };
 
     return (
@@ -233,11 +230,12 @@ const CourseDetails = () => {
                     {activeSection === 'assignments' && (
                         <div className="space-y-4">
                             {assignments.map((assignment) => (
-                                <div key={assignment.id} className="bg-white border border-gray-300 rounded-xl p-6 shadow-md h-64 cursor-pointer" onClick={() => handleAssignmentClick(assignment.id)}>
+                                <div key={assignment.id} className="bg-white border border-gray-300 rounded-xl p-6 shadow-md h-64 cursor-pointer" onClick={() => handleAssignmentClick(assignment.id,assignment.module_id)}>
                                     <h2 className="text-xl font-semibold mb-6">{assignment.title}</h2>
                                     <div className="shadow-md items-center p-5 border border-gray-100 rounded-xl max-w-lg">
                                         <p className="text-sm text-gray-600 mb-4">Description : {assignment.description}</p>
                                         <p className="text-sm text-gray-600 mb-4">Total Marks : {assignment.total_marks}</p>
+                                        <p className="text-sm text-gray-600 mb-4">Module_id : {assignment.module_id}</p>
 
                                         <p className="text-sm text-gray-600 mb-4">Due Date : {formatDate(assignment.due_date)}</p>
                                     </div>

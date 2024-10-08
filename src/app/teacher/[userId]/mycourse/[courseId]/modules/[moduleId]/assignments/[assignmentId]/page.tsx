@@ -75,17 +75,25 @@ export default function ViewModuleAssignment() {
     }, [assignmentId, moduleId, courseId])
 
     const handleDeleteAssignment = async () => {
-        try {
-            const res = await axios.delete(`/api/delete/delete-assignment/${assignmentId}`);
-            console.log(res.data);
-        } catch (error) {
-            console.log(error)
+        if (window.confirm("Are you sure you want to delete this assignment? This action cannot be undone.")) {
+            try {
+                const response = await axios.delete(`/api/assignments/${assignmentId}/delete-assignment`);
+                if (response.status === 200) {
+                    router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments`);
+                } else {
+                }
+            } catch (error) {
+                console.error('An error occurred while deleting the assignment.');
+            }
         }
-        router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments`)
     }
 
     const handleEditAssignment = () => {
         router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments/${assignmentId}/edit-assignment`)
+    }
+
+    const handleViewSubmission = () => {
+        router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments/${assignmentId}/submission`)
     }
 
     const formatDate = (timestamp: any) => {
@@ -103,17 +111,10 @@ export default function ViewModuleAssignment() {
                     <ul className="flex justify-start space-x-4 list-none p-0">
                         <li className="p-3 rounded-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/student/mycourse/${params.courseId}`)}>{courses?.title}</li>
                         <li className="p-3 rounded-xl text-black cursor-pointer">/</li>
-                        {params.moduleId ? (
-                            <>
-                                <li className="p-3 rounded-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}`)}>Module {oneModule?.title}</li>
-                                <li className="p-3 rounded-xl text-black cursor-pointer">/</li>
-                            </>
-                        ) : (
-                            <>
-                                <li className="p-3 rounded-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}/assignments`)}>Assignments</li>
-                                <li className="p-3 rounded-xl text-black cursor-pointer">/</li>
-                            </>
-                        )}
+                        <li className="p-3 rounded-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}`)}>{oneModule?.title}</li>
+                        <li className="p-3 rounded-xl text-black cursor-pointer">/</li>
+                        <li className="p-3 rounded-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments`)}>Assignments</li>
+                        <li className="p-3 rounded-xl text-black cursor-pointer">/</li>
                         <li className="p-3 rounded-xl text-black cursor-pointer">{oneAssignment?.title}</li>
                     </ul>
                 </nav>
@@ -136,6 +137,12 @@ export default function ViewModuleAssignment() {
                                 >
                                     Delete Assignments
                                 </button>
+                                <button
+                                    className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                                    onClick={handleViewSubmission} // Replace with your add module logic
+                                >
+                                    View Submissions
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -149,6 +156,6 @@ export default function ViewModuleAssignment() {
                     </div> */}
                 </div>
             </div>
-        </div>
+        </div >
     );
 }

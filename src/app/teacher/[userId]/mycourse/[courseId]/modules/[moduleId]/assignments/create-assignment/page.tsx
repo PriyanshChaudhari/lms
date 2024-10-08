@@ -19,7 +19,7 @@ export default function CreateAssignment() {
         total_marks: '',
         due_date: '',
     });
-    
+
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
     const [showModal, setShowModal] = useState(false); // Modal state
@@ -68,7 +68,7 @@ export default function CreateAssignment() {
             formSubmissionData.append('description', formData.description);
             formSubmissionData.append('total_marks', formData.total_marks);
             formSubmissionData.append('due_date', formData.due_date);
-            
+
             if (file) {
                 formSubmissionData.append('file', file);
             }
