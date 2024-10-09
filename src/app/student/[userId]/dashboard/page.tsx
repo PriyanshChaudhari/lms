@@ -38,13 +38,8 @@ const Dashboard: React.FC = () => {
   }, [userId]);
 
   return (
-    <div className="flex flex-col lg:h-screen h-full p-5">
-      <div className="flex flex-1 gap-10 flex-wrap md:flex-nowrap items-start justify-center border border-gray-300 p-5">
-        <div className="w-full md:w-2/3 rounded-lg flex flex-col justify-center items-center h-full max-h-[calc(100vh-2rem)]">
           <CourseCard courses={courses} userId={userId} />
-        </div>
-      </div>
-    </div>
+        
   );
 };
 
