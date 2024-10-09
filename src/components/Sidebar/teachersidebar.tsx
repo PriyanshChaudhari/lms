@@ -28,6 +28,7 @@ const Sidebar: React.FC = () => {
   const router = useRouter();
   const params = useParams();
   const userId = params.userId as string;
+  const [activeSection, setActiveSection] = useState('dashboard');
 
   useEffect(() => {
     fetchCourses();
@@ -82,7 +83,14 @@ const Sidebar: React.FC = () => {
   const toggleCoursesVisibility = () => {
     setCoursesVisible(!isCoursesVisible);
     setSectionVisible(!isSectionVisible);
+    setActiveSection('courses');
   };
+
+  const toggleDashboardVisibility = () => {
+    setActiveSection('dashboard');
+    setCoursesVisible(false);
+  }
+
 
   const handleCourseClick = (courseId: string) => {
     if (selectedCourseId === courseId) {
@@ -98,13 +106,22 @@ const Sidebar: React.FC = () => {
       {/* Desktop Sidebar */}
       <aside className="hidden sm:block w-1/4 lg:w-1/6 bg-gray-100 dark:bg-gray-800 p-4 h-full fixed z-50">
         <div className="flex flex-col gap-4 h-[85vh] bg-white dark:bg-black border border-gray-300 dark:border-gray-700 p-4">
-          <Link href={`/teacher/${userId}/dashboard`} className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 rounded-md">
+          <Link href={`/teacher/${userId}/dashboard`} 
+          onClick={toggleDashboardVisibility}
+          className={`${
+            activeSection === 'dashboard' 
+              ? 'bg-blue-500 text-white' 
+              : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200'
+          } p-2 rounded-md`}>
             Dashboard
           </Link>
           <button
             onClick={toggleCoursesVisibility}
-            className={`${isSectionVisible ? 'bg-blue-500 text-white text-left' : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 text-left'
-              } p-2 rounded-md`}
+            className={`${
+              activeSection === 'courses'
+                ? 'bg-blue-500 text-white text-left' 
+                : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 text-left'
+            } p-2 rounded-md`}
           >
             My Courses
           </button>

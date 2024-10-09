@@ -7,7 +7,7 @@ import AddOneMemberComponent from './AddOneMemberComponent';
 import ExcelMemberComponent from './ExcelMemberComponent';
 import ExcelRemoveMemberComponent from './ExcelRemoveMemberComponent';
 
-interface users {
+interface User {
   userId: string;
   first_name: string;
   last_name: string;
@@ -18,7 +18,7 @@ const Group = () => {
   const params = useParams();
   const groupId = params.groupId as string;
 
-  const [users, setUsers] = useState<users[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [isManageUserVisible, setIsManageUserVisible] = useState(false);
@@ -27,7 +27,6 @@ const Group = () => {
   const [isRemoveExcelUpload, setIsRemoveExcelUpload] = useState(false);
 
   useEffect(() => {
-    // Fetch group members
     const getGroupMembers = async () => {
       try {
         const res = await axios.get(`/api/groups/${groupId}/members`);
@@ -44,7 +43,6 @@ const Group = () => {
     getGroupMembers();
   }, [groupId]);
 
-  // Handle removing a user
   const handleRemoveUser = async (userId: string) => {
     try {
       const res = await axios.post('/api/groups/remove-member', { groupId, userId });
@@ -60,28 +58,34 @@ const Group = () => {
     }
   };
 
+  const handleCloseAddOneMember = () => {
+    setIsAddOneMember(false);
+  };
+
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md">
+    <div className="flex justify-center items-center h-screen">
+      <div className=" w-full max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
       <h1 className="text-2xl font-semibold text-center mb-6">Group Management</h1>
       <div className="text-center mb-4">
-        <button
+       <div>
+         <button
           onClick={() => setIsManageUserVisible(!isManageUserVisible)}
-          className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 transition duration-200"
+          className="bg-blue-600 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700 transition duration-200"
         >
-          {isManageUserVisible ? 'Cancel' : 'Manage Members'}
+          {isManageUserVisible ? 'Close' : 'Manage Members'}
         </button>
 
         {isManageUserVisible && (
-          <div className="mt-4">
+          <div className="mt-4 grid sm:grid-cols-3 grid-rows-3">
             <button
               onClick={() => {
                 setIsAddOneMember(true);
                 setIsExcelUpload(false);
                 setIsRemoveExcelUpload(false);
               }}
-              className="bg-green-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-green-700 transition duration-200 mr-4"
+              className="bg-green-600 text-white font-semibold py-2 px-4 rounded hover:bg-green-700 transition duration-200 mr-4"
             >
-              Add One Member
+              Add member (Manually)
             </button>
             <button
               onClick={() => {
@@ -89,33 +93,34 @@ const Group = () => {
                 setIsExcelUpload(true);
                 setIsRemoveExcelUpload(false);
               }}
-              className="bg-orange-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-orange-700 transition duration-200 mr-4"
+              className="bg-orange-600 text-white font-semibold py-2 px-4 rounded hover:bg-orange-700 transition duration-200 mr-4"
             >
-              Upload Excel File
+              Add members (Excel File)
             </button>
-
             <button
               onClick={() => {
                 setIsAddOneMember(false);
                 setIsExcelUpload(false);
                 setIsRemoveExcelUpload(true);
               }}
-              className="bg-red-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-red-700 transition duration-200"
+              className="bg-red-600 text-white font-semibold py-2 px-4 rounded hover:bg-red-700 transition duration-200"
             >
-              Upload Excel File to remove members
+              Remove members (Excel File)
             </button>
           </div>
         )}
+       </div>
 
-        {(isManageUserVisible && isAddOneMember) && <AddOneMemberComponent />}
-        {(isManageUserVisible && isExcelUpload) && <ExcelMemberComponent />}
-        {(isManageUserVisible && isRemoveExcelUpload) && <ExcelRemoveMemberComponent />}
+        <div>
+          {(isManageUserVisible && isAddOneMember) && <AddOneMemberComponent onClose={handleCloseAddOneMember} />}
+          {(isManageUserVisible && isExcelUpload) && <ExcelMemberComponent onClose={() => setIsExcelUpload(false)} />}
+          {(isManageUserVisible && isRemoveExcelUpload) && <ExcelRemoveMemberComponent />}
+        </div>
       </div>
 
       {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}
       {successMessage && <p className="text-green-500 text-center mb-4">{successMessage}</p>}
 
-      {/* Display group members */}
       <table className="min-w-full bg-white border border-gray-300 rounded-lg">
         <thead>
           <tr>
@@ -145,7 +150,7 @@ const Group = () => {
           ))}
         </tbody>
       </table>
-
+    </div>
     </div>
   );
 };

@@ -3,18 +3,22 @@ import * as XLSX from 'xlsx';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
-const ExcelMemberComponent = () => {
+interface ExcelMemberComponentProps {
+    onClose: () => void;
+}
+
+const ExcelMemberComponent: React.FC<ExcelMemberComponentProps> = ({ onClose }) => {
     const [file, setFile] = useState<File | null>(null);
     const [error, setError] = useState<string>('');
+    const [message, setMessage] = useState<string>('');
+    const router = useRouter();
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
             setFile(e.target.files[0]);
-            setError(''); // Clear error when a new file is selected
+            setError('');
         }
     };
-
-    const router = useRouter();
 
     const handleFileUpload = async () => {
         if (!file) {
@@ -31,7 +35,7 @@ const ExcelMemberComponent = () => {
                 const workbook = XLSX.read(data, { type: 'array' });
                 const sheetName = workbook.SheetNames[0];
                 const worksheet = workbook.Sheets[sheetName];
-                const jsonData = XLSX.utils.sheet_to_json(worksheet); // This should return an array
+                const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
                 try {
                     // Send the members array as payload
@@ -40,8 +44,11 @@ const ExcelMemberComponent = () => {
                     });
 
                     if (response.status === 201) {
-                        alert('Group members Upload successfully');
-                        router.push('/admin/dashboard');
+                        setMessage('Group members Upload successfully');
+                        setTimeout(() => {
+                            onClose();
+                            router.push('/admin/dashboard');
+                        }, 2000);
                     } else {
                         alert('Failed to upload group members');
                         console.error('Failed to upload data');
@@ -54,18 +61,18 @@ const ExcelMemberComponent = () => {
         reader.readAsArrayBuffer(file);
     };
 
-
     return (
-        <div className="border border-gray-300 m-5">
-            <div className="max-w-4xl mx-auto p-5">
-                <div className="w-full h-screen flex justify-center items-center max-w-md mx-auto p-4">
-                    <div>
-                        <h2 className="text-2xl font-semibold mb-4">Upload Excel File</h2>
-                        <p className="mb-6">Select and upload the Excel file of your choice</p>
-
-                        <div
-                            className="border-2 border-dashed border-gray-400 dark:border-gray-300 lg:p-16 p-6 text-center cursor-pointer hover:border-gray-500 transition"
-                        >
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="w-full max-w-md mx-auto bg-white dark:bg-gray-800 p-8 shadow-md rounded">
+                <h1 className="text-2xl font-bold mb-6">Remove Group Members</h1>
+                {message && <p className="text-green-500 mb-4">{message}</p>}
+                {error && <p className="text-red-500 mb-4">{error}</p>}
+                <form onSubmit={(e) => e.preventDefault()}>
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-2">
+                            Upload Excel File
+                        </label>
+                        <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-md p-4 text-center cursor-pointer hover:border-gray-400 transition">
                             <input
                                 type="file"
                                 accept=".xlsx, .xls"
@@ -73,42 +80,37 @@ const ExcelMemberComponent = () => {
                                 className="hidden"
                                 id="file-upload"
                             />
-                            <label htmlFor="file-upload" className="block">
-                                <p className="text-gray-600">Choose a file or drag & drop it here</p>
-                                <p className="text-gray-500">Excel files (.xlsx, .xls) only</p>
+                            <label htmlFor="file-upload" className="cursor-pointer">
+                                <p className="text-gray-600 dark:text-gray-300">Choose a file or drag & drop it here</p>
+                                <p className="text-gray-500 dark:text-gray-400 text-sm">Excel files (.xlsx, .xls) only</p>
                             </label>
                         </div>
-
-                        {file && (
-                            <p className="text-center text-gray-600 mt-4">
-                                Selected file: <span className="font-medium">{file.name}</span>
-                            </p>
-                        )}
-
-                        {error && <p className="text-red-500 mt-2">{error}</p>}
-
-                        <div className="flex justify-between mt-4">
-                            <button
-                                onClick={handleFileUpload}
-                                className="bg-black text-white py-2 px-7 rounded-xl dark:hover:bg-[#1a1a1a] transition"
-                            >
-                                Upload
-                            </button>
-                            <button
-                                type="button"
-                                className="bg-gray-300 dark:bg-white text-black border border-gray-300 py-2 px-4 rounded-xl hover:bg-gray-400 dark:hover:bg-gray-100 transition"
-                                onClick={() => {
-                                    setFile(null);
-                                }}
-                            >
-                                Cancel
-                            </button>
-                        </div>
                     </div>
-                </div>
+                    {file && (
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                            Selected file: <span className="font-medium">{file.name}</span>
+                        </p>
+                    )}
+                    <div className="flex justify-between">
+                        <button
+                            type="button"
+                            onClick={handleFileUpload}
+                            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200"
+                        >
+                            Upload Members
+                        </button>
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition duration-200"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     );
 }
 
-export default ExcelMemberComponent
+export default ExcelMemberComponent;

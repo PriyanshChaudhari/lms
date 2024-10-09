@@ -22,20 +22,36 @@ const Sidebar: React.FC = () => {
   const [isUserSectionVisible, setUserSectionVisible] = useState(false);
   const [isCourseSectionVisible, setCourseSectionVisible] = useState(false);
   const [isGroupSectionVisible, setGroupSectionVisible] = useState(false);
+  const [activeSection, setActiveSection] = useState('dashboard');
 
   const toggleUserSection = () => {
     setUserSectionOpen(!isUserSectionOpen);
     setUserSectionVisible(!isUserSectionVisible);
+    setActiveSection('user');
+    
   };
+
+  const toggleDashboardSection = () => {
+    setActiveSection('dashboard');
+    setUserSectionOpen(false);
+    setCourseSectionOpen(false);
+    setGroupSectionOpen(false);
+    setUserSectionVisible(false);
+    setCourseSectionVisible(false);
+    setGroupSectionVisible(false);
+    
+  }
 
   const toggleCourseSection = () => {
     setCourseSectionOpen(!isCourseSectionOpen);
     setCourseSectionVisible(!isCourseSectionVisible);
+    setActiveSection('course');
   };
 
   const toggleGroupSection = () => {
     setGroupSectionOpen(!isGroupSectionOpen);
     setGroupSectionVisible(!isGroupSectionVisible);
+    setActiveSection('group');
   };
 
   return (
@@ -46,14 +62,24 @@ const Sidebar: React.FC = () => {
           <div className="flex flex-col gap-6 h-[85vh] bg-white dark:bg-black border border-gray-300 dark:border-gray-700 p-4">
             <Link
               href="/admin/dashboard"
-              className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 rounded-md"
+              onClick={toggleDashboardSection}
+          className={`${
+            activeSection === 'dashboard' 
+              ? 'bg-blue-500 text-white' 
+              : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200'
+          } p-2 rounded-md`}
             >
               Dashboard
             </Link>
             <button
               onClick={toggleUserSection}
-              className={`${isUserSectionVisible ? 'bg-blue-500 text-white text-left' : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 text-left'
-                } p-2 rounded-md`}
+              // className={`${isUserSectionVisible ? 'bg-blue-500 text-white text-left' : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 text-left'
+              //   } p-2 rounded-md`}
+            className={`${
+              activeSection === 'user'
+                ? 'bg-blue-500 text-white text-left' 
+                : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 text-left'
+            } p-2 rounded-md`}
             >
               Users
             </button>
@@ -83,8 +109,11 @@ const Sidebar: React.FC = () => {
             )}
             <button
               onClick={toggleCourseSection}
-              className={`${isCourseSectionVisible ? 'bg-blue-500 text-white text-left' : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 text-left'
-                } p-2 rounded-md`}
+              className={`${
+                activeSection === 'course'
+                  ? 'bg-blue-500 text-white text-left' 
+                  : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 text-left'
+              } p-2 rounded-md`}
             >
               Course Category
             </button>
@@ -108,8 +137,11 @@ const Sidebar: React.FC = () => {
 
             <button
               onClick={toggleGroupSection}
-              className={`${isGroupSectionVisible ? 'bg-blue-500 text-white text-left' : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 text-left'
-                } p-2 rounded-md`}
+              className={`${
+                activeSection === 'group'
+                  ? 'bg-blue-500 text-white text-left' 
+                  : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 text-left'
+              } p-2 rounded-md`}
             >
               Groups
             </button>

@@ -60,7 +60,8 @@ const ExcelRemoveMemberComponent = () => {
 
 
     return (
-        <div className="border border-gray-300 m-5">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="border border-gray-300 m-5 relative lg:left-32 md:left-32">
             <div className="max-w-4xl mx-auto p-5">
                 <div className="w-full h-screen flex justify-center items-center max-w-md mx-auto p-4">
                     <div>
@@ -111,6 +112,7 @@ const ExcelRemoveMemberComponent = () => {
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     );
 }
