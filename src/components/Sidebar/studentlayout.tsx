@@ -12,7 +12,10 @@ const studentlayout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         {children}
       </div> */}
 
-      <div className="lg:w-5/6 w-full">
+      <div className="lg:w-1/6 md:w-1/4">
+        <Sidebar />
+      </div>
+      <div className="lg:w-5/6 w-full md:w-3/4">
         {children}
       </div>
 
