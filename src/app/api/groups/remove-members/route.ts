@@ -42,6 +42,7 @@ export async function batchGroupsDeletion(members: Array<{ userId: string; group
 
             // Get the group ID using the group name
             const groupId = await getGroupIdFromGroupName(group_name);
+            console.log(`groupId:${groupId}`)
             if (!groupId) {
                 console.log(`Group with name ${group_name} does not exist`);
                 continue;  // Skip if group doesn't exist
@@ -49,14 +50,16 @@ export async function batchGroupsDeletion(members: Array<{ userId: string; group
 
             // Check if user is in the group
             const userInGroup = await checkIfUserInGroup(userId, groupId);
-            if (!userInGroup) {  // If the user is not in the group, skip deletion
+            if (userInGroup == false) {  // If the user is not in the group, skip deletion
                 console.log(`User with userId ${userId} is not in group ${group_name}, skipping deletion`);
                 continue;
             }
 
             const groupMembersRef = collection(db, 'group_members');
-            const q = query(groupMembersRef, where('group_id', '==', groupId), where('user_id', '==', userId));
+            const q = query(groupMembersRef, where('group_id', '==', String(groupId)), where('user_id', '==', String(userId)));
             const querySnapshot = await getDocs(q);
+
+            console.log(`query : ${querySnapshot}`)
 
             // Delete the matched document within the batch
             querySnapshot.forEach((doc) => {
@@ -89,7 +92,7 @@ async function getGroupIdFromGroupName(group_name: string): Promise<string | nul
     const groupSnapshot = await getDocs(groupQuery);
 
     if (groupSnapshot.empty) {
-        console.log("getGIDFromGName end")
+        console.log("getGIDFromGName end return null")
         return null;
     }
 
@@ -98,18 +101,28 @@ async function getGroupIdFromGroupName(group_name: string): Promise<string | nul
         groupId = doc.id; // Assuming groupId is the document ID
     });
 
-    console.log("getGIDFromGName end")
+    console.log("getGIDFromGName end", groupId)
     return groupId;
 }
 
 // Helper function to check if user is already in the group
 async function checkIfUserInGroup(userId: string, groupId: string): Promise<boolean> {
+    console.log(`Checking if user with ID ${userId} is in group with ID ${groupId}`);
+
     const groupMembersQuery = query(
         collection(db, 'group_members'),
-        where('user_id', '==', userId),
-        where('group_id', '==', groupId),
+        where('user_id', '==', String(userId)),
+        where('group_id', '==', String(groupId)),
     );
+
     const groupMembersSnapshot = await getDocs(groupMembersQuery);
 
-    return !groupMembersSnapshot.empty;
+    if (groupMembersSnapshot.empty) {
+        console.log(`No user found in group with ID ${groupId} for user ID ${userId}`);
+        return false;
+    }
+
+    console.log(`User with ID ${userId} found in group with ID ${groupId}`);
+    return true;
 }
+

@@ -35,19 +35,19 @@ const ExcelMemberComponent = () => {
 
                 try {
                     // Send the members array as payload
-                    const response = await axios.post('/api/groups/remove-members', {
+                    const response = await axios.post('/api/groups/upload-members', {
                         members: jsonData, // Ensure jsonData is an array
                     });
 
                     if (response.status === 201) {
-                        alert('Group members removed successfully');
+                        alert('Group members Upload successfully');
                         router.push('/admin/dashboard');
                     } else {
-                        alert('Failed to remove group members');
-                        console.error('Failed to remove data');
+                        alert('Failed to upload group members');
+                        console.error('Failed to upload data');
                     }
                 } catch (error) {
-                    console.error('Error removing data:', error);
+                    console.error('Error uploading data:', error);
                 }
             }
         };

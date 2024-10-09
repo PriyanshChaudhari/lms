@@ -18,8 +18,6 @@ const ExcelUploader = () => {
     }
   };
 
-
-
   const handleFileUpload = async () => {
     if (!file) {
       setError('Please select a file to upload.');
@@ -83,9 +81,8 @@ const ExcelUploader = () => {
         <p className="mb-6 text-center text-gray-600">Select and upload the Excel file of your choice</p>
 
         <div
-          className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition ${
-            file ? 'border-green-500 bg-green-50' : 'border-gray-400 hover:border-gray-500'
-          }`}
+          className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition ${file ? 'border-green-500 bg-green-50' : 'border-gray-400 hover:border-gray-500'
+            }`}
         >
           {!file && (
             <input
@@ -99,7 +96,7 @@ const ExcelUploader = () => {
           <label htmlFor="file-upload" className="block">
             {file ? (
               <div className="flex items-center justify-center">
-             
+
                 <p className="text-green-700">
                   Selected: <span className="font-medium">{file.name}</span>
                 </p>
@@ -118,11 +115,10 @@ const ExcelUploader = () => {
         <div className="flex justify-between mt-6">
           <button
             onClick={handleFileUpload}
-            className={` py-2 px-4 rounded-md transition ${
-              file
-                ? 'bg-green-500 text-white w-1/2 hover:bg-green-600'
-                : 'bg-gray-300 text-gray-500 w-full cursor-not-allowed'
-            }`}
+            className={` py-2 px-4 rounded-md transition ${file
+              ? 'bg-green-500 text-white w-1/2 hover:bg-green-600'
+              : 'bg-gray-300 text-gray-500 w-full cursor-not-allowed'
+              }`}
             disabled={!file}
           >
             Upload

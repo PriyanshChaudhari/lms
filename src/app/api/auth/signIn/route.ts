@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
             const token = jwt.sign(tokenData, SECRET_KEY, { expiresIn: '1d' })
 
             console.log("Sign-in successful for userId: " + user.userId);
-            console.log(token)
+            // console.log(token)
             const response = NextResponse.json({
                 message: "Login successful",
                 success: true,
@@ -81,7 +81,7 @@ async function validateUserCredentials(userId: string, password: string) {
 
         if (!userDoc.exists) {
             console.log("No user with this Username!!")
-            return null
+            return null;
         }
         const userData = userDoc.data();
         if (!userData) {

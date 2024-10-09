@@ -25,6 +25,7 @@ export async function middleware(request: NextRequest) {
             const { userId, email, role } = decodedToken.payload as { userId: string, email: string, role: string };
 
             // Access data from the token
+            console.log("Data from token:")
             console.log("User ID:", userId);
             console.log("Email:", email);
             console.log("Role:", role);

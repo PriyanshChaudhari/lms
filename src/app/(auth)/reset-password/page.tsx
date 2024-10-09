@@ -54,22 +54,6 @@ export default function ResetPassword() {
     };
 
     return (
-        // <div>
-        //     <h1>Reset Password</h1>
-        //     <form onSubmit={handleSubmit}>
-        //         <label htmlFor="newPassword">New Password:</label>
-        //         <input
-        //             type="password"
-        //             id="newPassword"
-        //             value={newPassword}
-        //             onChange={(e) => setNewPassword(e.target.value)}
-        //             required
-        //         />
-        //         <button type="submit">Reset Password</button>
-        //     </form>
-        //     {message && <p>{message}</p>}
-        // </div>
-
         <div className="font-rubik flex justify-center items-center min-h-screen bg-gradient-to-r from-gray-100 via-gray-300 to-gray-100 dark:from-slate-900 dark:via-slate-500 dark:to-slate-900" style={{ paddingTop: '2rem' }}>
             <div className='flex-row flex-wrap justify-center my-auto '>
                 <div className="flex-row dark:bg-neutral-900 dark:shadow-blue-800 rounded-[0.5rem] shadow-custom dark:shadow-custom bg-[#ffffff] sm:m-2" style={{ position: 'relative', padding: '4rem', width: '100%', minWidth: '20rem', marginBottom: '3rem' }}>

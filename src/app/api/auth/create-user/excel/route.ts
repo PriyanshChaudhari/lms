@@ -119,7 +119,7 @@ export async function batchUsersCreation(jsonData: UserData[]) {
         // Return success with user information
         return jsonData.map(user => ({
             userId: user.userId,
-            email: user.email || `${user.userId}@example.com`
+            email: user.email
         }));
 
     } catch (error) {

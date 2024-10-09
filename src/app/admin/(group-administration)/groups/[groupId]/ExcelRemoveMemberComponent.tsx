@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import axios from 'axios';
+import { json } from 'stream/consumers';
 
 const ExcelRemoveMemberComponent = () => {
     const [file, setFile] = useState<File | null>(null);
@@ -14,34 +15,36 @@ const ExcelRemoveMemberComponent = () => {
         }
     };
 
-    const router = useRouter();
 
+    const router = useRouter();
+    const params = useParams()
+    const groupId = params.groupId;
     const handleFileUpload = async () => {
         if (!file) {
             setError('Please select a file to upload.');
             return;
         }
-    
+
         const reader = new FileReader();
         reader.onload = async (e: ProgressEvent<FileReader>) => {
             const result = e.target?.result;
-    
+
             if (result && typeof result !== 'string') {
                 const data = new Uint8Array(result);
                 const workbook = XLSX.read(data, { type: 'array' });
                 const sheetName = workbook.SheetNames[0];
                 const worksheet = workbook.Sheets[sheetName];
                 const jsonData = XLSX.utils.sheet_to_json(worksheet);
-    
+                console.log(JSON.stringify(jsonData))
                 try {
                     // Switch to POST or PATCH request instead of DELETE
                     const response = await axios.post('/api/groups/remove-members', {
                         members: jsonData,
                     });
-    
+
                     if (response.status === 201) {
-                        alert('Group members removed successfully');
-                        router.push('/admin/dashboard');
+                        // alert('Group members removed successfully');
+                        router.push(`/admin/groups/${groupId}`);
                         console.log('Data removed successfully');
                     } else {
                         alert('Failed to remove group members');
@@ -54,7 +57,7 @@ const ExcelRemoveMemberComponent = () => {
         };
         reader.readAsArrayBuffer(file);
     };
-    
+
 
     return (
         <div className="border border-gray-300 m-5">

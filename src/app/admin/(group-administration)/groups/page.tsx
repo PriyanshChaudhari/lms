@@ -51,25 +51,36 @@ const Groups = () => {
     return (
         <div>
             <button onClick={handleCreateGroup} className='bg-blue-500 hover:bg-blue-600 m-2 p-2'>Create Group</button>
-            <h1>Groups</h1>
-            <table className='bg-red-100'>
+            <h1 className='text-2xl font-semibold'>Groups</h1>
+            <table className="min-w-96 bg-white border border-gray-300 rounded-lg shadow-md">
                 <thead>
-                    <tr>
-                        <th>Name</th>
-                        <td></td>
-                        <td></td>
+                    <tr className="bg-gray-200">
+                        <th className="px-6 py-3 border-b text-gray-700 font-bold text-left">Group Name</th>
+                        <th className="px-6 py-3 border-b"></th>
+                        <th className="px-6 py-3 border-b"></th>
                     </tr>
                 </thead>
                 <tbody>
                     {groups.map(group => (
-                        <tr key={group.id}>
-                            <td onClick={() => handleClick(group.id)}>{group.group_name}</td>
-                            <button onClick={() => handleEditGroup(group.id)}>Edit group</button>
-                            <button onClick={() => handleDeleteGroup(group.id)}>Delete group</button>
+                        <tr key={group.id} className="hover:bg-gray-50 transition duration-150">
+                            <td className="px-6 py-4 border-b text-gray-700  cursor-pointer hover:underline hover:text-gray-800 hover:font-semibold" onClick={() => handleClick(group.id)}>
+                                {group.group_name}
+                            </td>
+                            <td className="px-6 py-4 border-b">
+                                <button className="bg-blue-600 text-white font-semibold py-2 px-5 rounded-md hover:bg-blue-700 transition duration-200" onClick={() => handleEditGroup(group.id)}>
+                                    Edit group
+                                </button>
+                            </td>
+                            <td className="px-6 py-4 border-b">
+                                <button className="bg-red-600 text-white font-semibold py-2 px-5 rounded-md hover:bg-red-700 transition duration-200" onClick={() => handleDeleteGroup(group.id)}>
+                                    Delete group
+                                </button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+
         </div>
     );
 };

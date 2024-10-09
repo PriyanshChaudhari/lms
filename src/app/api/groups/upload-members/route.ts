@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
 
         console.log("batch start")
         // Call the batch creation function
-        const groupRecords = await batchGroupsCreation(jsonData);
+        const groupRecords = await batchGroupsCreation(jsonData.members);
         console.log("batch end")
 
         console.log("Batch Group member creation successful");
