@@ -88,7 +88,7 @@ const LoginPage = () => {
                         <div style={{ maxWidth: '20rem', margin: '0 auto' }}>
                             <div style={{ marginBottom: '1.2rem' }}>
                                 <label htmlFor="prn" className='text-gray-900 dark:text-gray-200' style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem' }}>
-                                    Enter prn <span style={{ color: '#ef4444' }}>*</span>
+                                    User ID <span style={{ color: '#ef4444' }}>*</span>
                                 </label>
                                 <input
                                     type="text"
@@ -98,7 +98,7 @@ const LoginPage = () => {
                                     value={user.userId}
                                     onChange={handleChange}
                                     style={{ width: '100%', padding: '0.75rem', border: '1px solid #d1d5db', borderRadius: '0.375rem', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)', fontSize: '0.875rem', outline: 'none', transition: 'border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out' }}
-                                    placeholder="Enter Your prn"
+                                    placeholder="Enter Your User Id"
                                     required
                                 />
                                 <div className='flex-row text-xs'>
@@ -133,10 +133,11 @@ const LoginPage = () => {
 
                         <div className='mt-2 '>
                             <button
-                                className='bg-blue-500'
+                                className='bg-blue-500 text-white w-full font-medium text-sm  hover:bg-blue-600 transition-colors duration-200 ease-in-out'
                                 type="submit"
                                 onClick={handleSubmit}
-                                style={{ width: '100%', padding: '0.75rem', color: '#ffffff', borderRadius: '0.375rem', fontSize: '0.875rem', fontWeight: '500', cursor: 'pointer', transition: 'background-color 0.2s ease-in-out' }}
+                                // style={{ width: '100%', padding: '0.75rem', color: '#ffffff', borderRadius: '0.375rem', fontSize: '0.875rem', fontWeight: '500', cursor: 'pointer', transition: 'background-color 0.2s ease-in-out' }}
+                                style={{ padding: '0.75rem', cursor: 'pointer',borderRadius: '0.375rem' }}
                             >
                                 Submit
                             </button>
