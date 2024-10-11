@@ -20,9 +20,13 @@ const ShowProfile = () => {
     const DefaultProfilePic = `https://firebasestorage.googleapis.com/v0/b/${firebaseStorageId}/o/default-profile-pic.png?alt=media`;
     const [profilePicUrl, setProfilePicUrl] = useState<string>(DefaultProfilePic);
     const [userId, setUserId] = useState<string | null>(null);
-    const [user, setUser] = useState<UserProfile|null>(null)
+    const [user, setUser] = useState<UserProfile | null>(null)
     const [newProfilePic, setNewProfilePic] = useState<File | null>(null);
-    const [editProfilePic,setEditProfilePic] = useState<boolean>(false);
+    // const [editProfilePic, setEditProfilePic] = useState<boolean>(false);
+    const [isHovering, setIsHovering] = useState(false);
+    const [showPopup, setShowPopup] = useState(false);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [showFileInput, setShowFileInput] = useState(true);
 
     useEffect(() => {
         const storedUserId = sessionStorage.getItem('userId');
@@ -49,11 +53,30 @@ const ShowProfile = () => {
         if (userId) {
             fetchUserProfile();
         }
-    },[userId]);
+    }, [userId]);
+
+
+    const handleMouseEnter = () => setIsHovering(true);
+    const handleMouseLeave = () => setIsHovering(false);
+
+    const openPopup = () => setShowPopup(true);
+    const closePopup = () => {
+        setShowPopup(false);
+        setNewProfilePic(null);
+        setPreviewUrl(null);
+        setShowFileInput(true);
+    };
 
     const handleProfilePicChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             setNewProfilePic(e.target.files[0]);
+
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewUrl(reader.result as string);
+                setShowFileInput(false);
+            };
+            reader.readAsDataURL(e.target.files[0]);
         }
     };
 
@@ -71,13 +94,16 @@ const ShowProfile = () => {
             await updateDoc(userRef, { profilePicUrl: downloadUrl });
 
             setProfilePicUrl(downloadUrl);
+
+            closePopup();
         } catch (error) {
             console.error('Error uploading profile picture:', error);
         }
+
     };
 
     const navigateToDashboard = () => {
-        router.push('/dashboard');
+
 
         if (user?.role === 'admin') {
             router.push('/admin/dashboard');
@@ -90,7 +116,15 @@ const ShowProfile = () => {
             const teacherId = user.userId;
             router.push(`/teacher/${teacherId}/dashboard`);
         }
+        else {
+            router.push('/dashboard');
+        }
 
+    };
+
+    const handleChangeImage = () => {
+        setPreviewUrl(null);
+        setShowFileInput(true);
     };
 
     return (
@@ -100,16 +134,27 @@ const ShowProfile = () => {
                     {/* Profile Header */}
                     <div className="relative h-48 bg-gray-500">
                         <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2">
-                            <div className="relative">
+                            <div className="relative"
+                                onMouseEnter={handleMouseEnter}
+                                onMouseLeave={handleMouseLeave}
+                            >
                                 <div className="w-32 h-32 rounded-full border-4 border-white dark:border-gray-800 bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-4xl text-gray-600 dark:text-gray-300">
                                     <img src={user?.profilePicUrl || DefaultProfilePic} className="h-full w-full rounded-full object-cover" />
                                 </div>
+                                {isHovering && (
+                                    <div
+                                        className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center cursor-pointer"
+                                        onClick={openPopup}
+                                    >
+                                        <span className="text-white">Edit</span>
+                                    </div>
+                                )}
                                 <div className="absolute bottom-0 right-0 bg-green-500 w-5 h-5 rounded-full border-2 border-white">
-                                    
+
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
 
                     {/* Profile Content */}
@@ -123,7 +168,7 @@ const ShowProfile = () => {
                             </p>
                         </div>
 
-                        <div className="text-center mb-8">
+                        {/* <div className="text-center mb-8">
                             <div className="btn bg-green-500 hover:bg-green-600" onClick={() => setEditProfilePic(prev => !prev)}>
                                 {editProfilePic ? 'Cancel' : 'Edit Profile Picture'}
                             </div>
@@ -134,7 +179,7 @@ const ShowProfile = () => {
                                     <button onClick={uploadProfilePic}>Upload New Profile Picture</button>
                                 </div>
                             )}
-                        </div>
+                        </div> */}
 
                         <div className="space-y-4">
                             <div className="flex items-center space-x-4 mb-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
@@ -206,6 +251,58 @@ const ShowProfile = () => {
                     </div>
                 </div>
             </div>
+            {showPopup && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="relative bg-white  dark:bg-gray-800 p-6 rounded shadow-md ">
+                        <h2 className="text-xl font-bold mb-4 ">Edit Profile Picture</h2>
+                        <div className="mb-4 ">
+
+                        {showFileInput ? (
+                                <input 
+                                    type="file" 
+                                    accept="image/*"
+                                    onChange={handleProfilePicChange}
+                                    className="mb-2"
+                                />
+                            ) : (
+                                <div className="mt-2 flex flex-col items-center">
+                                    <div>
+                                        <p className="text-sm text-gray-600 dark:text-gray-300 text-center mb-2">Preview:</p>
+                                        <div className="w-24 h-24 rounded-full border-4 dark:border-white border-gray-400 bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-4xl text-gray-600 dark:text-gray-300">
+                                            <img
+                                                src={previewUrl || ''}
+                                                alt="Preview"
+                                                className="h-full w-full rounded-full object-cover"
+                                            />
+                                        </div>
+                                    </div>
+                                    <button 
+                                        onClick={handleChangeImage}
+                                        className="mt-2 text-sm text-blue-500 hover:text-blue-600"
+                                    >
+                                        Change Image
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                        <div className="flex justify-center space-x-2">
+                            <button
+                                onClick={uploadProfilePic}
+                                className="bg-blue-500 text-white px-4 py-2 w-1/2 rounded text-sm hover:bg-blue-600"
+                                disabled={!newProfilePic}
+                            >
+                                Upload
+                            </button>
+                            <button
+                                onClick={closePopup}
+                                className="bg-gray-300 text-gray-800 px-4 py-2 w-1/2 text-sm rounded hover:bg-gray-400"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
