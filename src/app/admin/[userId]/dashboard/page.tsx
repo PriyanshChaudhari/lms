@@ -1,38 +1,35 @@
 "use client"
 import React, { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 
-export default function CourseDetails({ params }: { params: { courseId: string } }) {
+export default function CourseDetails() {
+    const router = useRouter();
+    const params = useParams();
+    const userId = params.userId as string;
     const [activeSection, setActiveSection] = useState<string>('users');
 
-    const router = useRouter();
-
-    // const handleModuleClick = (moduleId: number) => {
-    //     router.push(`/student/mycourse/${params.courseId}/modules/${moduleId}`);
-    // };
-
     const handleCreateUserClick = () => {
-        router.push('/admin/create-user');
+        router.push(`/admin/${userId}/create-user`);
     };
 
     const handleUploadUsersClick = () => {
-        router.push('/admin/upload-users');
+        router.push(`/admin/${userId}/upload-users`);
     };
 
     const handleCreateCategoryClick = () => {
-        router.push('/admin/course-category/create');
+        router.push(`/admin/${userId}/course-category/create`);
     };
 
     const handleModifyCategoryClick = () => {
-        router.push('/admin/course-category/manage');
+        router.push(`/admin/${userId}/course-category/manage`);
     };
 
     const handleViewUsersClick = () => {
-        router.push('/admin/view-users');
+        router.push(`/admin/${userId}/view-users`);
     };
 
     const handleDeleteUsersClick= () => {
-        router.push('/admin/delete-users');
+        router.push(`/admin/${userId}/delete-users`);
     };
 
     return (
@@ -110,11 +107,11 @@ export default function CourseDetails({ params }: { params: { courseId: string }
                             <div className="space-y-4 ">
                                 <h2 className="text-xl font-semibold">Group Management</h2>
                                 <div className="space-y-4 justify-between mb-4">
-                                    <div className="bg-white border border-gray-300 rounded-xl p-3 shadow-md h-12" onClick={() => { router.push('/admin/groups/create-group') }}>
+                                    <div className="bg-white border border-gray-300 rounded-xl p-3 shadow-md h-12" onClick={() => { router.push(`/admin/${userId}/groups/create-group`) }}>
                                         <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">Create Group</h2>
                                     </div>
 
-                                    <div className="bg-white border border-gray-300 rounded-xl p-3 shadow-md h-12 " onClick={() => { router.push('/admin/groups') }}>
+                                    <div className="bg-white border border-gray-300 rounded-xl p-3 shadow-md h-12 " onClick={() => { router.push(`/admin/${userId}/groups`) }}>
                                         <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">View Groups</h2>
                                     </div>
 

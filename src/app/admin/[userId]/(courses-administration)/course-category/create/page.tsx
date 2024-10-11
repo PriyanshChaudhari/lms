@@ -1,11 +1,12 @@
 "use client"
 import React, { ChangeEvent, useState, useEffect } from 'react';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 const CreateCategory = () => {
     const router = useRouter();
-
+    const params = useParams();
+    const userId = params.userId as string;
     const [category, setCategory] = useState({
         category_name: "",
         parent_category_id: ""
@@ -26,10 +27,6 @@ const CreateCategory = () => {
     useEffect(() => {
         fetchCategories();
     }, []);
-
-    const handleClick = () =>{
-    //   router.push('/admin/dashboard');
-    }
 
     const handleCategoryChange = (index: number, e: ChangeEvent<HTMLSelectElement>) => {
         const { value } = e.target;
@@ -66,7 +63,7 @@ const CreateCategory = () => {
 
             // Optionally, show a success message
             alert("Category created successfully!");
-            router.push('/admin/dashboard');
+            router.push(`/admin/${userId}/dashboard`);
         } catch (error) {
             console.error(error);
             // Optionally, show an error message
@@ -111,36 +108,35 @@ const CreateCategory = () => {
     return (
         <div className='flex h-screen justify-center items-center'>
             <div className="w-full max-w-md mx-auto mt-8 p-6 dark:bg-gray-800 rounded shadow-md">
-            <h2 className="text-2xl font-bold mb-4">Create a New Category</h2>
-            <form onSubmit={handleSubmit}>
-                <div className="mb-6">
-                    <label htmlFor="category_name" className="block text-sm font-medium text-gray-700 dark:text-gray-100">
-                        Category Name
-                    </label>
-                    <input
-                        type="text"
-                        id="category_name"
-                        name="category_name"
-                        value={category.category_name}
-                        onChange={handleNameChange}
-                        className=" p-2 w-full border border-gray-300 rounded dark:bg-gray-800 mt-4"
-                        required
-                    />
-                </div>
+                <h2 className="text-2xl font-bold mb-4">Create a New Category</h2>
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-6">
+                        <label htmlFor="category_name" className="block text-sm font-medium text-gray-700 dark:text-gray-100">
+                            Category Name
+                        </label>
+                        <input
+                            type="text"
+                            id="category_name"
+                            name="category_name"
+                            value={category.category_name}
+                            onChange={handleNameChange}
+                            className=" p-2 w-full border border-gray-300 rounded dark:bg-gray-800 mt-4"
+                            required
+                        />
+                    </div>
 
-                {renderCategoryDropdowns()}
+                    {renderCategoryDropdowns()}
 
-                <div>
-                    <button
-                        type="submit"
-                        onClick={handleClick}
-                        className="w-full bg-blue-600 text-white py-2 px-4 mt-4 rounded hover:bg-blue-700"
-                    >
-                        Create Category
-                    </button>
-                </div>
-            </form>
-        </div>
+                    <div>
+                        <button
+                            type="submit"
+                            className="w-full bg-blue-600 text-white py-2 px-4 mt-4 rounded hover:bg-blue-700"
+                        >
+                            Create Category
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };

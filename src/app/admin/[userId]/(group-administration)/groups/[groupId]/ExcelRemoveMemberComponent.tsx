@@ -5,6 +5,8 @@ import axios from 'axios';
 import { json } from 'stream/consumers';
 
 const ExcelRemoveMemberComponent = () => {
+    const params = useParams();
+    const userId = params.userId as string;
     const [file, setFile] = useState<File | null>(null);
     const [error, setError] = useState<string>('');
 
@@ -17,7 +19,6 @@ const ExcelRemoveMemberComponent = () => {
 
 
     const router = useRouter();
-    const params = useParams()
     const groupId = params.groupId;
     const handleFileUpload = async () => {
         if (!file) {
@@ -44,7 +45,7 @@ const ExcelRemoveMemberComponent = () => {
 
                     if (response.status === 201) {
                         // alert('Group members removed successfully');
-                        router.push(`/admin/groups/${groupId}`);
+                        router.push(`/admin/${userId}/groups/${groupId}`);
                         console.log('Data removed successfully');
                     } else {
                         alert('Failed to remove group members');

@@ -56,7 +56,7 @@ const LoginPage = () => {
                     } else if (role === 'Teacher') {
                         router.push(`/teacher/${user.userId}/dashboard`);
                     } else if (role === 'Admin') {
-                        router.push(`/admin/dashboard`);
+                        router.push(`/admin/${user.userId}/dashboard`);
                     } else {
                         console.error('Unknown role:', role);
                         alert('An unexpected error occurred');

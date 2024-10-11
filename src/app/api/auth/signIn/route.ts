@@ -47,11 +47,11 @@ export async function POST(req: NextRequest) {
 
             let redirectUrl = "/";
             if (user.role === "Student") {
-                redirectUrl = "/student/dashboard";
+                redirectUrl = `/student/${userId}/dashboard`;
             } else if (user.role === "Teacher") {
-                redirectUrl = "/teacher/dashboard";
+                redirectUrl = `/teacher/${userId}/dashboard`;
             } else if (user.role === "Admin") {
-                redirectUrl = "/admin/dashboard";
+                redirectUrl = `/admin/${userId}/dashboard`;
             }
 
             response.headers.set("Location", redirectUrl);

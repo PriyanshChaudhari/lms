@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import axios from 'axios';
 
 interface ExcelMemberComponentProps {
@@ -9,6 +9,8 @@ interface ExcelMemberComponentProps {
 
 const ExcelMemberComponent: React.FC<ExcelMemberComponentProps> = ({ onClose }) => {
     const [file, setFile] = useState<File | null>(null);
+    const params = useParams();
+    const userId = params.userId as string;
     const [error, setError] = useState<string>('');
     const [message, setMessage] = useState<string>('');
     const router = useRouter();
@@ -47,7 +49,7 @@ const ExcelMemberComponent: React.FC<ExcelMemberComponentProps> = ({ onClose }) 
                         setMessage('Group members Upload successfully');
                         setTimeout(() => {
                             onClose();
-                            router.push('/admin/dashboard');
+                            router.push(`/admin/${userId}/dashboard`);
                         }, 2000);
                     } else {
                         alert('Failed to upload group members');

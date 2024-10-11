@@ -11,6 +11,7 @@ interface AddOneMemberComponentProps {
 const AddOneMemberComponent: React.FC<AddOneMemberComponentProps> = ({ onClose }) => {
     const params = useParams();
     const groupId = params.groupId as string;
+    const userId = params.userId as string;
 
     const [user, setUser] = useState({ groupId: groupId, userId: '' });
     const [errorMessage, setErrorMessage] = useState('');

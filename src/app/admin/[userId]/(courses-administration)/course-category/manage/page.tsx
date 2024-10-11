@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 interface Category {
     id: string;
@@ -16,6 +16,8 @@ interface Course {
 }
 
 const ManageCategories = () => {
+    const params = useParams();
+    const userId = params.userId as string;
     const [categories, setCategories] = useState<Category[]>([]);
     const [courses, setCourses] = useState<Course[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);

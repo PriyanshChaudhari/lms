@@ -1,7 +1,7 @@
 "use client"
 import axios from 'axios';
 import { group } from 'console';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 interface Group {
@@ -10,6 +10,8 @@ interface Group {
 }
 
 const Groups = () => {
+    const params = useParams();
+    const userId = params.userId as string;
     const [groups, setGroups] = useState<Group[]>([]);
     const router = useRouter();
 
@@ -28,14 +30,14 @@ const Groups = () => {
 
 
     const handleClick = (groupId: string) => {
-        router.push(`/admin/groups/${groupId}`)
+        router.push(`/admin/${userId}/groups/${groupId}`)
     }
     const handleCreateGroup = () => {
-        router.push('/admin/groups/create-group')
+        router.push(`/admin/${userId}/groups/create-group`)
     }
 
     const handleEditGroup = (groupId: string) => {
-        router.push(`/admin/groups/${groupId}/edit-group`)
+        router.push(`/admin/${userId}/groups/${groupId}/edit-group`)
     }
 
     const handleDeleteGroup = async (groupId: string) => {
@@ -45,34 +47,10 @@ const Groups = () => {
         } catch (error) {
             console.log(error)
         }
-        router.push(`/admin/groups`)
+        router.push(`/admin/${userId}/groups`)
     }
 
     return (
-        // <div>
-        //     <button onClick={handleCreateGroup} className='bg-blue-500 hover:bg-blue-600 m-2 p-2'>Create Group</button>
-        //     <h1>Groups</h1>
-        //     <table className='bg-red-100'>
-        //         <thead>
-        //             <tr>
-        //                 <th>Name</th>
-        //                 <td></td>
-        //                 <td></td>
-        //             </tr>
-        //         </thead>
-        //         <tbody>
-        //             {groups.map(group => (
-        //                 <tr key={group.id}>
-        //                     <td onClick={() => handleClick(group.id)}>{group.group_name}</td>
-        //                     <button onClick={() => handleEditGroup(group.id)}>Edit group</button>
-        //                     <button onClick={() => handleDeleteGroup(group.id)}>Delete group</button>
-        //                 </tr>
-        //             ))}
-        //         </tbody>
-        //     </table>
-        // </div>
-
-
         <div className="flex justify-content items-center  h-screen ">
             <div className="w-full max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md">
             <h1 className="text-2xl font-semibold text-center mb-6">Group Management</h1>
