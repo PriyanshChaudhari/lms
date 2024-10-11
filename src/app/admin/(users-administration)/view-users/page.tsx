@@ -8,8 +8,7 @@ interface User {
     last_name: string;
     email: string;
     role: string;
-    profile_pic: string;
-    dob: string;
+    profilePicUrl: string;
 }
 
 const ViewUsers = () => {
@@ -91,7 +90,6 @@ const ViewUsers = () => {
                                     <th className="px-4 py-2 text-gray-700 dark:text-gray-300">Last Name</th>
                                     <th className="px-4 py-2 text-gray-700 dark:text-gray-300">Email</th>
                                     <th className="px-4 py-2 text-gray-700 dark:text-gray-300">Role</th>
-                                    <th className="px-4 py-2 text-gray-700 dark:text-gray-300">Date of Birth</th>
                                     <th className="px-4 py-2 text-gray-700 dark:text-gray-300">Profile Picture</th>
                                     {isEditMode && (
                                         <>
@@ -109,9 +107,8 @@ const ViewUsers = () => {
                                         <td className="border px-4 py-2 text-gray-700 dark:text-gray-300">{user.last_name}</td>
                                         <td className="border px-4 py-2 text-gray-700 dark:text-gray-300">{user.email}</td>
                                         <td className="border px-4 py-2 text-gray-700 dark:text-gray-300">{user.role}</td>
-                                        <td className="border px-4 py-2 text-gray-700 dark:text-gray-300">{formatDate(user.dob)}</td>
                                         <td className="border px-4 py-2 text-gray-700 dark:text-gray-300">
-                                            <img src={user.profile_pic} alt="Profile Pic" className="border border-gray-300 h-7 w-7 object-cover rounded-full" />
+                                            <img src={user?.profilePicUrl} alt="Profile Pic" className="border border-gray-300 h-7 w-7 object-cover rounded-full" />
                                         </td>
                                         {isEditMode && (
                                             <>

@@ -4,9 +4,13 @@ import React, { useState, ChangeEvent } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
+interface user{
+    userId:string;
+    password:string
+}
 const LoginPage = () => {
     const router = useRouter()
-    const [user, setUser] = React.useState({
+    const [user, setUser] = useState<user>({
         userId: "",
         password: ""
     });
@@ -36,9 +40,10 @@ const LoginPage = () => {
 
         if (valid) {
             try {
+                console.log(typeof(user.userId) , user.userId + "from login page id type")
                 const res = await axios.post('/api/auth/signIn', user);
                 const data = res.data;
-                console.log('Response data:', data);  // Debugging line
+                console.log('Response data:', data);
 
                 if (data.success) {
                     const { role, userId } = data;
@@ -46,11 +51,11 @@ const LoginPage = () => {
 
                     sessionStorage.setItem('userId', userId);
 
-                    if (role === 'student') {
+                    if (role === 'Student') {
                         router.push(`/student/${user.userId}/dashboard`);
-                    } else if (role === 'teacher') {
+                    } else if (role === 'Teacher') {
                         router.push(`/teacher/${user.userId}/dashboard`);
-                    } else if (role === 'admin') {
+                    } else if (role === 'Admin') {
                         router.push(`/admin/dashboard`);
                     } else {
                         console.error('Unknown role:', role);

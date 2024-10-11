@@ -105,19 +105,19 @@ const ShowProfile = () => {
     const navigateToDashboard = () => {
 
 
-        if (user?.role === 'admin') {
+        if (user?.role === 'Admin') {
             router.push('/admin/dashboard');
         }
-        else if (user?.role === 'student') {
+        else if (user?.role === 'Student') {
             const studentId = user.userId;
             router.push(`/student/${studentId}/dashboard`);
         }
-        else if (user?.role === 'teacher') {
+        else if (user?.role === 'Teacher') {
             const teacherId = user.userId;
             router.push(`/teacher/${teacherId}/dashboard`);
         }
         else {
-            router.push('/dashboard');
+            router.replace('/dashboard');
         }
 
     };
@@ -143,7 +143,7 @@ const ShowProfile = () => {
                                 </div>
                                 {isHovering && (
                                     <div
-                                        className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center cursor-pointer"
+                                        className="absolute inset-0 bg-black bg-opacity-20 rounded-full flex items-center justify-center cursor-pointer"
                                         onClick={openPopup}
                                     >
                                         <span className="text-white">Edit</span>

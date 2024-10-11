@@ -1,11 +1,11 @@
 "use client"
 import { useState, ChangeEvent } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import axios from 'axios';
 
 const CreateUser = () => {
     const router = useRouter();
     const params = useParams();
-    const userId = params.userId as string;
 
     const [user, setUser] = useState({
         userId: "",
@@ -17,24 +17,13 @@ const CreateUser = () => {
 
     const [error, setError] = useState<string | null>(null);
 
-
     const handleChange = (e: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
         const { name, value } = e.target;
         setUser({ ...user, [name]: value });
     };
 
-    const createPassword = (userId: string, firstName: string):string => {
-        const userIdPart = userId.slice(-5);
-        const firstNamePart = firstName.slice(0, 3);
-        let password = `${userIdPart}${firstNamePart}`;
-        
-        return password;
-    };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        createPassword(user.userId, user.firstName);
 
         if (!user.userId || !user.firstName || !user.lastName || !user.email || !user.role) {
             let missingFields = [];
@@ -47,25 +36,27 @@ const CreateUser = () => {
             return;
         } else {
             try {
-                const userWithPassword = { ...user, password: createPassword(user.userId, user.firstName) };
-                console.log("user: ", userWithPassword);
-                const response = await fetch('/api/auth/create-user', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(userWithPassword)
-                });
+                const response = await axios.post('/api/auth/create-user', user);
 
-                if (response.ok) {
+                // Check if the response status indicates success
+                if (response.status === 201) {
                     console.log('User created successfully');
                     router.push('/admin/dashboard');
                 } else {
-                    const data = await response.json();
-                    setError(data.error || 'Error creating user'); // Set error message
+                    setError(response.data.error || 'Error creating user'); // Set error message if response status is not 201
                 }
-            } catch (error) {
-                setError('Something went wrong. Please try again later.');
-                console.error('Error:', error);
+            } catch (error: any) {
+                if (error.response) {
+                    // If the error has a response, log it and show the API-specific error message
+                    console.error('Error from API:', error.response.data);
+                    setError(error.response.data.error || 'Failed to create user. Please check the input and try again.');
+                } else {
+                    // Generic fallback error message
+                    setError('Something went wrong. Please try again later.');
+                    console.error('Error:', error);
+                }
             }
+
         }
     };
 

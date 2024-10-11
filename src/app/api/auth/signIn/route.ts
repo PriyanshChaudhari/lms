@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken'
 export async function POST(req: NextRequest) {
     try {
         const { userId, password } = await req.json();
-
+        console.log(typeof(userId) , userId + " type of id from login backend")
         if (!userId || !password) {
             return NextResponse.json(
                 { message: "userId and password are required" },
@@ -46,11 +46,11 @@ export async function POST(req: NextRequest) {
             })
 
             let redirectUrl = "/";
-            if (user.role === "student") {
+            if (user.role === "Student") {
                 redirectUrl = "/student/dashboard";
-            } else if (user.role === "teacher") {
+            } else if (user.role === "Teacher") {
                 redirectUrl = "/teacher/dashboard";
-            } else if (user.role === "admin") {
+            } else if (user.role === "Admin") {
                 redirectUrl = "/admin/dashboard";
             }
 
@@ -94,7 +94,7 @@ async function validateUserCredentials(userId: string, password: string) {
         const userIdFromDB = userDoc.id;
         const userEmail = userData.email;
         const userRole = userData.role;
-        const storedPasswordHash = userData.password_hash;
+        const storedPasswordHash = userData.password;
 
         if (storedPasswordHash && await bcrypt.compare(password, storedPasswordHash)) {
             return {

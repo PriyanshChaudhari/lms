@@ -41,16 +41,16 @@ export async function middleware(request: NextRequest) {
             // const user = userDoc.data();
 
             // Redirect based on role
-            if (path.startsWith('/student') && role !== 'student') {
+            if (path.startsWith('/student') && role !== 'Student') {
                 console.log('student');
                 return NextResponse.redirect(new URL('/unauthorized', request.nextUrl));
             }
 
-            if (path.startsWith('/teacher') && role !== 'teacher') {
+            if (path.startsWith('/teacher') && role !== 'Teacher') {
                 return NextResponse.redirect(new URL('/unauthorized', request.nextUrl));
             }
 
-            if (path.startsWith('/admin') && role !== 'admin') {
+            if (path.startsWith('/admin') && role !== 'Admin') {
                 return NextResponse.redirect(new URL('/unauthorized', request.nextUrl));
             }
         }
