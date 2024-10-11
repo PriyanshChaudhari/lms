@@ -18,10 +18,12 @@ export async function GET(req: NextRequest) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
 
-        const userData = userDoc.data();
+        const userData = {
+            userId : userDoc.id,
+            ...userDoc.data()};
 
         // Return the user data as JSON
-        return NextResponse.json({ id: userDoc.id, ...userData });
+        return NextResponse.json({ userData:userData , message:"user data fetch succesfully." });
     } catch (error: any) {
         console.log(error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

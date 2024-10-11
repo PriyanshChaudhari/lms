@@ -2,7 +2,7 @@
 import { useState, ChangeEvent } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 
-const AddUser = () => {
+const CreateUser = () => {
     const router = useRouter();
     const params = useParams();
     const userId = params.userId as string;
@@ -25,9 +25,7 @@ const AddUser = () => {
 
     const createPassword = (userId: string, firstName: string):string => {
         const userIdPart = userId.slice(-5);
-
         const firstNamePart = firstName.slice(0, 3);
-
         let password = `${userIdPart}${firstNamePart}`;
         
         return password;
@@ -159,4 +157,4 @@ const AddUser = () => {
     );
 }
 
-export default AddUser;
+export default CreateUser;
