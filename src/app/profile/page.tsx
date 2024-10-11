@@ -38,9 +38,9 @@ const ShowProfile = () => {
             try {
                 const response = await fetch(`/api/get/one-user?userId=${userId}`);
                 if (!response.ok) throw new Error('Failed to fetch user profile');
-                const userData = await response.json();
-                setUser(userData.userData);
-                setProfilePicUrl(userData.profilePicUrl || DefaultProfilePic);
+                const data = await response.json();
+                setUser(data.userData);
+                setProfilePicUrl(user?.profilePicUrl || DefaultProfilePic);
             } catch (err) {
                 console.error('Error fetching user profile:', err);
             }

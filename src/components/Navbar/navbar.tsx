@@ -3,24 +3,32 @@ import React, { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { MoonIcon, SunIcon } from '@radix-ui/react-icons'
 import { useTheme } from 'next-themes'
-import { usePathname, useParams,useRouter } from 'next/navigation';
+import { usePathname, useParams, useRouter } from 'next/navigation';
 import axios from 'axios'
 import LoginButton from '@/components/ui/loginButton'
 
+interface User {
+  userId: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  role: string;
+  profilePicUrl: string;
+}
 
 const Navbar: React.FC = () => {
   const params = useParams();
   const router = useRouter();
-  const DefaultProfilePic = 'https://firebasestorage.googleapis.com/v0/b/minor-project-01-5a5b7.appspot.com/o/users%2F8021000004%2Fprofile_pic.png?alt=media&token=061a7885-4080-41d2-bb21-d2131be8f098';
-  // const userId = params.userId as string;
+  const firebaseStorageId = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+  const DefaultProfilePic = `https://firebasestorage.googleapis.com/v0/b/${firebaseStorageId}/o/default-profile-pic.png?alt=media`;
   const { theme, setTheme } = useTheme();
   const pathname = usePathname();
   const [isDropdownOpen, setDropdownOpen] = useState(false);
-  const [profilePicUrl, setProfilePicUrl] = useState<string>('');
-  const [userName, setUserName] = useState<string>('User');
+  const [profilePicUrl, setProfilePicUrl] = useState<string>(DefaultProfilePic);
   const dropdownRef = useRef<HTMLDivElement>(null); // Ref for dropdown
   const [userId, setUserId] = useState<string | null>(null);
-  const [userRole, setUserRole] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null)
+
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
   };
@@ -33,7 +41,6 @@ const Navbar: React.FC = () => {
     try {
       await axios.get('/api/auth/logout');
       sessionStorage.clear(); // Clear session storage on logout
-      setUserName('User'); // Reset username state
       setProfilePicUrl(DefaultProfilePic); // Reset profile pic state
       window.location.replace('/login');
     } catch (error) {
@@ -56,68 +63,68 @@ const Navbar: React.FC = () => {
     }
   };
 
-
-  const isLoginPage = pathname === '/' || pathname === '/login';
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      let sessionUserId = sessionStorage.getItem('userId');
-      setUserId(sessionUserId);
-    }
-  }, []);
-
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setDropdownOpen(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
-
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
-  // Fetch user details whenever the userId changes
+  const isLoginPage = pathname === '/' || pathname === '/login';
+
   useEffect(() => {
-    const fetchProfileData = async () => {
+    const storedUserId = sessionStorage.getItem('userId');
+    if (storedUserId) {
+      setUserId(storedUserId);
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (!userId) return;
+
       try {
-        const userId = sessionStorage.getItem('userId');
-        if (userId) {
-          const res = await axios.get(`/api/get/one-user?userId=${userId}`);
-          setUserName(res.data); // Update with user data
-          setUserRole(res.data.role);
-          let picUrl = res.data.profile_pic;
-          if (picUrl) {
-            picUrl = picUrl.replace('gs://minor-project-01-5a5b7.appspot.com/', 'https://firebasestorage.googleapis.com/v0/b/minor-project-01-5a5b7.appspot.com/o/');
-          }
-          setProfilePicUrl(picUrl); // Assuming res.data contains profilePicUrl
+        const response = await fetch(`/api/get/one-user?userId=${userId}`);
+        if (!response.ok) throw new Error('Failed to fetch user profile');
+        const data = await response.json();
+        setUser(data.userData);
+        if (data.userData.profilePicUrl) {
+          setProfilePicUrl(data.userData.profilePicUrl);
+        } else {
+          setProfilePicUrl(DefaultProfilePic);
         }
-      } catch (error) {
-        console.log(error);
+      } catch (err) {
+        console.error('Error fetching user profile:', err);
+        setProfilePicUrl(DefaultProfilePic);
       }
     };
 
-    fetchProfileData();
+    if (userId) {
+      fetchUserProfile();
+    }
   }, [userId]);
 
   const navigateToDashboard = () => {
+    router.push('/dashboard');
 
-    if(userRole === 'admin') {
-        router.push('/admin/dashboard');
+    if (user?.role === 'admin') {
+      router.push('/admin/dashboard');
     }
-    else if(userRole === 'student') {
-        const studentId = userId;
-        router.push(`/student/${studentId}/dashboard`);
+    else if (user?.role === 'student') {
+      const studentId = user.userId;
+      router.push(`/student/${studentId}/dashboard`);
     }
-    else if(userRole === 'teacher') {
-        const teacherId = userId;
-        router.push(`/teacher/${teacherId}/dashboard`);
+    else if (user?.role === 'teacher') {
+      const teacherId = user.userId;
+      router.push(`/teacher/${teacherId}/dashboard`);
     }
 
-};
+  };
 
   return (
     <nav className="dark:bg-gray-800 p-4 w-full bg-gray-100 text-black dark:text-white  z-10 top-0 sticky font-rubik" style={{ cursor: 'default' }}>
@@ -135,7 +142,7 @@ const Navbar: React.FC = () => {
           ) : (
             <div className="relative" ref={dropdownRef}>
               <div className='flex gap-6 items-center'>
-                <p className='hidden sm:block'>{`${getGreeting()},  ${userName.first_name || 'User'}`}</p>
+                <p className='hidden sm:block'>{`${getGreeting()},  ${user?.first_name || 'User'}`}</p>
                 <div
                   className="border border-gray-500 text-xs h-8 w-8 rounded-full cursor-pointer"
                   onClick={toggleDropdown}
