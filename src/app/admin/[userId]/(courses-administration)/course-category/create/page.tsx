@@ -18,7 +18,7 @@ const CreateCategory = () => {
     const fetchCategories = async () => {
         try {
             const res = await axios.get('/api/get/categories');
-            setCategories(res.data);
+            setCategories(res.data.categories);
         } catch (error) {
             console.error('Error fetching categories:', error);
         }
@@ -48,7 +48,7 @@ const CreateCategory = () => {
 
         try {
             const res = await axios.post('/api/course-category/', category);
-            const data = res.data;
+            const data = res.data.categories;
             console.log(data);
 
             // Reset the form
@@ -129,7 +129,7 @@ const CreateCategory = () => {
 
                     <div>
                         <button
-                            type="submit"
+                            type="submit" 
                             className="w-full bg-blue-600 text-white py-2 px-4 mt-4 rounded hover:bg-blue-700"
                         >
                             Create Category

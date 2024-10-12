@@ -11,7 +11,7 @@ export async function GET() {
             ...doc.data()
         }));
 
-        return NextResponse.json(categories, { status: 200 });
+        return NextResponse.json({categories:categories,  status: 200 });
     } catch (error) {
         console.error('Error fetching categories:', error);
         return NextResponse.json({ error: 'Failed to fetch categories' }, { status: 500 });

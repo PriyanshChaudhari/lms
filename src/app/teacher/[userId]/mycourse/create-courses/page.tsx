@@ -1,7 +1,9 @@
 "use client";
 import React, { ChangeEvent, useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation'; // Firebase storage
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
+import { storage } from "@/lib/firebaseConfig";
 
 const CreateCourse = () => {
     const params = useParams()
@@ -10,9 +12,9 @@ const CreateCourse = () => {
     const [course, setCourse] = useState({
         title: "",
         description: "",
-        thumbnail: "",
         teacher_id: userId,
-        category: ""
+        category: "",
+        coursePicUrl: ""
     });
     const [category, setCategory] = useState({
         category_name: "",
@@ -20,6 +22,10 @@ const CreateCourse = () => {
     });
     const [categories, setCategories] = useState<{ id: string; category_name: string; parent_category_id: string | null }[]>([]);
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+    const [imageFile, setImageFile] = useState<File | null>(null);
+
+    const firebaseStorageId = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET;
+    const defaultCoursePicUrl = `https://firebasestorage.googleapis.com/v0/b/${firebaseStorageId}/o/default-course-pic.png?alt=media`;
 
     const hasFetchedTeachers = useRef(false);
     const [teachers, setTeachers] = useState<{ id: string; name: string }[]>([]);
@@ -27,11 +33,15 @@ const CreateCourse = () => {
     const fetchCategories = async () => {
         try {
             const res = await axios.get('/api/get/categories');
-            setCategories(res.data);
+            setCategories(res.data.categories);
         } catch (error) {
             console.error('Error fetching categories:', error);
         }
     };
+
+    useEffect(() => {
+        fetchCategories();
+    }, []);
 
     const handleCategoryChange = (index: number, e: ChangeEvent<HTMLSelectElement>) => {
         const { value } = e.target;
@@ -57,10 +67,6 @@ const CreateCourse = () => {
     //     fetchTeachers();
     // }, []);
 
-    useEffect(() => {
-        fetchCategories();
-    }, []);
-
     const handleChange = (e: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setCourse({ ...course, [name]: value });
@@ -70,28 +76,51 @@ const CreateCourse = () => {
         return new Promise<void>((resolve) => {
             const selectedCategoryId = selectedCategories[selectedCategories.length - 1];
             console.log(selectedCategoryId);
-            
+
             setCourse((prevCourse) => ({
                 ...prevCourse,
                 category: selectedCategoryId,
             }));
-    
+
             // Since setCourse is async, use a setTimeout to simulate state update completion
             setTimeout(() => {
                 resolve();
-            }, 0); 
+            }, 0);
         });
     };
 
+    const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        setImageFile(file || null);
+    };
+
+    const uploadImageAndGetUrl = async () => {
+        if (!imageFile) {
+            // Return default course picture URL if no file is uploaded
+            return defaultCoursePicUrl;
+        }
+
+        if (!course.title.trim()) {
+            throw new Error('Title cannot be empty when uploading an image');
+        }
+
+        const formattedTitle = course.title.replace(/\s+/g, '-').toLowerCase();
+        const storageRef = ref(storage, `course-images/${formattedTitle}`);
+        const uploadTask = await uploadBytesResumable(storageRef, imageFile);
+        return await getDownloadURL(uploadTask.ref);
+    };
+
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+        const coursePicUrl = await uploadImageAndGetUrl();
         await updateCategoryInCourse();
-        console.log(course.category);        
+        console.log(course.category);
 
         try {
             const res = await axios.post('/api/courses/create-courses', {
                 ...course,
+                coursePicUrl,
                 category: selectedCategories[selectedCategories.length - 1], // Ensure the latest category
             });
             const data = res.data;
@@ -101,7 +130,7 @@ const CreateCourse = () => {
             setCourse({
                 title: "",
                 description: "",
-                thumbnail: "",
+                coursePicUrl: "",
                 teacher_id: userId,
                 category: ""
             });
@@ -148,52 +177,50 @@ const CreateCourse = () => {
     return (
         <div className=''>
             <div className="max-w-md mx-auto mt-8 p-6 bg-white dark:bg-gray-800 rounded shadow-md">
-            <h2 className="text-2xl font-bold mb-4">Create a New Course</h2>
-            <form onSubmit={handleSubmit}>
-                <div className="mb-4">
-                    <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-100">
-                        Course Title
-                    </label>
-                    <input
-                        type="text"
-                        id="title"
-                        name="title"
-                        value={course.title}
-                        onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-800"
-                        required
-                    />
-                </div>
+                <h2 className="text-2xl font-bold mb-4">Create a New Course</h2>
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-4">
+                        <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-100">
+                            Course Title
+                        </label>
+                        <input
+                            type="text"
+                            id="title"
+                            name="title"
+                            value={course.title}
+                            onChange={handleChange}
+                            className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-800 uppercase"
+                            required
+                        />
+                    </div>
 
-                <div className="mb-4">
-                    <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-100">
-                        Description
-                    </label>
-                    <textarea
-                        id="description"
-                        name="description"
-                        value={course.description}
-                        onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-800"
-                        required
-                    />
-                </div>
+                    <div className="mb-4">
+                        <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-100">
+                            Description
+                        </label>
+                        <textarea
+                            id="description"
+                            name="description"
+                            value={course.description}
+                            onChange={handleChange}
+                            className="mt-1  capitalize p-2 w-full border border-gray-300 rounded dark:bg-gray-800"
+                            required
+                        />
+                    </div>
 
-                {/* <div className="mb-4">
-                    <label htmlFor="thumbnail" className="block text-sm font-medium text-gray-700">
-                        Thumbnail URL
-                    </label>
-                    <input
-                        type="text"
-                        id="thumbnail"
-                        name="thumbnail"
-                        value={course.thumbnail}
-                        onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-800"
-                    />
-                </div> */}
+                    <div className="mb-4">
+                        <label htmlFor="courseImage" className="block text-sm font-medium">
+                            Course Image (PNG, JPG, JPEG)
+                        </label>
+                        <input
+                            type="file"
+                            accept="image/png, image/jpeg"
+                            onChange={handleImageChange}
+                            className="mt-1 p-2 w-full border"
+                        />
+                    </div>
 
-                {/* <div className="mb-4">
+                    {/* <div className="mb-4">
                     <label htmlFor="teacher_id" className="block text-sm font-medium text-gray-700">
                         Teacher
                     </label>
@@ -214,7 +241,7 @@ const CreateCourse = () => {
                     </select>
                 </div> */}
 
-                {/*<div className="mb-4">
+                    {/*<div className="mb-4">
                     <label htmlFor="category" className="block text-sm font-medium text-gray-700">
                         Category
                     </label>
@@ -234,18 +261,18 @@ const CreateCourse = () => {
                     </select>
                 </div>*/}
 
-                {renderCategoryDropdowns()}
+                    {renderCategoryDropdowns()}
 
-                <div className='mt-4'>
-                    <button
-                        type="submit"
-                        className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
-                    >
-                        Create Course
-                    </button>
-                </div>
-            </form>
-        </div>
+                    <div className='mt-4'>
+                        <button
+                            type="submit"
+                            className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+                        >
+                            Create Course
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };

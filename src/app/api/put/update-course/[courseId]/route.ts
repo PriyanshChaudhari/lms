@@ -5,10 +5,10 @@ import { NextRequest, NextResponse } from "next/server";
 export async function PUT(req: NextRequest, { params }: { params: { courseId: string } }) {
     try {
         const { courseId } = params
-        const { title, description, thumbnail, teacher_id, category } = await req.json();
+        const { title, description, coursePicUrl, teacher_id, category } = await req.json();
         console.log(courseId)
 
-        if (!title || !description || !thumbnail || !teacher_id || !category) {
+        if (!title || !description || !coursePicUrl || !teacher_id || !category) {
             return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
         }
 
@@ -17,7 +17,7 @@ export async function PUT(req: NextRequest, { params }: { params: { courseId: st
         const updatedCourse = {
             title,
             description,
-            thumbnail,
+            coursePicUrl,
             teacher_id,
             category,
             updated_at: new Date(), // Set updated timestamp
