@@ -47,7 +47,7 @@ const AddOneMemberComponent: React.FC<AddOneMemberComponentProps> = ({ onClose }
 
     return (
         <div className="fixed inset-0 flex items-center justify-center dark:bg-[#212830] bg-opacity-50">
-            <div className="relative w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md lg:left-32 md:left-32">
+            <div className="relative w-full max-w-md mx-auto p-6 bg-white dark:bg-[#151b23] rounded-lg shadow-md lg:left-32 md:left-32">
                 <h1 className="text-2xl font-semibold text-center mb-6">Add Group Member</h1>
 
                 {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}

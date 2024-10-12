@@ -44,13 +44,13 @@ const CreateGroup = () => {
     };
 
     return (
-        <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+        <div className="max-w-md mx-auto mt-10 p-6 bg-white dark:bg-[#151b23] rounded-lg shadow-md">
             <h1 className="text-2xl font-semibold text-center mb-4">Create Group</h1>
             {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}
 
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                    <label htmlFor="group_name" className=" block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="group_name" className=" block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         Group Name
                     </label>
                     <input
@@ -61,7 +61,7 @@ const CreateGroup = () => {
                         onChange={handleChange}
                         required
                         
-                        className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 uppercase"
+                        className="w-full border border-gray-300 dark:bg-[#151b23] rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 uppercase"
                     />
                 </div>
 

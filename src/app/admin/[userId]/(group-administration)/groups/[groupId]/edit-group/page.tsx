@@ -62,7 +62,7 @@ const EditGroup = () => {
     };
 
     return (
-        <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+        <div className="max-w-md mx-auto mt-10 p-6 bg-white dark:bg-[#212830] rounded-lg shadow-md">
             <h1 className="text-2xl font-semibold text-center mb-4">Edit Group</h1>
             {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}
 

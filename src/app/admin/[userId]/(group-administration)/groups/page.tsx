@@ -52,7 +52,7 @@ const Groups = () => {
 
     return (
         <div className="flex justify-content items-center  h-screen ">
-            <div className="w-full max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md">
+            <div className="w-full max-w-3xl mx-auto p-6 bg-white dark:bg-[#151b23] rounded-lg shadow-md">
             <h1 className="text-2xl font-semibold text-center mb-6">Group Management</h1>
             <div className="text-center mb-4">
                 <button
@@ -65,7 +65,7 @@ const Groups = () => {
 
 
             {/* Display group members */}
-            <table className="min-w-full bg-white border border-gray-300 rounded-lg">
+            <table className="min-w-full bg-white dark:bg-[#151b23] border border-gray-300 rounded-lg">
                 <thead>
                     <tr className="text-center">
                         <th className="px-4 py-2 border-b font-semibold ">Name</th>
