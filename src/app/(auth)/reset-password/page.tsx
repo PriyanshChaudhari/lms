@@ -54,7 +54,7 @@ export default function ResetPassword() {
     };
 
     return (
-        <div className="font-rubik flex justify-center items-center min-h-screen bg-gradient-to-r from-gray-100 via-gray-300 to-gray-100 dark:from-slate-900 dark:via-slate-500 dark:to-slate-900" style={{ paddingTop: '2rem' }}>
+        <div className="font-rubik flex justify-center items-center min-h-screen bg-gradient-to-r from-gray-100 via-gray-300 to-gray-100 dark:from-[#212830] dark:via-[#212830] dark:to-[#212830]" style={{ paddingTop: '2rem' }}>
             <div className='flex-row flex-wrap justify-center my-auto '>
                 <div className="flex-row dark:bg-[#151b23] dark:shadow-blue-800 rounded-[0.5rem] shadow-custom dark:shadow-custom bg-[#ffffff] sm:m-2" style={{ position: 'relative', padding: '4rem', width: '100%', minWidth: '20rem', marginBottom: '3rem' }}>
                     <div className="head text-lg sm:text-3xl  font-bold flex justify-between mb-8 text-gray-900 dark:text-gray-200 ">
