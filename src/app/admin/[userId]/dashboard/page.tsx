@@ -68,7 +68,7 @@ export default function CourseDetails() {
                             <h2 className="text-xl font-semibold">User Management</h2>
                             <div className="space-y-4 justify-between mb-4">
                                 <div className="bg-white border {/*border-gray-300*/} rounded-xl p-3 shadow-md h-12" onClick={handleCreateUserClick}>
-                                    <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">Add User</h2>
+                                    <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">Create User</h2>
                                 </div>
 
                                 <div className="bg-white border {/*border-gray-300*/} rounded-xl p-3 shadow-md h-12 " onClick={handleUploadUsersClick}>
