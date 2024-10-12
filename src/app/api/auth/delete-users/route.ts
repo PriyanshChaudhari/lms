@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebaseConfig';
+import { db, storage } from '@/lib/firebaseConfig'; // Import storage from firebase config
 import { doc, getDoc, writeBatch } from 'firebase/firestore';
+import { ref, deleteObject } from 'firebase/storage';
 
-// Define the type for user data (for deletion, you just need the userId)
+// Define the type for user data
 interface UserData {
     userId: string;
 }
@@ -12,7 +13,7 @@ export async function POST(req: NextRequest) {
         const jsonData = await req.json();
         console.log('Received data:', jsonData);
 
-        // Ensure we access the userIds array correctly
+        // Access the userIds array from the request
         const userIds = jsonData.userIds;
         console.log('Processing userIds:', userIds);
 
@@ -40,10 +41,22 @@ export async function batchUsersDeletion(userIds: UserData[]) {
                 throw new Error('User ID is required');
             }
 
+            // Step 1: Reference to the user document in Firestore
             const userRef = doc(db, "users", userId);
             const userSnap = await getDoc(userRef);
 
             if (userSnap.exists()) {
+                // Step 2: Delete the profile picture from Firebase Storage
+                const profilePicRef = ref(storage, `users/${userId}/profile_pic.png`);
+                try {
+                    console.log(`Deleting profile picture for userId ${userId}...`);
+                    await deleteObject(profilePicRef);
+                    console.log(`Profile picture for userId ${userId} deleted`);
+                } catch (imageError) {
+                    console.error(`Error deleting profile picture for userId ${userId}:`, imageError);
+                }
+
+                // Step 3: Add user document deletion to the batch
                 console.log(`Deleting user with userId ${userId}...`);
                 batch.delete(userRef);
                 deletedUsers.push({ userId });
@@ -52,7 +65,7 @@ export async function batchUsersDeletion(userIds: UserData[]) {
             }
         }
 
-        // Commit the batch deletion
+        // Step 4: Commit the batch deletion
         await batch.commit();
         console.log("Batch user deletion successful");
 
