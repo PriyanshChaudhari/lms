@@ -61,7 +61,7 @@ const ExcelRemoveMemberComponent = () => {
 
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="fixed inset-0 flex items-center justify-center dark:bg-[#212830] bg-opacity-50">
         <div className="border border-gray-300 m-5 relative lg:left-32 md:left-32">
             <div className="max-w-4xl mx-auto p-5">
                 <div className="w-full h-screen flex justify-center items-center max-w-md mx-auto p-4">
@@ -96,7 +96,7 @@ const ExcelRemoveMemberComponent = () => {
                         <div className="flex justify-between mt-4">
                             <button
                                 onClick={handleFileUpload}
-                                className="bg-black text-white py-2 px-7 rounded-xl dark:hover:bg-[#1a1a1a] transition"
+                                className="dark:bg-[#212830] text-white py-2 px-7 rounded-xl dark:hover:bg-[#1a1a1a] transition"
                             >
                                 remove
                             </button>

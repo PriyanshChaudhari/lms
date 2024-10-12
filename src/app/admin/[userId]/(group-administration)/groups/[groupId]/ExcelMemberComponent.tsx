@@ -64,8 +64,8 @@ const ExcelMemberComponent: React.FC<ExcelMemberComponentProps> = ({ onClose }) 
     };
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="w-full max-w-md mx-auto bg-white dark:bg-gray-800 p-8 shadow-md rounded">
+        <div className="fixed inset-0 flex items-center justify-center dark:bg-[#212830] bg-opacity-50">
+            <div className="w-full max-w-md mx-auto bg-white dark:bg-[#151b23] p-8 shadow-md rounded">
                 <h1 className="text-2xl font-bold mb-6">Remove Group Members</h1>
                 {message && <p className="text-green-500 mb-4">{message}</p>}
                 {error && <p className="text-red-500 mb-4">{error}</p>}

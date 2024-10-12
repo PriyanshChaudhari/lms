@@ -128,11 +128,11 @@ const ShowProfile = () => {
     };
 
     return (
-        <div className="bg-gray-300 dark:bg-gray-900 min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+        <div className="bg-gray-300 dark:bg-[#212830] min-h-screen py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto">
-                <div className="bg-white dark:bg-gray-800 shadow-xl rounded-lg overflow-hidden">
+                <div className="bg-white dark:bg-[#151b23] shadow-xl rounded-lg overflow-hidden">
                     {/* Profile Header */}
-                    <div className="relative h-48 bg-gray-500">
+                    <div className="relative h-48 bg-gray-500 dark:bg-[#444c56]">
                         <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2">
                             <div className="relative"
                                 onMouseEnter={handleMouseEnter}
@@ -143,7 +143,7 @@ const ShowProfile = () => {
                                 </div>
                                 {isHovering && (
                                     <div
-                                        className="absolute inset-0 bg-black bg-opacity-20 rounded-full flex items-center justify-center cursor-pointer"
+                                        className="absolute inset-0 bg-white dark:bg-[#212830] bg-opacity-20 dark:bg-opacity-70 rounded-full flex items-center justify-center cursor-pointer"
                                         onClick={openPopup}
                                     >
                                         <span className="text-white">Edit</span>
@@ -182,7 +182,7 @@ const ShowProfile = () => {
                         </div> */}
 
                         <div className="space-y-4">
-                            <div className="flex items-center space-x-4 mb-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                            <div className="flex items-center space-x-4 mb-6 p-4 bg-gray-50 dark:bg-gray-600 rounded-lg">
                                 <div className="flex-shrink-0 text-gray-500 text-xl font-bold w-8 text-center">
                                     👤
                                 </div>
@@ -196,7 +196,7 @@ const ShowProfile = () => {
                                 </div>
                             </div>
 
-                            <div className="flex items-center space-x-4 mb-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                            <div className="flex items-center space-x-4 mb-6 p-4 bg-gray-50 dark:bg-gray-600 rounded-lg">
                                 <div className="flex-shrink-0 text-gray-500 text-xl font-bold w-8 text-center">
                                     ✉️
                                 </div>
@@ -210,7 +210,7 @@ const ShowProfile = () => {
                                 </div>
                             </div>
 
-                            <div className="flex items-center space-x-4 mb-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                            <div className="flex items-center space-x-4 mb-6 p-4 bg-gray-50 dark:bg-gray-600 rounded-lg">
                                 <div className="flex-shrink-0 text-gray-500 text-xl font-bold w-8 text-center">
                                     🎓
                                 </div>
@@ -224,8 +224,8 @@ const ShowProfile = () => {
                                 </div>
                             </div>
 
-                            <div className="flex items-center space-x-4 mb-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                                <div className="flex-shrink-0 text-gray-500 text-xl font-bold w-8 text-center">
+                            <div className="flex items-center space-x-4 mb-6 p-4 bg-gray-50 dark:bg-gray-600 rounded-lg">
+                                <div className="flex-shrink-0 text-gray-500 dark:text-gray-900 text-xl font-bold w-8 text-center">
                                     #
                                 </div>
                                 <div className="flex-grow">
@@ -252,8 +252,8 @@ const ShowProfile = () => {
                 </div>
             </div>
             {showPopup && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="relative bg-white  dark:bg-gray-800 p-6 rounded shadow-md ">
+                <div className="fixed inset-0 flex items-center justify-center bg-white dark:bg-[#212830] bg-opacity-50 dark:bg-opacity-50">
+                    <div className="relative bg-white  dark:bg-[#151b23] p-6 rounded shadow-md ">
                         <h2 className="text-xl font-bold mb-4 ">Edit Profile Picture</h2>
                         <div className="mb-4 ">
 

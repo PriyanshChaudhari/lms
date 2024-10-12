@@ -59,7 +59,7 @@ const CreateCourse = () => {
 
     return (
         <div className='h-screen flex justify-center items-center'>
-            <div className="w-full max-w-md mx-auto mt-8 p-6 rounded border dark:bg-gray-800 border-gray-100 shadow-md">
+            <div className="w-full max-w-md mx-auto mt-8 p-6 rounded border dark:bg-[#151b23] border-gray-100 shadow-md">
             <h2 className="text-2xl font-bold mb-4">Create a New Module</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
@@ -72,7 +72,7 @@ const CreateCourse = () => {
                         name="title"
                         value={module.title}
                         onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-800"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-[#151b23]"
                         required
                     />
                 </div>
@@ -86,7 +86,7 @@ const CreateCourse = () => {
                         name="description"
                         value={module.description}
                         onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-800"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-[#151b23]"
                         required
                     />
                 </div>
@@ -102,7 +102,7 @@ const CreateCourse = () => {
                         min={1}
                         value={module.position}
                         onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-800"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-[#151b23]"
                     />
                 </div>
 

@@ -127,7 +127,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="dark:bg-gray-800 p-4 w-full bg-gray-100 text-black dark:text-white  z-10 top-0 sticky font-rubik" style={{ cursor: 'default' }}>
+    <nav className="dark:bg-[#151b23] p-4 w-full bg-gray-100 text-black dark:text-white  z-10 top-0 sticky font-rubik" style={{ cursor: 'default' }}>
       <div className="mx-auto text-center flex w-5/6 justify-between font-bold text-black dark:text-white">
         <div className="text-3xl space-x-1 flex items-center sm:text-2xl font-extrabold">
           LMS
@@ -152,11 +152,11 @@ const Navbar: React.FC = () => {
               </div>
 
               {isDropdownOpen && (
-                <div className="absolute top-full right-0 mt-2 w-44 bg-white dark:bg-gray-800 border border-gray-300 rounded-xl shadow-lg">
+                <div className="absolute top-full right-0 mt-2 w-44 bg-white dark:bg-[#151b23] border border-gray-300 rounded-xl shadow-lg">
                   <ul className="list-none p-2">
-                    <li className="p-2 text-sm bg-gray-50 dark:bg-gray-700 rounded mb-2 hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer" onClick={navigateToDashboard}>Dashboard</li>
-                    <li className="p-2 text-sm bg-gray-50 dark:bg-gray-700 mb-2 rounded hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer" onClick={navigateToProfile}>Profile</li>
-                    <li className="text-sm bg-gray-50 dark:bg-gray-700 rounded cursor-pointer">
+                    <li className="p-2 text-sm bg-gray-50 dark:bg-[#212830] rounded mb-2 hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer" onClick={navigateToDashboard}>Dashboard</li>
+                    <li className="p-2 text-sm bg-gray-50 dark:bg-[#212830] mb-2 rounded hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer" onClick={navigateToProfile}>Profile</li>
+                    <li className="text-sm bg-gray-50 dark:bg-[#212830] rounded cursor-pointer">
                       <button className='text-red-500  hover:text-red-600 p-2 rounded-xl' onClick={handleLogout}>Log Out</button>
                     </li>
                   </ul>

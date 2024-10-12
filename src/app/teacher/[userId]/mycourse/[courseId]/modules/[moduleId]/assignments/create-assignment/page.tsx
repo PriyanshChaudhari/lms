@@ -99,7 +99,7 @@ export default function CreateAssignment() {
 
     return (
         <div className='h-screen flex justify-center items-center'>
-            <div className="w-full max-w-md mx-auto dark:bg-gray-800 p-8 shadow-md rounded">
+            <div className="w-full max-w-md mx-auto dark:bg-[#151b23] p-8 shadow-md rounded">
                 <h1 className="text-2xl font-bold mb-6">Add New Assessment</h1>
                 {message && <p className="text-green-500">{message}</p>}
                 {error && <p className="text-red-500">{error}</p>}
@@ -111,7 +111,7 @@ export default function CreateAssignment() {
                             name="title"
                             value={formData.title}
                             onChange={handleChange}
-                            className="mt-1 block w-full p-2 border border-gray-300 rounded dark:bg-gray-800"
+                            className="mt-1 block w-full p-2 border border-gray-300 rounded dark:bg-[#151b23]"
                             required
                         />
                     </div>
@@ -121,7 +121,7 @@ export default function CreateAssignment() {
                             name="assessment_type"
                             value={formData.assessment_type}
                             onChange={handleChange}
-                            className="mt-1 block w-full p-2 border border-gray-300 rounded dark:bg-gray-800"
+                            className="mt-1 block w-full p-2 border border-gray-300 rounded dark:bg-[#151b23]"
                             required
                         >
                             <option value="quiz">Quiz</option>
@@ -134,7 +134,7 @@ export default function CreateAssignment() {
                             name="description"
                             value={formData.description}
                             onChange={handleChange}
-                            className="mt-1 block w-full p-2 border border-gray-300 rounded dark:bg-gray-800"
+                            className="mt-1 block w-full p-2 border border-gray-300 rounded dark:bg-[#151b23]"
                             required
                         />
                     </div>
@@ -146,7 +146,7 @@ export default function CreateAssignment() {
                             value={formData.total_marks}
                             onChange={handleChange}
                             min={0}
-                            className="mt-1 block w-full p-2 border border-gray-300 rounded dark:bg-gray-800"
+                            className="mt-1 block w-full p-2 border border-gray-300 rounded dark:bg-[#151b23]"
                             required
                         />
                     </div>
@@ -157,7 +157,7 @@ export default function CreateAssignment() {
                             name="due_date"
                             value={formData.due_date}
                             onChange={handleChange}
-                            className="mt-1 block w-full p-2 border border-gray-300 rounded dark:bg-gray-800"
+                            className="mt-1 block w-full p-2 border border-gray-300 rounded dark:bg-[#151b23]"
                             min={new Date().toISOString().split("T")[0]}
                             required
                         />
@@ -177,8 +177,8 @@ export default function CreateAssignment() {
 
                 {/* Modal for File Upload */}
                 {showModal && (
-                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                        <div className="relative bg-white dark:bg-gray-800 p-6 rounded shadow-md lg:left-32 md:left-32">
+                    <div className="fixed inset-0 flex items-center justify-center dark:bg-[#212830] bg-opacity-50">
+                        <div className="relative bg-white dark:bg-[#151b23] p-6 rounded shadow-md lg:left-32 md:left-32">
                             <h3 className="text-xl font-bold mb-4">Upload File</h3>
                             <input type="file" onChange={handleFileChange} />
                             <div className="flex justify-end mt-4">

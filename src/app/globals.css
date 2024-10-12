@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* globals.css */
+:root {
+    --bg-color: white; /* Default light mode background */
+    --text-color: black;
+  }
+  
+  .dark {
+    --bg-color: #212830; /* Dark mode background */
+    --text-color: white;
+  }
+  
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+  }
+  

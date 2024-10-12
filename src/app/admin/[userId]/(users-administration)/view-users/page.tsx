@@ -61,8 +61,8 @@ const ViewUsers = () => {
     };
 
     return (
-        <div className="bg-gray-300 dark:bg-black min-h-screen flex items-center justify-center p-6">
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md w-full max-w-6xl">
+        <div className="bg-gray-300 dark:dark:bg-[#212830] min-h-screen flex items-center justify-center p-6">
+            <div className="bg-white dark:bg-[#151b23] p-8 rounded-lg shadow-md w-full max-w-6xl">
                 <h2 className="text-2xl font-semibold mb-4 text-black dark:text-gray-300 text-center">View Users</h2>
                 {users.length === 0 ? (
                     <p className="text-gray-700 dark:text-gray-300 text-center">No users available</p>
