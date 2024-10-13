@@ -2,9 +2,10 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import axios from 'axios';
-import ExcelUploader from '@/components/Upload/ExcelUploader';
 import AddOneStudent from '@/components/Upload/AddOneStudent';
 import AddOneTeacher from '@/components/Upload/AddOneTeacher';
+import ExcelEnrollComponent from './ExcelEnrollComponent';
+import ExcelUnEnrollComponent from './ExcelUnEnrollComponent';
 
 interface users {
     user_id: string;
@@ -72,8 +73,6 @@ const CourseDetails = () => {
                 item.last_name.toLowerCase().includes(searchTerm.toLowerCase())
         );
 
-
-
     useEffect(() => {
         const getCourse = async () => {
             try {
@@ -136,6 +135,18 @@ const CourseDetails = () => {
     const handleAssignmentClick = (assignmentId: string, moduleId: string) => {
         router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments/${assignmentId}`);
     };
+
+    const handleRemoveParticipant = async (userId: string, courseId: string) => {
+        try {
+            const res = await axios.delete("/api/enrollment", {
+                data: { user_id: userId, course_id: courseId } // Use 'data' to pass the body in DELETE request
+            });
+            console.log('Participant removed:', res.data);
+        } catch (error) {
+            console.error('Error removing participant:', error);
+        }
+    };
+
 
     return (
         <div className="border border-gray-300 m-5 h-screen flex justify-center items-center">
@@ -230,7 +241,7 @@ const CourseDetails = () => {
                     {activeSection === 'assignments' && (
                         <div className="space-y-4">
                             {assignments.map((assignment) => (
-                                <div key={assignment.id} className="bg-white border border-gray-300 rounded-xl p-6 shadow-md h-64 cursor-pointer" onClick={() => handleAssignmentClick(assignment.id,assignment.module_id)}>
+                                <div key={assignment.id} className="bg-white border border-gray-300 rounded-xl p-6 shadow-md h-64 cursor-pointer" onClick={() => handleAssignmentClick(assignment.id, assignment.module_id)}>
                                     <h2 className="text-xl font-semibold mb-6">{assignment.title}</h2>
                                     <div className="shadow-md items-center p-5 border border-gray-100 rounded-xl max-w-lg">
                                         <p className="text-sm text-gray-600 mb-4">Description : {assignment.description}</p>
@@ -306,6 +317,7 @@ const CourseDetails = () => {
                                                             <th className="py-3 px-6 text-center">Last Name</th>
                                                             <th className="py-3 px-6 text-center">Email</th>
                                                             <th className="py-3 px-6 text-center">Role</th>
+                                                            <th className="py-3 px-6 text-center">Remove USER</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody className="text-gray-600 text-sm font-normal">
@@ -316,6 +328,14 @@ const CourseDetails = () => {
                                                                 <td className="py-3 px-6 text-center">{participant.last_name}</td>
                                                                 <td className="py-3 px-6 text-center">{participant.email}</td>
                                                                 <td className="py-3 px-6 text-center capitalize">{participant.role}</td>
+                                                                <td>
+                                                                    <button
+                                                                        onClick={() => handleRemoveParticipant(participant.user_id, courseId)}
+                                                                        className="py-3 px-6 text-center capitalize">
+                                                                        ❌
+                                                                    </button>
+                                                                </td>
+
                                                             </tr>
                                                         ))}
                                                     </tbody>
@@ -363,15 +383,26 @@ const CourseDetails = () => {
 
                                         {/* Conditionally render AddOneStudent or AddOneTeacher form based on state */}
                                         {showAddStudent && (
-                                            <div className="mt-4">
-                                                <AddOneStudent courseId={courseId} />
-                                            </div>
+                                            <>
+                                                <div className="mt-4">
+                                                    <AddOneStudent courseId={courseId} />
+                                                </div>
+                                                {/* <div className="mt-4">
+                                                    <ExcelEnrollComponent  />
+                                                </div> */}
+                                                {/* <div className="mt-4">
+                                                    <ExcelUnEnrollComponent />
+                                                </div> */}
+                                            </>
+
                                         )}
 
                                         {showAddTeacher && (
-                                            <div className="mt-4">
-                                                <AddOneTeacher courseId={courseId} />
-                                            </div>
+                                            <>
+                                                {/* <div className="mt-4">
+                                                    <AddOneTeacher courseId={courseId} />
+                                                </div> */}
+                                            </>
                                         )}
                                     </div>
                                 </div>
