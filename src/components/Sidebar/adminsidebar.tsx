@@ -69,8 +69,8 @@ const Sidebar: React.FC = () => {
               href={`/admin/${userId}/dashboard`}
               onClick={toggleDashboardSection}
               className={`${activeSection === 'dashboard'
-                  ? 'bg-blue-500 text-white'
-                  : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200'
+                ? 'bg-blue-500 text-white'
+                : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200'
                 } p-2 rounded-md`}
             >
               Dashboard
@@ -78,8 +78,8 @@ const Sidebar: React.FC = () => {
             <button
               onClick={toggleUserSection}
               className={`${activeSection === 'user'
-                  ? 'bg-blue-500 text-white text-left'
-                  : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 text-left'
+                ? 'bg-blue-500 text-white text-left'
+                : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 text-left'
                 } p-2 rounded-md`}
             >
               Users
@@ -109,8 +109,8 @@ const Sidebar: React.FC = () => {
             <button
               onClick={toggleCourseSection}
               className={`${activeSection === 'course'
-                  ? 'bg-blue-500 text-white text-left'
-                  : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 text-left'
+                ? 'bg-blue-500 text-white text-left'
+                : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 text-left'
                 } p-2 rounded-md`}
             >
               Course Category
@@ -134,8 +134,8 @@ const Sidebar: React.FC = () => {
             <button
               onClick={toggleGroupSection}
               className={`${activeSection === 'group'
-                  ? 'bg-blue-500 text-white text-left'
-                  : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 text-left'
+                ? 'bg-blue-500 text-white text-left'
+                : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 text-left'
                 } p-2 rounded-md`}
             >
               Groups
@@ -169,34 +169,34 @@ const Sidebar: React.FC = () => {
 
       {/* Mobile Sidebar */}
       {isMobileMenuOpen && (
-        <div className={`fixed top-18 left-0 w-64 h-full bg-gray-100 dark:bg-[#151b23] text-black dark:text-white transition-transform transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} z-50`}>
+        <div className={`fixed top-18 left-0 w-64 h-full bg-gray-100 dark:bg-[#151b23] text-black dark:text-white transition-transform transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} z-50 overflow-y-auto`}>
           <button onClick={closeMobileMenu} className="text-3xl absolute top-4 right-4 focus:outline-none text-black dark:text-white">
             ✕
           </button>
-          <ul className="font-medium space-y-4 mt-12">
+          <ul className="font-medium text-center space-y-4 mt-12 ">
             <li>
               <Link href={`/admin/${userId}/dashboard`} className="block p-4 text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
                 Dashboard
               </Link>
             </li>
             <li>
-              <button onClick={toggleUserSection} className="block p-4 text-center text-black dark:text-gray-200">
+              <button onClick={toggleUserSection} className="p-4  text-black dark:text-gray-200">
                 Users
               </button>
               {isUserSectionOpen && (
-                <ul className="pl-4">
+                <ul className="pl-4 text-xs pr-4 ">
                   <li>
-                    <Link href={`/admin/${userId}/create-user`} className="block p-4 text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
+                    <Link href={`/admin/${userId}/create-user`} className="block p-4 text-center text-black dark:bg-[#212830] mb-2 mx-2 rounded dark:text-gray-200" onClick={closeMobileMenu}>
                       Create User
                     </Link>
                   </li>
                   <li>
-                    <Link href={`/admin/${userId}/upload-users`} className="block p-4 text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
+                    <Link href={`/admin/${userId}/upload-users`} className="block p-4 text-center text-black dark:bg-[#212830] mb-2 mx-2 rounded dark:text-gray-200" onClick={closeMobileMenu}>
                       Upload Users Data
                     </Link>
                   </li>
                   <li>
-                    <Link href={`/admin/${userId}/view-users`} className="block p-4 text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
+                    <Link href={`/admin/${userId}/view-users`} className="block p-4 text-center text-black dark:bg-[#212830] mb-2 mx-2 rounded dark:text-gray-200" onClick={closeMobileMenu}>
                       View Users
                     </Link>
                   </li>
@@ -204,18 +204,18 @@ const Sidebar: React.FC = () => {
               )}
             </li>
             <li>
-              <button onClick={toggleCourseSection} className="block p-4 text-center text-black dark:text-gray-200">
+              <button onClick={toggleCourseSection} className="p-4 text-center text-black dark:text-gray-200">
                 Course Category
               </button>
               {isCourseSectionOpen && (
-                <ul className="pl-4">
+                <ul className="pl-4 text-xs pr-4">
                   <li>
-                    <Link href={`/admin/${userId}/course-category/create`} className="block p-4 text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
+                    <Link href={`/admin/${userId}/course-category/create`} className="block p-4 text-center dark:bg-[#212830] mb-2 mx-2 rounded text-black dark:text-gray-200" onClick={closeMobileMenu}>
                       Add Courses Category
                     </Link>
                   </li>
                   <li>
-                    <Link href={`/admin/${userId}/course-category/manage`} className="block p-4 text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
+                    <Link href={`/admin/${userId}/course-category/manage`} className="block p-4 text-center dark:bg-[#212830] mb-2 mx-2 rounded text-black dark:text-gray-200" onClick={closeMobileMenu}>
                       Manage Category
                     </Link>
                   </li>
@@ -223,18 +223,18 @@ const Sidebar: React.FC = () => {
               )}
             </li>
             <li>
-              <button onClick={toggleGroupSection} className="block p-4 text-center text-black dark:text-gray-200">
+              <button onClick={toggleGroupSection} className="p-4 text-center text-black dark:text-gray-200">
                 Groups
               </button>
               {isGroupSectionOpen && (
-                <ul className="pl-4">
+                <ul className="pl-4 text-xs pr-4">
                   <li>
-                    <Link href={`/admin/${userId}/groups/create-group`} className="block p-4 text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
+                    <Link href={`/admin/${userId}/groups/create-group`} className="block p-4 dark:bg-[#212830] mb-2 mx-2 rounded text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
                       Create Group
                     </Link>
                   </li>
                   <li>
-                    <Link href={`/admin/${userId}/groups`} className="block p-4 text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
+                    <Link href={`/admin/${userId}/groups`} className="block p-4 dark:bg-[#212830] mb-2 mx-2 rounded text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
                       View Groups
                     </Link>
                   </li>

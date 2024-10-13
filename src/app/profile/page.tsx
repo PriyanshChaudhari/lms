@@ -106,7 +106,8 @@ const ShowProfile = () => {
 
 
         if (user?.role === 'Admin') {
-            router.push('/admin/dashboard');
+            const adminId = user.userId;
+            router.push(`/admin/${adminId}/dashboard`);
         }
         else if (user?.role === 'Student') {
             const studentId = user.userId;
