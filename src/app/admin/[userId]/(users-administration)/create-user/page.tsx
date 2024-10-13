@@ -6,6 +6,7 @@ import axios from 'axios';
 const CreateUser = () => {
     const router = useRouter();
     const params = useParams();
+    const userId = params.userId as string;
 
     const [user, setUser] = useState({
         userId: "",
@@ -41,7 +42,7 @@ const CreateUser = () => {
                 // Check if the response status indicates success
                 if (response.status === 201) {
                     console.log('User created successfully');
-                    router.push('/admin/dashboard');
+                    router.push(`/admin/${userId}/dashboard`);
                 } else {
                     setError(response.data.error || 'Error creating user'); // Set error message if response status is not 201
                 }

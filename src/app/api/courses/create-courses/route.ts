@@ -38,7 +38,6 @@ export async function POST(req: NextRequest) {
         // Use the created course's ID to add the teacher to the enrolled_at table
         await addDoc(collection(db, 'enrolled_at'), {
             user_id: teacher_id,
-            role: "teacher",
             course_id: courseRef.id, // Use the courseRef.id here for the newly created course
             enrolled_at: new Date(),
         });
