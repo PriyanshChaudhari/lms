@@ -148,7 +148,7 @@ export default function ViewModuleAssignment() {
                     </div>
                     {/* <div>
                         <button
-                            className="bg-black text-white rounded-xl p-3 my-5"
+                            className="dark:bg-[#212830] text-white rounded-xl p-3 my-5"
                             onClick={() => router.push(params.moduleId ? `/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments/${assignmentId}/add-submission` : `/teacher/${userId}/mycourse/${courseId}/assignments/${assignmentId}/add-submission`)}
                         >
                             Add Submission

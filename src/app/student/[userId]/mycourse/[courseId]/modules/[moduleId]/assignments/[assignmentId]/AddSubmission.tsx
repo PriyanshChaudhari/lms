@@ -96,7 +96,7 @@ export default function AddSubmission() {
 
     return (
         <div className="h-screen flex justify-center items-center">
-            <div className="w-full max-w-md mx-auto dark:bg-gray-800 p-8 shadow-md rounded">
+            <div className="w-full max-w-md mx-auto dark:bg-[#151b23] p-8 shadow-md rounded">
                 <h1 className="text-2xl font-bold mb-6">Submit Assignment</h1>
                 {message && <p className="text-green-500">{message}</p>}
                 {error && <p className="text-red-500">{error}</p>}
@@ -124,7 +124,7 @@ export default function AddSubmission() {
                             <input
                                 type="file"
                                 onChange={handleFileChange}
-                                className="mt-1 block w-full p-2 border border-gray-300 rounded dark:bg-gray-800"
+                                className="mt-1 block w-full p-2 border border-gray-300 rounded dark:bg-[#151b23]"
                                 required
                             />
                         </div>
@@ -266,7 +266,7 @@ export default function AddSubmission() {
 //                             {message && <p className="text-green-500 mt-2">{message}</p>}
 
 //                             <div className="flex justify-between mt-4">
-//                                 <button type="submit" className="bg-black text-white py-2 px-7 rounded-xl hover:bg-gray-800 transition">
+//                                 <button type="submit" className="dark:bg-[#212830] text-white py-2 px-7 rounded-xl hover:bg-[#151b23] transition">
 //                                     Submit
 //                                 </button>
 //                                 <button

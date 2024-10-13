@@ -103,8 +103,8 @@ const Sidebar: React.FC = () => {
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden sm:block w-1/4 lg:w-1/6 bg-gray-100 dark:bg-gray-800 p-4 h-full fixed z-50">
-        <div className="flex flex-col gap-4 h-[85vh] bg-white dark:bg-black border border-gray-300 dark:border-gray-700 p-4">
+      <aside className="hidden sm:block w-1/4 lg:w-1/6 bg-gray-100 dark:bg-[#151b23] p-4 h-full fixed z-50">
+        <div className="flex flex-col gap-4 h-[85vh] bg-white dark:bg-[#212830] border border-gray-300 dark:border-gray-700 p-4">
           <Link href={`/student/${userId}/dashboard`} 
           onClick={toggleDashboardVisibility}
           className={`${
@@ -172,14 +172,14 @@ const Sidebar: React.FC = () => {
       </aside>
 
       {/* Mobile Sidebar Toggle */}
-      <div className="md:hidden fixed top-40 left-0 bg-white dark:bg-gray-800 border border-gray-300 rounded-e-full">
+      <div className="md:hidden fixed top-40 left-0 bg-white dark:bg-[#151b23] border border-gray-300 rounded-e-full">
         <button onClick={toggleMobileMenu} className="text-xl m-3 focus:outline-none">
           {isMobileMenuOpen ? "✕" : "☰"}
         </button>
       </div>
 
       {/* Mobile Sidebar Content */}
-      <div className={`fixed top-18 left-0 w-64 h-full bg-gray-100 dark:bg-gray-800 text-black dark:text-white transition-transform transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} z-50`}>
+      <div className={`fixed top-18 left-0 w-64 h-full bg-gray-100 dark:bg-[#151b23] text-black dark:text-white transition-transform transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} z-50`}>
         <button onClick={closeMobileMenu} className="text-3xl absolute top-4 right-4 focus:outline-none text-black dark:text-white">
           ✕
         </button>

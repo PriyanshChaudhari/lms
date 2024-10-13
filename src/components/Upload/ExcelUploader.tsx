@@ -76,7 +76,7 @@ const ExcelUploader = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <div className="bg-gray-50 dark:bg-gray-900 p-8 rounded-lg shadow-md max-w-md w-full">
+      <div className="bg-gray-50 dark:bg-[#151b23] p-8 rounded-lg shadow-md max-w-md w-full">
         <h2 className="text-2xl font-semibold mb-4 text-center">Upload Excel File</h2>
         <p className="mb-6 text-center text-gray-600">Select and upload the Excel file of your choice</p>
 

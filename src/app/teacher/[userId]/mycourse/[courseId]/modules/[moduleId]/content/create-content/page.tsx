@@ -134,7 +134,7 @@ const CreateContent = () => {
 
     return (
         <div className="flex justify-center items-center h-screen">
-            <div className="w-full max-w-md mx-auto mt-8 p-6 dark:bg-gray-800 rounded shadow-md">
+            <div className="w-full max-w-md mx-auto mt-8 p-6 dark:bg-[#151b23] rounded shadow-md">
                 <h2 className="text-2xl font-bold mb-4">Create Content</h2>
 
                 <form onSubmit={handleSubmit}>
@@ -221,8 +221,8 @@ const CreateContent = () => {
                 </form>
 
                 {showModal && (
-                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                        <div className="relative bg-white dark:bg-gray-800 p-6 rounded shadow-md lg:left-32 md:left-32">
+                    <div className="fixed inset-0 flex items-center justify-center dark:bg-[#212830] bg-opacity-50">
+                        <div className="relative bg-white dark:bg-[#151b23] p-6 rounded shadow-md lg:left-32 md:left-32">
                             <h3 className="text-xl font-bold mb-4">Upload File</h3>
                             <input type="file" onChange={handleFileChange} />
                             <div className="flex justify-end mt-4">

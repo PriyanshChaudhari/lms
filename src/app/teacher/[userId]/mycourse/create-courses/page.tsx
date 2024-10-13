@@ -176,7 +176,7 @@ const CreateCourse = () => {
 
     return (
         <div className=''>
-            <div className="max-w-md mx-auto mt-8 p-6 bg-white dark:bg-gray-800 rounded shadow-md">
+            <div className="max-w-md mx-auto mt-8 p-6 bg-white dark:bg-[#151b23] rounded shadow-md">
                 <h2 className="text-2xl font-bold mb-4">Create a New Course</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
@@ -189,7 +189,7 @@ const CreateCourse = () => {
                             name="title"
                             value={course.title}
                             onChange={handleChange}
-                            className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-800 uppercase"
+                            className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-[#151b23] uppercase"
                             required
                         />
                     </div>
@@ -204,7 +204,7 @@ const CreateCourse = () => {
                             autoCapitalize='true'
                             value={course.description}
                             onChange={handleChange}
-                            className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-800"
+                            className="mt-1  capitalize p-2 w-full border border-gray-300 rounded dark:bg-[#151b23]"
                             required
                         />
                     </div>
@@ -251,7 +251,7 @@ const CreateCourse = () => {
                         name="category"
                         value={course.category}
                         onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-800"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-[#151b23]"
                         required
                     >
                         <option value="">Select Category</option>

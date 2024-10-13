@@ -128,7 +128,7 @@ const CourseDetails = () => {
         <div className="border border-gray-300 m-5">
             <div className="max-w-4xl mx-auto p-5">
                 <h1 className="text-3xl font-bold mb-4">{courses?.title}</h1>
-                <p className="text-lg text-gray-700 mb-6">{courses?.description}</p>
+                <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">{courses?.description}</p>
 
                 <nav className="mb-6 border border-gray-300 rounded-xl shadow-md p-2">
                     <ul className="flex justify-start space-x-4 list-none p-0">
@@ -189,7 +189,7 @@ const CourseDetails = () => {
                             {/* Modules List */}
                             {sortedModules.map((module) => (
                                 <div key={module.id} className="space-y-4">
-                                    <div className="bg-white border flex justify-between border-gray-300 rounded-xl p-4 shadow-md min-h-6">
+                                    <div className="bg-white border flex justify-between border-gray-300  rounded-xl p-4 shadow-md min-h-6">
                                         <h2 className="text-xl font-semibold">{module.title}</h2>
                                         <h2 className="text-xl font-semibold">{module.description}</h2>
                                         <h2 className="text-xl font-semibold">{module.position}</h2>
@@ -259,7 +259,7 @@ const CourseDetails = () => {
                                             placeholder="Search participants by name"
                                             value={searchTerm}
                                             onChange={(e) => setSearchTerm(e.target.value)}
-                                            className="mb-4 p-2 border border-gray-300 rounded w-full"
+                                            className="mb-4 p-2 border border-gray-300 dark:bg-[#212830] rounded w-full"
                                         />
                                     </div>
                                     <div className="overflow-x-auto">
@@ -268,7 +268,7 @@ const CourseDetails = () => {
                                         ) : (
                                             <table className="min-w-full table-auto border-collapse border border-gray-300">
                                                 <thead>
-                                                    <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                                                    <tr className="bg-gray-200 dark:bg-[#151b23] text-gray-600 uppercase text-sm leading-normal">
                                                         <th className="py-3 px-6 text-center">Student ID</th>
                                                         <th className="py-3 px-6 text-center">First Name</th>
                                                         <th className="py-3 px-6 text-center">Last Name</th>
@@ -276,7 +276,7 @@ const CourseDetails = () => {
                                                         <th className="py-3 px-6 text-center">Role</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody className="text-gray-600 text-sm font-normal">
+                                                <tbody className="text-gray-600 dark:text-gray-100 text-sm font-normal">
                                                     {filteredParticipants.map((participant) => (
                                                         <tr key={participant.user_id} className="border-b border-gray-200 ">
                                                             <td className="py-3 px-6 text-center whitespace-nowrap">{participant.user_id}</td>
