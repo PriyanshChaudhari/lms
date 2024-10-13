@@ -201,9 +201,10 @@ const CreateCourse = () => {
                         <textarea
                             id="description"
                             name="description"
+                            autoCapitalize='true'
                             value={course.description}
                             onChange={handleChange}
-                            className="mt-1  capitalize p-2 w-full border border-gray-300 rounded dark:bg-gray-800"
+                            className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-800"
                             required
                         />
                     </div>

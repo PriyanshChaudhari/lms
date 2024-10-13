@@ -9,7 +9,7 @@ interface Props {
 const AddOneTeacher = ({ courseId }: Props) => {
     const [enrollment, setEnrollment] = useState({
         teacher_id: "",
-        role: "teacher",
+        // role: "teacher",
         course_id: courseId,
     });
 
@@ -72,7 +72,7 @@ const AddOneTeacher = ({ courseId }: Props) => {
                 // Optionally, reset the form
                 setEnrollment({
                     teacher_id: "",
-                    role: "teacher",
+                    // role: "teacher",
                     course_id: courseId,
                 });
             } catch (error: any) {

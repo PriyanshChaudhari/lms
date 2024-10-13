@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
         const usersList = usersSnapshot.docs.map(doc => ({
             id: doc.id,
             ...doc.data()
-        })).filter(user => user.role === "teacher");
+        })).filter(user => user.role === "Teacher");
 
         // Return the list of users as JSON
         return NextResponse.json(usersList);
