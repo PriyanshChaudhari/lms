@@ -62,7 +62,7 @@ export async function PUT(req: NextRequest, { params }: { params: { assignmentId
         const due_date = formData.get('due_date') as string;
 
         const docRef = doc(db, "assessments", assignmentId);
-        let attachment_url = '';
+        let attachment_url = ;
 
         // Step 1: Upload the file, if provided
         const file = formData.get('file') as File | null;

@@ -23,18 +23,18 @@ export async function DELETE(req: NextRequest, { params }: { params: { courseId:
 
         // Step 2: Delete the course image from Firebase Storage if it exists
         if (coursePicUrl) {
-            // Extract the storage path from the URL (it's after the bucket URL)
             const imageRefPath = decodeURIComponent(coursePicUrl.split("/o/")[1].split("?")[0]);
 
-            // Get a reference to the file in Firebase Storage
-            const imageRef = ref(storage, imageRefPath);
-
-            // Delete the image from Firebase Storage
-            await deleteObject(imageRef);
+            // If the image is not the default course image, delete it
+            if (imageRefPath !== "default-course-pic.png") {
+                const imageRef = ref(storage, imageRefPath);
+                await deleteObject(imageRef); // Delete the custom image from storage
+            }
         }
 
-        // Step 3: Delete the course document from Firestore
+        // Delete the course document from Firestore
         await deleteDoc(courseRef);
+
 
         return NextResponse.json({ message: "Course and associated image deleted successfully" }, { status: 200 });
     } catch (error) {
