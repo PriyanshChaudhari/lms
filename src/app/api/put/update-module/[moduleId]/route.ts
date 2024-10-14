@@ -1,14 +1,14 @@
 import { db } from "@/lib/firebaseConfig"; // Firestore instance
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, Timestamp, updateDoc } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(req: NextRequest, { params }: { params: { moduleId: string } }) {
     try {
         const { moduleId } = params
-        const { title, description, position, course_id } = await req.json();
+        const { title, description, course_id } = await req.json();
         console.log(moduleId)
 
-        if (!course_id || !title || !description || !position) {
+        if (!course_id || !title || !description) {
             return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
         }
 
@@ -19,9 +19,8 @@ export async function PUT(req: NextRequest, { params }: { params: { moduleId: st
         const updatedModule = {
             title,
             description,
-            position,
             course_id,
-            updated_at: new Date(), // Set updated timestamp
+            updated_at: Timestamp.now(), // Set updated timestamp
         };
 
         await updateDoc(moduleRef, updatedModule);

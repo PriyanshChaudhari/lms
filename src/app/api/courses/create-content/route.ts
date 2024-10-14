@@ -1,5 +1,5 @@
 import { db } from "@/lib/firebaseConfig";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, Timestamp } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { app } from '@/lib/firebaseConfig';
@@ -45,14 +45,12 @@ export async function POST(req: NextRequest) {
         }
 
         await addDoc(collection(db, 'course-content'), {
-            course_id,
-            module_id,
+            course_module_id:module_id,
             title,
             content_type,
             content_url,
             text_content,
-            position,
-            created_at: new Date(),
+            created_at: Timestamp.now() 
         });
 
         return NextResponse.json({ message: 'course-content added' }, { status: 201 });

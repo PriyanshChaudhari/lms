@@ -23,9 +23,9 @@ export default function AddSubmission() {
     useEffect(() => {
         const fetchSubmission = async () => {
             try {
-                const response = await axios.get(`/api/assignments/${assignmentId}/submission/${userId}`);
+                const response = await axios.post(`/api/assignments/${assignmentId}/submission/check-submission`,{userId,assignmentId});
                 if (response.status === 200) {
-                    setSubmission(response.data.submissions.file_url); // Existing submission URL
+                    setSubmission(response.data.submissions[0].file_url); // Existing submission URL
                 }
             } catch (error) {
                 console.error("Error fetching submission:", error);
@@ -41,7 +41,7 @@ export default function AddSubmission() {
         }
     };
 
-    // Submit assignment
+    // Submit or update assignment
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         if (!file) {
@@ -61,9 +61,12 @@ export default function AddSubmission() {
                 formSubmissionData.append("file", file);
             }
 
-            const response = await axios.post("/api/assignments/add-submission", formSubmissionData);
+            const url = `/api/assignments/${assignmentId}/submission/manage-submission` 
+                // : `/api/assignments/${assignmentId}/submission/add-submission`;
+
+            const response = await axios.post(url, formSubmissionData);
             if (response.status === 201) {
-                setMessage("Submission added successfully!");
+                setMessage("Submission added/updated successfully!");
                 setSubmission(response.data.submission_url); // Update the submission URL
                 setFile(null);
             } else {
@@ -80,10 +83,11 @@ export default function AddSubmission() {
     const handleDelete = async () => {
         try {
             setDeleting(true);
-            const response = await axios.delete(`/api/assignments/${assignmentId}/submission/${userId}`);
+            const response = await axios.delete(`/api/assignments/${assignmentId}/submission/manage-submission`,{data:{userId,assignmentId}});
             if (response.status === 200) {
                 setMessage("Submission deleted successfully.");
                 setSubmission(null); // Remove submission from UI
+                setFile(null); // Reset file input
             } else {
                 setError("Failed to delete submission.");
             }
@@ -139,6 +143,32 @@ export default function AddSubmission() {
                             </button>
                         </div>
                     </form>
+                )}
+                {submission && (
+                    <div className="mt-4">
+                        <h2 className="text-lg font-semibold">Edit Submission</h2>
+                        <form onSubmit={handleSubmit}>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-100">Upload New File</label>
+                                <input
+                                    type="file"
+                                    onChange={handleFileChange}
+                                    className="mt-1 block w-full p-2 border border-gray-300 rounded dark:bg-[#151b23]"
+                                    required
+                                />
+                            </div>
+
+                            <div className="mb-4">
+                                <button
+                                    type="submit"
+                                    className={`bg-blue-600 text-white w-full px-4 py-2 rounded hover:bg-blue-700 ${uploading ? "opacity-50 cursor-not-allowed" : ""}`}
+                                    disabled={uploading}
+                                >
+                                    {uploading ? "Uploading..." : "Edit Submission"}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 )}
             </div>
         </div>

@@ -224,7 +224,7 @@ export default function EditAssignment() {
     useEffect(() => {
         async function fetchAssignment() {
             try {
-                const response = await axios.post('/api/get/assignments/one-assignments', { assignmentId });
+                const response = await axios.get(`/api/assignments/${assignmentId}`);
                 const assignment = response.data.assignment;
                 setFormData({
                     course_id: courseId,
@@ -354,7 +354,8 @@ export default function EditAssignment() {
                         </div>
                     )}
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-100">Upload New File</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-100">ReUpload  File</label>
+                        <p className='text-red-600'>If you are uploading new file then upload all previous file beacase it will overwrite previous file or for multiple file upload zip file</p>
                         <input type="file" onChange={handleFileChange} />
                     </div>
                     <div className="mb-4">

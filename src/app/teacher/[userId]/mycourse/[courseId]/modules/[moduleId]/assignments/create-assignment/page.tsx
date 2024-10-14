@@ -44,6 +44,10 @@ export default function CreateAssignment() {
             setError('Please fill in all required fields.');
             return false;
         }
+        if(!file){
+            setError('Please upload file.');
+            return false;
+        }
         return true;
     };
 
@@ -115,19 +119,7 @@ export default function CreateAssignment() {
                             required
                         />
                     </div>
-                    {/* <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-100">Assessment Type</label>
-                        <select
-                            name="assessment_type"
-                            value={formData.assessment_type}
-                            onChange={handleChange}
-                            className="mt-1 block w-full p-2 border border-gray-300 rounded dark:bg-[#151b23]"
-                            required
-                        >
-                            <option value="quiz">Quiz</option>
-                            <option value="assignment">Assignment</option>
-                        </select>
-                    </div> */}
+
                     <div className="mb-4">
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-100">Description</label>
                         <textarea
@@ -138,6 +130,7 @@ export default function CreateAssignment() {
                             required
                         />
                     </div>
+
                     <div className="mb-4">
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-100">Total Marks</label>
                         <input
@@ -150,6 +143,7 @@ export default function CreateAssignment() {
                             required
                         />
                     </div>
+
                     <div className="mb-6">
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-100">Due Date</label>
                         <input

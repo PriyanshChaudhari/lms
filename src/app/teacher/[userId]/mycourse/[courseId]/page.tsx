@@ -5,7 +5,6 @@ import axios from 'axios';
 import AddOneStudent from '@/components/Upload/AddOneStudent';
 import AddOneTeacher from '@/components/Upload/AddOneTeacher';
 import ExcelEnrollComponent from './ExcelEnrollComponent';
-import ExcelUnEnrollComponent from './ExcelUnEnrollComponent';
 import EnrollByGroupComponent from './EnrollByGroupComponent';
 
 interface users {
@@ -385,18 +384,18 @@ const CourseDetails = () => {
                                         {/* Conditionally render AddOneStudent or AddOneTeacher form based on state */}
                                         {showAddStudent && (
                                             <>
-                                                {/* <div className="mt-4">
+                                                <div className="mt-4">
                                                     <AddOneStudent courseId={courseId} />
-                                                </div> */}
+                                                </div>
                                                 {/* <div className="mt-4">
                                                     <EnrollByGroupComponent/>
                                                 </div> */}
                                                 {/* <div>
                                                     <ExcelUnEnrollComponent/>
                                                 </div> */}
-                                                <div className="mt-4">
+                                                {/* <div className="mt-4">
                                                     <ExcelEnrollComponent  />
-                                                </div>
+                                                </div> */}
                                                 {/* <div className="mt-4">
                                                     <ExcelUnEnrollComponent />
                                                 </div> */}

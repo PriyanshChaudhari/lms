@@ -82,7 +82,7 @@ const MyCourse: React.FC = () => {
 
                                     {courses.map((course) => (
                                         <div key={course.course_id} className="border border-gray-300 dark:text-white  hover:bg-slate-100 dark:hover:bg-[#1a1a1a] rounded-xl p-5 w-full max-w-xs shadow-sm cursor-pointer">
-                                            <img src={`${course.coursePicUrl}`} className="rounded mb-4"></img>
+                                            <img src={`${course.coursePicUrl}`} alt="img" className="rounded mb-4"></img>
                                             <p>{course.course_id}</p>
                                             <h3 className="text-lg font-semibold mb-2 underline" onClick={() => handleClick(course.course_id)}>{course.title}</h3>
                                             <p className="text-sm text-gray-600 mb-4">{course.description}</p>

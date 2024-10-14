@@ -1,5 +1,5 @@
 import { db } from "@/lib/firebaseConfig"; // Firestore instance
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, Timestamp, updateDoc } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(req: NextRequest, { params }: { params: { courseId: string } }) {
@@ -20,7 +20,7 @@ export async function PUT(req: NextRequest, { params }: { params: { courseId: st
             coursePicUrl,
             teacher_id,
             category,
-            updated_at: new Date(), // Set updated timestamp
+            updated_at: Timestamp.now(), // Set updated timestamp
         };
 
         await updateDoc(courseRef, updatedCourse);

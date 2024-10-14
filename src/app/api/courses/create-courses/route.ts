@@ -1,5 +1,5 @@
 import { db } from "@/lib/firebaseConfig";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs, Timestamp } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -10,29 +10,13 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
-        // Fetch all thumbnails from the thumbnails collection
-        // const thumbnailsSnapshot = await getDocs(collection(db, 'thumbnails'));
-        // const thumbnails = thumbnailsSnapshot.docs.map(doc => doc.data());
-
-        // if (thumbnails.length === 0) {
-        //     return NextResponse.json({ error: 'No thumbnails available' }, { status: 404 });
-        // }
-
-        // Select a random thumbnail from the thumbnails collection
-        // const randomThumbnail = thumbnails[Math.floor(Math.random() * thumbnails.length)].url;
-        // console.log('Random thumbnail:', randomThumbnail);
-        
-        // const firebaseStorageId = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET;
-        // const defaultProfilePicUrl = `https://firebasestorage.googleapis.com/v0/b/${firebaseStorageId}/o/default-profile-pic.png?alt=media`;
-        // Create the course with the random thumbnail
-
         const courseRef = await addDoc(collection(db, 'courses'), {
             title,
             description, // Use the random thumbnail URL here
             teacher_id,
             category,
             coursePicUrl ,
-            created_at: new Date(),
+            created_at: Timestamp.now()
         });
 
         // Use the created course's ID to add the teacher to the enrolled_at table

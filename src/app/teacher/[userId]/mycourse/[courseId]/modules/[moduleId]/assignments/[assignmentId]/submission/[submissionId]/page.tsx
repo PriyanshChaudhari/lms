@@ -9,7 +9,7 @@ export default function ReviewSubmission() {
     const router = useRouter();
 
     const [submission, setSubmission] = useState({
-        student_name: '',
+        student_id: '',
         submission_date: '',
         file_url: '',
         feedback: '',
@@ -21,10 +21,16 @@ export default function ReviewSubmission() {
     useEffect(() => {
         const fetchSubmissionDetails = async () => {
             try {
-                const response = await axios.post('/api/get/submissions/one', { submissionId });
-                const data = response.data;
+                const response = await axios.get(`/api/assignments/${assignmentId}/submission/${submissionId}`);
+                const data = response.data.submission;
                 if (response.status === 200) {
-                    setSubmission(data);
+                    setSubmission({
+                        student_id: data.user_id,
+                        submission_date: data.submission_date,
+                        file_url: data.file_url,
+                        feedback: data.feedback || '',
+                        marks_obtained: data.marks_obtained || 0
+                    });
                 } else {
                     setError('Failed to fetch submission details');
                 }
@@ -34,7 +40,7 @@ export default function ReviewSubmission() {
         };
 
         fetchSubmissionDetails();
-    }, [submissionId]);
+    }, [submissionId,assignmentId]);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setSubmission({
@@ -43,10 +49,10 @@ export default function ReviewSubmission() {
         });
     };
 
-    const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            const response = await axios.put(`/api/submissions/${submissionId}/grade`, {
+            const response = await axios.put(`/api/assignments/${assignmentId}/submission/${submissionId}`, {
                 marks_obtained: submission.marks_obtained,
                 feedback: submission.feedback
             });
@@ -54,7 +60,7 @@ export default function ReviewSubmission() {
             if (response.status === 200) {
                 setSuccess('Submission graded successfully!');
                 setError('');
-                router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments/${assignmentId}/submissions`);
+                router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments/${assignmentId}/submission`);
             } else {
                 setError('Failed to submit grades.');
             }
@@ -69,7 +75,7 @@ export default function ReviewSubmission() {
             {error && <p className="text-red-500 mb-4">{error}</p>}
             {success && <p className="text-green-500 mb-4">{success}</p>}
 
-            <p className="mb-2"><strong>Student:</strong> {submission.student_name}</p>
+            <p className="mb-2"><strong>Student ID:</strong> {submission.student_id}</p>
             <p className="mb-2"><strong>Submission Date:</strong> {new Date(submission.submission_date.seconds * 1000).toLocaleDateString()}</p>
             <a href={submission.file_url} className="text-blue-500 hover:underline mb-6 block" target="_blank" rel="noopener noreferrer">
                 View Submitted File
