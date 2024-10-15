@@ -9,10 +9,12 @@ interface ExcelMemberComponentProps {
 
 const ExcelMemberComponent: React.FC<ExcelMemberComponentProps> = ({ onClose }) => {
     const [file, setFile] = useState<File | null>(null);
-    const params = useParams();
-    const userId = params.userId as string;
     const [error, setError] = useState<string>('');
     const [message, setMessage] = useState<string>('');
+    const [actionType, setActionType] = useState<'upload' | 'remove' | null>(null);
+    const params = useParams();
+    const userId = params.userId as string;
+    const groupId = params.groupId as string;
     const router = useRouter();
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,23 +42,37 @@ const ExcelMemberComponent: React.FC<ExcelMemberComponentProps> = ({ onClose }) 
                 const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
                 try {
-                    // Send the members array as payload
-                    const response = await axios.post('/api/groups/upload-members', {
-                        members: jsonData, // Ensure jsonData is an array
-                    });
+                    let response;
 
-                    if (response.status === 201) {
-                        setMessage('Group members Upload successfully');
-                        setTimeout(() => {
-                            onClose();
-                            router.push(`/admin/${userId}/dashboard`);
-                        }, 2000);
+                    if (actionType === 'upload') {
+                        response = await axios.post('/api/groups/upload-members', {
+                            members: jsonData,
+                        });
+                    } else if (actionType === 'remove') {
+                        response = await axios.delete('/api/groups/upload-members', {
+                            data: { members: jsonData },
+                        });
+                    }
+
+                    if (response?.status === 201) {
+                        setMessage(
+                            actionType === 'upload'
+                                ? 'Group members uploaded successfully'
+                                : 'Group members removed successfully'
+                        );
+                        // setTimeout(() => {
+                        //     router.push(`/admin/${userId}/dashboard`);
+                        // }, 2000);
                     } else {
-                        alert('Failed to upload group members');
-                        console.error('Failed to upload data');
+                        setError(
+                            actionType === 'upload'
+                                ? 'Failed to upload group members'
+                                : 'Failed to remove group members'
+                        );
                     }
                 } catch (error) {
-                    console.error('Error uploading data:', error);
+                    console.error('Error:', error);
+                    setError('An error occurred while processing the request.');
                 }
             }
         };
@@ -66,7 +82,9 @@ const ExcelMemberComponent: React.FC<ExcelMemberComponentProps> = ({ onClose }) 
     return (
         <div className="fixed inset-0 flex items-center justify-center dark:bg-[#212830] bg-opacity-50">
             <div className="w-full max-w-md mx-auto bg-white dark:bg-[#151b23] p-8 shadow-md rounded">
-                <h1 className="text-2xl font-bold mb-6">Remove Group Members</h1>
+                <h1 className="text-2xl font-bold mb-6">
+                    {actionType === 'remove' ? 'Remove Group Members' : 'Upload Group Members'}
+                </h1>
                 {message && <p className="text-green-500 mb-4">{message}</p>}
                 {error && <p className="text-red-500 mb-4">{error}</p>}
                 <form onSubmit={(e) => e.preventDefault()}>
@@ -96,14 +114,27 @@ const ExcelMemberComponent: React.FC<ExcelMemberComponentProps> = ({ onClose }) 
                     <div className="flex justify-between">
                         <button
                             type="button"
-                            onClick={handleFileUpload}
+                            onClick={() => {
+                                setActionType('upload');
+                                handleFileUpload();
+                            }}
                             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200"
                         >
                             Upload Members
                         </button>
                         <button
                             type="button"
-                            onClick={onClose}
+                            onClick={() => {
+                                setActionType('remove');
+                                handleFileUpload();
+                            }}
+                            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition duration-200"
+                        >
+                            Remove Members
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setFile(null)}
                             className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition duration-200"
                         >
                             Cancel
@@ -113,6 +144,6 @@ const ExcelMemberComponent: React.FC<ExcelMemberComponentProps> = ({ onClose }) 
             </div>
         </div>
     );
-}
+};
 
 export default ExcelMemberComponent;

@@ -3,7 +3,7 @@ import React, { ChangeEvent, useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
 
-const CreateCourse = () => {
+const CreateCourseModule = () => {
     const params = useParams()
     const router = useRouter()
     const userId = params.userId;
@@ -11,7 +11,6 @@ const CreateCourse = () => {
     const [module, setModule] = useState({
         title: "",
         description: "",
-        position: 0,
         course_id: courseId
     });
 
@@ -48,7 +47,6 @@ const CreateCourse = () => {
             setModule({
                 title: "",
                 description: "",
-                position: 0,
                 course_id: courseId
             });
             router.push(`/teacher/${userId}/mycourse/${courseId}/`)
@@ -91,21 +89,6 @@ const CreateCourse = () => {
                     />
                 </div>
 
-                <div className="mb-4">
-                    <label htmlFor="position" className="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-2">
-                        Position
-                    </label>
-                    <input
-                        type="number"
-                        id="position"
-                        name="position"
-                        min={1}
-                        value={module.position}
-                        onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-[#151b23]"
-                    />
-                </div>
-
                 <div className='mt-8'>
                     <button
                         type="submit"
@@ -120,4 +103,4 @@ const CreateCourse = () => {
     );
 };
 
-export default CreateCourse;
+export default CreateCourseModule;

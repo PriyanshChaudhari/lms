@@ -14,7 +14,6 @@ const EditCourse = () => {
     const [course, setCourse] = useState({
         title: "",
         description: "",
-        coursePicUrl: "",
         teacher_id: userId,
         category: ""
     });
@@ -22,7 +21,8 @@ const EditCourse = () => {
     const [categories, setCategories] = useState<{ id: string; category_name: string; parent_category_id: string | null }[]>([]);
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const [loading, setLoading] = useState(true); // To manage loading state
-    const [imageFile, setImageFile] = useState<File | null>(null);
+    const [file, setFile] = useState<File | null>(null); // File state
+    const [error, setError] = useState('');
 
     const firebaseStorageId = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET;
     const defaultCoursePicUrl = `https://firebasestorage.googleapis.com/v0/b/${firebaseStorageId}/o/default-course-pic.png?alt=media`;
@@ -37,7 +37,6 @@ const EditCourse = () => {
                 setCourse({
                     title: courseData.title,
                     description: courseData.description,
-                    coursePicUrl: courseData.coursePicUrl || defaultCoursePicUrl,
                     teacher_id: courseData.teacher_id || userId,
                     category: courseData.category || ""
                 });
@@ -63,6 +62,23 @@ const EditCourse = () => {
         setCourse({ ...course, [name]: value });
     };
 
+    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            setFile(e.target.files[0]);
+        }
+    };
+
+    const validateForm = () => {
+        const { title, description, category, teacher_id } = course;
+        if (!title || !description || !category || !teacher_id) {
+            setError('Please fill in all required fields.');
+            return false;
+        }
+        return true;
+    };
+
+
+
     const handleCategoryChange = (index: number, e: ChangeEvent<HTMLSelectElement>) => {
         const { value } = e.target;
         const updatedSelectedCategories = [...selectedCategories.slice(0, index + 1)];
@@ -73,43 +89,28 @@ const EditCourse = () => {
         setCourse({ ...course, category: value });
     };
 
-    const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        setImageFile(file || null);
-    };
-
-    const uploadImageAndGetUrl = async () => {
-        if (!imageFile) {
-            return course.coursePicUrl; // Keep the old image if no new file is uploaded
-        }
-
-        if (!course.title.trim()) {
-            throw new Error('Title cannot be empty when uploading an image');
-        }
-
-        const formattedTitle = course.title.replace(/\s+/g, '-').toLowerCase();
-        const storageRef = ref(storage, `course-images/${formattedTitle}`);
-        const uploadTask = await uploadBytesResumable(storageRef, imageFile);
-        return await getDownloadURL(uploadTask.ref);
-    };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const coursePicUrl = await uploadImageAndGetUrl();
-
+        if (!validateForm()) {
+            return; // Exit if validation fails
+        }
         try {
-            console.log("Updating course:", course);
+            const formSubmissionData = new FormData();
+            formSubmissionData.append('title', course.title);
+            formSubmissionData.append('description', course.description);
+            formSubmissionData.append('teacher_id', course.teacher_id);
+            formSubmissionData.append('category', course.category);
 
-            const res = await axios.put(`/api/put/update-course/${courseId}`, {
-                ...course,
-                coursePicUrl // Use the new or old image URL
-            }); // Send updated data
-            console.log("Course updated:", res.data);
+            // Attach the image file to the form data
+            if (file) {
+                formSubmissionData.append('file', file);
+            }
 
-            // Optionally, redirect after successful update
-            router.push(`/teacher/${userId}/mycourse`);
+            // Send form data to the backend
+            const res = await axios.put(`/api/put/update-course/${courseId}`, formSubmissionData);
+            router.push(`/teacher/${userId}/mycourse/`);
         } catch (error) {
-            console.error("Error updating course:", error);
+            setError('An error occurred. Please try again.');
         }
     };
 
@@ -204,24 +205,10 @@ const EditCourse = () => {
                         <input
                             type="file"
                             accept="image/png, image/jpeg"
-                            onChange={handleImageChange}
+                            onChange={handleFileChange}
                             className="mt-1 p-2 w-full border"
                         />
                     </div>
-
-                    {/* <div className="mb-4">
-                    <label htmlFor="thumbnail" className="block text-sm font-medium text-gray-700">
-                        Thumbnail URL
-                    </label>
-                    <input
-                        type="text"
-                        id="thumbnail"
-                        name="thumbnail"
-                        value={course.thumbnail}
-                        onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded"
-                    />
-                </div> */}
 
                     {renderCategoryDropdowns()}
 

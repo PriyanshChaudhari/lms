@@ -4,26 +4,25 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
     try {
-        const { student_id, assignment_id } = await req.json();
+        const { userId, assignmentId } = await req.json();
 
-        if (!student_id || !assignment_id) {
+        if (!userId || !assignmentId) {
             return NextResponse.json({ error: "Missing student_id or assignment_id" }, { status: 400 });
         }
 
         // Query submissions collection for the current student and assignment
         const q = query(collection(db, "submissions"), 
-            where("student_id", "==", student_id), 
-            where("assignment_id", "==", assignment_id)
+            where("user_id", "==", userId), 
+            where("assignment_id", "==", assignmentId)
         );
 
         const querySnapshot = await getDocs(q);
-
-        // If a document exists for the student's submission
-        if (!querySnapshot.empty) {
-            return NextResponse.json({ exists: true }, { status: 200 });
-        } else {
-            return NextResponse.json({ exists: false }, { status: 200 });
-        }
+        const submissions = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data(),
+        }));
+        const exists = submissions.length > 0;
+        return NextResponse.json({ submissions:submissions ,exists}, { status: 200 });
 
     } catch (error) {
         console.error("Error checking submission:", error);

@@ -24,9 +24,8 @@ interface contents {
     id: string;
     title: string;
     description: string;
-    position: number;
-    text_content: string;
-    content_url: string;
+    content_type: string;
+    attachments: string[];
 }
 
 export default function ViewModule() {
@@ -81,7 +80,7 @@ export default function ViewModule() {
 
     const handleDeleteContent = async () => {
         try {
-            const res = await axios.delete(`/api/delete/delete-content/${contentId}`);
+            const res = await axios.delete(`/api/delete/delete-content/${contentId}`, { data: { courseId, moduleId } });
             console.log(res.data);
         } catch (error) {
             console.log(error)
@@ -106,9 +105,22 @@ export default function ViewModule() {
                 <div className="space-y-4 ">
                     <div className="bg-white border border-gray-300 rounded-xl p-6 shadow-md h-26">
                         <h2 className="text-xl font-semibold mb-2">{oneContent?.title}</h2>
-                        <iframe src={oneContent?.content_url} width="100%" height="300px" className='mb-4'></iframe>
-                        <h2 className="text-xl font-semibold mb-2">{oneContent?.text_content}</h2>
-                    
+                        {oneContent?.attachments?.length > 0 && (
+                            <div>
+                                {oneContent?.attachments.map((attachment, index) => (
+                                    <div key={index} className="mb-4">
+                                        <a href={attachment} target="_blank" rel="noopener noreferrer">LINK {index + 1}</a>
+                                        <iframe
+                                            src={attachment}
+                                            width="100%"
+                                            height="300px"
+                                            className="mb-4"
+                                            title={`iframe-${index}`}
+                                        ></iframe>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                         {/* Edit Content Button */}
                         <button
                             className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600 mt-2"

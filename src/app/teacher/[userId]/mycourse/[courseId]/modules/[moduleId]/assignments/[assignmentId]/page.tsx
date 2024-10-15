@@ -109,7 +109,7 @@ export default function ViewModuleAssignment() {
                 <p className="text-lg text-gray-700 mb-6">{courses?.description}</p>
                 <nav className="mb-6 p-2">
                     <ul className="flex justify-start space-x-4 list-none p-0">
-                        <li className="p-3 rounded-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/student/mycourse/${params.courseId}`)}>{courses?.title}</li>
+                        <li className="p-3 rounded-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}`)}>{courses?.title}</li>
                         <li className="p-3 rounded-xl text-black cursor-pointer">/</li>
                         <li className="p-3 rounded-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}`)}>{oneModule?.title}</li>
                         <li className="p-3 rounded-xl text-black cursor-pointer">/</li>

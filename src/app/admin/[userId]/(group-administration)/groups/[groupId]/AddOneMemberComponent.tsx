@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useParams } from 'next/navigation';
 
 interface AddOneMemberComponentProps {
-  onClose: () => void;
+    onClose: () => void;
 }
 
 const AddOneMemberComponent: React.FC<AddOneMemberComponentProps> = ({ onClose }) => {

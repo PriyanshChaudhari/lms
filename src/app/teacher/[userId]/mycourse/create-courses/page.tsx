@@ -14,7 +14,6 @@ const CreateCourse = () => {
         description: "",
         teacher_id: userId,
         category: "",
-        coursePicUrl: ""
     });
     const [category, setCategory] = useState({
         category_name: "",
@@ -22,13 +21,9 @@ const CreateCourse = () => {
     });
     const [categories, setCategories] = useState<{ id: string; category_name: string; parent_category_id: string | null }[]>([]);
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-    const [imageFile, setImageFile] = useState<File | null>(null);
+    const [file, setFile] = useState<File | null>(null); // File state
+    const [error, setError] = useState('');
 
-    const firebaseStorageId = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET;
-    const defaultCoursePicUrl = `https://firebasestorage.googleapis.com/v0/b/${firebaseStorageId}/o/default-course-pic.png?alt=media`;
-
-    const hasFetchedTeachers = useRef(false);
-    const [teachers, setTeachers] = useState<{ id: string; name: string }[]>([]);
 
     const fetchCategories = async () => {
         try {
@@ -53,23 +48,15 @@ const CreateCourse = () => {
         setCategory({ ...category, parent_category_id: value });
     };
 
-    // useEffect(() => {
-    //     // Fetch the list of teachers when the component mounts
-    //     const fetchTeachers = async () => {
-    //         try {
-    //             const res = await axios.get('/api/get/teachers');
-    //             setTeachers(res.data);
-    //         } catch (error) {
-    //             console.error('Error fetching teachers:', error);
-    //         }
-    //     };
-
-    //     fetchTeachers();
-    // }, []);
-
     const handleChange = (e: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setCourse({ ...course, [name]: value });
+    };
+
+    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            setFile(e.target.files[0]);
+        }
     };
 
     const updateCategoryInCourse = () => {
@@ -89,56 +76,56 @@ const CreateCourse = () => {
         });
     };
 
-    const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        setImageFile(file || null);
-    };
-
-    const uploadImageAndGetUrl = async () => {
-        if (!imageFile) {
-            // Return default course picture URL if no file is uploaded
-            return defaultCoursePicUrl;
+    const validateForm = () => {
+        const { title, description, category, teacher_id } = course;
+        if (!title || !description || !category || !teacher_id) {
+            setError('Please fill in all required fields.');
+            return false;
         }
-
-        if (!course.title.trim()) {
-            throw new Error('Title cannot be empty when uploading an image');
-        }
-
-        const formattedTitle = course.title.replace(/\s+/g, '-').toLowerCase();
-        const storageRef = ref(storage, `course-images/${formattedTitle}`);
-        const uploadTask = await uploadBytesResumable(storageRef, imageFile);
-        return await getDownloadURL(uploadTask.ref);
+        // if (!file) {
+        //     setError('Please upload file.');
+        //     return false;
+        // }
+        return true;
     };
-
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const coursePicUrl = await uploadImageAndGetUrl();
-        await updateCategoryInCourse();
-        console.log(course.category);
+        await updateCategoryInCourse(); // Ensure category is updated before proceeding
+        if (!validateForm()) {
+            return; // Exit if validation fails
+        }
 
         try {
-            const res = await axios.post('/api/courses/create-courses', {
-                ...course,
-                coursePicUrl,
-                category: selectedCategories[selectedCategories.length - 1], // Ensure the latest category
-            });
-            const data = res.data;
-            console.log(data);
+            const formSubmissionData = new FormData();
+            formSubmissionData.append('title', course.title);
+            formSubmissionData.append('description', course.description);
+            formSubmissionData.append('teacher_id', course.teacher_id);
+            formSubmissionData.append('category', course.category);
 
-            // Optionally, you can reset the form after successful submission
-            setCourse({
-                title: "",
-                description: "",
-                coursePicUrl: "",
-                teacher_id: userId,
-                category: ""
-            });
-            router.push(`/teacher/${userId}/mycourse/`)
+            // Attach the image file to the form data
+            if (file) {
+                formSubmissionData.append('file', file);
+            }
+
+            // Send form data to the backend
+            const res = await axios.post('/api/courses/create-courses', formSubmissionData);
+            if (res.status === 201) {
+                // Handle successful course creation
+                setCourse({
+                    title: '',
+                    description: '',
+                    category: '',
+                    teacher_id: userId,
+                });
+                setFile(null);
+                router.push(`/teacher/${userId}/mycourse/`);
+            }
         } catch (error) {
-            console.error(error);
+            setError('An error occurred. Please try again.');
         }
     };
+
 
     const renderCategoryDropdowns = () => {
         let availableCategories = categories.filter(cat => !cat.parent_category_id);
@@ -178,6 +165,7 @@ const CreateCourse = () => {
         <div className=''>
             <div className="max-w-md mx-auto mt-8 p-6 bg-white dark:bg-[#151b23] rounded shadow-md">
                 <h2 className="text-2xl font-bold mb-4">Create a New Course</h2>
+                {error}
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
                         <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-100">
@@ -211,56 +199,15 @@ const CreateCourse = () => {
 
                     <div className="mb-4">
                         <label htmlFor="courseImage" className="block text-sm font-medium">
-                            Course Image (PNG, JPG, JPEG)
+                            Upload File
                         </label>
                         <input
                             type="file"
                             accept="image/png, image/jpeg"
-                            onChange={handleImageChange}
+                            onChange={handleFileChange}
                             className="mt-1 p-2 w-full border"
                         />
                     </div>
-
-                    {/* <div className="mb-4">
-                    <label htmlFor="teacher_id" className="block text-sm font-medium text-gray-700">
-                        Teacher
-                    </label>
-                    <select
-                        id="teacher_id"
-                        name="teacher_id"
-                        value={course.teacher_id}
-                        onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded"
-                        required
-                    >
-                        <option value="">Select Teacher</option>
-                        {teachers.map(teacher => (
-                            <option key={teacher.id} value={teacher.id}>
-                                {teacher.first_name} {teacher.last_name}
-                            </option>
-                        ))}
-                    </select>
-                </div> */}
-
-                    {/*<div className="mb-4">
-                    <label htmlFor="category" className="block text-sm font-medium text-gray-700">
-                        Category
-                    </label>
-                    <select
-                        id="category"
-                        name="category"
-                        value={course.category}
-                        onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-[#151b23]"
-                        required
-                    >
-                        <option value="">Select Category</option>
-                        <option value="programming">Programming</option>
-                        <option value="design">Design</option>
-                        <option value="marketing">Marketing</option>
-                        {/* Add more categories as needed *\/}
-                    </select>
-                </div>*/}
 
                     {renderCategoryDropdowns()}
 

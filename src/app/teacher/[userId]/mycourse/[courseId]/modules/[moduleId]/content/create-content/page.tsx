@@ -14,21 +14,21 @@ const CreateContent = () => {
         course_id: courseId,
         module_id: moduleId,
         title: "",
+        description: "",
         content_type: "",
-        text_content: "",
-        position: "",
+        attachments: ""
     });
 
     const [errors, setErrors] = useState({
         course_id: "",
         module_id: "",
         title: "",
+        description: "",
         content_type: "",
-        text_content: "",
-        position: "",
+        attachments: ""
     });
 
-    const [file, setFile] = useState<File | null>(null);
+    const [files, setFiles] = useState<File[]>([]);
     const [showModal, setShowModal] = useState(false);
 
     const handleChange = (e: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) => {
@@ -38,25 +38,22 @@ const CreateContent = () => {
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
-            setFile(e.target.files[0]);
+            setFiles(Array.from(e.target.files)); // Handle multiple files
         }
+        console.log(`files from frontend :: $${files}`)
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         let valid = true;
         const newErrors = {
+            course_id: "",
             module_id: "",
             title: "",
+            description: "",
             content_type: "",
-            text_content: "",
-            position: "",
+            attachments: ""
         };
-
-        if (content.module_id.trim() === "") {
-            newErrors.module_id = "Course is required";
-            valid = false;
-        }
 
         if (content.title.trim() === "") {
             newErrors.title = "Title is required";
@@ -65,16 +62,6 @@ const CreateContent = () => {
 
         if (content.content_type === "") {
             newErrors.content_type = "Content type is required";
-            valid = false;
-        }
-
-        if (content.content_type === "article" && content.text_content.trim() === "") {
-            newErrors.text_content = "Text content is required for articles";
-            valid = false;
-        }
-
-        if (content.position.trim() === "" || isNaN(Number(content.position))) {
-            newErrors.position = "Position must be a valid number";
             valid = false;
         }
 
@@ -87,10 +74,14 @@ const CreateContent = () => {
                 formData.append("module_id", content.module_id);
                 formData.append("title", content.title);
                 formData.append("content_type", content.content_type);
-                formData.append("text_content", content.text_content);
-                formData.append("position", content.position);
-                if (file) {
-                    formData.append("file", file);
+                formData.append("description", content.description);
+                formData.append("attachments", content.attachments);
+
+                // Append all files if content type is "file"
+                if (files.length > 0) {
+                    files.forEach((file) => {
+                        formData.append("files", file);
+                    });
                 }
 
                 const res = await axios.post("/api/courses/create-content", formData, {
@@ -98,22 +89,22 @@ const CreateContent = () => {
                 });
                 console.log(res.data);
                 setContent({
-                    course_id: "",
-                    module_id: "",
+                    course_id: courseId,
+                    module_id: moduleId,
                     title: "",
                     content_type: "",
-                    text_content: "",
-                    position: "",
+                    description: "",
+                    attachments: ""
                 });
                 setErrors({
                     course_id: "",
                     module_id: "",
                     title: "",
                     content_type: "",
-                    text_content: "",
-                    position: "",
+                    description: "",
+                    attachments: ""
                 });
-                setFile(null);
+                setFiles([]);
                 setShowModal(false);
                 router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/`);
             } catch (error) {
@@ -122,15 +113,12 @@ const CreateContent = () => {
         }
     };
 
-    const isFormValid = () => {
-        return (
-            content.title.trim() !== "" &&
-            content.content_type !== "" &&
-            (content.content_type !== "article" || content.text_content.trim() !== "") &&
-            content.position.trim() !== "" &&
-            !isNaN(Number(content.position))
-        );
-    };
+    // const isFormValid = () => {
+    //     return (
+    //         content.title.trim() !== "" &&
+    //         content.content_type !== ""
+    //     );
+    // };
 
     return (
         <div className="flex justify-center items-center h-screen">
@@ -155,6 +143,22 @@ const CreateContent = () => {
                     </div>
 
                     <div className="mb-4">
+                        <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-white">
+                            Description
+                        </label>
+                        <input
+                            type="text"
+                            id="description"
+                            name="description"
+                            value={content.description}
+                            onChange={handleChange}
+                            className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-700"
+                            required
+                        />
+                        {errors.description && <p className="text-red-600 text-sm">{errors.description}</p>}
+                    </div>
+
+                    <div className="mb-4">
                         <label htmlFor="content_type" className="block text-sm font-medium text-gray-700 dark:text-white">
                             Content Type
                         </label>
@@ -167,84 +171,50 @@ const CreateContent = () => {
                             required
                         >
                             <option value="">Select Content Type</option>
-                            <option value="video">Video</option>
-                            <option value="article">Audio</option>
-                            <option value="assignment">Assignment</option>
+                            <option value="file">File</option>
+                            <option value="url">URL</option>
                         </select>
                         {errors.content_type && <p className="text-red-600 text-sm">{errors.content_type}</p>}
                     </div>
 
-                    {content.content_type === "article" && (
+                    {content.content_type === "url" && (
                         <div className="mb-4">
-                            <label htmlFor="text_content" className="block text-sm font-medium text-gray-700 dark:text-white">
-                                Text Content
+                            <label htmlFor="attachments" className="block text-sm font-medium text-gray-700 dark:text-white">
+                                Attachments
                             </label>
-                            <textarea
-                                id="text_content"
-                                name="text_content"
-                                value={content.text_content}
+                            <input
+                                type="text"
+                                id="attachments"
+                                name="attachments"
+                                value={content.attachments}
                                 onChange={handleChange}
                                 className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-700"
                                 required
                             />
-                            {errors.text_content && <p className="text-red-600 text-sm">{errors.text_content}</p>}
+                        </div>
+                    )}
+
+                    {content.content_type === "file" && (
+                        <div className="mb-4">
+                            <label htmlFor="file" className="block text-sm font-medium text-gray-700 dark:text-white">
+                                Upload Files
+                            </label>
+                            <input type="file" name="file" required multiple onChange={handleFileChange} />
                         </div>
                     )}
 
                     <div className="mb-4">
-                        <label htmlFor="position" className="block text-sm font-medium text-gray-700 dark:text-white">
-                            Position
-                        </label>
-                        <input
-                            type="number"
-                            id="position"
-                            name="position"
-                            value={content.position}
-                            onChange={handleChange}
-                            min={1}
-                            className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-700"
-                            required
-                        />
-                        {errors.position && <p className="text-red-600 text-sm">{errors.position}</p>}
-                    </div>
-
-                    <div className="mb-4">
                         <button
-                            type="button"
-                            onClick={() => setShowModal(true)}
-                            className={`w-full py-2 px-4 rounded ${isFormValid() ? "bg-blue-500 hover:bg-blue-600 text-white" : "bg-gray-300 text-gray-600 cursor-not-allowed"}`}
-                            disabled={!isFormValid()}
+                            type="submit"
+                            // onClick={() => setShowModal(true)}
+                            className='w-full py-2 px-4 rounded bg-blue-500 hover:bg-blue-600 text-white'
+                        // disabled={!isFormValid()}
                         >
-                            Upload File
+                            Submit
                         </button>
                     </div>
                 </form>
-
-                {showModal && (
-                    <div className="fixed inset-0 flex items-center justify-center dark:bg-[#212830] bg-opacity-50">
-                        <div className="relative bg-white dark:bg-[#151b23] p-6 rounded shadow-md lg:left-32 md:left-32">
-                            <h3 className="text-xl font-bold mb-4">Upload File</h3>
-                            <input type="file" onChange={handleFileChange} />
-                            <div className="flex justify-end mt-4">
-                                <button
-                                    onClick={() => setShowModal(false)}
-                                    className="mr-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-                                >
-                                    Close
-                                </button>
-                                <button
-                                    onClick={handleSubmit}
-                                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                                >
-                                    Create Content
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
             </div>
-
         </div>
     );
 };
