@@ -18,12 +18,12 @@ export default function CreateAssignment() {
         description: '',
         total_marks: '',
         due_date: '',
+        attachments: [] as File[], // Array to hold multiple files
     });
 
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
     const [showModal, setShowModal] = useState(false); // Modal state
-    const [file, setFile] = useState<File | null>(null); // File state
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setFormData({
@@ -33,8 +33,12 @@ export default function CreateAssignment() {
     };
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0) {
-            setFile(e.target.files[0]);
+        if (e.target.files) {
+            const files = Array.from(e.target.files);
+            setFormData((prevData) => ({
+                ...prevData,
+                attachments: [...prevData.attachments, ...files], // Append selected files
+            }));
         }
     };
 
@@ -44,16 +48,11 @@ export default function CreateAssignment() {
             setError('Please fill in all required fields.');
             return false;
         }
-        if(!file){
-            setError('Please upload file.');
+        if (formData.attachments.length === 0) {
+            setError('Please upload at least one file.');
             return false;
         }
         return true;
-    };
-
-    const isFormComplete = () => {
-        const { title, description, total_marks, due_date } = formData;
-        return title && description && total_marks && due_date; // All required fields must be filled
     };
 
     const handleSubmit = async (e: FormEvent) => {
@@ -73,9 +72,10 @@ export default function CreateAssignment() {
             formSubmissionData.append('total_marks', formData.total_marks);
             formSubmissionData.append('due_date', formData.due_date);
 
-            if (file) {
-                formSubmissionData.append('file', file);
-            }
+            // Append all files
+            formData.attachments.forEach((file) => {
+                formSubmissionData.append('files', file);
+            });
 
             const response = await axios.post('/api/assignments/create-assignment', formSubmissionData);
             const data = response.data;
@@ -90,8 +90,8 @@ export default function CreateAssignment() {
                     description: '',
                     total_marks: '',
                     due_date: '',
+                    attachments: [], // Reset attachments
                 });
-                setFile(null);
                 router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments`);
             } else {
                 setError(data.error || 'Failed to add assessment');
@@ -158,40 +158,25 @@ export default function CreateAssignment() {
                     </div>
 
                     <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-100">Upload Files</label>
+                        <input
+                            type="file"
+                            multiple
+                            onChange={handleFileChange}
+                            className="mt-1 block w-full p-2 border border-gray-300 rounded dark:bg-[#151b23]"
+                            required
+                        />
+                    </div>
+
+                    <div className="mb-4">
                         <button
-                            type="button"
-                            onClick={() => setShowModal(true)}
-                            className={`bg-gray-500 text-white w-full px-4 py-2 rounded hover:bg-gray-600 ${!isFormComplete() ? 'opacity-50 cursor-not-allowed' : ''}`}
-                            disabled={!isFormComplete()}  // Disable button if form is incomplete
+                            type="submit"
+                            className="bg-blue-600 text-white w-full px-4 py-2 rounded hover:bg-blue-700"
                         >
-                            Upload Files
+                            Create Assignment
                         </button>
                     </div>
                 </form>
-
-                {/* Modal for File Upload */}
-                {showModal && (
-                    <div className="fixed inset-0 flex items-center justify-center dark:bg-[#212830] bg-opacity-50">
-                        <div className="relative bg-white dark:bg-[#151b23] p-6 rounded shadow-md lg:left-32 md:left-32">
-                            <h3 className="text-xl font-bold mb-4">Upload File</h3>
-                            <input type="file" onChange={handleFileChange} />
-                            <div className="flex justify-end mt-4">
-                                <button
-                                    onClick={() => setShowModal(false)}
-                                    className="mr-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-                                >
-                                    Close
-                                </button>
-                                <button
-                                    onClick={handleSubmit}  // Call submit from here
-                                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                                >
-                                    Create Assignment
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                )}
             </div>
         </div>
     );

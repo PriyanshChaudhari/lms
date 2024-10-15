@@ -1,22 +1,24 @@
 import { db } from "@/lib/firebaseConfig"; // Firebase Firestore instance
-import { doc, deleteDoc } from "firebase/firestore";
+import { doc, getDoc, deleteDoc } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
-import { getStorage, ref, listAll, deleteObject } from "firebase/storage";
+import { getStorage, ref, deleteObject } from "firebase/storage";
 import { app } from '@/lib/firebaseConfig';
 
-async function deleteRelatedFiles(contentId: string, courseId: string, moduleId: string) {
+// Function to delete a single file from Firebase Storage
+async function deleteFile(fileUrl: string) {
     const storage = getStorage(app);
-    const storageRef = ref(storage, `courses/${courseId}/${moduleId}/course-content/`);
+    const fileRef = ref(storage, fileUrl);
+    return deleteObject(fileRef).catch((error) => {
+        console.error(`Error deleting file from storage: ${error}`);
+        throw new Error("Failed to delete file from storage");
+    });
+}
 
-    // List all files in the folder
-    const listResult = await listAll(storageRef);
-
-    const fileDeletionPromises = listResult.items
-        .filter((itemRef) => itemRef.name.startsWith(`course_content_${contentId}_`))
-        .map((itemRef) => deleteObject(itemRef));
-
-    // Wait for all files to be deleted
-    await Promise.all(fileDeletionPromises);
+// Function to delete related files from Firebase Storage using attachments
+async function deleteRelatedFiles(attachments: string[]) {
+    for (const fileUrl of attachments) {
+        await deleteFile(fileUrl);
+    }
 }
 
 // The handler for the DELETE request
@@ -24,18 +26,28 @@ export async function DELETE(req: NextRequest, { params }: { params: { contentId
     try {
         const { contentId } = params;
         const { data } = await req.json();
-        const {courseId,moduleId} = data;
+        const { courseId, moduleId } = data;
+
         if (!contentId || !courseId || !moduleId) {
             return NextResponse.json({ error: "Content ID, Course ID, and Module ID are required" }, { status: 400 });
         }
 
-        // Delete related files in Firebase Storage
-        await deleteRelatedFiles(contentId, courseId, moduleId);
-
         // Reference to the document in Firestore
         const contentRef = doc(db, "course-content", contentId);
 
-        // Delete the document
+        // Fetch the document to get the attachments
+        const docSnap = await getDoc(contentRef);
+        if (!docSnap.exists()) {
+            return NextResponse.json({ error: "Content not found" }, { status: 404 });
+        }
+
+        const existingContent = docSnap.data();
+        const attachments = existingContent.attachments || [];
+
+        // Delete related files in Firebase Storage using the attachments array
+        await deleteRelatedFiles(attachments);
+
+        // Delete the document from Firestore
         await deleteDoc(contentRef);
 
         return NextResponse.json({ message: "Content and related files deleted successfully" }, { status: 200 });
