@@ -6,6 +6,7 @@ import AddOneStudent from '@/components/Upload/AddOneStudent';
 import AddOneTeacher from '@/components/Upload/AddOneTeacher';
 import ExcelEnrollComponent from './ExcelEnrollComponent';
 import EnrollByGroupComponent from './EnrollByGroupComponent';
+import GradesTable from './GradesComponent';
 
 interface users {
     user_id: string;
@@ -175,12 +176,12 @@ const CourseDetails = () => {
                             )}
                         </li>
 
-                        {/* <li
+                        <li
                             className={` p-3 rounded-xl cursor-pointer ${activeSection === 'grades' ? 'bg-gray-400 text-white' : ''}`}
                             onClick={() => setActiveSection('grades')}
                         >
                             Grades
-                        </li> */}
+                        </li>
 
                         <li
                             className={` p-3 rounded-xl cursor-pointer ${activeSection === 'participants' ? 'bg-gray-400 text-white' : ''}`}
@@ -257,26 +258,7 @@ const CourseDetails = () => {
 
 
                     {activeSection === 'grades' && (
-                        <div className="overflow-x-auto">
-                            <table className="min-w-full bg-white border border-gray-300">
-                                <thead>
-                                    <tr>
-                                        <th className="py-2 px-4 border-b">Grade</th>
-                                        <th className="py-2 px-4 border-b">Range</th>
-                                        <th className="py-2 px-4 border-b">Email</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {data.map((item, index) => (
-                                        <tr key={index}>
-                                            <td className="py-2 px-4 border-b">{item.grade}</td>
-                                            <td className="py-2 px-4 border-b">{item.range}</td>
-                                            <td className="py-2 px-4 border-b">{item.email}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                        <GradesTable courseId={courseId} />
                     )}
 
                     {/* completed */}
