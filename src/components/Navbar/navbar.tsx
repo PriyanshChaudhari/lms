@@ -291,7 +291,7 @@ const Navbar: React.FC = () => {
     };
   }, []);
 
-  const isLoginPage = pathname === '/' || pathname === '/login';
+  const isLoginPage = pathname === '/' || pathname === '/login' || pathname === '/forgot-password' || pathname === '/reset-password';
 
   
 
