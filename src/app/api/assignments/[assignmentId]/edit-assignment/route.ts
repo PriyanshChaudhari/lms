@@ -1,25 +1,10 @@
-import { db } from "@/lib/firebaseConfig";
-import { doc, updateDoc, Timestamp } from "firebase/firestore";
+import { db } from "@/lib/firebaseConfig"; // Firestore instance
+import { doc, getDoc, Timestamp, updateDoc } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL, listAll, deleteObject } from 'firebase/storage';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
 import { app } from '@/lib/firebaseConfig';
 
-async function deletePreviousSubmission(storageRef: any, course_id: string, module_id: string, assignmentId: string) {
-    const folderRef = ref(storageRef, `courses/${course_id}/${module_id}/assignments`);
-
-    // List all files in the assignment's folder
-    const fileList = await listAll(folderRef);
-    // Iterate over the files and find any that match `submission_${userId}`
-    const regex = new RegExp(`^Assignment_${assignmentId}\\..+$`);
-    const matchingFile = fileList.items.find(item => regex.test(item.name));
-    console.log(matchingFile)
-
-    if (matchingFile) {
-        // Delete the existing file with matching name
-        await deleteObject(matchingFile);
-    }
-}
-
+// Function to handle file uploads to Firebase Storage
 async function uploadFile(
     fileBuffer: Uint8Array,
     fileName: string,
@@ -29,10 +14,8 @@ async function uploadFile(
     moduleId: string
 ) {
     const storageRef = getStorage(app);
-    await deletePreviousSubmission(storageRef, courseId, moduleId, assignmentId);
     const fileExtension = fileName.split('.').pop();
-    // Use assignmentId to ensure file name consistency
-    const newFileName = `Assignment_${assignmentId}.${fileExtension}`;
+    const newFileName = `Assignment_${assignmentId}_${fileName}.${fileExtension}`; // Ensure unique file name
     const fileRef = ref(storageRef, `courses/${courseId}/${moduleId}/assignments/${newFileName}`);
     const metadata = { contentType };
     const uploadTask = uploadBytesResumable(fileRef, fileBuffer, metadata);
@@ -49,6 +32,13 @@ async function uploadFile(
     });
 }
 
+async function deleteFile(fileUrl: string) {
+    const storage = getStorage(app);
+    const fileRef = ref(storage, fileUrl);
+    await deleteObject(fileRef);
+    console.log(`Deleted file: ${fileUrl}`);
+}
+
 export async function PUT(req: NextRequest, { params }: { params: { assignmentId: string } }) {
     try {
         const { assignmentId } = params;
@@ -60,26 +50,51 @@ export async function PUT(req: NextRequest, { params }: { params: { assignmentId
         const description = formData.get('description') as string;
         const total_marks = formData.get('total_marks') as string;
         const due_date = formData.get('due_date') as string;
+        const deleteFilesJson = formData.get('deleteFiles') as string;
+        const deleteFiles = JSON.parse(deleteFilesJson) as string[];
+        const newFiles = formData.getAll('newFiles') as File[];
 
-        const docRef = doc(db, "assessments", assignmentId);
-        let attachment_url = ;
-
-        // Step 1: Upload the file, if provided
-        const file = formData.get('file') as File | null;
-        if (file) {
-            const arrayBuffer = await file.arrayBuffer();
-            const fileBuffer = new Uint8Array(arrayBuffer);
-            attachment_url = await uploadFile(fileBuffer, file.name, file.type, docRef.id, course_id, module_id) as string;
+        if (!assignmentId || !module_id || !title || !assessment_type || !description) {
+            return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
         }
 
-        // Step 2: Update the document with new data
+        const docRef = doc(db, "assessments", assignmentId);
+
+        // Fetch the existing document to get current attachments
+        const docSnap = await getDoc(docRef);
+        if (!docSnap.exists()) {
+            return NextResponse.json({ error: "Assignment not found" }, { status: 404 });
+        }
+
+        const existingAssessment = docSnap.data();
+        let updatedAttachments = existingAssessment.attachments || [];
+
+        // Handle file deletions
+        if (deleteFiles && deleteFiles.length > 0) {
+            for (const fileUrl of deleteFiles) {
+                await deleteFile(fileUrl);
+                updatedAttachments = updatedAttachments.filter((url: string) => url !== fileUrl);
+            }
+        }
+
+        // Handle new file uploads
+        if (newFiles && newFiles.length > 0) {
+            for (const file of newFiles) {
+                const arrayBuffer = await file.arrayBuffer();
+                const fileBuffer = new Uint8Array(arrayBuffer);
+                const fileUrl = await uploadFile(fileBuffer, file.name, file.type, assignmentId, course_id, module_id);
+                updatedAttachments.push(fileUrl); // Add new file to attachments
+            }
+        }
+
+        // Prepare the data to update
         const updatedAssessment = {
             title,
             assessment_type,
             description,
             total_marks: parseInt(total_marks),
             due_date: Timestamp.fromDate(new Date(due_date)),
-            ...(attachment_url && { attachment_url }), // Update the attachment_url if a new file was uploaded
+            attachment_url: updatedAttachments, // Update attachments with new ones
             updated_at: Timestamp.now(),
         };
 

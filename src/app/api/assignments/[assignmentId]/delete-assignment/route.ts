@@ -9,10 +9,9 @@ async function deleteFile(fileUrl: string) {
     const storage = getStorage(app);
     const fileRef = ref(storage, fileUrl);
 
-    return new Promise((resolve, reject) => {
-        deleteObject(fileRef)
-            .then(() => resolve(true))
-            .catch((error) => reject(error));
+    return deleteObject(fileRef).catch((error) => {
+        console.error(`Error deleting file from storage: ${error}`);
+        throw new Error("Failed to delete file from storage");
     });
 }
 
@@ -30,14 +29,20 @@ export async function DELETE(req: NextRequest, { params }: { params: { assignmen
     const { assignmentId } = params;
 
     try {
-        // Fetch the assignment document to get the attachment URL
+        // Fetch the assignment document to get the attachment URLs
         const assignmentDocRef = doc(db, "assessments", assignmentId);
         const assignmentDoc = await getDoc(assignmentDocRef);
-        const assignmentData = assignmentDoc.data();
 
-        // Delete the attached file from Firebase Storage if available
-        if (assignmentData && assignmentData.attachment_url) {
-            await deleteFile(assignmentData.attachment_url);
+        if (!assignmentDoc.exists()) {
+            return NextResponse.json({ error: "Assignment not found" }, { status: 404 });
+        }
+
+        const assignmentData = assignmentDoc.data();
+        const attachmentUrls = assignmentData?.attachments || []; // Assuming 'attachments' is an array
+
+        // Delete all attached files from Firebase Storage if available
+        for (const fileUrl of attachmentUrls) {
+            await deleteFile(fileUrl);
         }
 
         // Delete related documents in other collections (if applicable)

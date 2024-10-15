@@ -14,8 +14,7 @@ async function uploadFile(
 ) {
     const storageRef = getStorage(app);
     const fileExtension = fileName.split('.').pop();
-    // Use assignmentId to ensure file name consistency
-    const newFileName = `Assignment_${assignmentId}.${fileExtension}`;
+    const newFileName = `Assignment_${assignmentId}_${fileName}.${fileExtension}`; // Use assignmentId for file name consistency
     const fileRef = ref(storageRef, `courses/${courseId}/${moduleId}/assignments/${newFileName}`);
     const metadata = { contentType };
     const uploadTask = uploadBytesResumable(fileRef, fileBuffer, metadata);
@@ -51,23 +50,24 @@ export async function POST(req: NextRequest) {
             description,
             total_marks: parseInt(total_marks),
             due_date: Timestamp.fromDate(new Date(due_date)),
-            attachment_url: '', // Placeholder for now
+            attachment_url: [], // Change to an array for multiple URLs
             created_at: Timestamp.now(),
         };
 
         const docRef = await addDoc(collection(db, "assessments"), newAssessment);
-        let attachment_url = '';
+        const attachment_urls: string[] = []; // Array to hold all file URLs
 
-        // Step 2: Upload the file, if provided, using docRef.id for consistency
-        const file = formData.get('file') as File | null;
-        if (file) {
+        // Step 2: Upload files, if provided
+        const files = formData.getAll('files') as File[]; // Change to 'files' to get all uploaded files
+        for (const file of files) {
             const arrayBuffer = await file.arrayBuffer();
             const fileBuffer = new Uint8Array(arrayBuffer);
-            attachment_url = await uploadFile(fileBuffer, file.name, file.type, title, course_id, module_id) as string;
+            const fileUrl = await uploadFile(fileBuffer, file.name, file.type, docRef.id, course_id, module_id) as string;
+            attachment_urls.push(fileUrl); // Collect URLs
         }
 
-        // Step 3: Update the document with the attachment_url
-        await updateDoc(docRef, { attachment_url });
+        // Step 3: Update the document with the attachment_url array
+        await updateDoc(docRef, { attachment_url: attachment_urls });
 
         return NextResponse.json({ message: "Assessment added successfully", id: docRef.id }, { status: 201 });
     } catch (error) {
