@@ -63,37 +63,51 @@ const Group = () => {
   return (
     <div className="flex justify-center items-center h-screen">
       <div className=" w-full max-w-4xl mx-auto p-6 bg-white dark:bg-[#212830] rounded-lg shadow-md">
-        <h1 className="text-2xl font-semibold text-center mb-6">Group Management</h1>
-        <div className="text-center mb-4">
+        <div className="flex gap-4 justify-center items-center mb-6">
+          <h1 className="text-2xl font-semibold text-center ">Group Management</h1>
           <div>
             <button
               onClick={() => setIsManageUserVisible(!isManageUserVisible)}
-              className="bg-blue-600 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700 transition duration-200"
+              className={`${isManageUserVisible ? 'hidden' : 'bg-blue-600 hover:bg-blue-700'
+                } text-white text-sm font-semibold py-2 px-4 rounded transition duration-200`}
             >
               {isManageUserVisible ? 'Close' : 'Manage Members'}
             </button>
+          </div>
+        </div>
+        <div className="text-center mb-4">
+          <div>
+
 
             {isManageUserVisible && (
-              <div className="mt-4 grid sm:grid-cols-3 grid-rows-3">
-                <button
-                  onClick={() => {
-                    setIsAddOneMember(true);
-                    setIsExcelUpload(false);
-                  }}
-                  className="bg-green-600 text-white font-semibold py-2 px-4 rounded hover:bg-green-700 transition duration-200 mr-4"
-                >
-                  Add member (Manually)
-                </button>
-                <button
-                  onClick={() => {
-                    setIsAddOneMember(false);
-                    setIsExcelUpload(true);
-                  }}
-                  className="bg-orange-600 text-white font-semibold py-2 px-4 rounded hover:bg-orange-700 transition duration-200 mr-4"
-                >
-                  Add members (Excel File)
-                </button>
-              </div>
+          
+                  <div className="mt-4 flex gap-4 justify-center ">
+                    <button
+                      onClick={() => {
+                        setIsAddOneMember(true);
+                        setIsExcelUpload(false);
+                      }}
+                      className="w-fit bg-green-600 text-sm text-white font-semibold py-2 px-4 rounded hover:bg-green-700 transition duration-200 "
+                    >
+                     Add Members (Manually)
+                    </button>
+                    <button
+                      onClick={() => {
+                        setIsAddOneMember(false);
+                        setIsExcelUpload(true);
+                      }}
+                      className="w-fit bg-orange-600 text-sm text-white font-semibold py-2 px-4 rounded hover:bg-orange-700 transition duration-200 "
+                    >
+                      Add Members (Excel File)
+                    </button>
+                    <button
+                      onClick={() => setIsManageUserVisible(!isManageUserVisible)}
+                      className="bg-red-600 text-sm text-white font-semibold w-fit  py-2 px-4 rounded hover:bg-red-700 transition duration-200 "
+                    >
+                      Cancel
+                    </button>
+                  </div>
+              
             )}
           </div>
 
