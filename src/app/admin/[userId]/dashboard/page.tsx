@@ -128,7 +128,7 @@ export default function CourseDetails() {
 
                 <div className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm p-6 mb-8">
                     <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                        User Management
+                        Admin Dashboard
                     </h1>
 
                 </div>
