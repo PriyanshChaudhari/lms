@@ -83,7 +83,7 @@ const ExcelMemberComponent: React.FC<ExcelMemberComponentProps> = ({ onClose }) 
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-gray-50 dark:bg-[#151b23] p-8 rounded-lg-lg shadow-md max-w-md w-full">
+            <div className="relative bg-gray-50 dark:bg-[#151b23] p-8 rounded-lg-lg shadow-md max-w-md w-full">
                 <h2 className="text-2xl font-semibold mb-4 text-center">Manage Group Members</h2>
                 <p className="mb-6 text-center text-gray-600">Select action and upload the Excel file</p>
 

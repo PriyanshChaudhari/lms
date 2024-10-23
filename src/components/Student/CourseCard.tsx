@@ -59,7 +59,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ courses, userId }) => {
         //     </div>
         // </div>
 
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-8">
+        <div className="min-h-screen bg-gray-50 dark:bg-transparent p-8">
             <div className="max-w-7xl mx-auto">
                 <div className="flex justify-between items-center mb-8">
                     <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
@@ -72,7 +72,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ courses, userId }) => {
                     {courses.map((course) => (
                         <div 
                             key={course.course_id} 
-                            className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
+                            className="bg-white dark:bg-[#151b23] rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
                         >
                             <div className="aspect-video relative overflow-hidden p-6">
                                 <img

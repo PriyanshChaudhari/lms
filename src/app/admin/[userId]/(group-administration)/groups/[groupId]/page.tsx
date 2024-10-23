@@ -61,8 +61,8 @@ const Group = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className=" w-full max-w-4xl mx-auto p-6 bg-white dark:bg-[#212830] rounded-lg-lg shadow-md">
+    <div className="bg-gray-50 dark:bg-[#212830] flex justify-center items-center h-screen">
+      <div className=" w-full max-w-4xl mx-auto p-6  bg-white dark:bg-[#151b23]  rounded-lg-lg shadow-md">
         <div className="flex gap-4 justify-center items-center mb-6">
           <h1 className="text-2xl font-semibold text-center ">Group Management</h1>
           <div>
@@ -120,7 +120,7 @@ const Group = () => {
         {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}
         {successMessage && <p className="text-green-500 text-center mb-4">{successMessage}</p>}
 
-        <table className="min-w-full bg-white dark:bg-[#212830] border border-gray-300 rounded-lg-lg">
+        <table className="min-w-full  border border-gray-300 rounded-lg-lg">
           <thead>
             <tr>
               <th className="px-4 py-2 border-b font-semibold text-left">User ID</th>
