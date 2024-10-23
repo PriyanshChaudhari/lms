@@ -62,7 +62,7 @@ const CreateUser = () => {
     };
 
     return (
-        <div className="bg-gray-300 dark:dark:bg-[#212830] min-h-screen flex items-center justify-center p-6">
+        <div className="bg-gray-50 dark:dark:bg-[#212830] min-h-screen flex items-center justify-center p-6">
             <form onSubmit={handleSubmit} className="bg-white dark:bg-[#151b23] p-8 rounded-lg-lg shadow-md w-full max-w-xl">
                 <div className="mb-4">
                     <h2 className="text-2xl font-semibold mb-4 text-black dark:text-gray-300 text-center">Add User</h2>

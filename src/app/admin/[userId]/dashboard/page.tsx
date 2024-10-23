@@ -164,19 +164,19 @@ export default function CourseDetails() {
                             <h2 className="text-xl font-semibold">User Management</h2>
                             <div className="space-y-4 justify-between mb-4">
                                 <div className="bg-white dark:bg-[#151b23]   rounded-lg-xl p-3 shadow-md h-12" onClick={handleCreateUserClick}>
-                                    <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">Create User</h2>
+                                    <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">→  <span className="ml-2">Create User</span></h2>
                                 </div>
 
                                 <div className="bg-white dark:bg-[#151b23]   rounded-lg-xl p-3 shadow-md h-12 " onClick={handleUploadUsersClick}>
-                                    <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">Upload Users</h2>
+                                    <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">→  <span className="ml-2">Upload Users</span></h2>
                                 </div>
 
                                 <div className="bg-white dark:bg-[#151b23]   rounded-lg-xl p-3 shadow-md h-12 " onClick={handleViewUsersClick}>
-                                    <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">View Users</h2>
+                                    <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">→  <span className="ml-2">View Users</span></h2>
                                 </div>
 
                                 <div className="bg-white dark:bg-[#151b23]  rounded-lg-xl p-3 shadow-md h-12 " onClick={handleDeleteUsersClick}>
-                                    <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">Delete Users</h2>
+                                    <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">→  <span className="ml-2">Delete Users</span></h2>
                                 </div>
                             </div>
                         </div>
@@ -187,11 +187,11 @@ export default function CourseDetails() {
                             <h2 className="text-xl font-semibold">Course Categegory Management</h2>
                             <div className="space-y-4 justify-between mb-4">
                                 <div className="bg-white dark:bg-[#151b23]  rounded-lg-xl p-3 shadow-md h-12" onClick={handleCreateCategoryClick}>
-                                    <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">Add Category</h2>
+                                    <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">→  <span className="ml-2">Add Category</span></h2>
                                 </div>
 
                                 <div className="bg-white dark:bg-[#151b23]   rounded-lg-xl p-3 shadow-md h-12 " onClick={handleModifyCategoryClick}>
-                                    <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">Manage categories</h2>
+                                    <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">→  <span className="ml-2">Manage categories</span></h2>
                                 </div>
                             </div>
                         </div>
@@ -204,11 +204,11 @@ export default function CourseDetails() {
                                 <h2 className="text-xl font-semibold">Group Management</h2>
                                 <div className="space-y-4 justify-between mb-4">
                                     <div className="bg-white dark:bg-[#151b23]   rounded-lg-xl p-3 shadow-md h-12" onClick={() => { router.push(`/admin/${userId}/groups/create-group`) }}>
-                                        <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">Create Group</h2>
+                                        <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">→  <span className="ml-2">Create Group</span></h2>
                                     </div>
 
                                     <div className="bg-white dark:bg-[#151b23] rounded-lg-xl p-3 shadow-md h-12 " onClick={() => { router.push(`/admin/${userId}/groups`) }}>
-                                        <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">View Groups</h2>
+                                        <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">→  <span className="ml-2">View Groups</span></h2>
                                     </div>
 
                                 </div>
