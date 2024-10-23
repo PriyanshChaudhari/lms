@@ -41,11 +41,11 @@ export default function ViewModules() {
                 {sortedModules.map((module) => (
                     <div key={module.id} className="space-y-4">
                         <div
-                            className="bg-white border flex justify-between border-gray-300 rounded-xl p-4 shadow-md min-h-6 ">
+                            className="bg-white border flex justify-between border-gray-300 rounded-lg-xl p-4 shadow-md min-h-6 ">
                             <h2 className="text-xl font-semibold">{module.title}</h2>
                             <h2 className="text-xl font-semibold">{module.description}</h2>
                             <h2 className="text-xl font-semibold">{module.position}</h2>
-                            <div className='px-3 rounded-xl cursor-pointer bg-gray-300  hover:bg-gray-200' onClick={() => handleModuleClick(module.id)} > GO -> </div>
+                            <div className='px-3 rounded-lg-xl cursor-pointer bg-gray-300  hover:bg-gray-200' onClick={() => handleModuleClick(module.id)} > GO -> </div>
                         </div>
 
                     </div>

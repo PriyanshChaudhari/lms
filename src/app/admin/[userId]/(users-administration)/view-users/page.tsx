@@ -62,7 +62,7 @@ const ViewUsers = () => {
 
     return (
         <div className="bg-gray-300 dark:dark:bg-[#212830] min-h-screen flex items-center justify-center p-6">
-            <div className="bg-white dark:bg-[#151b23] p-8 rounded-lg shadow-md w-full max-w-6xl">
+            <div className="bg-white dark:bg-[#151b23] p-8 rounded-lg-lg shadow-md w-full max-w-6xl">
                 <h2 className="text-2xl font-semibold mb-4 text-black dark:text-gray-300 text-center">View Users</h2>
                 {users.length === 0 ? (
                     <p className="text-gray-700 dark:text-gray-300 text-center">No users available</p>
@@ -74,10 +74,10 @@ const ViewUsers = () => {
                             </span>
                             <button
                                 onClick={() => setIsEditMode(!isEditMode)}
-                                className={`relative inline-flex items-center h-5 w-10 rounded-full transition-colors ${isEditMode ? 'bg-blue-500' : 'bg-gray-300'}`}
+                                className={`relative inline-flex items-center h-5 w-10 rounded-lg-full transition-colors ${isEditMode ? 'bg-blue-500' : 'bg-gray-300'}`}
                             >
                                 <span
-                                    className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${isEditMode ? 'translate-x-6' : 'translate-x-1'}`}
+                                    className={`inline-block h-3 w-3 transform rounded-lg-full bg-white transition-transform ${isEditMode ? 'translate-x-6' : 'translate-x-1'}`}
                                 />
                             </button>
                         </div>
@@ -108,15 +108,15 @@ const ViewUsers = () => {
                                         <td className="border px-4 py-2 text-gray-700 dark:text-gray-300">{user.email}</td>
                                         <td className="border px-4 py-2 text-gray-700 dark:text-gray-300">{user.role}</td>
                                         <td className="border px-4 py-2 text-gray-700 dark:text-gray-300">
-                                            <img src={user?.profilePicUrl} alt="Profile Pic" className="border border-gray-300 h-7 w-7 object-cover rounded-full" />
+                                            <img src={user?.profilePicUrl} alt="Profile Pic" className="border border-gray-300 h-7 w-7 object-cover rounded-lg-full" />
                                         </td>
                                         {isEditMode && (
                                             <>
                                                 <td className="px-4 py-2 border border-gray-300">
-                                                    <button className="bg-blue-500 text-white px-3 py-1  rounded" onClick={() => handleEdit(user.id)}>Edit</button>
+                                                    <button className="bg-blue-500 text-white px-3 py-1  rounded-lg" onClick={() => handleEdit(user.id)}>Edit</button>
                                                 </td>
                                                 <td className="px-4 py-2 border border-gray-300">
-                                                    <button className="bg-red-500 text-white px-3 py-1  rounded" onClick={() => handleDelete(user.id)}>Delete</button>
+                                                    <button className="bg-red-500 text-white px-3 py-1  rounded-lg" onClick={() => handleDelete(user.id)}>Delete</button>
                                                 </td>
                                             </>
                                         )}

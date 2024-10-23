@@ -43,11 +43,11 @@ export default function ViewContent() {
                 {sortedContent.map((content) => (
                     <div key={content.id} className="space-y-4">
                         <div
-                            className="bg-white border flex justify-between border-gray-300 rounded-xl p-4 shadow-md min-h-6 ">
+                            className="bg-white border flex justify-between border-gray-300 rounded-lg-xl p-4 shadow-md min-h-6 ">
                             <h2 className="text-xl font-semibold">{content.title}</h2>
                             <h2 className="text-xl font-semibold">{content.description}</h2>
                             <h2 className="text-xl font-semibold">{content.position}</h2>
-                            <div className='px-3 rounded-xl cursor-pointer bg-gray-300  hover:bg-gray-200' onClick={() => handleContentClick(content.id)} > GO -> </div>
+                            <div className='px-3 rounded-lg-xl cursor-pointer bg-gray-300  hover:bg-gray-200' onClick={() => handleContentClick(content.id)} > GO -> </div>
                         </div>
 
                     </div>

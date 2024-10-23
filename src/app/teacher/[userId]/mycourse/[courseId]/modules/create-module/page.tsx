@@ -57,7 +57,7 @@ const CreateCourseModule = () => {
 
     return (
         <div className='h-screen flex justify-center items-center'>
-            <div className="w-full max-w-md mx-auto mt-8 p-6 rounded border dark:bg-[#151b23] border-gray-100 shadow-md">
+            <div className="w-full max-w-md mx-auto mt-8 p-6 rounded-lg border dark:bg-[#151b23] border-gray-100 shadow-md">
             <h2 className="text-2xl font-bold mb-4">Create a New Module</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
@@ -70,7 +70,7 @@ const CreateCourseModule = () => {
                         name="title"
                         value={module.title}
                         onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-[#151b23]"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded-lg dark:bg-[#151b23]"
                         required
                     />
                 </div>
@@ -84,7 +84,7 @@ const CreateCourseModule = () => {
                         name="description"
                         value={module.description}
                         onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-[#151b23]"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded-lg dark:bg-[#151b23]"
                         required
                     />
                 </div>
@@ -92,7 +92,7 @@ const CreateCourseModule = () => {
                 <div className='mt-8'>
                     <button
                         type="submit"
-                        className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+                        className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
                     >
                         Create Module
                     </button>

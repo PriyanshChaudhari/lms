@@ -111,7 +111,7 @@ const Sidebar: React.FC = () => {
             activeSection === 'dashboard' 
               ? 'bg-blue-500 text-white' 
               : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200'
-          } p-2 rounded-md`}>
+          } p-2 rounded-lg-md`}>
             Dashboard
           </Link>
           <button
@@ -120,7 +120,7 @@ const Sidebar: React.FC = () => {
               activeSection === 'courses'
                 ? 'bg-blue-500 text-white text-left' 
                 : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 text-left'
-            } p-2 rounded-md`}
+            } p-2 rounded-lg-md`}
           >
             My Courses
           </button>
@@ -135,7 +135,7 @@ const Sidebar: React.FC = () => {
                   {courses.map((course) => (
                     <li
                       key={course.course_id}
-                      className="text-black list-none py-1 dark:text-gray-200 cursor-pointer bg-gray-300 dark:bg-gray-700 rounded p-3 my-2"
+                      className="text-black list-none py-1 dark:text-gray-200 cursor-pointer bg-gray-300 dark:bg-gray-700 rounded-lg p-3 my-2"
                     >
                       <Link href={`/student/${userId}/mycourse/${course.course_id}`}>
                         <span onClick={() => handleCourseClick(course.course_id)}>
@@ -144,7 +144,7 @@ const Sidebar: React.FC = () => {
                       </Link>
 
                       {selectedCourseId === course.course_id && (
-                        <div className="mt-2 p-2 bg-gray-300 dark:bg-gray-700 rounded">
+                        <div className="mt-2 p-2 bg-gray-300 dark:bg-gray-700 rounded-lg">
                           {isLoadingModules ? (
                             <p>Loading modules...</p>
                           ) : modules[course.course_id] ? (
@@ -172,7 +172,7 @@ const Sidebar: React.FC = () => {
       </aside>
 
       {/* Mobile Sidebar Toggle */}
-      <div className="md:hidden fixed top-40 left-0 bg-white dark:bg-[#151b23] border border-gray-300 rounded-e-full">
+      <div className="md:hidden fixed top-40 left-0 bg-white dark:bg-[#151b23] border border-gray-300 rounded-lg-e-full">
         <button onClick={toggleMobileMenu} className="text-xl m-3 focus:outline-none">
           {isMobileMenuOpen ? "✕" : "☰"}
         </button>

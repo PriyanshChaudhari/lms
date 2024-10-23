@@ -89,7 +89,7 @@ const CreateCategory = () => {
                     <select
                         value={selectedCategories[i] || ""}
                         onChange={(e) => handleCategoryChange(i, e)}
-                        className=" p-2 w-full border border-gray-300 rounded dark:bg-[#151b23] mt-4"
+                        className=" p-2 w-full border border-gray-300 rounded-lg dark:bg-[#151b23] mt-4"
                     >
                         <option value="">Select Category</option>
                         {availableCategories.map(cat => (
@@ -107,7 +107,7 @@ const CreateCategory = () => {
 
     return (
         <div className='flex h-screen justify-center items-center'>
-            <div className="w-full max-w-md mx-auto mt-8 p-6 dark:bg-[#151b23] rounded shadow-md">
+            <div className="w-full max-w-md mx-auto mt-8 p-6 dark:bg-[#151b23] rounded-lg shadow-md">
                 <h2 className="text-2xl font-bold mb-4">Create a New Category</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-6">
@@ -120,7 +120,7 @@ const CreateCategory = () => {
                             name="category_name"
                             value={category.category_name}
                             onChange={handleNameChange}
-                            className=" p-2 w-full border border-gray-300 rounded dark:bg-[#151b23] mt-4"
+                            className=" p-2 w-full border border-gray-300 rounded-lg dark:bg-[#151b23] mt-4"
                             required
                         />
                     </div>
@@ -130,7 +130,7 @@ const CreateCategory = () => {
                     <div>
                         <button
                             type="submit" 
-                            className="w-full bg-blue-600 text-white py-2 px-4 mt-4 rounded hover:bg-blue-700"
+                            className="w-full bg-blue-600 text-white py-2 px-4 mt-4 rounded-lg hover:bg-blue-700"
                         >
                             Create Category
                         </button>

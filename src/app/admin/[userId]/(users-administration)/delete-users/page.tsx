@@ -68,7 +68,7 @@ const ExcelDeleteUploader = () => {
     if (isDeleted) {
         return (
             <div className="min-h-screen flex items-center justify-center">
-                <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full">
+                <div className="bg-white p-8 rounded-lg-lg shadow-md max-w-md w-full">
                     <div className="text-center">
                         <h2 className="text-2xl font-semibold mb-4">Users Deleted Successfully</h2>
                         <p className="mb-6 text-gray-600">Your Excel file has been processed, and the users have been deleted.</p>
@@ -84,12 +84,12 @@ const ExcelDeleteUploader = () => {
     // Main UI for selecting and uploading the Excel file
     return (
         <div className="min-h-screen flex items-center justify-center">
-            <div className="bg-gray-50 dark:bg-gray-900 p-8 rounded-lg shadow-md max-w-md w-full">
+            <div className="bg-gray-50 dark:bg-gray-900 p-8 rounded-lg-lg shadow-md max-w-md w-full">
                 <h2 className="text-2xl font-semibold mb-4 text-center">Delete Users via Excel</h2>
                 <p className="mb-6 text-center text-gray-600">Upload an Excel file with user IDs to delete users</p>
 
                 <div
-                    className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition ${file ? 'border-red-500 bg-red-50' : 'border-gray-400 hover:border-gray-500'
+                    className={`border-2 border-dashed rounded-lg-lg p-6 text-center cursor-pointer transition ${file ? 'border-red-500 bg-red-50' : 'border-gray-400 hover:border-gray-500'
                         }`}
                 >
                     {!file && (
@@ -122,7 +122,7 @@ const ExcelDeleteUploader = () => {
                 <div className="flex justify-between mt-6">
                     <button
                         onClick={handleFileUpload}
-                        className={`py-2 px-4 rounded-md transition ${file
+                        className={`py-2 px-4 rounded-lg-md transition ${file
                             ? 'bg-red-500 text-white w-1/2 hover:bg-red-600'
                             : 'bg-gray-300 text-gray-500 w-full cursor-not-allowed'
                             }`}
@@ -133,7 +133,7 @@ const ExcelDeleteUploader = () => {
                     {file && (
                         <button
                             type="button"
-                            className="w-1/2 ml-4 bg-red-100 text-red-600 py-2 px-4 rounded-md hover:bg-red-200 transition"
+                            className="w-1/2 ml-4 bg-red-100 text-red-600 py-2 px-4 rounded-lg-md hover:bg-red-200 transition"
                             onClick={() => {
                                 setFile(null);
                             }}

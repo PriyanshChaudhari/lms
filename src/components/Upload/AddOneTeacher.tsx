@@ -90,7 +90,7 @@ const AddOneTeacher = ({ courseId }: Props) => {
 
 
     return (
-        <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded shadow-md">
+        <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
             <h2 className="text-2xl font-bold mb-4">Enroll teacher in Course</h2>
             {generalError && (
                 <div className="mb-4 text-red-600 font-bold text-center">
@@ -107,7 +107,7 @@ const AddOneTeacher = ({ courseId }: Props) => {
                         name="teacher_id"
                         value={enrollment.teacher_id}
                         onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded-lg"
                         required
                     >
                         <option value="">Select Teacher</option>
@@ -129,7 +129,7 @@ const AddOneTeacher = ({ courseId }: Props) => {
                         name="course_id"
                         value={enrollment.course_id}
                         onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded-lg"
                         required
                     >
                         <option value="">Select Course</option>
@@ -152,7 +152,7 @@ const AddOneTeacher = ({ courseId }: Props) => {
                         name="progress"
                         value={enrollment.progress}
                         onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded-lg"
                         required
                     />
                     {errors.progress && <p className="text-red-600 text-sm">{errors.progress}</p>}
@@ -167,7 +167,7 @@ const AddOneTeacher = ({ courseId }: Props) => {
                         name="completion_status"
                         value={enrollment.completion_status}
                         onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded-lg"
                         required
                     >
                         <option value="">Select Status</option>
@@ -181,7 +181,7 @@ const AddOneTeacher = ({ courseId }: Props) => {
                 <div>
                     <button
                         type="submit"
-                        className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+                        className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
                     >
                         Enroll Teacher
                     </button>

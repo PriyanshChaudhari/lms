@@ -8,7 +8,7 @@ interface Course {
     description: string;
     teacher_id: string;
     category: string;
-    thumbnail: string
+    coursePicUrl:string;
 }
 
 interface CourseCardProps {
@@ -24,57 +24,89 @@ const CourseCard: React.FC<CourseCardProps> = ({ courses, userId }) => {
     };
 
     return (
-        // <div className="flex flex-col h-screen p-5">
-        //     <div className="w-full flex flex-1  flex-wrap md:flex-nowrap items-start justify-center">
-        //         <div className="w-full  p-5  rounded-lg flex flex-col justify-center items-center h-full max-h-[calc(100vh-2rem)]">
-        //             <div className="flex-col gap-8 mb-10">
-        //                 <div className="text-2xl font-bold ">My Courses</div>
-        //             </div>
-        //             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-5 justify-items-center">
+       
 
-        //                 {courses.map((course) => (
-        //                     <div key={course.course_id} className="border border-gray-300 dark:text-white  hover:bg-slate-100 dark:hover:bg-[#1a1a1a] rounded p-5 w-full max-w-xs shadow-sm cursor-pointer">
-        //                         <img src={`${course.thumbnail}`} className="rounded mb-4"></img>
-        //                         <h2 onClick={() => handleClick(course.course_id)} className="text-lg font-semibold hover:underline">{course.title}</h2>
-        //                         <p className="text-sm text-gray-600">{course.description}</p>
+        // <div className="flex flex-col p-5">
+        //     <div className="flex flex-1 gap-10 flex-wrap md:flex-nowrap items-start justify-center border border-gray-300 p-5">
+        //         <div className="w-full flex flex-col justify-center items-center  max-h-[calc(100vh-2rem)]">
+        //             <div className="flex flex-col h-screen p-5">
+        //                 <div className="flex flex-1  flex-wrap md:flex-nowrap items-start justify-center">
+        //                     <div className="w-full  p-5  rounded-lg-lg flex flex-col justify-center items-center h-full max-h-[calc(100vh-2rem)]">
+        //                         <div className="flex-col gap-8 mb-10">
+        //                             <div className="text-2xl font-bold ">My Courses</div>
 
+        //                         </div>
+
+        //                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-5 justify-items-center">
+
+
+        //                             {courses.map((course) => (
+        //                                 <div key={course.course_id} className="border border-gray-300 dark:text-white  hover:bg-slate-100 dark:hover:bg-[#1a1a1a] rounded-lg-xl p-5    cursor-pointer">
+        //                                     <img src={`${course.thumbnail}`} className="rounded-lg mb-4 w-72"></img>
+        //                                     <h3 className="text-lg font-semibold mb-2 underline" onClick={() => handleClick(course.course_id)}>{course.title}</h3>
+        //                                     <p className="text-sm text-gray-600 mb-4">{course.description}</p>
+
+
+
+        //                                 </div>
+        //                             ))}
+
+        //                         </div>
         //                     </div>
-        //                 ))}
-
+        //                 </div>
         //             </div>
         //         </div>
         //     </div>
         // </div>
 
-        <div className="flex flex-col p-5">
-            <div className="flex flex-1 gap-10 flex-wrap md:flex-nowrap items-start justify-center border border-gray-300 p-5">
-                <div className="w-full flex flex-col justify-center items-center  max-h-[calc(100vh-2rem)]">
-                    <div className="flex flex-col h-screen p-5">
-                        <div className="flex flex-1  flex-wrap md:flex-nowrap items-start justify-center">
-                            <div className="w-full  p-5  rounded-lg flex flex-col justify-center items-center h-full max-h-[calc(100vh-2rem)]">
-                                <div className="flex-col gap-8 mb-10">
-                                    <div className="text-2xl font-bold ">My Courses</div>
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-8">
+            <div className="max-w-7xl mx-auto">
+                <div className="flex justify-between items-center mb-8">
+                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                        My Courses
+                    </h1>
+                    
+                </div>
 
-                                </div>
-
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-5 justify-items-center">
-
-
-                                    {courses.map((course) => (
-                                        <div key={course.course_id} className="border border-gray-300 dark:text-white  hover:bg-slate-100 dark:hover:bg-[#1a1a1a] rounded-xl p-5    cursor-pointer">
-                                            <img src={`${course.thumbnail}`} className="rounded mb-4 w-72"></img>
-                                            <h3 className="text-lg font-semibold mb-2 underline" onClick={() => handleClick(course.course_id)}>{course.title}</h3>
-                                            <p className="text-sm text-gray-600 mb-4">{course.description}</p>
-
-
-
-                                        </div>
-                                    ))}
-
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {courses.map((course) => (
+                        <div 
+                            key={course.course_id} 
+                            className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
+                        >
+                            <div className="aspect-video relative overflow-hidden p-6">
+                                <img
+                                    src={course.coursePicUrl}
+                                    alt={course.title}
+                                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
+                                />
+                            </div>
+                            
+                            <div className="p-6">
+                                <h2 
+                                    className="text-xl font-semibold text-gray-900 dark:text-white mb-2 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer truncate"
+                                    onClick={() => handleClick(course.course_id)}
+                                >
+                                    {course.title}
+                                </h2>
+                                
+                                <p className="text-gray-600 dark:text-gray-300 mb-6 line-clamp-2 text-sm">
+                                    {course.description}
+                                </p>
+                                
+                                <div className="flex gap-4">
+                                    <button 
+                                        className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg transition-colors duration-200 text-sm"
+                                        onClick={() => handleClick(course.course_id)}
+                                    >
+                                        View
+                                    </button>
+                                   
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    ))}
+                    
                 </div>
             </div>
         </div>

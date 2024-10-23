@@ -131,41 +131,41 @@ const CourseDetails = () => {
         //         <h1 className="text-3xl font-bold mb-4">{courses?.title}</h1>
         //         <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">{courses?.description}</p>
 
-        //         <nav className="mb-6 border border-gray-300 rounded-xl shadow-md p-2">
+        //         <nav className="mb-6 border border-gray-300 rounded-lg-xl shadow-md p-2">
         //             <ul className="flex justify-start space-x-4 list-none p-0">
         //                 <li
-        //                     className={` p-3 rounded-xl cursor-pointer ${activeSection === 'course' ? 'bg-gray-400 text-white' : ''}`}
+        //                     className={` p-3 rounded-lg-xl cursor-pointer ${activeSection === 'course' ? 'bg-gray-400 text-white' : ''}`}
         //                     onClick={() => setActiveSection('course')}
         //                 >
         //                     Course
         //                 </li>
 
         //                 <li
-        //                     className={` p-3 rounded-xl cursor-pointer ${activeSection === 'assignments' ? 'bg-gray-400 text-white' : ''}`}
+        //                     className={` p-3 rounded-lg-xl cursor-pointer ${activeSection === 'assignments' ? 'bg-gray-400 text-white' : ''}`}
         //                     onClick={() => setActiveSection('assignments')}
         //                 >
         //                     Assignments
         //                     {assignments.length > 0 && (
-        //                         <span className="ml-2 bg-gray-300 text-gray-700 text-xs font-semibold px-2 py-1 rounded-full">
+        //                         <span className="ml-2 bg-gray-300 text-gray-700 text-xs font-semibold px-2 py-1 rounded-lg-full">
         //                             {assignments.length}
         //                         </span>
         //                     )}
         //                 </li>
 
         //                 {/* <li
-        //                     className={` p-3 rounded-xl cursor-pointer ${activeSection === 'grades' ? 'bg-gray-400 text-white' : ''}`}
+        //                     className={` p-3 rounded-lg-xl cursor-pointer ${activeSection === 'grades' ? 'bg-gray-400 text-white' : ''}`}
         //                     onClick={() => setActiveSection('grades')}
         //                 >
         //                     Grades
         //                 </li> */}
 
         //                 <li
-        //                     className={` p-3 rounded-xl cursor-pointer ${activeSection === 'participants' ? 'bg-gray-400 text-white' : ''}`}
+        //                     className={` p-3 rounded-lg-xl cursor-pointer ${activeSection === 'participants' ? 'bg-gray-400 text-white' : ''}`}
         //                     onClick={() => setActiveSection('participants')}
         //                 >
         //                     Participants
         //                     {participantData.length > 0 && (
-        //                         <span className="ml-2 bg-gray-300 text-gray-700 text-xs font-semibold px-2 py-1 rounded-full">
+        //                         <span className="ml-2 bg-gray-300 text-gray-700 text-xs font-semibold px-2 py-1 rounded-lg-full">
         //                             {participantData.length}
         //                         </span>
         //                     )}
@@ -174,7 +174,7 @@ const CourseDetails = () => {
 
 
         //                 {/* <li
-        //                     className={` p-3 rounded-xl cursor-pointer ${activeSection === 'settings' ? 'bg-gray-400 text-white' : ''}`}
+        //                     className={` p-3 rounded-lg-xl cursor-pointer ${activeSection === 'settings' ? 'bg-gray-400 text-white' : ''}`}
         //                     onClick={() => setActiveSection('settings')}
         //                 >
         //                     Settings
@@ -190,12 +190,12 @@ const CourseDetails = () => {
         //                     {/* Modules List */}
         //                     {sortedModules.map((module) => (
         //                         <div key={module.id} className="space-y-4">
-        //                             <div className="bg-white border flex justify-between border-gray-300  rounded-xl p-4 shadow-md min-h-6">
+        //                             <div className="bg-white border flex justify-between border-gray-300  rounded-lg-xl p-4 shadow-md min-h-6">
         //                                 <h2 className="text-xl font-semibold">{module.title}</h2>
         //                                 <h2 className="text-xl font-semibold">{module.description}</h2>
         //                                 <h2 className="text-xl font-semibold">{module.position}</h2>
         //                                 <div
-        //                                     className="px-3 rounded-xl cursor-pointer bg-gray-300 hover:bg-gray-200"
+        //                                     className="px-3 rounded-lg-xl cursor-pointer bg-gray-300 hover:bg-gray-200"
         //                                     onClick={() => handleModuleClick(module.id)}
         //                                 >
         //                                 GO ->
@@ -210,9 +210,9 @@ const CourseDetails = () => {
         //             {activeSection === 'assignments' && (
         //                 <div className="space-y-4">
         //                     {assignments.map((assignment) => (
-        //                         <div key={assignment.id} className="bg-white border border-gray-300 rounded-xl p-6 shadow-md h-64 cursor-pointer" onClick={() => handleAssignmentClick(assignment.id,assignment.module_id)}>
+        //                         <div key={assignment.id} className="bg-white border border-gray-300 rounded-lg-xl p-6 shadow-md h-64 cursor-pointer" onClick={() => handleAssignmentClick(assignment.id,assignment.module_id)}>
         //                             <h2 className="text-xl font-semibold mb-6">{assignment.title}</h2>
-        //                             <div className="shadow-md items-center p-5 border border-gray-100 rounded-xl max-w-lg">
+        //                             <div className="shadow-md items-center p-5 border border-gray-100 rounded-lg-xl max-w-lg">
         //                                 <p className="text-sm text-gray-600 mb-4">Description : {assignment.description}</p>
         //                                 <p className="text-sm text-gray-600 mb-4">Total Marks : {assignment.total_marks}</p>
 
@@ -250,17 +250,17 @@ const CourseDetails = () => {
         //             {/* completed */}
         //             {activeSection === 'participants' && (
         //                 <div className="space-y-4">
-        //                     <div className="border border-gray-300 dark:text-white rounded-xl p-6 shadow-md cursor-pointer">
+        //                     <div className="border border-gray-300 dark:text-white rounded-lg-xl p-6 shadow-md cursor-pointer">
         //                         {/* <h2 className="text-xl font-semibold mb-6">Course Participants</h2>  */}
         //                         <h1 className="text-xl font-bold mb-b">Participants</h1>
-        //                         <div className="shadow-md items-center p-5 border border-gray-100 rounded-xl">
+        //                         <div className="shadow-md items-center p-5 border border-gray-100 rounded-lg-xl">
         //                             <div className="overflow-x-auto mb-4">
         //                                 <input
         //                                     type="text"
         //                                     placeholder="Search participants by name"
         //                                     value={searchTerm}
         //                                     onChange={(e) => setSearchTerm(e.target.value)}
-        //                                     className="mb-4 p-2 border border-gray-300 dark:bg-[#212830] rounded w-full"
+        //                                     className="mb-4 p-2 border border-gray-300 dark:bg-[#212830] rounded-lg w-full"
         //                                 />
         //                             </div>
         //                             <div className="overflow-x-auto">
@@ -303,7 +303,7 @@ const CourseDetails = () => {
         <div className="min-h-screen bg-gray-50 dark:bg-transparent py-8 px-4">
             <div className="max-w-7xl mx-auto">
                 
-                <div className="bg-white dark:bg-[#151b23] rounded-lg shadow-sm p-6 mb-8">
+                <div className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm p-6 mb-8">
                     <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
                         {courses?.title}
                     </h1>
@@ -311,13 +311,13 @@ const CourseDetails = () => {
                 </div>
 
                 
-                <nav className="bg-white dark:bg-[#151b23] rounded-lg shadow-sm mb-8">
+                <nav className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm mb-8">
                     <ul className="flex p-2 gap-2">
                         {['course', 'assignments', 'grades', 'participants'].map((section) => (
                             <li key={section}>
                                 <button
                                     onClick={() => setActiveSection(section)}
-                                    className={`px-4 py-2 rounded-md font-medium transition-colors
+                                    className={`px-4 py-2 rounded-lg-md font-medium transition-colors
                                     ${activeSection === section
                                             ? 'bg-blue-500 text-white'
                                             : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
@@ -325,12 +325,12 @@ const CourseDetails = () => {
                                 >
                                     {section.charAt(0).toUpperCase() + section.slice(1)}
                                     {(section === 'assignments' && assignments.length > 0) && (
-                                        <span className="ml-2 bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded-full">
+                                        <span className="ml-2 bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded-lg-full">
                                             {assignments.length}
                                         </span>
                                     )}
                                     {(section === 'participants' && participantData.length > 0) && (
-                                        <span className="ml-2 bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded-full">
+                                        <span className="ml-2 bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded-lg-full">
                                             {participantData.length}
                                         </span>
                                     )}
@@ -351,7 +351,7 @@ const CourseDetails = () => {
                                 {sortedModules.map((module) => (
                                     <div
                                         key={module.id}
-                                        className="bg-white dark:bg-[#151b23] rounded-lg shadow-sm hover:shadow-md transition-shadow"
+                                        className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm hover:shadow-md transition-shadow"
                                     >
                                         <div className="flex items-center justify-between p-6">
                                             <span className="flex items-center gap-6">
@@ -369,7 +369,7 @@ const CourseDetails = () => {
                                             </span>
                                             <button
                                                 onClick={() => handleModuleClick(module.id)}
-                                                className="px-4 py-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                                                className="px-4 py-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg-lg transition-colors"
                                             >
                                                 View Module →
                                             </button>
@@ -387,7 +387,7 @@ const CourseDetails = () => {
                                 <div
                                     key={assignment.id}
                                     onClick={() => handleAssignmentClick(assignment.id, assignment.module_id)}
-                                    className="bg-white dark:bg-[#151b23] rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer p-6"
+                                    className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer p-6"
                                 >
                                     <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
                                         {assignment.title}
@@ -397,7 +397,7 @@ const CourseDetails = () => {
                                             {assignment.description}
                                         </p>
                                         <div className="grid grid-cols-2 gap-4">
-                                            <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                            <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg-lg">
                                                 <p className="text-sm text-gray-500 dark:text-gray-400">
                                                     Total Marks
                                                 </p>
@@ -405,7 +405,7 @@ const CourseDetails = () => {
                                                     {assignment.total_marks}
                                                 </p>
                                             </div>
-                                            <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                            <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg-lg">
                                                 <p className="text-sm text-gray-500 dark:text-gray-400">
                                                     Due Date
                                                 </p>
@@ -428,7 +428,7 @@ const CourseDetails = () => {
 
                     
                     {activeSection === 'participants' && (
-                        <div className="bg-white dark:bg-[#151b23] rounded-lg shadow-sm">
+                        <div className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm">
                             <div className="p-6">
                                 <div className="flex justify-between items-center mb-6">
                                     <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
@@ -444,7 +444,7 @@ const CourseDetails = () => {
                                         placeholder="Search participants..."
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
-                                        className="w-full mb-6 px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-[#151b23]"
+                                        className="w-full mb-6 px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg-lg focus:ring-2 focus:ring-blue-500 dark:bg-[#151b23]"
                                     />
                                     <div className="overflow-x-auto">
                                         <table className="w-full">

@@ -83,7 +83,7 @@ const ExcelMemberComponent: React.FC<ExcelMemberComponentProps> = ({ onClose }) 
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-gray-50 dark:bg-[#151b23] p-8 rounded-lg shadow-md max-w-md w-full">
+            <div className="bg-gray-50 dark:bg-[#151b23] p-8 rounded-lg-lg shadow-md max-w-md w-full">
                 <h2 className="text-2xl font-semibold mb-4 text-center">Manage Group Members</h2>
                 <p className="mb-6 text-center text-gray-600">Select action and upload the Excel file</p>
 
@@ -94,7 +94,7 @@ const ExcelMemberComponent: React.FC<ExcelMemberComponentProps> = ({ onClose }) 
                     <select
                         value={actionType}
                         onChange={(e) => setActionType(e.target.value as 'upload' | 'remove')}
-                        className="w-full p-2 border rounded-md dark:bg-[#1f2937] dark:border-gray-600"
+                        className="w-full p-2 border rounded-lg-md dark:bg-[#1f2937] dark:border-gray-600"
                     >
                         <option value="upload">Add Members</option>
                         <option value="remove">Remove Members</option>
@@ -102,7 +102,7 @@ const ExcelMemberComponent: React.FC<ExcelMemberComponentProps> = ({ onClose }) 
                 </div>
 
                 <div
-                    className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition ${file ? (actionType === 'upload' ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50') : 'border-gray-400 hover:border-gray-500'}`}
+                    className={`border-2 border-dashed rounded-lg-lg p-6 text-center cursor-pointer transition ${file ? (actionType === 'upload' ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50') : 'border-gray-400 hover:border-gray-500'}`}
                 >
                     <input
                         type="file"
@@ -130,7 +130,7 @@ const ExcelMemberComponent: React.FC<ExcelMemberComponentProps> = ({ onClose }) 
                 <div className="flex justify-between mt-6">
                     <button
                         onClick={handleFileUpload}
-                        className={`py-2 px-4 rounded-md transition ${file
+                        className={`py-2 px-4 rounded-lg-md transition ${file
                             ? actionType === 'upload'
                                 ? 'bg-green-500 text-white hover:bg-green-600'
                                 : 'bg-red-500 text-white hover:bg-red-600'
@@ -143,7 +143,7 @@ const ExcelMemberComponent: React.FC<ExcelMemberComponentProps> = ({ onClose }) 
 
                     {/* <button
                         type="button"
-                        className="w-1/2 ml-4 bg-gray-100 text-gray-600 py-2 px-4 rounded-md hover:bg-gray-200 transition"
+                        className="w-1/2 ml-4 bg-gray-100 text-gray-600 py-2 px-4 rounded-lg-md hover:bg-gray-200 transition"
                         onClick={() => {
                             setFile(null);
                             setError('');
@@ -158,7 +158,7 @@ const ExcelMemberComponent: React.FC<ExcelMemberComponentProps> = ({ onClose }) 
                   
                         <button
                             type="button"
-                            className="w-1/2  ml-4 bg-red-100 text-red-600 py-2 px-4 rounded-md hover:bg-red-200 transition"
+                            className="w-1/2  ml-4 bg-red-100 text-red-600 py-2 px-4 rounded-lg-md hover:bg-red-200 transition"
                             onClick={() => {
                                 setFile(null);
                                 setError('');

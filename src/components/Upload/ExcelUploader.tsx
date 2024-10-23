@@ -61,7 +61,7 @@ const ExcelUploader = () => {
   if (isUploaded) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full">
+        <div className="bg-white p-8 rounded-lg-lg shadow-md max-w-md w-full">
           <div className="text-center">
             <h2 className="text-2xl font-semibold mb-4">File Uploaded Successfully</h2>
             <p className="mb-6 text-gray-600">Your Excel file has been uploaded and processed.</p>
@@ -76,12 +76,12 @@ const ExcelUploader = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <div className="bg-gray-50 dark:bg-[#151b23] p-8 rounded-lg shadow-md max-w-md w-full">
+      <div className="bg-gray-50 dark:bg-[#151b23] p-8 rounded-lg-lg shadow-md max-w-md w-full">
         <h2 className="text-2xl font-semibold mb-4 text-center">Upload Excel File</h2>
         <p className="mb-6 text-center text-gray-600">Select and upload the Excel file of your choice</p>
 
         <div
-          className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition ${file ? 'border-green-500 bg-green-50' : 'border-gray-400 hover:border-gray-500'
+          className={`border-2 border-dashed rounded-lg-lg p-6 text-center cursor-pointer transition ${file ? 'border-green-500 bg-green-50' : 'border-gray-400 hover:border-gray-500'
             }`}
         >
           {!file && (
@@ -115,7 +115,7 @@ const ExcelUploader = () => {
         <div className="flex justify-between mt-6">
           <button
             onClick={handleFileUpload}
-            className={` py-2 px-4 rounded-md transition ${file
+            className={` py-2 px-4 rounded-lg-md transition ${file
               ? 'bg-green-500 text-white w-1/2 hover:bg-green-600'
               : 'bg-gray-300 text-gray-500 w-full cursor-not-allowed'
               }`}
@@ -126,7 +126,7 @@ const ExcelUploader = () => {
           {file && (
             <button
               type="button"
-              className="w-1/2  ml-4 bg-red-100 text-red-600 py-2 px-4 rounded-md hover:bg-red-200 transition"
+              className="w-1/2  ml-4 bg-red-100 text-red-600 py-2 px-4 rounded-lg-md hover:bg-red-200 transition"
               onClick={() => {
                 setFile(null);
               }}

@@ -100,7 +100,7 @@ export default function AddSubmission() {
 
     return (
         <div className="h-screen flex justify-center items-center">
-            <div className="w-full max-w-md mx-auto dark:bg-[#151b23] p-8 shadow-md rounded">
+            <div className="w-full max-w-md mx-auto dark:bg-[#151b23] p-8 shadow-md rounded-lg">
                 <h1 className="text-2xl font-bold mb-6">Submit Assignment</h1>
                 {message && <p className="text-green-500">{message}</p>}
                 {error && <p className="text-red-500">{error}</p>}
@@ -114,7 +114,7 @@ export default function AddSubmission() {
                         <div className="mt-4">
                             <button
                                 onClick={handleDelete}
-                                className={`bg-red-600 text-white w-full px-4 py-2 rounded hover:bg-red-700 ${deleting ? "opacity-50 cursor-not-allowed" : ""}`}
+                                className={`bg-red-600 text-white w-full px-4 py-2 rounded-lg hover:bg-red-700 ${deleting ? "opacity-50 cursor-not-allowed" : ""}`}
                                 disabled={deleting}
                             >
                                 {deleting ? "Deleting..." : "Delete Submission"}
@@ -128,7 +128,7 @@ export default function AddSubmission() {
                             <input
                                 type="file"
                                 onChange={handleFileChange}
-                                className="mt-1 block w-full p-2 border border-gray-300 rounded dark:bg-[#151b23]"
+                                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg dark:bg-[#151b23]"
                                 required
                             />
                         </div>
@@ -136,7 +136,7 @@ export default function AddSubmission() {
                         <div className="mb-4">
                             <button
                                 type="submit"
-                                className={`bg-blue-600 text-white w-full px-4 py-2 rounded hover:bg-blue-700 ${uploading ? "opacity-50 cursor-not-allowed" : ""}`}
+                                className={`bg-blue-600 text-white w-full px-4 py-2 rounded-lg hover:bg-blue-700 ${uploading ? "opacity-50 cursor-not-allowed" : ""}`}
                                 disabled={uploading}
                             >
                                 {uploading ? "Uploading..." : "Submit"}
@@ -153,7 +153,7 @@ export default function AddSubmission() {
                                 <input
                                     type="file"
                                     onChange={handleFileChange}
-                                    className="mt-1 block w-full p-2 border border-gray-300 rounded dark:bg-[#151b23]"
+                                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg dark:bg-[#151b23]"
                                     required
                                 />
                             </div>
@@ -161,7 +161,7 @@ export default function AddSubmission() {
                             <div className="mb-4">
                                 <button
                                     type="submit"
-                                    className={`bg-blue-600 text-white w-full px-4 py-2 rounded hover:bg-blue-700 ${uploading ? "opacity-50 cursor-not-allowed" : ""}`}
+                                    className={`bg-blue-600 text-white w-full px-4 py-2 rounded-lg hover:bg-blue-700 ${uploading ? "opacity-50 cursor-not-allowed" : ""}`}
                                     disabled={uploading}
                                 >
                                     {uploading ? "Uploading..." : "Edit Submission"}
@@ -296,12 +296,12 @@ export default function AddSubmission() {
 //                             {message && <p className="text-green-500 mt-2">{message}</p>}
 
 //                             <div className="flex justify-between mt-4">
-//                                 <button type="submit" className="dark:bg-[#212830] text-white py-2 px-7 rounded-xl hover:bg-[#151b23] transition">
+//                                 <button type="submit" className="dark:bg-[#212830] text-white py-2 px-7 rounded-lg-xl hover:bg-[#151b23] transition">
 //                                     Submit
 //                                 </button>
 //                                 <button
 //                                     type="button"
-//                                     className="bg-gray-300 text-black border border-gray-300 py-2 px-4 rounded-xl hover:bg-gray-400 transition"
+//                                     className="bg-gray-300 text-black border border-gray-300 py-2 px-4 rounded-lg-xl hover:bg-gray-400 transition"
 //                                     onClick={() => setFiles([])}
 //                                 >
 //                                     Cancel
@@ -411,13 +411,13 @@ export default function AddSubmission() {
 
 //     return (
 //         <div className="min-h-screen flex items-center justify-center">
-//             <div className="bg-gray-50 dark:bg-gray-900 p-8 rounded-lg shadow-md max-w-md w-full">
+//             <div className="bg-gray-50 dark:bg-gray-900 p-8 rounded-lg-lg shadow-md max-w-md w-full">
 //                 <h2 className="text-2xl font-semibold mb-4 text-center">Submit Your Assignment</h2>
 //                 <p className="mb-6 text-center text-gray-600">Select and upload the files of your choice</p>
 
 //                 <form onSubmit={handleSubmit}>
 //                     <div
-//                         className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition ${files.length > 0 ? 'border-green-500 bg-green-50' : 'border-gray-400 hover:border-gray-500'
+//                         className={`border-2 border-dashed rounded-lg-lg p-6 text-center cursor-pointer transition ${files.length > 0 ? 'border-green-500 bg-green-50' : 'border-gray-400 hover:border-gray-500'
 //                             }`}
 //                         onDragOver={(e) => e.preventDefault()}
 //                         onDrop={handleDrop}
@@ -453,7 +453,7 @@ export default function AddSubmission() {
 //                     <div className="flex justify-between mt-6">
 //                         <button
 //                             type="submit"
-//                             className={`py-2 px-4 rounded-md transition ${files.length > 0
+//                             className={`py-2 px-4 rounded-lg-md transition ${files.length > 0
 //                                     ? 'bg-green-500 text-white w-1/2 hover:bg-green-600'
 //                                     : 'bg-gray-300 text-gray-500 w-full cursor-not-allowed'
 //                                 }`}
@@ -464,7 +464,7 @@ export default function AddSubmission() {
 //                         {files.length > 0 && (
 //                             <button
 //                                 type="button"
-//                                 className="w-1/2 ml-4 bg-red-100 text-red-600 py-2 px-4 rounded-md hover:bg-red-200 transition"
+//                                 className="w-1/2 ml-4 bg-red-100 text-red-600 py-2 px-4 rounded-lg-md hover:bg-red-200 transition"
 //                                 onClick={() => setFiles([])}
 //                                 disabled={uploading}
 //                             >

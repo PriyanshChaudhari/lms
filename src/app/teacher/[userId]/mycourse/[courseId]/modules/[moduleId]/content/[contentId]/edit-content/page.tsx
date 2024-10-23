@@ -108,7 +108,7 @@ const EditContent = () => {
 
     return (
         <div className="flex justify-center items-center h-screen">
-            <div className="w-full max-w-md mx-auto mt-8 p-6 dark:bg-[#151b23] rounded shadow-md">
+            <div className="w-full max-w-md mx-auto mt-8 p-6 dark:bg-[#151b23] rounded-lg shadow-md">
                 <h2>Edit Content</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
@@ -121,7 +121,7 @@ const EditContent = () => {
                             name="title"
                             value={content.title}
                             onChange={handleChange}
-                            className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-700"
+                            className="mt-1 p-2 w-full border border-gray-300 rounded-lg dark:bg-gray-700"
                             required
                         />
                     </div>
@@ -136,7 +136,7 @@ const EditContent = () => {
                             name="description"
                             value={content.description}
                             onChange={handleChange}
-                            className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-700"
+                            className="mt-1 p-2 w-full border border-gray-300 rounded-lg dark:bg-gray-700"
                             required
                         />
 
@@ -151,7 +151,7 @@ const EditContent = () => {
                             name="content_type"
                             value={content.content_type}
                             onChange={handleChange}
-                            className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-700"
+                            className="mt-1 p-2 w-full border border-gray-300 rounded-lg dark:bg-gray-700"
                             required
                         >
                             <option value="">Select Content Type</option>
@@ -171,7 +171,7 @@ const EditContent = () => {
                                 name="attachments"
                                 value={content.attachments}
                                 onChange={handleChange}
-                                className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-700"
+                                className="mt-1 p-2 w-full border border-gray-300 rounded-lg dark:bg-gray-700"
 
                             />
                         </div>
@@ -204,7 +204,7 @@ const EditContent = () => {
                     <div className="mb-4">
                         <button
                             type="submit"
-                            className='w-full py-2 px-4 rounded bg-blue-500 hover:bg-blue-600 text-white'
+                            className='w-full py-2 px-4 rounded-lg bg-blue-500 hover:bg-blue-600 text-white'
                         >
                             Submit
                         </button>

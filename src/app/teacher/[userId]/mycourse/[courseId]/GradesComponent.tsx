@@ -90,10 +90,15 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
     };
 
     return (
-        <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-300">
+        <div className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm ">
+          <div className="p-6 grid gap-4">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                Participants' Grades
+            </h2>
+            <div className="overflow-x-auto">
+            <table className="min-w-full ">
                 <thead>
-                    <tr>
+                    <tr className="bg-gray-50 dark:bg-gray-700 text-left">
                         <th className="py-2 px-4 border-b">Student Name</th>
                         {events.map(event => (
                             <th key={event.id} className="py-2 px-4 border-b">{event.event_name}</th>
@@ -105,15 +110,15 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
                 </thead>
                 <tbody>
                     {students.map(student => (
-                        <tr key={student.user_id}>
-                            <td className="py-2 px-4 border-b">{`${student.first_name} ${student.last_name}`}</td>
+                        <tr key={student.user_id} className="border-t border-gray-100 dark:border-gray-700">
+                            <td className="p-4 text-gray-700 dark:text-gray-300">{`${student.first_name} ${student.last_name}`}</td>
                             {events.map(event => (
-                                <td key={event.id} className="py-2 px-4 border-b">
+                                <td key={event.id} className="p-4 text-gray-700 dark:text-gray-300">
                                     {grades[student.user_id]?.event_marks.find(g => g.event_name === event.event_name)?.marks || '-'}
                                 </td>
                             ))}
                             {assignments.map(assignment => (
-                                <td key={assignment.id} className="py-2 px-4 border-b">
+                                <td key={assignment.id} className="p-4 text-gray-700 dark:text-gray-300">
                                     {grades[student.user_id]?.assignment_marks.find(g => g.assessment_id === assignment.id)?.obtained_marks || '-'}
                                 </td>
                             ))}
@@ -121,6 +126,8 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
                     ))}
                 </tbody>
             </table>
+            </div>
+          </div>
         </div>
     );
 };

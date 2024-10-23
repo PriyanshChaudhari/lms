@@ -62,7 +62,7 @@ const EditGroup = () => {
     };
 
     return (
-        <div className="max-w-md mx-auto mt-10 p-6 bg-white dark:bg-[#212830] rounded-lg shadow-md">
+        <div className="max-w-md mx-auto mt-10 p-6 bg-white dark:bg-[#212830] rounded-lg-lg shadow-md">
             <h1 className="text-2xl font-semibold text-center mb-4">Edit Group</h1>
             {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}
 
@@ -78,14 +78,14 @@ const EditGroup = () => {
                         value={group.group_name}
                         onChange={handleChange}
                         required
-                        className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 uppercase"
+                        className="w-full border border-gray-300 rounded-lg-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 uppercase"
                     />
                 </div>
 
                 <button
                     type="submit"
                     disabled={loading}
-                    className={`w-full bg-blue-600 text-white font-semibold py-2 rounded-md hover:bg-blue-700 transition duration-200 ease-in-out ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`w-full bg-blue-600 text-white font-semibold py-2 rounded-lg-md hover:bg-blue-700 transition duration-200 ease-in-out ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                     {loading ? 'Updating...' : 'Update Group'}
                 </button>

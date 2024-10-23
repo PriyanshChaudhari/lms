@@ -62,14 +62,14 @@ const Group = () => {
 
   return (
     <div className="flex justify-center items-center h-screen">
-      <div className=" w-full max-w-4xl mx-auto p-6 bg-white dark:bg-[#212830] rounded-lg shadow-md">
+      <div className=" w-full max-w-4xl mx-auto p-6 bg-white dark:bg-[#212830] rounded-lg-lg shadow-md">
         <div className="flex gap-4 justify-center items-center mb-6">
           <h1 className="text-2xl font-semibold text-center ">Group Management</h1>
           <div>
             <button
               onClick={() => setIsManageUserVisible(!isManageUserVisible)}
               className={`${isManageUserVisible ? 'hidden' : 'bg-blue-600 hover:bg-blue-700'
-                } text-white text-sm font-semibold py-2 px-4 rounded transition duration-200`}
+                } text-white text-sm font-semibold py-2 px-4 rounded-lg transition duration-200`}
             >
               {isManageUserVisible ? 'Close' : 'Manage Members'}
             </button>
@@ -87,7 +87,7 @@ const Group = () => {
                         setIsAddOneMember(true);
                         setIsExcelUpload(false);
                       }}
-                      className="w-fit bg-green-600 text-sm text-white font-semibold py-2 px-4 rounded hover:bg-green-700 transition duration-200 "
+                      className="w-fit bg-green-600 text-sm text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition duration-200 "
                     >
                      Add Members (Manually)
                     </button>
@@ -96,13 +96,13 @@ const Group = () => {
                         setIsAddOneMember(false);
                         setIsExcelUpload(true);
                       }}
-                      className="w-fit bg-orange-600 text-sm text-white font-semibold py-2 px-4 rounded hover:bg-orange-700 transition duration-200 "
+                      className="w-fit bg-orange-600 text-sm text-white font-semibold py-2 px-4 rounded-lg hover:bg-orange-700 transition duration-200 "
                     >
                       Add Members (Excel File)
                     </button>
                     <button
                       onClick={() => setIsManageUserVisible(!isManageUserVisible)}
-                      className="bg-red-600 text-sm text-white font-semibold w-fit  py-2 px-4 rounded hover:bg-red-700 transition duration-200 "
+                      className="bg-red-600 text-sm text-white font-semibold w-fit  py-2 px-4 rounded-lg hover:bg-red-700 transition duration-200 "
                     >
                       Cancel
                     </button>
@@ -120,7 +120,7 @@ const Group = () => {
         {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}
         {successMessage && <p className="text-green-500 text-center mb-4">{successMessage}</p>}
 
-        <table className="min-w-full bg-white dark:bg-[#212830] border border-gray-300 rounded-lg">
+        <table className="min-w-full bg-white dark:bg-[#212830] border border-gray-300 rounded-lg-lg">
           <thead>
             <tr>
               <th className="px-4 py-2 border-b font-semibold text-left">User ID</th>
@@ -140,7 +140,7 @@ const Group = () => {
                 <td className="px-4 py-2 border-b">
                   <button
                     onClick={() => handleRemoveUser(user.userId)}
-                    className="bg-red-600 text-white font-semibold py-1 px-4 rounded-md hover:bg-red-700 transition duration-200"
+                    className="bg-red-600 text-white font-semibold py-1 px-4 rounded-lg-md hover:bg-red-700 transition duration-200"
                   >
                     Remove
                   </button>

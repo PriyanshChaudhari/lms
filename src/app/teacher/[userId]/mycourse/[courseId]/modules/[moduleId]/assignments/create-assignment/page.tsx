@@ -103,7 +103,7 @@ export default function CreateAssignment() {
 
     return (
         <div className='h-screen flex justify-center items-center'>
-            <div className="w-full max-w-md mx-auto dark:bg-[#151b23] p-8 shadow-md rounded">
+            <div className="w-full max-w-md mx-auto dark:bg-[#151b23] p-8 shadow-md rounded-lg">
                 <h1 className="text-2xl font-bold mb-6">Add New Assessment</h1>
                 {message && <p className="text-green-500">{message}</p>}
                 {error && <p className="text-red-500">{error}</p>}
@@ -115,7 +115,7 @@ export default function CreateAssignment() {
                             name="title"
                             value={formData.title}
                             onChange={handleChange}
-                            className="mt-1 block w-full p-2 border border-gray-300 rounded dark:bg-[#151b23]"
+                            className="mt-1 block w-full p-2 border border-gray-300 rounded-lg dark:bg-[#151b23]"
                             required
                         />
                     </div>
@@ -126,7 +126,7 @@ export default function CreateAssignment() {
                             name="description"
                             value={formData.description}
                             onChange={handleChange}
-                            className="mt-1 block w-full p-2 border border-gray-300 rounded dark:bg-[#151b23]"
+                            className="mt-1 block w-full p-2 border border-gray-300 rounded-lg dark:bg-[#151b23]"
                             required
                         />
                     </div>
@@ -139,7 +139,7 @@ export default function CreateAssignment() {
                             value={formData.total_marks}
                             onChange={handleChange}
                             min={0}
-                            className="mt-1 block w-full p-2 border border-gray-300 rounded dark:bg-[#151b23]"
+                            className="mt-1 block w-full p-2 border border-gray-300 rounded-lg dark:bg-[#151b23]"
                             required
                         />
                     </div>
@@ -151,7 +151,7 @@ export default function CreateAssignment() {
                             name="due_date"
                             value={formData.due_date}
                             onChange={handleChange}
-                            className="mt-1 block w-full p-2 border border-gray-300 rounded dark:bg-[#151b23]"
+                            className="mt-1 block w-full p-2 border border-gray-300 rounded-lg dark:bg-[#151b23]"
                             min={new Date().toISOString().split("T")[0]}
                             required
                         />
@@ -163,7 +163,7 @@ export default function CreateAssignment() {
                             type="file"
                             multiple
                             onChange={handleFileChange}
-                            className="mt-1 block w-full p-2 border border-gray-300 rounded dark:bg-[#151b23]"
+                            className="mt-1 block w-full p-2 border border-gray-300 rounded-lg dark:bg-[#151b23]"
                             required
                         />
                     </div>
@@ -171,7 +171,7 @@ export default function CreateAssignment() {
                     <div className="mb-4">
                         <button
                             type="submit"
-                            className="bg-blue-600 text-white w-full px-4 py-2 rounded hover:bg-blue-700"
+                            className="bg-blue-600 text-white w-full px-4 py-2 rounded-lg hover:bg-blue-700"
                         >
                             Create Assignment
                         </button>

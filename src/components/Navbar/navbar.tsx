@@ -138,7 +138,7 @@
 //         </div>
 
 //         <div className=" flex lg:space-x-10 items-center gap-6 text-md font-semibold">
-//           <button onClick={toggleTheme} className="transition ease-in-out duration-300 rounded-md text-black dark:text-gray-200">
+//           <button onClick={toggleTheme} className="transition ease-in-out duration-300 rounded-lg-md text-black dark:text-gray-200">
 //             {theme === 'dark' ? <SunIcon className='text-2xl' /> : <MoonIcon className='text-3xl' />}
 //           </button>
 //           {isLoginPage ? (
@@ -148,20 +148,20 @@
 //               <div className='flex gap-6 items-center'>
 //                 <p className='hidden sm:block'>{`${getGreeting()},  ${user?.first_name || 'User'}`}</p>
 //                 <div
-//                   className="border border-gray-500 text-xs h-8 w-8 rounded-full cursor-pointer"
+//                   className="border border-gray-500 text-xs h-8 w-8 rounded-lg-full cursor-pointer"
 //                   onClick={toggleDropdown}
 //                 >
-//                   <img src={profilePicUrl || DefaultProfilePic} className="h-full w-full rounded-full object-cover" />
+//                   <img src={profilePicUrl || DefaultProfilePic} className="h-full w-full rounded-lg-full object-cover" />
 //                 </div>
 //               </div>
 
 //               {isDropdownOpen && (
-//                 <div className="absolute top-full right-0 mt-2 w-44 bg-white dark:bg-[#151b23] border border-gray-300 rounded-xl shadow-lg">
+//                 <div className="absolute top-full right-0 mt-2 w-44 bg-white dark:bg-[#151b23] border border-gray-300 rounded-lg-xl shadow-lg">
 //                   <ul className="list-none p-2">
-//                     <li className="p-2 text-sm bg-gray-50 dark:bg-[#212830] rounded mb-2 hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer" onClick={navigateToDashboard}>Dashboard</li>
-//                     <li className="p-2 text-sm bg-gray-50 dark:bg-[#212830] mb-2 rounded hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer" onClick={navigateToProfile}>Profile</li>
-//                     <li className="text-sm bg-gray-50 dark:bg-[#212830] rounded cursor-pointer">
-//                       <button className='text-red-500  hover:text-red-600 p-2 rounded-xl' onClick={handleLogout}>Log Out</button>
+//                     <li className="p-2 text-sm bg-gray-50 dark:bg-[#212830] rounded-lg mb-2 hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer" onClick={navigateToDashboard}>Dashboard</li>
+//                     <li className="p-2 text-sm bg-gray-50 dark:bg-[#212830] mb-2 rounded-lg hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer" onClick={navigateToProfile}>Profile</li>
+//                     <li className="text-sm bg-gray-50 dark:bg-[#212830] rounded-lg cursor-pointer">
+//                       <button className='text-red-500  hover:text-red-600 p-2 rounded-lg-xl' onClick={handleLogout}>Log Out</button>
 //                     </li>
 //                   </ul>
 //                 </div>
@@ -321,7 +321,7 @@ const Navbar: React.FC = () => {
         </div>
 
         <div className="flex lg:space-x-10 items-center gap-6 text-md font-semibold">
-          <button onClick={toggleTheme} className="transition ease-in-out duration-300 rounded-md text-black dark:text-gray-200">
+          <button onClick={toggleTheme} className="transition ease-in-out duration-300 rounded-lg-md text-black dark:text-gray-200">
             {theme === 'dark' ? <SunIcon className='text-2xl' /> : <MoonIcon className='text-3xl' />}
           </button>
           {isLoginPage ? (
@@ -341,10 +341,10 @@ const Navbar: React.FC = () => {
               {isDropdownOpen && (
                 <div className="absolute top-full right-0 mt-2 w-44 bg-white dark:bg-[#151b23] border border-gray-300 rounded-xl shadow-lg">
                   <ul className="list-none p-2">
-                    <li className="p-2 text-sm bg-gray-50 dark:bg-[#212830] rounded mb-2 hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer" onClick={navigateToDashboard}>Dashboard</li>
-                    <li className="p-2 text-sm bg-gray-50 dark:bg-[#212830] mb-2 rounded hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer" onClick={navigateToProfile}>Profile</li>
-                    <li className="text-sm bg-gray-50 dark:bg-[#212830] rounded cursor-pointer">
-                      <button className='text-red-500 hover:text-red-600 p-2 rounded-xl' onClick={handleLogout}>Log Out</button>
+                    <li className="p-2 text-sm bg-gray-50 dark:bg-[#212830] rounded-lg mb-2 hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer" onClick={navigateToDashboard}>Dashboard</li>
+                    <li className="p-2 text-sm bg-gray-50 dark:bg-[#212830] mb-2 rounded-lg hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer" onClick={navigateToProfile}>Profile</li>
+                    <li className="text-sm bg-gray-50 dark:bg-[#212830] rounded-lg cursor-pointer">
+                      <button className='text-red-500 hover:text-red-600 p-2 rounded-lg-xl' onClick={handleLogout}>Log Out</button>
                     </li>
                   </ul>
                 </div>

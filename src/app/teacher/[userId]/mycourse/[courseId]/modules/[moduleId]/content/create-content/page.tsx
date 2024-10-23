@@ -122,7 +122,7 @@ const CreateContent = () => {
 
     return (
         <div className="flex justify-center items-center h-screen">
-            <div className="w-full max-w-md mx-auto mt-8 p-6 dark:bg-[#151b23] rounded shadow-md">
+            <div className="w-full max-w-md mx-auto mt-8 p-6 dark:bg-[#151b23] rounded-lg shadow-md">
                 <h2 className="text-2xl font-bold mb-4">Create Content</h2>
 
                 <form onSubmit={handleSubmit}>
@@ -136,7 +136,7 @@ const CreateContent = () => {
                             name="title"
                             value={content.title}
                             onChange={handleChange}
-                            className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-700"
+                            className="mt-1 p-2 w-full border border-gray-300 rounded-lg dark:bg-gray-700"
                             required
                         />
                         {errors.title && <p className="text-red-600 text-sm">{errors.title}</p>}
@@ -152,7 +152,7 @@ const CreateContent = () => {
                             name="description"
                             value={content.description}
                             onChange={handleChange}
-                            className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-700"
+                            className="mt-1 p-2 w-full border border-gray-300 rounded-lg dark:bg-gray-700"
                             required
                         />
                         {errors.description && <p className="text-red-600 text-sm">{errors.description}</p>}
@@ -167,7 +167,7 @@ const CreateContent = () => {
                             name="content_type"
                             value={content.content_type}
                             onChange={handleChange}
-                            className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-700"
+                            className="mt-1 p-2 w-full border border-gray-300 rounded-lg dark:bg-gray-700"
                             required
                         >
                             <option value="">Select Content Type</option>
@@ -188,7 +188,7 @@ const CreateContent = () => {
                                 name="attachments"
                                 value={content.attachments}
                                 onChange={handleChange}
-                                className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-gray-700"
+                                className="mt-1 p-2 w-full border border-gray-300 rounded-lg dark:bg-gray-700"
                                 required
                             />
                         </div>
@@ -207,7 +207,7 @@ const CreateContent = () => {
                         <button
                             type="submit"
                             // onClick={() => setShowModal(true)}
-                            className='w-full py-2 px-4 rounded bg-blue-500 hover:bg-blue-600 text-white'
+                            className='w-full py-2 px-4 rounded-lg bg-blue-500 hover:bg-blue-600 text-white'
                         // disabled={!isFormValid()}
                         >
                             Submit

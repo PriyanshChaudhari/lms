@@ -70,7 +70,7 @@ export default function ReviewSubmission() {
     };
 
     return (
-        <div className="max-w-md mx-auto bg-white p-8 shadow-md rounded-md">
+        <div className="max-w-md mx-auto bg-white p-8 shadow-md rounded-lg-md">
             <h1 className="text-2xl font-bold mb-6">Review Submission</h1>
             {error && <p className="text-red-500 mb-4">{error}</p>}
             {success && <p className="text-green-500 mb-4">{success}</p>}
@@ -89,7 +89,7 @@ export default function ReviewSubmission() {
                         name="marks_obtained"
                         value={submission.marks_obtained}
                         onChange={handleChange}
-                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-lg-md"
                         required
                     />
                 </div>
@@ -100,11 +100,11 @@ export default function ReviewSubmission() {
                         name="feedback"
                         value={submission.feedback}
                         onChange={handleChange}
-                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-lg-md"
                     />
                 </div>
 
-                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Submit Grade</button>
+                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-lg-md hover:bg-blue-600">Submit Grade</button>
             </form>
         </div>
     );

@@ -63,7 +63,7 @@ const CreateUser = () => {
 
     return (
         <div className="bg-gray-300 dark:dark:bg-[#212830] min-h-screen flex items-center justify-center p-6">
-            <form onSubmit={handleSubmit} className="bg-white dark:bg-[#151b23] p-8 rounded-lg shadow-md w-full max-w-xl">
+            <form onSubmit={handleSubmit} className="bg-white dark:bg-[#151b23] p-8 rounded-lg-lg shadow-md w-full max-w-xl">
                 <div className="mb-4">
                     <h2 className="text-2xl font-semibold mb-4 text-black dark:text-gray-300 text-center">Add User</h2>
                 </div>
@@ -83,7 +83,7 @@ const CreateUser = () => {
                         name="userId"
                         value={user.userId}
                         onChange={handleChange}
-                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-md focus:outline-none focus:border-blue-500 dark:focus:border-white"
+                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg-md focus:outline-none focus:border-blue-500 dark:focus:border-white"
                     />
                 </div>
 
@@ -95,7 +95,7 @@ const CreateUser = () => {
                         name="firstName"
                         value={user.firstName}
                         onChange={handleChange}
-                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-md focus:outline-none focus:border-blue-500 dark:focus:border-white capitalize"
+                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg-md focus:outline-none focus:border-blue-500 dark:focus:border-white capitalize"
                     />
                 </div>
 
@@ -107,7 +107,7 @@ const CreateUser = () => {
                         name="lastName"
                         value={user.lastName}
                         onChange={handleChange}
-                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-md focus:outline-none focus:border-blue-500 dark:focus:border-white capitalize"
+                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg-md focus:outline-none focus:border-blue-500 dark:focus:border-white capitalize"
                     />
                 </div>
 
@@ -119,7 +119,7 @@ const CreateUser = () => {
                         name="email"
                         value={user.email}
                         onChange={handleChange}
-                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-md focus:outline-none focus:border-blue-500 dark:focus:border-white"
+                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg-md focus:outline-none focus:border-blue-500 dark:focus:border-white"
                     />
                 </div>
 
@@ -130,7 +130,7 @@ const CreateUser = () => {
                         onChange={handleChange}
                         value={user.role}
                         required
-                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-md focus:outline-none focus:border-blue-500 dark:focus:border-white"
+                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg-md focus:outline-none focus:border-blue-500 dark:focus:border-white"
                     >
                         <option value="student">Student</option>
                         <option value="teacher">Teacher</option>
@@ -140,7 +140,7 @@ const CreateUser = () => {
 
                 <button
                     type="submit"
-                    className="w-full bg-red-500 text-white font-semibold py-2 rounded-md hover:bg-red-600 transition duration-300"
+                    className="w-full bg-red-500 text-white font-semibold py-2 rounded-lg-md hover:bg-red-600 transition duration-300"
                 >
                     Submit
                 </button>

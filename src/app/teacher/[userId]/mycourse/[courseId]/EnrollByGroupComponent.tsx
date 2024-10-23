@@ -105,7 +105,7 @@ const EnrollByGroupComponent = () => {
                             name="group_id"
                             value={enrollment.group_id}
                             onChange={handleChange}
-                            className="mt-1 p-2 w-full border border-gray-300 rounded"
+                            className="mt-1 p-2 w-full border border-gray-300 rounded-lg"
                             required
                         >
                             <option value="">Select Group</option>
@@ -122,14 +122,14 @@ const EnrollByGroupComponent = () => {
                         <button
                             type="button"
                             onClick={(e) => handleSubmit(e, 'enroll')}
-                            className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+                            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
                         >
                             Enroll Group
                         </button>
                         <button
                             type="button"
                             onClick={(e) => handleSubmit(e, 'unenroll')}
-                            className="w-full bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700"
+                            className="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700"
                         >
                             Unenroll Group
                         </button>

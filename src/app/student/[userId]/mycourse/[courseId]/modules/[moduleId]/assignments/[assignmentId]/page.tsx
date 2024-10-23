@@ -85,7 +85,7 @@ export default function ViewModuleAssignment() {
                     feedback: data.feedback,
                     file_url: data.file_url,
                 });
-                console.log(data.marks_obtained,data.feedback,data.file_url)
+                console.log(data.marks_obtained, data.feedback, data.file_url)
 
             } catch (error) {
                 console.log(error);
@@ -108,65 +108,146 @@ export default function ViewModuleAssignment() {
     };
 
     return (
-        <div className="border border-gray-300 m-5">
-            <div className="max-w-4xl mx-auto p-5">
-                <h1 className="text-3xl font-bold mb-4">{courses?.title}</h1>
-                <p className="text-lg text-gray-700 mb-6">{courses?.description}</p>
-                <nav className="mb-6 p-2">
-                    <ul className="flex justify-start space-x-4 list-none p-0">
-                        <li className="p-3 rounded-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/student/${userId}/mycourse/${courseId}`)}>{courses?.title}</li>
-                        <li className="p-3 rounded-xl text-black cursor-pointer">/</li>
-                        <li className="p-3 rounded-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/student/${userId}/mycourse/${courseId}/modules/${moduleId}`)}>Module {oneModule?.title}</li>
-                        <li className="p-3 rounded-xl text-black cursor-pointer">/</li>
-                        <li className="p-3 rounded-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/student/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments`)}>Assignments</li>
-                        <li className="p-3 rounded-xl text-black cursor-pointer">/</li>
-                        <li className="p-3 rounded-xl text-black cursor-pointer">{oneAssignment?.title}</li>
+        // <div className="border border-gray-300 m-5">
+        //     <div className="max-w-4xl mx-auto p-5">
+        //         <h1 className="text-3xl font-bold mb-4">{courses?.title}</h1>
+        //         <p className="text-lg text-gray-700 mb-6">{courses?.description}</p>
+        //         <nav className="mb-6 p-2">
+        //             <ul className="flex justify-start space-x-4 list-none p-0">
+        //                 <li className="p-3 rounded-lg-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/student/${userId}/mycourse/${courseId}`)}>{courses?.title}</li>
+        //                 <li className="p-3 rounded-lg-xl text-black cursor-pointer">/</li>
+        //                 <li className="p-3 rounded-lg-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/student/${userId}/mycourse/${courseId}/modules/${moduleId}`)}>Module {oneModule?.title}</li>
+        //                 <li className="p-3 rounded-lg-xl text-black cursor-pointer">/</li>
+        //                 <li className="p-3 rounded-lg-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/student/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments`)}>Assignments</li>
+        //                 <li className="p-3 rounded-lg-xl text-black cursor-pointer">/</li>
+        //                 <li className="p-3 rounded-lg-xl text-black cursor-pointer">{oneAssignment?.title}</li>
+        //             </ul>
+        //         </nav>
+
+        //         <div className="space-y-4 ">
+        //             <div className="bg-white border border-gray-300 rounded-lg-xl p-6 shadow-md h-26">
+        //                 <h2 className="text-xl font-semibold mb-2">{oneAssignment?.title}</h2>
+        //                 <p className="text-sm text-gray-600">Opened : {formatDate(oneAssignment?.created_at)}</p>
+        //                 <p className="text-sm text-gray-600">Due date : {formatDate(oneAssignment?.due_date)}</p>
+        //                 <div>
+        //                     {/* Display the attachment in an iframe */}
+        //                     <iframe
+        //                         src={oneAssignment?.attachment_url}
+        //                     ></iframe>
+
+        //                     {oneAssignment?.attachment_url && (
+        //                         <a href={oneAssignment.attachment_url} className="block mt-2 text-blue-600 hover:underline">
+        //                             Download Attachment
+        //                         </a>
+        //                     )}
+        //                 </div>
+        //             </div>
+
+        //             {/* Submission Action Section */}
+        // {!isPastDue(oneAssignment?.due_date) ? (
+        //     <>
+        //         <div>
+        //             <button
+        //                 className="bg-gray-950 hover:bg-gray-700 text-white rounded-lg-xl px-4 py-2"
+        //                 onClick={() => router.push(`/student/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments/${assignmentId}/submission/add-submission`)}
+        //             >
+        //                 {submissionExists ? "Edit Submission" : "Add Submission"}
+        //             </button>
+        //         </div>
+        //     </>
+        // ) : (
+        //     submissionExists && (
+        //         <div className="bg-gray-100 p-4 rounded-lg-xl shadow-md">
+        //             <h3 className="text-lg font-semibold">Marks and Feedback</h3>
+        //             <p className="text-md text-gray-700">Marks Obtained: {submissionData?.marks_obtained ?? "N/A"}</p>
+        //             <p className="text-md text-gray-700">Feedback: {submissionData?.feedback ?? "No feedback provided"}</p>
+        //             <iframe src={submissionData?.file_url}></iframe>
+        //         </div>
+        //     )
+        // )}
+        //         </div>
+        //     </div>
+        // </div>
+
+        <div className="min-h-screen bg-gray-50 dark:bg-transparent py-8 px-4">
+            <div className="max-w-7xl mx-auto">
+
+                <div className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm p-6 mb-8">
+                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                        {courses?.title}
+                    </h1>
+                    <p className="text-gray-600 dark:text-gray-300">{courses?.description}</p>
+                </div>
+
+
+                <nav className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm mb-8">
+                    <ul className="flex p-2 gap-2">
+                        <li className="p-3 rounded-lg-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/student/${userId}/mycourse/${courseId}`)}>{courses?.title}</li>
+                        <li className="p-3 rounded-lg-xl text-black cursor-pointer">/</li>
+                        <li className="p-3 rounded-lg-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/student/${userId}/mycourse/${courseId}/modules/${moduleId}`)}>Module {oneModule?.title}</li>
+                        <li className="p-3 rounded-lg-xl text-black cursor-pointer">/</li>
+                        <li className="p-3 rounded-lg-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/student/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments`)}>Assignments</li>
+                        <li className="p-3 rounded-lg-xl text-black cursor-pointer">/</li>
+                        <li className="p-3 rounded-lg-xl text-black cursor-pointer">{oneAssignment?.title}</li>
                     </ul>
                 </nav>
 
-                <div className="space-y-4 ">
-                    <div className="bg-white border border-gray-300 rounded-xl p-6 shadow-md h-26">
-                        <h2 className="text-xl font-semibold mb-2">{oneAssignment?.title}</h2>
-                        <p className="text-sm text-gray-600">Opened : {formatDate(oneAssignment?.created_at)}</p>
-                        <p className="text-sm text-gray-600">Due date : {formatDate(oneAssignment?.due_date)}</p>
-                        <div>
-                            {/* Display the attachment in an iframe */}
-                            <iframe
-                                src={oneAssignment?.attachment_url}
-                            ></iframe>
+                <div className="space-y-6">
 
-                            {oneAssignment?.attachment_url && (
-                                <a href={oneAssignment.attachment_url} className="block mt-2 text-blue-600 hover:underline">
-                                    Download Attachment
-                                </a>
-                            )}
+
+                    <div>
+
+                        <div className="grid gap-4 ">
+                            
+
+                            <div>
+                                <div className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm hover:shadow-md transition-shadow flex items-center justify-between p-6">
+                                    <h2 className="text-xl font-semibold mb-2">{oneAssignment?.title}</h2>
+                                    <p className="text-sm text-gray-600">Opened : {formatDate(oneAssignment?.created_at)}</p>
+                                    <p className="text-sm text-gray-600">Due date : {formatDate(oneAssignment?.due_date)}</p>
+                                    <div>
+                                        {/* Display the attachment in an iframe */}
+                                        <iframe
+                                            src={oneAssignment?.attachment_url}
+                                        ></iframe>
+
+                                        {oneAssignment?.attachment_url && (
+                                           <div className="flex justify-center items-center">
+                                             <a href={oneAssignment.attachment_url} className="block mt-2 text-blue-600 hover:underline">
+                                                Download Attachment
+                                            </a>
+                                           </div>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {!isPastDue(oneAssignment?.due_date) ? (
+                                    <>
+                                        <div>
+                                            <button
+                                                className="bg-gray-950 hover:bg-gray-700 text-white rounded-lg-xl px-4 py-2"
+                                                onClick={() => router.push(`/student/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments/${assignmentId}/submission/add-submission`)}
+                                            >
+                                                {submissionExists ? "Edit Submission" : "Add Submission"}
+                                            </button>
+                                        </div>
+                                    </>
+                                ) : (
+                                    submissionExists && (
+                                        <div className="bg-gray-100 p-4 rounded-lg-xl shadow-md">
+                                            <h3 className="text-lg font-semibold">Marks and Feedback</h3>
+                                            <p className="text-md text-gray-700">Marks Obtained: {submissionData?.marks_obtained ?? "N/A"}</p>
+                                            <p className="text-md text-gray-700">Feedback: {submissionData?.feedback ?? "No feedback provided"}</p>
+                                            <iframe src={submissionData?.file_url}></iframe>
+                                        </div>
+                                    )
+                                )}
+
+                            </div>
                         </div>
                     </div>
-
-                    {/* Submission Action Section */}
-                    {!isPastDue(oneAssignment?.due_date) ? (
-                        <>
-                            <div>
-                                <button
-                                    className="bg-gray-950 hover:bg-gray-700 text-white rounded-xl px-4 py-2"
-                                    onClick={() => router.push(`/student/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments/${assignmentId}/submission/add-submission`)}
-                                >
-                                    {submissionExists ? "Edit Submission" : "Add Submission"}
-                                </button>
-                            </div>
-                        </>
-                    ) : (
-                        submissionExists && (
-                            <div className="bg-gray-100 p-4 rounded-xl shadow-md">
-                                <h3 className="text-lg font-semibold">Marks and Feedback</h3>
-                                <p className="text-md text-gray-700">Marks Obtained: {submissionData?.marks_obtained ?? "N/A"}</p>
-                                <p className="text-md text-gray-700">Feedback: {submissionData?.feedback ?? "No feedback provided"}</p>
-                                <iframe src={submissionData?.file_url}></iframe>
-                            </div>
-                        )
-                    )}
                 </div>
             </div>
-        </div>
-    );
+            </div>
+            );
 }

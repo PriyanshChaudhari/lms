@@ -145,7 +145,7 @@ const CreateCourse = () => {
                     <select
                         value={selectedCategories[i] || ""}
                         onChange={(e) => handleCategoryChange(i, e)}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded-lg"
                     >
                         <option value="">Select Category</option>
                         {availableCategories.map(cat => (
@@ -163,7 +163,7 @@ const CreateCourse = () => {
 
     return (
         <div className=''>
-            <div className="max-w-md mx-auto mt-8 p-6 bg-white dark:bg-[#151b23] rounded shadow-md">
+            <div className="max-w-md mx-auto mt-8 p-6 bg-white dark:bg-[#151b23] rounded-lg shadow-md">
                 <h2 className="text-2xl font-bold mb-4">Create a New Course</h2>
                 {error}
                 <form onSubmit={handleSubmit}>
@@ -177,7 +177,7 @@ const CreateCourse = () => {
                             name="title"
                             value={course.title}
                             onChange={handleChange}
-                            className="mt-1 p-2 w-full border border-gray-300 rounded dark:bg-[#151b23] uppercase"
+                            className="mt-1 p-2 w-full border border-gray-300 rounded-lg dark:bg-[#151b23] uppercase"
                             required
                         />
                     </div>
@@ -192,7 +192,7 @@ const CreateCourse = () => {
                             autoCapitalize='true'
                             value={course.description}
                             onChange={handleChange}
-                            className="mt-1  capitalize p-2 w-full border border-gray-300 rounded dark:bg-[#151b23]"
+                            className="mt-1  capitalize p-2 w-full border border-gray-300 rounded-lg dark:bg-[#151b23]"
                             required
                         />
                     </div>
@@ -214,7 +214,7 @@ const CreateCourse = () => {
                     <div className='mt-4'>
                         <button
                             type="submit"
-                            className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+                            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
                         >
                             Create Course
                         </button>

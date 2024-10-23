@@ -87,7 +87,7 @@ const LoginPage = () => {
     return (
         // <div className="font-rubik flex justify-center items-center min-h-screen bg-gradient-to-r from-gray-100 via-gray-300 to-gray-100 dark:from-[#212830] dark:via-[#212830] dark:to-[#212830]" style={{ paddingTop: '2rem' }}>
         //     <div className='flex-row flex-wrap justify-center my-auto '>
-        //         <div className="flex-row dark:bg-[#151b23] dark:shadow-blue-800 rounded-[0.5rem] shadow-custom dark:shadow-custom bg-[#ffffff] sm:m-2" style={{ position: 'relative', padding: '4rem', width: '100%', minWidth: '20rem', marginBottom: '3rem' }}>
+        //         <div className="flex-row dark:bg-[#151b23] dark:shadow-blue-800 rounded-lg-[0.5rem] shadow-custom dark:shadow-custom bg-[#ffffff] sm:m-2" style={{ position: 'relative', padding: '4rem', width: '100%', minWidth: '20rem', marginBottom: '3rem' }}>
         //             <div className="head text-xl sm:text-4xl  font-bold flex justify-between mb-8 text-gray-900 dark:text-gray-200 ">
         //                 Log in
         //                 <div>icon</div>
@@ -157,7 +157,7 @@ const LoginPage = () => {
         // </div>
 
         <div className='relative z-0 bg-gradient-to-r from-white via-white to-gray-100 dark:from-[#212830] dark:via-[#212830] dark:to-[#212830] min-h-screen flex items-center justify-center'>
-            <div className='z-10 w-full sm:w-[650px] m-auto p-8 rounded-2xl'>
+            <div className='z-10 w-full sm:w-[650px] m-auto p-8 rounded-lg-2xl'>
                 <p className='font-light text-gray-900 dark:text-gray-200'>WELCOME BACK</p>
                 <h2 className='text-5xl font-extrabold pt-2 pb-2 text-gray-900 dark:text-gray-200'>Login.</h2>
 
@@ -174,7 +174,7 @@ const LoginPage = () => {
                             value={user.userId}
                             onChange={handleChange}
                             placeholder="Enter your PRN"
-                            className='py-4 px-6 rounded font-medium bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200 placeholder-gray-400'
+                            className='py-4 px-6 rounded-lg font-medium bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200 placeholder-gray-400'
                             required
                         />
                     </label>
@@ -186,14 +186,14 @@ const LoginPage = () => {
                             value={user.password}
                             onChange={handleChange}
                             placeholder="Enter your password"
-                            className='py-4 px-6 rounded font-medium bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200 placeholder-gray-400'
+                            className='py-4 px-6 rounded-lg font-medium bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200 placeholder-gray-400'
                             required
                         />
                     </label>
 
                     <button
                         type='submit'
-                        className='pt-3 px-8 w-fit font-bold bg-blue-500 text-white p-3 rounded hover:bg-blue-600 transition duration-300'
+                        className='pt-3 px-8 w-fit font-bold bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition duration-300'
                     >
                         {loading ? "Logging in..." : "Login"}
                     </button>

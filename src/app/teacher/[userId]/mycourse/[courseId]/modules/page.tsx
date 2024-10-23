@@ -40,21 +40,23 @@ export default function ViewModules() {
             <div className="w-full max-w-4xl  mx-auto p-5">
                 <div className='flex gap-6 justify-center items-center mb-6'>
                     <h1 className='text-2xl font-bold'>Add new Module</h1>
-                    <button className='bg-blue-500 hover:bg-blue-600 rounded p-2 text-white text-sm' onClick={createModule}>Add Module</button>
+                    <button className='bg-blue-500 hover:bg-blue-600 rounded-lg p-2 text-white text-sm' onClick={createModule}>Add Module</button>
                 </div>
                 {sortedModules.map((module) => (
                     <div key={module.id} className="space-y-4">
                         <div
-                            className="border flex justify-between border-gray-300 my-2 rounded-xl p-4 shadow-md min-h-6 ">
+                            className="border flex justify-between border-gray-300 my-2 rounded-lg-xl p-4 shadow-md min-h-6 ">
                             <h2 className="text-xl font-semibold">{module.position}</h2>
                             <h2 className="text-xl font-semibold">{module.description}</h2>
                             <h2 className="text-xl font-semibold">{module.title}</h2>
-                            <div className='px-3 rounded flex items-center cursor-pointer bg-gray-400  hover:bg-gray-500' onClick={() => handleModuleClick(module.id)} > GO -> </div>
+                            <div className='px-3 rounded-lg flex items-center cursor-pointer bg-gray-400  hover:bg-gray-500' onClick={() => handleModuleClick(module.id)} > GO -> </div>
                         </div>
 
                     </div>
                 ))}
             </div>
         </div>
+
+        
     );
 }

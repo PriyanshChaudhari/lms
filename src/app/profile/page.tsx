@@ -131,7 +131,7 @@ const ShowProfile = () => {
     return (
         <div className="bg-gray-300 dark:bg-[#212830] min-h-screen py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto">
-                <div className="bg-white dark:bg-[#151b23] shadow-xl rounded-lg overflow-hidden">
+                <div className="bg-white dark:bg-[#151b23] shadow-xl rounded-lg-lg overflow-hidden">
                     {/* Profile Header */}
                     <div className="relative h-48 bg-gray-500 dark:bg-[#444c56]">
                         <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2">
@@ -183,7 +183,7 @@ const ShowProfile = () => {
                         </div> */}
 
                         <div className="space-y-4">
-                            <div className="flex items-center space-x-4 mb-6 p-4 bg-gray-50 dark:bg-gray-600 rounded-lg">
+                            <div className="flex items-center space-x-4 mb-6 p-4 bg-gray-50 dark:bg-gray-600 rounded-lg-lg">
                                 <div className="flex-shrink-0 text-gray-500 text-xl font-bold w-8 text-center">
                                     👤
                                 </div>
@@ -197,7 +197,7 @@ const ShowProfile = () => {
                                 </div>
                             </div>
 
-                            <div className="flex items-center space-x-4 mb-6 p-4 bg-gray-50 dark:bg-gray-600 rounded-lg">
+                            <div className="flex items-center space-x-4 mb-6 p-4 bg-gray-50 dark:bg-gray-600 rounded-lg-lg">
                                 <div className="flex-shrink-0 text-gray-500 text-xl font-bold w-8 text-center">
                                     ✉️
                                 </div>
@@ -211,7 +211,7 @@ const ShowProfile = () => {
                                 </div>
                             </div>
 
-                            <div className="flex items-center space-x-4 mb-6 p-4 bg-gray-50 dark:bg-gray-600 rounded-lg">
+                            <div className="flex items-center space-x-4 mb-6 p-4 bg-gray-50 dark:bg-gray-600 rounded-lg-lg">
                                 <div className="flex-shrink-0 text-gray-500 text-xl font-bold w-8 text-center">
                                     🎓
                                 </div>
@@ -225,7 +225,7 @@ const ShowProfile = () => {
                                 </div>
                             </div>
 
-                            <div className="flex items-center space-x-4 mb-6 p-4 bg-gray-50 dark:bg-gray-600 rounded-lg">
+                            <div className="flex items-center space-x-4 mb-6 p-4 bg-gray-50 dark:bg-gray-600 rounded-lg-lg">
                                 <div className="flex-shrink-0 text-gray-500 dark:text-gray-900 text-xl font-bold w-8 text-center">
                                     #
                                 </div>
@@ -244,7 +244,7 @@ const ShowProfile = () => {
                         <div className="mt-8 flex justify-center">
                             <button
                                 onClick={navigateToDashboard}
-                                className="bg-gray-500 text-white font-semibold py-3 px-6 rounded-md hover:bg-red-600 transition duration-300"
+                                className="hover:bg-red-600 text-white font-semibold py-3 px-6 rounded-lg-md bg-red-500 transition duration-300"
                             >
                                 Back to Dashboard
                             </button>
@@ -254,7 +254,7 @@ const ShowProfile = () => {
             </div>
             {showPopup && (
                 <div className="fixed inset-0 flex items-center justify-center bg-white dark:bg-[#212830] bg-opacity-50 dark:bg-opacity-50">
-                    <div className="relative bg-white  dark:bg-[#151b23] p-6 rounded shadow-md ">
+                    <div className="relative bg-white  dark:bg-[#151b23] p-6 rounded-lg shadow-md ">
                         <h2 className="text-xl font-bold mb-4 ">Edit Profile Picture</h2>
                         <div className="mb-4 ">
 
@@ -289,14 +289,14 @@ const ShowProfile = () => {
                         <div className="flex justify-center space-x-2">
                             <button
                                 onClick={uploadProfilePic}
-                                className="bg-blue-500 text-white px-4 py-2 w-1/2 rounded text-sm hover:bg-blue-600"
+                                className="bg-blue-500 text-white px-4 py-2 w-1/2 rounded-lg text-sm hover:bg-blue-600"
                                 disabled={!newProfilePic}
                             >
                                 Upload
                             </button>
                             <button
                                 onClick={closePopup}
-                                className="bg-gray-300 text-gray-800 px-4 py-2 w-1/2 text-sm rounded hover:bg-gray-400"
+                                className="bg-gray-300 text-gray-800 px-4 py-2 w-1/2 text-sm rounded-lg hover:bg-gray-400"
                             >
                                 Cancel
                             </button>

@@ -104,7 +104,7 @@ const EditUser = () => {
 
     return (
         <div className="bg-gray-300 dark:dark:bg-[#212830] min-h-screen flex items-center justify-center p-6">
-            <form onSubmit={handleSubmit} className="bg-white dark:bg-[#151b23] p-8 rounded-lg shadow-md w-full max-w-xl">
+            <form onSubmit={handleSubmit} className="bg-white dark:bg-[#151b23] p-8 rounded-lg-lg shadow-md w-full max-w-xl">
                 <div className="mb-4">
                     <h2 className="text-2xl font-semibold mb-4 text-black dark:text-gray-300 text-center">Edit User</h2>
                 </div>
@@ -123,7 +123,7 @@ const EditUser = () => {
                         name="id"
                         value={user.id}
                         readOnly
-                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-md focus:outline-none focus:border-blue-500 dark:focus:border-white bg-gray-100 dark:bg-gray-600"
+                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg-md focus:outline-none focus:border-blue-500 dark:focus:border-white bg-gray-100 dark:bg-gray-600"
                     />
                 </div>
 
@@ -135,7 +135,7 @@ const EditUser = () => {
                         name="first_name"
                         value={user.first_name}
                         onChange={handleChange}
-                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-md focus:outline-none focus:border-blue-500 dark:focus:border-white capitalize"
+                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg-md focus:outline-none focus:border-blue-500 dark:focus:border-white capitalize"
                     />
                 </div>
 
@@ -147,7 +147,7 @@ const EditUser = () => {
                         name="last_name"
                         value={user.last_name}
                         onChange={handleChange}
-                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-md focus:outline-none focus:border-blue-500 dark:focus:border-white capitalize"
+                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg-md focus:outline-none focus:border-blue-500 dark:focus:border-white capitalize"
                     />
                 </div>
 
@@ -159,7 +159,7 @@ const EditUser = () => {
                         name="email"
                         value={user.email}
                         onChange={handleChange}
-                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-md focus:outline-none focus:border-blue-500 dark:focus:border-white"
+                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg-md focus:outline-none focus:border-blue-500 dark:focus:border-white"
                     />
                 </div>
 
@@ -169,7 +169,7 @@ const EditUser = () => {
                         name="role"
                         value={user.role}
                         onChange={handleChange}
-                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-md focus:outline-none focus:border-blue-500 dark:focus:border-white"
+                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg-md focus:outline-none focus:border-blue-500 dark:focus:border-white"
                     >
                         <option value="student">Student</option>
                         <option value="teacher">Teacher</option>
@@ -179,7 +179,7 @@ const EditUser = () => {
 
                 <button
                     type="submit"
-                    className="w-full bg-blue-500 text-white font-semibold py-2 rounded-md hover:bg-blue-600 transition duration-300"
+                    className="w-full bg-blue-500 text-white font-semibold py-2 rounded-lg-md hover:bg-blue-600 transition duration-300"
                 >
                     Update User
                 </button>

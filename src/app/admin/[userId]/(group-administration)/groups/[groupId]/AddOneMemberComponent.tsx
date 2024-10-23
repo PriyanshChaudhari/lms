@@ -47,7 +47,7 @@ const AddOneMemberComponent: React.FC<AddOneMemberComponentProps> = ({ onClose }
 
     return (
         <div className="fixed inset-0 flex items-center justify-center dark:bg-[#212830] bg-opacity-50">
-            <div className="relative w-full max-w-md mx-auto p-6 bg-white dark:bg-[#151b23] rounded-lg shadow-md lg:left-32 md:left-32">
+            <div className="relative w-full max-w-md mx-auto p-6 bg-white dark:bg-[#151b23] rounded-lg-lg shadow-md lg:left-32 md:left-32">
                 <h1 className="text-2xl font-semibold text-center mb-6">Add Group Member</h1>
 
                 {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}
@@ -65,20 +65,20 @@ const AddOneMemberComponent: React.FC<AddOneMemberComponentProps> = ({ onClose }
                             value={user.userId}
                             onChange={handleChange}
                             required
-                            className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-2"
+                            className="w-full border border-gray-300 rounded-lg-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-2"
                         />
                     </div>
                     <div className="flex gap-2 justify-center">
                         <button
                             type="submit"
-                            className="w-1/2 bg-blue-600 text-white font-semibold py-2 rounded hover:bg-blue-700 transition duration-200"
+                            className="w-1/2 bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition duration-200"
                         >
                             Add User
                         </button>
                         <button
                             type="button"
                             onClick={onClose}
-                            className="w-1/2 bg-red-600 text-white font-semibold py-2 rounded hover:bg-red-700 transition duration-200"
+                            className="w-1/2 bg-red-600 text-white font-semibold py-2 rounded-lg hover:bg-red-700 transition duration-200"
                         >
                             Close
                         </button>

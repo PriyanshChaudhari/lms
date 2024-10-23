@@ -65,7 +65,7 @@ const EditModule = () => {
 
     return (
         <div className='h-screen flex justify-center items-center'>
-            <div className="w-full max-w-md mx-auto mt-8 p-6  rounded shadow-md">
+            <div className="w-full max-w-md mx-auto mt-8 p-6  rounded-lg shadow-md">
             <h2 className="text-2xl font-bold mb-4">Edit Module</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
@@ -78,7 +78,7 @@ const EditModule = () => {
                         name="title"
                         value={module.title}
                         onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded-lg"
                         required
                     />
                 </div>
@@ -92,7 +92,7 @@ const EditModule = () => {
                         name="description"
                         value={module.description}
                         onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded-lg"
                         required
                     />
                 </div>
@@ -107,14 +107,14 @@ const EditModule = () => {
                         name="position"
                         value={module.position}
                         onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded-lg"
                     />
                 </div>
 
                 <div>
                     <button
                         type="submit"
-                        className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+                        className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
                     >
                         Update Module
                     </button>

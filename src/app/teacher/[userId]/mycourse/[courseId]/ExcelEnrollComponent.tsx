@@ -75,7 +75,7 @@ const ExcelEnrollUnenrollComponent = () => {
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="w-full max-w-md mx-auto bg-white dark:bg-gray-800 p-8 shadow-md rounded">
+            <div className="w-full max-w-md mx-auto bg-white dark:bg-gray-800 p-8 shadow-md rounded-lg">
                 <h1 className="text-2xl font-bold mb-6">
                     {action === 'enroll' ? 'Enroll Users' : 'Unenroll Users'}
                 </h1>
@@ -86,7 +86,7 @@ const ExcelEnrollUnenrollComponent = () => {
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-2">
                         Upload Excel File
                     </label>
-                    <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-md p-4 text-center cursor-pointer hover:border-gray-400 transition">
+                    <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg-md p-4 text-center cursor-pointer hover:border-gray-400 transition">
                         <input
                             type="file"
                             accept=".xlsx, .xls"
@@ -115,7 +115,7 @@ const ExcelEnrollUnenrollComponent = () => {
                     <button
                         type="button"
                         onClick={() => setAction('enroll')}
-                        className={`px-4 py-2 rounded ${action === 'enroll'
+                        className={`px-4 py-2 rounded-lg ${action === 'enroll'
                             ? 'bg-blue-600 text-white'
                             : 'bg-gray-300 text-black'
                             } hover:bg-blue-700 transition duration-200`}
@@ -126,7 +126,7 @@ const ExcelEnrollUnenrollComponent = () => {
                     <button
                         type="button"
                         onClick={() => setAction('unenroll')}
-                        className={`px-4 py-2 rounded ${action === 'unenroll'
+                        className={`px-4 py-2 rounded-lg ${action === 'unenroll'
                             ? 'bg-red-600 text-white'
                             : 'bg-gray-300 text-black'
                             } hover:bg-red-700 transition duration-200`}
@@ -139,7 +139,7 @@ const ExcelEnrollUnenrollComponent = () => {
                     <button
                         type="button"
                         onClick={handleFileUpload}
-                        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition duration-200"
+                        className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-200"
                     >
                         {action === 'enroll' ? 'Enroll Users' : 'Unenroll Users'}
                     </button>
@@ -147,7 +147,7 @@ const ExcelEnrollUnenrollComponent = () => {
                     <button
                         type="button"
                         onClick={() => setFile(null)}
-                        className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition duration-200"
+                        className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition duration-200"
                     >
                         Cancel
                     </button>
@@ -228,7 +228,7 @@ export default ExcelEnrollUnenrollComponent;
 
 //     return (
 //         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-//             <div className="w-full max-w-md mx-auto bg-white dark:bg-gray-800 p-8 shadow-md rounded">
+//             <div className="w-full max-w-md mx-auto bg-white dark:bg-gray-800 p-8 shadow-md rounded-lg">
 //                 <h1 className="text-2xl font-bold mb-6">Remove Group Members</h1>
 //                 {message && <p className="text-green-500 mb-4">{message}</p>}
 //                 {error && <p className="text-red-500 mb-4">{error}</p>}
@@ -237,7 +237,7 @@ export default ExcelEnrollUnenrollComponent;
 //                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-2">
 //                             Upload Excel File
 //                         </label>
-//                         <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-md p-4 text-center cursor-pointer hover:border-gray-400 transition">
+//                         <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg-md p-4 text-center cursor-pointer hover:border-gray-400 transition">
 //                             <input
 //                                 type="file"
 //                                 accept=".xlsx, .xls"
@@ -260,13 +260,13 @@ export default ExcelEnrollUnenrollComponent;
 //                         <button
 //                             type="button"
 //                             onClick={handleFileUpload}
-//                             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200"
+//                             className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200"
 //                         >
 //                             Enroll Users
 //                         </button>
 //                         <button
 //                             type="button"
-//                             className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition duration-200"
+//                             className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition duration-200"
 //                         >
 //                             Cancel
 //                         </button>
