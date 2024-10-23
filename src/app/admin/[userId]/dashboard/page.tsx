@@ -135,21 +135,33 @@ export default function CourseDetails() {
 
 
                 <nav className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm mb-8">
-                    <ul className="flex p-2 gap-2">
+                    <ul className="flex p-2 gap-2 font-medium">
                         <li
-                            className={` p-3 rounded-lg-xl cursor-pointer ${activeSection === 'users' ? 'bg-gray-400 text-white' : ''}`}
+                            className={` p-3 rounded-lg-xl cursor-pointer 
+                                 ${activeSection === 'users'
+                                    ? 'bg-blue-500 text-white'
+                                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                                }`}
                             onClick={() => setActiveSection('users')}
                         >
                             Users
                         </li>
                         <li
-                            className={` p-3 rounded-lg-xl cursor-pointer ${activeSection === 'course' ? 'bg-gray-400 text-white' : ''}`}
+                            className={` p-3 rounded-lg-xl cursor-pointer
+                             ${activeSection === 'course'
+                                    ? 'bg-blue-500 text-white'
+                                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                                }`}
                             onClick={() => setActiveSection('course')}
                         >
                             Course Category
                         </li>
                         <li
-                            className={` p-3 rounded-lg-xl cursor-pointer ${activeSection === 'groups' ? 'bg-gray-400 text-white' : ''}`}
+                            className={` p-3 rounded-lg-xl cursor-pointer 
+                                 ${activeSection === 'groups'
+                                    ? 'bg-blue-500 text-white'
+                                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                                }`}
                             onClick={() => setActiveSection('groups')}
                         >
                             Groups
@@ -160,38 +172,42 @@ export default function CourseDetails() {
                 <div className="space-y-6">
 
                     {activeSection === 'users' && (
-                        <div className="space-y-4 dark:bg-[#212830]">
-                            <h2 className="text-xl font-semibold">User Management</h2>
-                            <div className="space-y-4 justify-between mb-4">
-                                <div className="bg-white dark:bg-[#151b23]   rounded-lg-xl p-3 shadow-md h-12" onClick={handleCreateUserClick}>
-                                    <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">→  <span className="ml-2">Create User</span></h2>
-                                </div>
+                        <div className="space-y-16 bg-gray-50 dark:bg-[#151b23]">
+                            <div className="space-y-4 p-6">
+                                <h2 className="text-xl font-semibold">User Management</h2>
+                                <div className="space-y-4 justify-between mb-4">
+                                    <div className=" dark:bg-[#212830]  rounded-lg-xl p-3 shadow-md h-12" onClick={handleCreateUserClick}>
+                                        <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">→  <span className="ml-2">Create User</span></h2>
+                                    </div>
 
-                                <div className="bg-white dark:bg-[#151b23]   rounded-lg-xl p-3 shadow-md h-12 " onClick={handleUploadUsersClick}>
-                                    <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">→  <span className="ml-2">Upload Users</span></h2>
-                                </div>
+                                    <div className="  dark:bg-[#212830] rounded-lg-xl p-3 shadow-md h-12 " onClick={handleUploadUsersClick}>
+                                        <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">→  <span className="ml-2">Upload Users</span></h2>
+                                    </div>
 
-                                <div className="bg-white dark:bg-[#151b23]   rounded-lg-xl p-3 shadow-md h-12 " onClick={handleViewUsersClick}>
-                                    <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">→  <span className="ml-2">View Users</span></h2>
-                                </div>
+                                    <div className=" dark:bg-[#212830]  rounded-lg-xl p-3 shadow-md h-12 " onClick={handleViewUsersClick}>
+                                        <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">→  <span className="ml-2">View Users</span></h2>
+                                    </div>
 
-                                <div className="bg-white dark:bg-[#151b23]  rounded-lg-xl p-3 shadow-md h-12 " onClick={handleDeleteUsersClick}>
-                                    <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">→  <span className="ml-2">Delete Users</span></h2>
+                                    <div className=" dark:bg-[#212830] rounded-lg-xl p-3 shadow-md h-12 " onClick={handleDeleteUsersClick}>
+                                        <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">→  <span className="ml-2">Delete Users</span></h2>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     )}
 
                     {activeSection === 'course' && (
-                        <div className="space-y-4 ">
-                            <h2 className="text-xl font-semibold">Course Categegory Management</h2>
-                            <div className="space-y-4 justify-between mb-4">
-                                <div className="bg-white dark:bg-[#151b23]  rounded-lg-xl p-3 shadow-md h-12" onClick={handleCreateCategoryClick}>
-                                    <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">→  <span className="ml-2">Add Category</span></h2>
-                                </div>
+                        <div className="space-y-16 bg-gray-50 dark:bg-[#151b23]">
+                            <div className="space-y-4 p-6">
+                                <h2 className="text-xl font-semibold">Course Categegory Management</h2>
+                                <div className="space-y-4 justify-between mb-4">
+                                    <div className=" dark:bg-[#212830]  rounded-lg-xl p-3 shadow-md h-12" onClick={handleCreateCategoryClick}>
+                                        <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">→  <span className="ml-2">Add Category</span></h2>
+                                    </div>
 
-                                <div className="bg-white dark:bg-[#151b23]   rounded-lg-xl p-3 shadow-md h-12 " onClick={handleModifyCategoryClick}>
-                                    <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">→  <span className="ml-2">Manage categories</span></h2>
+                                    <div className="  dark:bg-[#212830] rounded-lg-xl p-3 shadow-md h-12 " onClick={handleModifyCategoryClick}>
+                                        <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">→  <span className="ml-2">Manage categories</span></h2>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -199,15 +215,15 @@ export default function CourseDetails() {
 
 
                     {activeSection === 'groups' && (
-                        <div className="space-y-16">
-                            <div className="space-y-4 ">
+                        <div className="space-y-16 bg-gray-50 dark:bg-[#151b23]">
+                            <div className="space-y-4 p-6">
                                 <h2 className="text-xl font-semibold">Group Management</h2>
                                 <div className="space-y-4 justify-between mb-4">
-                                    <div className="bg-white dark:bg-[#151b23]   rounded-lg-xl p-3 shadow-md h-12" onClick={() => { router.push(`/admin/${userId}/groups/create-group`) }}>
+                                    <div className=" dark:bg-[#212830]  rounded-lg-xl p-3 shadow-md h-12" onClick={() => { router.push(`/admin/${userId}/groups/create-group`) }}>
                                         <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">→  <span className="ml-2">Create Group</span></h2>
                                     </div>
 
-                                    <div className="bg-white dark:bg-[#151b23] rounded-lg-xl p-3 shadow-md h-12 " onClick={() => { router.push(`/admin/${userId}/groups`) }}>
+                                    <div className=" dark:bg-[#212830] rounded-lg-xl p-3 shadow-md h-12 " onClick={() => { router.push(`/admin/${userId}/groups`) }}>
                                         <h2 className="text-base font-semibold mb-2 cursor-pointer w-fit">→  <span className="ml-2">View Groups</span></h2>
                                     </div>
 

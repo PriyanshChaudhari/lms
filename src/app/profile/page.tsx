@@ -113,7 +113,7 @@ const Profile = () => {
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
-                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl overflow-hidden">
                     {/* Profile Header with Banner */}
                     <div className="relative h-60 bg-gradient-to-r from-blue-500 to-purple-600">
                         {/* Decorative Elements */}
@@ -162,7 +162,7 @@ const Profile = () => {
 
                         {/* Profile Information Cards */}
                         <div className="grid gap-6 md:grid-cols-2">
-                            <div className="p-6 bg-gray-50 dark:bg-gray-700/50 rounded-xl hover:shadow-md transition-shadow">
+                            <div className="p-6 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:shadow-md transition-shadow">
                                 <div className="flex items-center space-x-4">
                                     <span className="text-2xl">👤</span>
                                     <div>
@@ -174,7 +174,7 @@ const Profile = () => {
                                 </div>
                             </div>
 
-                            <div className="p-6 bg-gray-50 dark:bg-gray-700/50 rounded-xl hover:shadow-md transition-shadow">
+                            <div className="p-6 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:shadow-md transition-shadow">
                                 <div className="flex items-center space-x-4">
                                     <span className="text-2xl">✉️</span>
                                     <div>
@@ -186,7 +186,7 @@ const Profile = () => {
                                 </div>
                             </div>
 
-                            <div className="p-6 bg-gray-50 dark:bg-gray-700/50 rounded-xl hover:shadow-md transition-shadow">
+                            <div className="p-6 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:shadow-md transition-shadow">
                                 <div className="flex items-center space-x-4">
                                     <span className="text-2xl">🎓</span>
                                     <div>
@@ -198,7 +198,7 @@ const Profile = () => {
                                 </div>
                             </div>
 
-                            <div className="p-6 bg-gray-50 dark:bg-gray-700/50 rounded-xl hover:shadow-md transition-shadow">
+                            <div className="p-6 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:shadow-md transition-shadow">
                                 <div className="flex items-center space-x-4">
                                     <span className="text-2xl">#</span>
                                     <div>
@@ -215,7 +215,7 @@ const Profile = () => {
                         <div className="mt-12 flex justify-center">
                             <button
                                 onClick={navigateToDashboard}
-                                className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+                                className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
                             >
                                 Back to Dashboard
                             </button>
