@@ -101,22 +101,22 @@ const Sidebar: React.FC = () => {
               </button>
 
               {isUserSectionOpen && (
-                <div className="space-y-1 bg-white dark:bg-gray-800">
+                <div className="space-y-1 bg-white dark:bg-gray-800 p-2">
                   <Link
                     href={`/admin/${userId}/create-user`}
-                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
+                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded  transition-colors duration-200"
                   >
                    → Create User
                   </Link>
                   <Link
                     href={`/admin/${userId}/upload-users`}
-                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
+                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded  transition-colors duration-200"
                   >
                    → Upload User Data
                   </Link>
                   <Link
                     href={`/admin/${userId}/view-users`}
-                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
+                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded  transition-colors duration-200"
                   >
                    → View Users
                   </Link>
@@ -142,16 +142,16 @@ const Sidebar: React.FC = () => {
               </button>
 
               {isCourseSectionOpen && (
-                <div className=" space-y-1 bg-white dark:bg-gray-800">
+                <div className=" space-y-1 bg-white dark:bg-gray-800 p-2">
                   <Link
                     href={`/admin/${userId}/course-category/create`}
-                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
+                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded  transition-colors duration-200"
                   >
                    → Add Category
                   </Link>
                   <Link
                     href={`/admin/${userId}/course-category/manage`}
-                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
+                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded  transition-colors duration-200"
                   >
                    → Manage Category
                   </Link>
@@ -177,22 +177,24 @@ const Sidebar: React.FC = () => {
               </button>
 
               {isGroupSectionOpen && (
-                <div className=" space-y-1 bg-white dark:bg-gray-800">
+                <div className=" space-y-1 bg-white dark:bg-gray-800 p-2">
                   <Link
                     href={`/admin/${userId}/groups/create-group`}
-                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
+                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded  transition-colors duration-200"
                   >
                    → Create Group
                   </Link>
                   <Link
                     href={`/admin/${userId}/groups`}
-                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
+                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded  transition-colors duration-200"
                   >
                    → View Groups
                   </Link>
                 </div>
               )}
             </div>
+
+            
           </nav>
         </div>
       </aside>

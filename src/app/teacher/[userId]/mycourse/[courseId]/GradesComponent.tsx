@@ -99,12 +99,12 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
             <table className="min-w-full ">
                 <thead>
                     <tr className="bg-gray-50 dark:bg-gray-700 text-left">
-                        <th className="py-2 px-4 border-b">Student Name</th>
+                        <th className="p-4 text-gray-700 dark:text-gray-300">Student Name</th>
                         {events.map(event => (
-                            <th key={event.id} className="py-2 px-4 border-b">{event.event_name}</th>
+                            <th key={event.id} className="p-4 text-gray-700 dark:text-gray-300">{event.event_name}</th>
                         ))}
                         {assignments.map(assignment => (
-                            <th key={assignment.id} className="py-2 px-4 border-b">{assignment.title}</th>
+                            <th key={assignment.id} className="p-4 text-gray-700 dark:text-gray-300">{assignment.title}</th>
                         ))}
                     </tr>
                 </thead>

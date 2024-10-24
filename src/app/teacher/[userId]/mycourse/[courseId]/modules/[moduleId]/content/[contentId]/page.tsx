@@ -89,7 +89,7 @@ export default function ViewModule() {
     }
 
     return (
-        <div className="border border-gray-300 m-5 flex justify-center items-center h-screen">
+        <div className=" flex justify-center items-center h-screen">
             <div className="w-full max-w-4xl mx-auto p-5">
                 <h1 className="text-3xl font-bold mb-4">{course?.title}</h1>
                 <p className="text-lg text-gray-700 mb-6">{course?.description}</p>
@@ -130,7 +130,7 @@ export default function ViewModule() {
                         </button>
                         <p></p>
                         <button
-                            className="bg-blue-500 text-white px-4 py-2 rounded-lg-xl hover:bg-blue-600 mt-2"
+                            className="bg-red-500 text-white px-4 py-2 rounded-lg-xl hover:bg-red-600 mt-2"
                             onClick={handleDeleteContent} // Function to handle edit
                         >
                             Delete Content

@@ -37,11 +37,11 @@ export default function ViewContent() {
     }
 
     return (
-        <div className="border border-gray-300 m-5 h-screen flex justify-center items-center">
-            <div className="w-full max-w-4xl mx-auto p-5">
-                <button className='bg-red-300 hover:bg-red-400' onClick={createContent}>Add Content</button>
+        <div className=" h-screen flex justify-center items-center">
+            <div className="w-full max-w-4xl mx-auto p-5 grid gap-4">
+               <div> <button className='bg-blue-500 hover:bg-blue-600 text-white  p-2' onClick={createContent}>Add Content</button></div>
                 {sortedContent.map((content) => (
-                    <div key={content.id} className="space-y-4">
+                    <div key={content.id} className="space-y-4 grid gap-4">
                         <div
                             className="bg-white border flex justify-between border-gray-300 rounded-lg-xl p-4 shadow-md min-h-6 ">
                             <h2 className="text-xl font-semibold">{content.title}</h2>

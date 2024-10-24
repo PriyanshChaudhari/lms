@@ -158,7 +158,8 @@ export default function ViewModule() {
                             </div>
 
                             <div>
-                                <div className="flex items-center justify-between p-6">
+                                <h2 className="text-xl font-bold my-2">Module Content:</h2>
+                                <div className="grid gap-4 items-center mt-4">
                                     {sortedContent.map((content) => (
                                         <div key={content.id} className="space-y-4">
                                             <div
