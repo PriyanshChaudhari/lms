@@ -7,14 +7,13 @@ const Sidebar: React.FC = () => {
   const router = useRouter();
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
-
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const closeMobileMenu = () => {
-    setMobileMenuOpen(false);
-  };
+  const [isUserSectionOpen, setUserSectionOpen] = useState(false);
+  const [isCourseSectionOpen, setCourseSectionOpen] = useState(false);
+  const [isGroupSectionOpen, setGroupSectionOpen] = useState(false);
+  const [isUserSectionVisible, setUserSectionVisible] = useState(false);
+  const [isCourseSectionVisible, setCourseSectionVisible] = useState(false);
+  const [isGroupSectionVisible, setGroupSectionVisible] = useState(false);
+  const [activeSection, setActiveSection] = useState('dashboard');
 
   useEffect(() => {
     const storedUserId = sessionStorage.getItem('userId');
@@ -23,13 +22,13 @@ const Sidebar: React.FC = () => {
     }
   }, []);
 
-  const [isUserSectionOpen, setUserSectionOpen] = useState(false);
-  const [isCourseSectionOpen, setCourseSectionOpen] = useState(false);
-  const [isGroupSectionOpen, setGroupSectionOpen] = useState(false);
-  const [isUserSectionVisible, setUserSectionVisible] = useState(false);
-  const [isCourseSectionVisible, setCourseSectionVisible] = useState(false);
-  const [isGroupSectionVisible, setGroupSectionVisible] = useState(false);
-  const [activeSection, setActiveSection] = useState('dashboard');
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
 
   const toggleUserSection = () => {
     setUserSectionOpen(!isUserSectionOpen);
@@ -62,188 +61,269 @@ const Sidebar: React.FC = () => {
   return (
     <>
       {/* Desktop Sidebar */}
-      <div>
-        <aside className="hidden sm:block w-1/4 lg:w-1/6 bg-gray-100 dark:bg-[#151b23] p-4 h-full fixed z-50">
-          <div className="flex flex-col gap-6 h-[85vh] bg-white dark:bg-[#212830] border border-gray-300 dark:border-gray-700 p-4">
+      <aside className="hidden sm:block w-64 bg-gray-100 dark:bg-[#151b23]  shadow-lg h-screen fixed z-50">
+        <div className="flex flex-col h-full">
+          {/* Sidebar Header */}
+          <div className="p-6 border-b border-gray-200 dark:border-gray-800">
+            <h2 className="text-xl font-bold text-gray-800 dark:text-white">Admin Portal</h2>
+          </div>
+
+          {/* Navigation */}
+          <nav className="flex-1 overflow-y-auto p-4 space-y-2">
             <Link
               href={`/admin/${userId}/dashboard`}
               onClick={toggleDashboardSection}
-              className={`${activeSection === 'dashboard'
-                ? 'bg-blue-500 text-white'
-                : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200'
-                } p-2 rounded-lg-md`}
+              className={`flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200 ${
+                activeSection === 'dashboard'
+                  ? 'bg-blue-500 text-white'
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+              }`}
+            >
+              <span className="text-lg">📊</span>
+              <span>Dashboard</span>
+            </Link>
+
+            {/* Users Section */}
+            <div className="space-y-1">
+              <button
+                onClick={toggleUserSection}
+                className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors duration-200 ${
+                  activeSection === 'user'
+                    ? 'bg-blue-500 text-white'
+                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                }`}
+              >
+                <div className="flex items-center space-x-3">
+                  <span className="text-lg">👤</span>
+                  <span>Users</span>
+                </div>
+                <span className="text-sm">{isUserSectionOpen ? '▼' : '▶'}</span>
+              </button>
+
+              {isUserSectionOpen && (
+                <div className="space-y-1 bg-white dark:bg-gray-800">
+                  <Link
+                    href={`/admin/${userId}/create-user`}
+                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
+                  >
+                   → Create User
+                  </Link>
+                  <Link
+                    href={`/admin/${userId}/upload-users`}
+                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
+                  >
+                   → Upload User Data
+                  </Link>
+                  <Link
+                    href={`/admin/${userId}/view-users`}
+                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
+                  >
+                   → View Users
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            {/* Course Category Section */}
+            <div className="space-y-1 ">
+              <button
+                onClick={toggleCourseSection}
+                className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors duration-200 ${
+                  activeSection === 'course'
+                    ? 'bg-blue-500 text-white'
+                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                }`}
+              >
+                <div className="flex items-center space-x-3">
+                  <span className="text-lg">📚</span>
+                  <span>Course Category</span>
+                </div>
+                <span className="text-sm">{isCourseSectionOpen ? '▼' : '▶'}</span>
+              </button>
+
+              {isCourseSectionOpen && (
+                <div className=" space-y-1 bg-white dark:bg-gray-800">
+                  <Link
+                    href={`/admin/${userId}/course-category/create`}
+                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
+                  >
+                   → Add Category
+                  </Link>
+                  <Link
+                    href={`/admin/${userId}/course-category/manage`}
+                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
+                  >
+                   → Manage Category
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            {/* Groups Section */}
+            <div className="space-y-1">
+              <button
+                onClick={toggleGroupSection}
+                className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors duration-200 ${
+                  activeSection === 'group'
+                    ? 'bg-blue-500 text-white'
+                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                }`}
+              >
+                <div className="flex items-center space-x-3">
+                  <span className="text-lg">👥</span>
+                  <span>Groups</span>
+                </div>
+                <span className="text-sm">{isGroupSectionOpen ? '▼' : '▶'}</span>
+              </button>
+
+              {isGroupSectionOpen && (
+                <div className=" space-y-1 bg-white dark:bg-gray-800">
+                  <Link
+                    href={`/admin/${userId}/groups/create-group`}
+                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
+                  >
+                   → Create Group
+                  </Link>
+                  <Link
+                    href={`/admin/${userId}/groups`}
+                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
+                  >
+                   → View Groups
+                  </Link>
+                </div>
+              )}
+            </div>
+          </nav>
+        </div>
+      </aside>
+
+      {/* Mobile Toggle Button */}
+      <button 
+        onClick={toggleMobileMenu}
+        className="md:hidden fixed right-4 top-3 z-50 p-2 rounded-lg bg-gray-100 dark:bg-[#151b23]"
+      >
+        <span className="text-xl text-gray-600 dark:text-gray-300">
+          {isMobileMenuOpen ? '✕' : '☰'}
+        </span>
+      </button>
+
+      {/* Mobile Sidebar Overlay */}
+      <div className={`md:hidden fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ${
+        isMobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+      }`}>
+        {/* Mobile Sidebar Content */}
+        <div className={`w-64 h-full bg-gray-100 dark:bg-[#151b23] transform transition-transform duration-300 ${
+          isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}>
+          <div className="p-4 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center">
+            <h2 className="text-xl font-bold text-gray-800 dark:text-white">Admin Menu</h2>
+            <button 
+              onClick={closeMobileMenu}
+              className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            >
+              ✕
+            </button>
+          </div>
+
+          <nav className="p-4 space-y-4">
+            <Link
+              href={`/admin/${userId}/dashboard`}
+              className="block p-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+              onClick={closeMobileMenu}
             >
               Dashboard
             </Link>
-            <button
-              onClick={toggleUserSection}
-              className={`${activeSection === 'user'
-                ? 'bg-blue-500 text-white text-left'
-                : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 text-left'
-                } p-2 rounded-lg-md`}
-            >
-              Users
-            </button>
-            {isUserSectionOpen && (
-              <div className="flex flex-col gap-2">
-                <Link
-                  href={`/admin/${userId}/create-user`}
-                  className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 dark:bg-[#151b23] rounded-lg bg-gray-300 text-sm"
-                >
-                  Create User
-                </Link>
-                <Link
-                  href={`/admin/${userId}/upload-users`}
-                  className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 dark:bg-[#151b23] rounded-lg bg-gray-300 text-sm"
-                >
-                  Upload User Data
-                </Link>
-                <Link
-                  href={`/admin/${userId}/view-users`}
-                  className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 dark:bg-[#151b23] rounded-lg bg-gray-300 text-sm"
-                >
-                  View Users
-                </Link>
-              </div>
-            )}
-            <button
-              onClick={toggleCourseSection}
-              className={`${activeSection === 'course'
-                ? 'bg-blue-500 text-white text-left'
-                : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 text-left'
-                } p-2 rounded-lg-md`}
-            >
-              Course Category
-            </button>
-            {isCourseSectionOpen && (
-              <div className="flex flex-col gap-2">
-                <Link
-                  href={`/admin/${userId}/course-category/create`}
-                  className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 dark:bg-[#151b23] rounded-lg bg-gray-300 text-sm"
-                >
-                  Add Category
-                </Link>
-                <Link
-                  href={`/admin/${userId}/course-category/manage`}
-                  className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 dark:bg-[#151b23] rounded-lg bg-gray-300 text-sm"
-                >
-                  Manage Category
-                </Link>
-              </div>
-            )}
-            <button
-              onClick={toggleGroupSection}
-              className={`${activeSection === 'group'
-                ? 'bg-blue-500 text-white text-left'
-                : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 text-left'
-                } p-2 rounded-lg-md`}
-            >
-              Groups
-            </button>
-            {isGroupSectionOpen && (
-              <div className="flex flex-col gap-2">
-                <Link
-                  href={`/admin/${userId}/groups/create-group`}
-                  className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 dark:bg-[#151b23] rounded-lg bg-gray-300 text-sm"
-                >
-                  Create Group
-                </Link>
-                <Link
-                  href={`/admin/${userId}/groups`}
-                  className="hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 p-2 dark:bg-[#151b23] rounded-lg bg-gray-300 text-sm"
-                >
-                  View Groups
-                </Link>
-              </div>
-            )}
-          </div>
-        </aside>
-      </div>
 
-      {/* Mobile Toggle Button */}
-      <div className="md:hidden fixed top-40 left-0 bg-white dark:bg-[#151b23] border border-gray-300 rounded-lg-e-full">
-        <button onClick={toggleMobileMenu} className="text-xl m-3 focus:outline-none">
-          {isMobileMenuOpen ? "✕" : "☰"}
-        </button>
-      </div>
-
-      {/* Mobile Sidebar */}
-      {isMobileMenuOpen && (
-        <div className={`fixed top-18 left-0 w-64 h-full bg-gray-100 dark:bg-[#151b23] text-black dark:text-white transition-transform transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} z-50 overflow-y-auto`}>
-          <button onClick={closeMobileMenu} className="text-3xl absolute top-4 right-4 focus:outline-none text-black dark:text-white">
-            ✕
-          </button>
-          <ul className="font-medium text-center space-y-4 mt-12 ">
-            <li>
-              <Link href={`/admin/${userId}/dashboard`} className="block p-4 text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
-                Dashboard
-              </Link>
-            </li>
-            <li>
-              <button onClick={toggleUserSection} className="p-4  text-black dark:text-gray-200">
-                Users
+            <div className="space-y-2">
+              <button
+                onClick={toggleUserSection}
+                className="w-full text-left p-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+              >
+                Users {isUserSectionOpen ? '▼' : '▶'}
               </button>
               {isUserSectionOpen && (
-                <ul className="pl-4 text-xs pr-4 ">
-                  <li>
-                    <Link href={`/admin/${userId}/create-user`} className="block p-4 text-center text-black dark:bg-[#212830] mb-2 mx-2 rounded-lg dark:text-gray-200" onClick={closeMobileMenu}>
-                      Create User
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href={`/admin/${userId}/upload-users`} className="block p-4 text-center text-black dark:bg-[#212830] mb-2 mx-2 rounded-lg dark:text-gray-200" onClick={closeMobileMenu}>
-                      Upload Users Data
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href={`/admin/${userId}/view-users`} className="block p-4 text-center text-black dark:bg-[#212830] mb-2 mx-2 rounded-lg dark:text-gray-200" onClick={closeMobileMenu}>
-                      View Users
-                    </Link>
-                  </li>
-                </ul>
+                <div className="pl-4 space-y-2">
+                  <Link
+                    href={`/admin/${userId}/create-user`}
+                    className="block p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+                    onClick={closeMobileMenu}
+                  >
+                    Create User
+                  </Link>
+                  <Link
+                    href={`/admin/${userId}/upload-users`}
+                    className="block p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+                    onClick={closeMobileMenu}
+                  >
+                    Upload User Data
+                  </Link>
+                  <Link
+                    href={`/admin/${userId}/view-users`}
+                    className="block p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+                    onClick={closeMobileMenu}
+                  >
+                    View Users
+                  </Link>
+                </div>
               )}
-            </li>
-            <li>
-              <button onClick={toggleCourseSection} className="p-4 text-center text-black dark:text-gray-200">
-                Course Category
+            </div>
+
+            <div className="space-y-2">
+              <button
+                onClick={toggleCourseSection}
+                className="w-full text-left p-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+              >
+                Course Category {isCourseSectionOpen ? '▼' : '▶'}
               </button>
               {isCourseSectionOpen && (
-                <ul className="pl-4 text-xs pr-4">
-                  <li>
-                    <Link href={`/admin/${userId}/course-category/create`} className="block p-4 text-center dark:bg-[#212830] mb-2 mx-2 rounded-lg text-black dark:text-gray-200" onClick={closeMobileMenu}>
-                      Add Courses Category
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href={`/admin/${userId}/course-category/manage`} className="block p-4 text-center dark:bg-[#212830] mb-2 mx-2 rounded-lg text-black dark:text-gray-200" onClick={closeMobileMenu}>
-                      Manage Category
-                    </Link>
-                  </li>
-                </ul>
+                <div className="pl-4 space-y-2">
+                  <Link
+                    href={`/admin/${userId}/course-category/create`}
+                    className="block p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+                    onClick={closeMobileMenu}
+                  >
+                    Add Category
+                  </Link>
+                  <Link
+                    href={`/admin/${userId}/course-category/manage`}
+                    className="block p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+                    onClick={closeMobileMenu}
+                  >
+                    Manage Category
+                  </Link>
+                </div>
               )}
-            </li>
-            <li>
-              <button onClick={toggleGroupSection} className="p-4 text-center text-black dark:text-gray-200">
-                Groups
+            </div>
+
+            <div className="space-y-2">
+              <button
+                onClick={toggleGroupSection}
+                className="w-full text-left p-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+              >
+                Groups {isGroupSectionOpen ? '▼' : '▶'}
               </button>
               {isGroupSectionOpen && (
-                <ul className="pl-4 text-xs pr-4">
-                  <li>
-                    <Link href={`/admin/${userId}/groups/create-group`} className="block p-4 dark:bg-[#212830] mb-2 mx-2 rounded-lg text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
-                      Create Group
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href={`/admin/${userId}/groups`} className="block p-4 dark:bg-[#212830] mb-2 mx-2 rounded-lg text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
-                      View Groups
-                    </Link>
-                  </li>
-                </ul>
+                <div className="pl-4 space-y-2">
+                  <Link
+                    href={`/admin/${userId}/groups/create-group`}
+                    className="block p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+                    onClick={closeMobileMenu}
+                  >
+                    Create Group
+                  </Link>
+                  <Link
+                    href={`/admin/${userId}/groups`}
+                    className="block p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+                    onClick={closeMobileMenu}
+                  >
+                    View Groups
+                  </Link>
+                </div>
               )}
-            </li>
-          </ul>
+            </div>
+          </nav>
         </div>
-      )}
+      </div>
     </>
   );
 };

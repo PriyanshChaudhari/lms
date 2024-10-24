@@ -101,64 +101,89 @@ const Sidebar: React.FC = () => {
   };
 
   return (
+  
     <>
-      {/* Desktop Sidebar */}
-      <aside className="hidden sm:block w-1/4 lg:w-1/6 bg-gray-100 dark:bg-[#151b23] p-4 h-full fixed z-50">
-        <div className="flex flex-col gap-4 h-[85vh] bg-white dark:bg-[#212830] border border-gray-300 dark:border-gray-700 p-4">
-          <Link href={`/student/${userId}/dashboard`} 
-          onClick={toggleDashboardVisibility}
-          className={`${
-            activeSection === 'dashboard' 
-              ? 'bg-blue-500 text-white' 
-              : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200'
-          } p-2 rounded-lg-md`}>
-            Dashboard
+    {/* Desktop Sidebar */}
+    <aside className="hidden sm:block w-64 bg-gray-100 dark:bg-[#151b23] dark:bg-[] shadow-lg h-screen fixed z-50">
+      <div className="flex flex-col h-full">
+        {/* Sidebar Header */}
+        <div className="p-6 border-b border-gray-200 dark:border-gray-800">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white">Student Portal</h2>
+        </div>
+
+        {/* Navigation Links */}
+        <nav className="flex-1 overflow-y-auto p-4 space-y-2">
+          <Link 
+            href={`/student/${userId}/dashboard`}
+            onClick={toggleDashboardVisibility}
+            className={`flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200 ${
+              activeSection === 'dashboard'
+                ? 'bg-blue-500 text-white'
+                : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+            }`}
+          >
+            <span className="text-lg">📊</span>
+            <span>Dashboard</span>
           </Link>
+
           <button
             onClick={toggleCoursesVisibility}
-            className={`${
+            className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors duration-200 ${
               activeSection === 'courses'
-                ? 'bg-blue-500 text-white text-left' 
-                : 'hover:bg-slate-300 dark:hover:bg-slate-600 hover:text-gray-700 dark:hover:text-gray-300 text-black dark:text-gray-200 text-left'
-            } p-2 rounded-lg-md`}
+                ? 'bg-blue-500 text-white'
+                : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+            }`}
           >
-            My Courses
+            <div className="flex items-center space-x-3">
+              <span className="text-lg">📚</span>
+              <span>My Courses</span>
+            </div>
+            <span className="text-sm">{isCoursesVisible ? '▼' : '▶'}</span>
           </button>
+
+          {/* Courses List */}
           {isCoursesVisible && (
-            <div>
+            <div className=" space-y-2">
               {isLoadingCourses ? (
-                <p>Loading courses...</p>
+                <div className="p-4 text-gray-500 dark:text-gray-400">Loading courses...</div>
               ) : error ? (
-                <p className="text-red-500">{error}</p>
+                <div className="p-4 text-red-500">{error}</div>
               ) : (
-                <ul className="list-disc">
+                <ul className="space-y-2">
                   {courses.map((course) => (
-                    <li
-                      key={course.course_id}
-                      className="text-black list-none py-1 dark:text-gray-200 cursor-pointer bg-gray-300 dark:bg-gray-700 rounded-lg p-3 my-2"
-                    >
+                    <li key={course.course_id} className="rounded-lg overflow-hidden bg-white dark:bg-[#212830]">
                       <Link href={`/student/${userId}/mycourse/${course.course_id}`}>
-                        <span onClick={() => handleCourseClick(course.course_id)}>
-                          <strong>{course.title}</strong>
-                        </span>
+                        <div 
+                          onClick={() => handleCourseClick(course.course_id)}
+                          className="p-3 border-b border-gray-200 dark:border-gray-600 flex justify-between transition-colors duration-200 rounded-lg"
+                        >
+                          <span className="text-gray-800 hover:underline dark:text-gray-200 font-medium">
+                            {course.title}
+                          </span>
+                          <span className="text-sm">{selectedCourseId ? '▼' : '▶'}</span>
+                        </div>
                       </Link>
 
+                      {/* Modules List */}
                       {selectedCourseId === course.course_id && (
-                        <div className="mt-2 p-2 bg-gray-300 dark:bg-gray-700 rounded-lg">
+                        <div className="mt-1 ">
                           {isLoadingModules ? (
-                            <p>Loading modules...</p>
+                            <div className="p-2 text-gray-500 dark:text-gray-400">Loading modules...</div>
                           ) : modules[course.course_id] ? (
-                            <ul className="list-disc pl-4">
+                            <ul className="space-y-1 p-2">
                               {modules[course.course_id].map((module) => (
-                                <Link key={module.id} href={`/student/${userId}/mycourse/${course.course_id}/modules/${module.id}`}>
-                                  <li className="py-1 text-sm text-black dark:text-white block cursor-pointer">
-                                    {module.position}. {module.description}
+                                <Link 
+                                  key={module.id}
+                                  href={`/student/${userId}/mycourse/${course.course_id}/modules/${module.id}`}
+                                >
+                                  <li className="p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100  dark:hover:bg-gray-700 rounded ">
+                                    {module.position}→ {module.description}
                                   </li>
                                 </Link>
                               ))}
                             </ul>
                           ) : (
-                            <p>No modules found for this course.</p>
+                            <div className="p-2 text-gray-500 dark:text-gray-400">No modules found</div>
                           )}
                         </div>
                       )}
@@ -168,31 +193,51 @@ const Sidebar: React.FC = () => {
               )}
             </div>
           )}
-        </div>
-      </aside>
-
-      {/* Mobile Sidebar Toggle */}
-      <div className="md:hidden fixed top-40 left-0 bg-white dark:bg-[#151b23] border border-gray-300 rounded-lg-e-full">
-        <button onClick={toggleMobileMenu} className="text-xl m-3 focus:outline-none">
-          {isMobileMenuOpen ? "✕" : "☰"}
-        </button>
+        </nav>
       </div>
+    </aside>
 
-      {/* Mobile Sidebar Content */}
-      <div className={`fixed top-18 left-0 w-64 h-full bg-gray-100 dark:bg-[#151b23] text-black dark:text-white transition-transform transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} z-50`}>
-        <button onClick={closeMobileMenu} className="text-3xl absolute top-4 right-4 focus:outline-none text-black dark:text-white">
-          ✕
-        </button>
-        <div className="flex flex-col gap-6 p-4 mt-12">
-          <Link href={`/student/${userId}/dashboard`} className="block p-4 text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
+    {/* Mobile Toggle Button */}
+    <button 
+      onClick={toggleMobileMenu}
+      className="md:hidden fixed top-3 right-4 z-50 p-2 rounded-lg bg-gray-100 dark:bg-[#151b23]"
+    >
+      <span className="text-xl">{isMobileMenuOpen ? '✕' : '☰'}</span>
+    </button>
+
+    {/* Mobile Sidebar */}
+    <div className={`md:hidden fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ${
+      isMobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+    }`}>
+      <div className={`w-64 h-full bg-gray-100 dark:bg-[#151b23] transform transition-transform duration-300 ${
+        isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+      }`}>
+        <div className="p-4 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white">Menu</h2>
+          <button onClick={closeMobileMenu} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+            ✕
+          </button>
+        </div>
+        <div className="p-4 space-y-4">
+          <Link 
+            href={`/student/${userId}/dashboard`}
+            className="block p-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+            onClick={closeMobileMenu}
+          >
             Dashboard
           </Link>
-          <Link href={`/student/${userId}/mycourse`} className="block p-4 text-center text-black dark:text-gray-200" onClick={closeMobileMenu}>
+          <Link 
+            href={`/student/${userId}/mycourse`}
+            className="block p-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+            onClick={closeMobileMenu}
+          >
             My Courses
           </Link>
         </div>
       </div>
-    </>
+    </div>
+  </>
+    
   );
 };
 
