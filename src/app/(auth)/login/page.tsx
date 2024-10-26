@@ -3,6 +3,7 @@ import Link from 'next/link';
 import React, { useState, ChangeEvent } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import TestCredentials from './TestingCredentials';
 
 interface user {
     userId: string;
@@ -76,6 +77,12 @@ const LoginPage = () => {
         }
     };
 
+    const handleCredentialsSelect = (credentials: any) => {
+        setUser({
+            userId: credentials.prn,
+            password: credentials.password
+        });
+    };
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setUser({
@@ -155,57 +162,59 @@ const LoginPage = () => {
         //         </div>
         //     </div>
         // </div>
-
-        <div className='relative z-0 bg-gradient-to-r from-white via-white to-gray-100 dark:from-[#212830] dark:via-[#212830] dark:to-[#212830] min-h-screen flex items-center justify-center'>
-            <div className='z-10 w-full sm:w-[650px] m-auto p-8 rounded-lg-2xl'>
-                <p className='font-light text-gray-900 dark:text-gray-200'>WELCOME BACK</p>
-                <h2 className='text-5xl font-extrabold pt-2 pb-2 text-gray-900 dark:text-gray-200'>Login.</h2>
-
-                <form
-                    onSubmit={handleSubmit}
-                    className='mt-12 flex flex-col gap-8'
-                >
-                    <label className='flex flex-col'>
-                        <span className='font-medium mb-4 text-gray-900 dark:text-gray-200'>PRN</span>
-                        <input
-                            type="text"
-                            id="userId"
-                            name="userId"
-                            value={user.userId}
-                            onChange={handleChange}
-                            placeholder="Enter your PRN"
-                            className='py-4 px-6 rounded-lg font-medium bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200 placeholder-gray-400'
-                            required
-                        />
-                    </label>
-                    <label className='flex flex-col'>
-                        <span className='font-medium mb-4 text-gray-900 dark:text-gray-200'>Password </span>
-                        <input
-                            type='password'
-                            name='password'
-                            value={user.password}
-                            onChange={handleChange}
-                            placeholder="Enter your password"
-                            className='py-4 px-6 rounded-lg font-medium bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200 placeholder-gray-400'
-                            required
-                        />
-                    </label>
-
-                    <button
-                        type='submit'
-                        className='pt-3 px-8 w-fit font-bold bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition duration-300'
-                    >
-                        {loading ? "Logging in..." : "Login"}
-                    </button>
-                </form>
-                <p className="mt-8 text-right text-gray-400">
-                    <Link href='/forgot-password' className='text-red-600 text-right font-medium'>forgot password?</Link>
-                </p>
+        <>
+            <div className="relative z-20 w-full sm:w-auto p-4 sm:p-8 bg-white dark:bg-[#212830] rounded-lg shadow-lg">
+                <TestCredentials onCredentialsSelect={handleCredentialsSelect} />
             </div>
-        </div>
+            <div className='relative z-0 bg-gradient-to-r from-white via-white to-gray-100 dark:from-[#212830] dark:via-[#212830] dark:to-[#212830] min-h-screen flex items-center justify-center'>
+                <div className='z-10 w-full sm:w-[650px] m-auto p-8 rounded-lg-2xl'>
+                    <p className='font-light text-gray-900 dark:text-gray-200'>WELCOME BACK</p>
+                    <h2 className='text-5xl font-extrabold pt-2 pb-2 text-gray-900 dark:text-gray-200'>Login.</h2>
 
-    
-        
+                    <form
+                        onSubmit={handleSubmit}
+                        className='mt-12 flex flex-col gap-8'
+                    >
+                        <label className='flex flex-col'>
+                            <span className='font-medium mb-4 text-gray-900 dark:text-gray-200'>PRN</span>
+                            <input
+                                type="text"
+                                id="userId"
+                                name="userId"
+                                value={user.userId}
+                                onChange={handleChange}
+                                placeholder="Enter your PRN"
+                                className='py-4 px-6 rounded-lg font-medium bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200 placeholder-gray-400'
+                                required
+                            />
+                        </label>
+                        <label className='flex flex-col'>
+                            <span className='font-medium mb-4 text-gray-900 dark:text-gray-200'>Password </span>
+                            <input
+                                type='password'
+                                name='password'
+                                value={user.password}
+                                onChange={handleChange}
+                                placeholder="Enter your password"
+                                className='py-4 px-6 rounded-lg font-medium bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200 placeholder-gray-400'
+                                required
+                            />
+                        </label>
+
+                        <button
+                            type='submit'
+                            className='pt-3 px-8 w-fit font-bold bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition duration-300'
+                        >
+                            {loading ? "Logging in..." : "Login"}
+                        </button>
+                    </form>
+                    <p className="mt-8 text-right text-gray-400">
+                        <Link href='/forgot-password' className='text-red-600 text-right font-medium'>forgot password?</Link>
+                    </p>
+                </div>
+
+            </div>
+        </>
     );
 
 };
