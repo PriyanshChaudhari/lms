@@ -2,6 +2,7 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
+import { CACHE_ONE_YEAR } from 'next/dist/lib/constants';
 
 interface Category {
     id: string;
@@ -40,7 +41,9 @@ const ManageCategories = () => {
     const fetchCategories = async () => {
         try {
             const res = await axios.get('/api/get/categories');
-            setCategories(res.data);
+            setCategories(res.data.categories);
+            console.log(categories)
+
         } catch (error) {
             console.error('Error fetching categories:', error);
         }
@@ -120,7 +123,7 @@ const ManageCategories = () => {
                 {filteredCategories.map(category => (
                     <li key={category.id} className='space-y-2'>
                         <div className="flex items-center justify-between p-2 border rounded-lg">
-                            <span 
+                            <span
                                 className="cursor-pointer hover:text-blue-600"
                                 onClick={() => handleCategoryClick(category.id)}
                             >
@@ -159,7 +162,7 @@ const ManageCategories = () => {
                 <div className="w-1/2 pl-4">
                     <h2 className="text-xl font-semibold mb-2">Courses</h2>
                     {selectedCategory ? (
-                                                <ul className="space-y-2">
+                        <ul className="space-y-2">
                             {courses.length > 0 ? (
                                 courses.map(course => (
                                     <li key={course.id} className="p-2 border rounded-lg">
