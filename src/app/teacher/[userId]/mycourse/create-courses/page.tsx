@@ -119,7 +119,7 @@ const CreateCourse = () => {
                     teacher_id: userId,
                 });
                 setFile(null);
-                router.push(`/teacher/${userId}/mycourse/`);
+                router.push(`/teacher/${userId}/dashboard`);
             }
         } catch (error) {
             setError('An error occurred. Please try again.');
