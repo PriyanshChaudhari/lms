@@ -90,7 +90,7 @@ const Dashboard: React.FC = () => {
   return (
     <div className="flex flex-col lg:flex-row   mx-auto">
       <CourseCard courses={courses} userId={userId} />
-      <div className="lg:w-96 bg-gray-100 dark:bg-[#151b23] rounded-lg shadow-md  h-screen sticky top-8">
+      <div className="lg:w-96 bg-gray-100 dark:bg-[#151b23] rounded-lg shadow-md m-8 sm:m-0 sm:h-screen sticky top-8">
         <Calendar />
       </div>
     </div>
