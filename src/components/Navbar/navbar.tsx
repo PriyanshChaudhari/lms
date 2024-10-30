@@ -111,7 +111,7 @@
 //     }
 //   }, [userId,DefaultProfilePic]);
 
-  
+
 
 //   const navigateToDashboard = () => {
 //     router.push('/dashboard');
@@ -184,6 +184,7 @@ import { useTheme } from 'next-themes'
 import { usePathname, useParams, useRouter } from 'next/navigation';
 import axios from 'axios'
 import LoginButton from '@/components/ui/loginButton'
+import Calendar from '../Calender/calender'
 
 interface User {
   userId: string;
@@ -208,8 +209,8 @@ const useAuth = () => {
         if (!response.ok) throw new Error('Failed to fetch user profile');
         const data = await response.json();
         setUser(data.userData);
-        
-       
+
+
       } catch (err) {
         console.error('Error fetching user profile:', err);
         setUser(null);
@@ -248,6 +249,14 @@ const Navbar: React.FC = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { userId, user, checkAuth } = useAuth();
+  const [isCalender, setCalender] = useState(false);
+
+  const handleCloseCalender = () => {
+    setCalender(false);
+    
+  };
+
+
 
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
@@ -272,6 +281,11 @@ const Navbar: React.FC = () => {
     window.location.replace('/profile');
   };
 
+  const navigateToCalender = () => {
+    setCalender(true);
+    setDropdownOpen(!isDropdownOpen);
+  };
+
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return 'Good Morning';
@@ -293,7 +307,7 @@ const Navbar: React.FC = () => {
 
   const isLoginPage = pathname === '/' || pathname === '/login' || pathname === '/forgot-password' || pathname === '/reset-password';
 
-  
+
 
   const navigateToDashboard = () => {
     if (user?.role === 'Admin') {
@@ -343,6 +357,7 @@ const Navbar: React.FC = () => {
                   <ul className="list-none p-2">
                     <li className="p-2 text-sm bg-gray-100 dark:bg-[#212830] rounded-lg mb-2 hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer" onClick={navigateToDashboard}>Dashboard</li>
                     <li className="p-2 text-sm bg-gray-100 dark:bg-[#212830] mb-2 rounded-lg hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer" onClick={navigateToProfile}>Profile</li>
+                    <li className="p-2 text-sm bg-gray-100 dark:bg-[#212830] mb-2 rounded-lg hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer" onClick={navigateToCalender}>Events</li>
                     <li className="text-sm bg-gray-100 dark:bg-[#212830] rounded-lg cursor-pointer">
                       <button className='text-red-500 hover:text-red-600 p-2 rounded-lg-xl' onClick={handleLogout}>Log Out</button>
                     </li>
@@ -350,8 +365,12 @@ const Navbar: React.FC = () => {
                 </div>
               )}
             </div>
+
           )}
         </div>
+   
+          {(isCalender) && <Calendar onClose={handleCloseCalender} />}
+      
       </div>
     </nav>
   )

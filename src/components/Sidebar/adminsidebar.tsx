@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Calendar from "../Calender/calender";
+
 
 const Sidebar: React.FC = () => {
   const router = useRouter();
@@ -14,6 +16,13 @@ const Sidebar: React.FC = () => {
   const [isCourseSectionVisible, setCourseSectionVisible] = useState(false);
   const [isGroupSectionVisible, setGroupSectionVisible] = useState(false);
   const [activeSection, setActiveSection] = useState('dashboard');
+  const [isCalender, setCalender] = useState(false);
+
+  const handleCloseCalender = () => {
+    setCalender(false);
+    setActiveSection('dashboard');
+    
+  };
 
   useEffect(() => {
     const storedUserId = sessionStorage.getItem('userId');
@@ -44,6 +53,17 @@ const Sidebar: React.FC = () => {
     setUserSectionVisible(false);
     setCourseSectionVisible(false);
     setGroupSectionVisible(false);
+  };
+
+  const toggleCalenderSection = () => {
+    setActiveSection('calender');
+    setUserSectionOpen(false);
+    setCourseSectionOpen(false);
+    setGroupSectionOpen(false);
+    setUserSectionVisible(false);
+    setCourseSectionVisible(false);
+    setGroupSectionVisible(false);
+    setCalender(true);
   };
 
   const toggleCourseSection = () => {
@@ -82,6 +102,20 @@ const Sidebar: React.FC = () => {
               <span className="text-lg">📊</span>
               <span>Dashboard</span>
             </Link>
+
+            <button
+              onClick={toggleCalenderSection}
+              className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors duration-200 ${
+                activeSection === 'calender'
+                  ? 'bg-blue-500 text-white'
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+              }`}
+            >
+               <div className="flex items-center space-x-3">
+               <span className="text-lg">📅</span>
+              <span>Events</span>
+            </div>
+            </button>
 
             {/* Users Section */}
             <div className="space-y-1">
@@ -196,6 +230,7 @@ const Sidebar: React.FC = () => {
 
             
           </nav>
+          {(isCalender) && <Calendar onClose={handleCloseCalender} />}
         </div>
       </aside>
 
@@ -324,6 +359,7 @@ const Sidebar: React.FC = () => {
               )}
             </div>
           </nav>
+          
         </div>
       </div>
     </>

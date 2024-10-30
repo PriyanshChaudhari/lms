@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
 import axios from "axios";
+import Calendar from "../Calender/calender";
 
 interface Module {
   id: string;
@@ -29,6 +30,13 @@ const Sidebar: React.FC = () => {
   const params = useParams();
   const userId = params.userId as string;
   const [activeSection, setActiveSection] = useState('dashboard');
+  const [isCalender, setCalender] = useState(false);
+
+  const handleCloseCalender = () => {
+    setCalender(false);
+    setActiveSection('dashboard');
+    
+  };
 
   useEffect(() => {
     fetchCourses();
@@ -91,6 +99,12 @@ const Sidebar: React.FC = () => {
     setCoursesVisible(false);
   }
 
+  const toggleCalenderSection = () => {
+    setCalender(true);
+    setCoursesVisible(false);
+    setActiveSection('calender');
+  }
+
   const handleCourseClick = (courseId: string) => {
     if (selectedCourseId === courseId) {
       setSelectedCourseId(null);
@@ -125,6 +139,19 @@ const Sidebar: React.FC = () => {
             <span className="text-lg">📊</span>
             <span>Dashboard</span>
           </Link>
+
+          <button
+              onClick={toggleCalenderSection}
+              className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors duration-200 ${activeSection === 'calender'
+                  ? 'bg-blue-500 text-white'
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                }`}
+            >
+              <div className="flex items-center space-x-3">
+                <span className="text-lg">📅</span>
+                <span>Events</span>
+              </div>
+            </button>
 
           <button
             onClick={toggleCoursesVisibility}
@@ -194,6 +221,7 @@ const Sidebar: React.FC = () => {
             </div>
           )}
         </nav>
+        {(isCalender) && <Calendar onClose={handleCloseCalender} />}
       </div>
     </aside>
 
