@@ -72,9 +72,9 @@ const CourseCard: React.FC<CourseCardProps> = ({ courses, userId }) => {
                     {courses.map((course) => (
                         <div 
                             key={course.course_id} 
-                            className="bg-white dark:bg-[#151b23] rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
+                            className="bg-white dark:bg-[#151b23] rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 p-6"
                         >
-                            <div className="aspect-video relative overflow-hidden p-6">
+                            <div className="aspect-video relative overflow-hidden mb-2">
                                 <img
                                     src={course.coursePicUrl}
                                     alt={course.title}
@@ -82,7 +82,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ courses, userId }) => {
                                 />
                             </div>
                             
-                            <div className="p-6">
+                            <div className="">
                                 <h2 
                                     className="text-xl font-semibold text-gray-900 dark:text-white mb-2 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer truncate"
                                     onClick={() => handleClick(course.course_id)}

@@ -65,7 +65,7 @@ const Calendar: React.FC<CalenderComponentProps> = ({ onClose }) => {
   };
 
   return (
-    <div  className="fixed  bottom-0 right-0 m-4 w-full max-w-sm transform translate-y-full animate-slide-in">
+    <div  className="fixed  bottom-0 right-0 m-4 w-full max-w-sm transform translate-y-full animate-slide-in ">
       <div className="relative w-full max-w-sm mx-auto p-4 bg-gray-100 dark:bg-[#151b23] rounded-lg shadow-2xl ">
         {/* Calendar Header */}
         <div className="flex items-center justify-between mb-4">
@@ -185,14 +185,14 @@ const Calendar: React.FC<CalenderComponentProps> = ({ onClose }) => {
         {selectedDate && events[selectedDate]?.length > 0 && (
           <div className="mt-6">
             <h3 className="text-lg font-medium mb-3">Events for {selectedDate}</h3>
-            <div className="space-y-2">
+            <div className="">
               {events[selectedDate].map((event, index) => (
-                <div key={index} className="grid grid-rows-2 justify-center bg-white dark:bg-gray-800 rounded-lg shadow">
-                  <div className="p-2 grid grid-cols-2 gap-4 items-center justify-between">
+                <div key={index} className="p-6 justify-evenly w-full bg-white dark:bg-gray-800 rounded-lg shadow">
+                  <div className="pb-4  grid grid-rows-2 gap-2 items-center justify-between">
                     <h4 className="font-medium">{event.title}</h4>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm">{event.description}</p>
+                    <p className="text-gray-600 dark:text-gray-400 text-xs">{event.description}</p>
                   </div>
-                  <div className="p-2 grid grid-cols-2 gap-4 items-center justify-center mx-auto">
+                  <div className=" grid grid-cols-2 gap-4 items-center justify-center mx-auto">
                     <p onClick={() => handleDeleteEvent(index)} className="bg-red-500 hover:bg-red-600 text-white flex p-2 justify-center items-center cursor-pointer">
                       Delete 🗑️
                     </p>
