@@ -55,14 +55,14 @@ const Groups = () => {
             <div className="w-full max-w-6xl mx-auto p-6  bg-white dark:bg-[#151b23] rounded-lg-lg shadow-md">
                 <div className="mb-6 flex justify-center gap-4 items-center">
                     <h1 className="text-2xl font-semibold text-center ">Group Management</h1>
-                    <div className="text-center ">
+                    {/* <div className="text-center ">
                         <button
                             onClick={handleCreateGroup}
                             className="text-sm bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200"
                         >
                             Create Group
                         </button>
-                    </div>
+                    </div> */}
                 </div>
 
 

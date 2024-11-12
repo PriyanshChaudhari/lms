@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter, useParams, usePathname } from "next/navigation";
 import axios from "axios";
 import Calendar from "../Calender/calender";
 
@@ -17,6 +17,9 @@ interface Course {
 }
 
 const Sidebar: React.FC = () => {
+  const pathname = usePathname()
+  const isActive = (path: string) => pathname === path;
+
   const [isCoursesVisible, setCoursesVisible] = useState(false);
   const [selectedCourseId, setSelectedCourseId] = useState<string | null>(null);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);

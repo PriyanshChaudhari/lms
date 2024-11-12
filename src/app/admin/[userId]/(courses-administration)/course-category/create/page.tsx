@@ -12,6 +12,8 @@ const CreateCategory = () => {
         parent_category_id: ""
     });
 
+    const [error, setError] = useState<string | null>(null);
+
     const [categories, setCategories] = useState<{ id: string; category_name: string; parent_category_id: string | null }[]>([]);
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
@@ -46,28 +48,34 @@ const CreateCategory = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        try {
-            const res = await axios.post('/api/course-category/', category);
-            const data = res.data.categories;
-            console.log(data);
+        if (category.category_name.trim() === "") {
+            setError("Please Enter Valid Category.")
+            return;
+        }
+        else {
+            try {
+                const res = await axios.post('/api/course-category/', category);
+                const data = res.data.categories;
+                console.log(data);
 
-            // Reset the form
-            setCategory({
-                category_name: "",
-                parent_category_id: ""
-            });
-            setSelectedCategories([]);
+                // Reset the form
+                setCategory({
+                    category_name: "",
+                    parent_category_id: ""
+                });
+                setSelectedCategories([]);
 
-            // Fetch updated categories
-            await fetchCategories();
+                // Fetch updated categories
+                await fetchCategories();
 
-            // Optionally, show a success message
-            alert("Category created successfully!");
-            router.push(`/admin/${userId}/dashboard`);
-        } catch (error) {
-            console.error(error);
-            // Optionally, show an error message
-            alert("Failed to create category. Please try again.");
+                // Optionally, show a success message
+                alert("Category created successfully!");
+                router.push(`/admin/${userId}/dashboard`);
+            } catch (error) {
+                console.error(error);
+                // Optionally, show an error message
+                alert("Failed to create category. Please try again.");
+            }
         }
     };
 
@@ -110,6 +118,11 @@ const CreateCategory = () => {
             <div className="w-full max-w-md mx-auto mt-8 p-6 dark:bg-[#151b23] rounded-lg shadow-md">
                 <h2 className="text-2xl font-bold mb-4">Create a New Category</h2>
                 <form onSubmit={handleSubmit}>
+                    {error && (
+                        <div className="mb-4 text-red-500 font-semibold text-left">
+                            {error}
+                        </div>
+                    )}
                     <div className="mb-6">
                         <label htmlFor="category_name" className="block text-sm font-medium text-gray-700 dark:text-gray-100">
                             Category Name
@@ -129,7 +142,7 @@ const CreateCategory = () => {
 
                     <div>
                         <button
-                            type="submit" 
+                            type="submit"
                             className="w-full bg-blue-600 text-white py-2 px-4 mt-4 rounded-lg hover:bg-blue-700"
                         >
                             Create Category

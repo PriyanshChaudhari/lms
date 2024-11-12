@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect, ChangeEvent} from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import axios from 'axios';
 
@@ -14,7 +14,7 @@ interface User {
 const EditUser = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const userId = searchParams.get('id');
+    const id = searchParams.get('id');
 
     const [user, setUser] = useState<User>({
         id: "",
@@ -28,19 +28,23 @@ const EditUser = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     const fetchUser = async () => {
-        if (!userId) {
+        if (!id) {
             setError("No user ID provided");
             setIsLoading(false);
             return;
         }
 
         try {
-            const response = await axios.get(`/api/get/one-user?userId=${userId}`)
-            console.log("response of get one user", response)    
+            const response = await axios.get(`/api/get/one-user?userId=${id}`)
+            console.log("response of get one user", response)
 
             const data = await response.data;
             if (data && typeof data === 'object') {
-                setUser(data); // Directly set the user data
+                setUser(data.userData); // Directly set the user data
+                setUser((prevUser) => ({
+                    ...prevUser,
+                    id: data.userData.userId, // Update the user ID
+                }));
                 console.log('User data:', data);
             } else {
                 throw new Error('Invalid user data received');
@@ -55,7 +59,7 @@ const EditUser = () => {
 
     useEffect(() => {
         fetchUser();
-    }, [userId]);
+    }, [id]);
 
     const formatDate = (timestamp: any) => {
         if (!timestamp) return "N/A";
@@ -72,25 +76,26 @@ const EditUser = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!user.id || !user.first_name || !user.last_name || !user.email) {
-            setError('Please fill in all the required fields');
+        if (user.id.trim() === "" || user.first_name.trim() === "" || user.last_name.trim() === "" || user.email.trim() === "" || user.role.trim() === "") {
+            setError('Please Fill All Required Fields.');
             return;
         }
+        else {
+            try {
+                console.log(user)
+                const response = await axios.put(`/api/put/update-user/${id}`, user);
+                console.log("response of update user", response)
 
-        try {
-            console.log(user)
-            const response = await axios.put(`/api/put/update-user/${userId}`, user);
-            console.log("response of update user", response)
-        
-            if (response.status === 200) {
-                console.log('User updated successfully');
-                router.push('/admin/dashboard');
-            } else {
-                setError(response.data.error || 'Error updating user');
+                if (response.status === 200) {
+                    console.log('User updated successfully');
+                    router.push('/admin/dashboard');
+                } else {
+                    setError(response.data.error || 'Error updating user');
+                }
+            } catch (error) {
+                setError('Something went wrong. Please try again later.');
+                console.error('Error:', error);
             }
-        } catch (error) {
-            setError('Something went wrong. Please try again later.');
-            console.error('Error:', error);
         }
     };
 
@@ -98,9 +103,9 @@ const EditUser = () => {
         return <div className="text-center mt-8">Loading user data...</div>;
     }
 
-    if (error) {
-        return <div className="text-center mt-8 text-red-500">{error}</div>;
-    }
+    // if (error) {
+    //     return <div className="text-center mt-8 text-red-500">{error}</div>;
+    // }
 
     return (
         <div className="bg-gray-300 dark:dark:bg-[#212830] min-h-screen flex items-center justify-center p-6">
@@ -110,7 +115,7 @@ const EditUser = () => {
                 </div>
 
                 {error && (
-                    <div className="mb-4 text-red-500 font-semibold text-center">
+                    <div className="mb-4 text-red-500 font-semibold text-left">
                         {error}
                     </div>
                 )}
@@ -123,7 +128,8 @@ const EditUser = () => {
                         name="id"
                         value={user.id}
                         readOnly
-                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg-md focus:outline-none focus:border-blue-500 dark:focus:border-white bg-gray-100 dark:bg-gray-600"
+                        required
+                        className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg-md focus:outline-none focus:border-blue-500 dark:focus:border-white bg-gray-100"
                     />
                 </div>
 
@@ -135,6 +141,7 @@ const EditUser = () => {
                         name="first_name"
                         value={user.first_name}
                         onChange={handleChange}
+                        required
                         className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg-md focus:outline-none focus:border-blue-500 dark:focus:border-white capitalize"
                     />
                 </div>
@@ -147,6 +154,7 @@ const EditUser = () => {
                         name="last_name"
                         value={user.last_name}
                         onChange={handleChange}
+                        required
                         className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg-md focus:outline-none focus:border-blue-500 dark:focus:border-white capitalize"
                     />
                 </div>
@@ -159,6 +167,7 @@ const EditUser = () => {
                         name="email"
                         value={user.email}
                         onChange={handleChange}
+                        required
                         className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg-md focus:outline-none focus:border-blue-500 dark:focus:border-white"
                     />
                 </div>
@@ -169,6 +178,7 @@ const EditUser = () => {
                         name="role"
                         value={user.role}
                         onChange={handleChange}
+                        required
                         className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg-md focus:outline-none focus:border-blue-500 dark:focus:border-white"
                     >
                         <option value="student">Student</option>

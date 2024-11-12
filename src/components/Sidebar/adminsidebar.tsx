@@ -1,12 +1,15 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Calendar from "../Calender/calender";
 
 
 const Sidebar: React.FC = () => {
   const router = useRouter();
+  const pathname = usePathname()
+  const isActive = (path: string) => pathname === path;
+
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const [isUserSectionOpen, setUserSectionOpen] = useState(false);
@@ -21,7 +24,7 @@ const Sidebar: React.FC = () => {
   const handleCloseCalender = () => {
     setCalender(false);
     setActiveSection('dashboard');
-    
+
   };
 
   useEffect(() => {
@@ -43,6 +46,10 @@ const Sidebar: React.FC = () => {
     setUserSectionOpen(!isUserSectionOpen);
     setUserSectionVisible(!isUserSectionVisible);
     setActiveSection('user');
+    setCourseSectionOpen(false);
+    setGroupSectionOpen(false);
+    setCalender(false);
+
   };
 
   const toggleDashboardSection = () => {
@@ -69,12 +76,18 @@ const Sidebar: React.FC = () => {
   const toggleCourseSection = () => {
     setCourseSectionOpen(!isCourseSectionOpen);
     setCourseSectionVisible(!isCourseSectionVisible);
+    setGroupSectionOpen(false);
+    setUserSectionOpen(false);
+    setCalender(false);
     setActiveSection('course');
   };
 
   const toggleGroupSection = () => {
     setGroupSectionOpen(!isGroupSectionOpen);
     setGroupSectionVisible(!isGroupSectionVisible);
+    setUserSectionOpen(false);
+    setCourseSectionOpen(false);
+    setCalender(false);
     setActiveSection('group');
   };
 
@@ -93,11 +106,10 @@ const Sidebar: React.FC = () => {
             <Link
               href={`/admin/${userId}/dashboard`}
               onClick={toggleDashboardSection}
-              className={`flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200 ${
-                activeSection === 'dashboard'
+              className={`flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200 ${activeSection === 'dashboard'
                   ? 'bg-blue-500 text-white'
                   : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-              }`}
+                }`}
             >
               <span className="text-lg">📊</span>
               <span>Dashboard</span>
@@ -105,27 +117,25 @@ const Sidebar: React.FC = () => {
 
             <button
               onClick={toggleCalenderSection}
-              className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors duration-200 ${
-                activeSection === 'calender'
+              className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors duration-200 ${activeSection === 'calender'
                   ? 'bg-blue-500 text-white'
                   : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-              }`}
+                }`}
             >
-               <div className="flex items-center space-x-3">
-               <span className="text-lg">📅</span>
-              <span>Events</span>
-            </div>
+              <div className="flex items-center space-x-3">
+                <span className="text-lg">📅</span>
+                <span>Events</span>
+              </div>
             </button>
 
             {/* Users Section */}
             <div className="space-y-1">
               <button
                 onClick={toggleUserSection}
-                className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors duration-200 ${
-                  activeSection === 'user'
+                className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors duration-200 ${activeSection === 'user'
                     ? 'bg-blue-500 text-white'
                     : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                }`}
+                  }`}
               >
                 <div className="flex items-center space-x-3">
                   <span className="text-lg">👤</span>
@@ -138,21 +148,26 @@ const Sidebar: React.FC = () => {
                 <div className="space-y-1 bg-white dark:bg-gray-800 p-2">
                   <Link
                     href={`/admin/${userId}/create-user`}
-                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded  transition-colors duration-200"
+                    className={`flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 rounded transition-colors duration-200 ${isActive(`/admin/${userId}/create-user`) ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                      }`}
                   >
-                   → Create User
+                    → Create User
                   </Link>
                   <Link
                     href={`/admin/${userId}/upload-users`}
-                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded  transition-colors duration-200"
+                    className={`flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 rounded transition-colors duration-200 ${isActive(`/admin/${userId}/upload-users`) ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                      }`}
                   >
-                   → Upload User Data
+                    → Upload User Data
                   </Link>
                   <Link
                     href={`/admin/${userId}/view-users`}
-                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded  transition-colors duration-200"
+                    className={`flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 rounded transition-colors duration-200 ${isActive(`/admin/${userId}/view-users`) ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                      }`}
+
+
                   >
-                   → View Users
+                    → View Users
                   </Link>
                 </div>
               )}
@@ -162,11 +177,10 @@ const Sidebar: React.FC = () => {
             <div className="space-y-1 ">
               <button
                 onClick={toggleCourseSection}
-                className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors duration-200 ${
-                  activeSection === 'course'
+                className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors duration-200 ${activeSection === 'course'
                     ? 'bg-blue-500 text-white'
                     : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                }`}
+                  }`}
               >
                 <div className="flex items-center space-x-3">
                   <span className="text-lg">📚</span>
@@ -179,15 +193,18 @@ const Sidebar: React.FC = () => {
                 <div className=" space-y-1 bg-white dark:bg-gray-800 p-2">
                   <Link
                     href={`/admin/${userId}/course-category/create`}
-                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded  transition-colors duration-200"
+                    className={`flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded  transition-colors duration-200 ${isActive(`/admin/${userId}/course-category/create`) ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"}
+                    `}
+
                   >
-                   → Add Category
+                    → Add Category
                   </Link>
                   <Link
                     href={`/admin/${userId}/course-category/manage`}
-                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded  transition-colors duration-200"
+                    className={`flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded  transition-colors duration-200 ${isActive(`/admin/${userId}/course-category/manage`) ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"}
+                    `}
                   >
-                   → Manage Category
+                    → Manage Category
                   </Link>
                 </div>
               )}
@@ -197,11 +214,10 @@ const Sidebar: React.FC = () => {
             <div className="space-y-1">
               <button
                 onClick={toggleGroupSection}
-                className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors duration-200 ${
-                  activeSection === 'group'
+                className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors duration-200 ${activeSection === 'group'
                     ? 'bg-blue-500 text-white'
                     : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                }`}
+                  }`}
               >
                 <div className="flex items-center space-x-3">
                   <span className="text-lg">👥</span>
@@ -214,28 +230,30 @@ const Sidebar: React.FC = () => {
                 <div className=" space-y-1 bg-white dark:bg-gray-800 p-2">
                   <Link
                     href={`/admin/${userId}/groups/create-group`}
-                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded  transition-colors duration-200"
+                    className={`flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded  transition-colors duration-200  ${isActive(`/admin/${userId}/groups/create-group`) ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"}
+                    `}
                   >
-                   → Create Group
+                    → Create Group
                   </Link>
                   <Link
                     href={`/admin/${userId}/groups`}
-                    className="flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded  transition-colors duration-200"
+                    className={`flex items-center p-2 text-sm text-gray-600 dar k:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded  transition-colors duration-200  ${isActive(`/admin/${userId}/groups`) ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"}
+                    `}
                   >
-                   → View Groups
+                    → View Groups
                   </Link>
                 </div>
               )}
             </div>
 
-            
+
           </nav>
           {(isCalender) && <Calendar onClose={handleCloseCalender} />}
         </div>
       </aside>
 
       {/* Mobile Toggle Button */}
-      <button 
+      <button
         onClick={toggleMobileMenu}
         className="md:hidden fixed right-4 top-3 z-50 p-2 rounded-lg bg-gray-100 dark:bg-[#151b23]"
       >
@@ -245,16 +263,14 @@ const Sidebar: React.FC = () => {
       </button>
 
       {/* Mobile Sidebar Overlay */}
-      <div className={`md:hidden fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ${
-        isMobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-      }`}>
-        {/* Mobile Sidebar Content */}
-        <div className={`w-64 h-full bg-gray-100 dark:bg-[#151b23] transform transition-transform duration-300 ${
-          isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+      <div className={`md:hidden fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ${isMobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}>
+        {/* Mobile Sidebar Content */}
+        <div className={`w-64 h-full bg-gray-100 dark:bg-[#151b23] transform transition-transform duration-300 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}>
           <div className="p-4 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center">
             <h2 className="text-xl font-bold text-gray-800 dark:text-white">Admin Menu</h2>
-            <button 
+            <button
               onClick={closeMobileMenu}
               className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
             >
@@ -359,7 +375,7 @@ const Sidebar: React.FC = () => {
               )}
             </div>
           </nav>
-          
+
         </div>
       </div>
     </>

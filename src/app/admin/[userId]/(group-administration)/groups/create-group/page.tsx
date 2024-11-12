@@ -23,6 +23,11 @@ const CreateGroup = () => {
         e.preventDefault();
         setLoading(true); // Set loading state
 
+        if(group.group_name.trim()===""){
+            setErrorMessage("Please Enter Valid Group Name.")
+            return;
+        }
+
         try {
             const res = await axios.post('/api/groups/create-group', { group_name: group.group_name });
 
@@ -47,12 +52,13 @@ const CreateGroup = () => {
         <div className="flex h-screen justify-center items-center">
             <div className="w-full max-w-md mx-auto mt-10 p-6 bg-white dark:bg-[#151b23] rounded-lg-lg shadow-md">
             <h1 className="text-2xl font-semibold text-center mb-4">Create Group</h1>
-            {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}
+
+            {errorMessage && <p className="text-red-500 text-left mb-4">{errorMessage}</p>}
 
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                    <label htmlFor="group_name" className=" block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Group Name
+                    <label htmlFor="group_name" className=" block text-gray-700 dark:text-gray-300 font-semibold mb-2">
+                        Group Name:
                     </label>
                     <input
                         type="text"
@@ -60,8 +66,7 @@ const CreateGroup = () => {
                         name="group_name"
                         value={group.group_name}
                         onChange={handleChange}
-                        required
-                        
+                        required                        
                         className="w-full border border-gray-300 dark:bg-[#151b23] rounded-lg-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 uppercase"
                     />
                 </div>

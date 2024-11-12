@@ -28,6 +28,8 @@ const ManageCategories = () => {
     const [deletingCategoryId, setDeletingCategoryId] = useState<string | null>(null);
     const router = useRouter();
 
+    const [error, setError] = useState<string | null>(null);
+
     useEffect(() => {
         fetchCategories();
     }, []);
@@ -87,6 +89,11 @@ const ManageCategories = () => {
     const handleEditSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!editingCategory) return;
+
+        if (editingCategory.category_name.trim() === "") {
+            setError("Please Enter Valid Category.")
+            return;
+        }
 
         try {
             await axios.put("/api/course-category", {
@@ -187,6 +194,11 @@ const ManageCategories = () => {
                     <div className="bg-white p-6 rounded-lg shadow-md">
                         <h2 className="text-2xl font-bold mb-4">Edit Category</h2>
                         <form onSubmit={handleEditSubmit}>
+                            {error && (
+                                <div className="mb-4 text-red-500 font-semibold text-left">
+                                    {error}
+                                </div>
+                            )}
                             <div className="mb-4">
                                 <label htmlFor="category_name" className="block text-sm font-medium text-gray-700">
                                     Category Name

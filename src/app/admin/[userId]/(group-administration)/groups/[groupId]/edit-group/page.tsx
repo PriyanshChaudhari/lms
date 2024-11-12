@@ -41,35 +41,45 @@ const EditGroup = () => {
         e.preventDefault();
         setLoading(true);
 
-        try {
-            const res = await axios.put(`/api/groups/${groupId}`, { group_name: group.group_name });
-
-            if (res.data.success) {
-                router.push(`/admin/${userId}/groups`);
-            } else {
-                console.error('Group update failed:', res.data.message);
-                setErrorMessage('Failed to update group. Please try again.');
-            }
-        } catch (error: any) {
-            if (error.response && error.response.data && error.response.data.message) {
-                setErrorMessage(error.response.data.message);
-            } else {
-                setErrorMessage('An error occurred while updating the group.');
-            }
-        } finally {
-            setLoading(false);
+        if (group.group_name.trim() === "") {
+            setErrorMessage("Please Enter Valid Group Name.")
+            setLoading(false)
+            return;
         }
+        else {
+            try {
+                const res = await axios.put(`/api/groups/${groupId}`, { group_name: group.group_name });
+
+                if (res.data.success) {
+                    router.push(`/admin/${userId}/groups`);
+                } else {
+                    console.error('Group update failed:', res.data.message);
+                    setErrorMessage('Failed to update group. Please try again.');
+                }
+            } catch (error: any) {
+                if (error.response && error.response.data && error.response.data.message) {
+                    setErrorMessage(error.response.data.message);
+                } else {
+                    setErrorMessage('An error occurred while updating the group.');
+                }
+            } finally {
+                setLoading(false);
+            }
+        }
+
+
     };
 
     return (
         <div className="max-w-md mx-auto mt-10 p-6 bg-white dark:bg-[#212830] rounded-lg-lg shadow-md">
             <h1 className="text-2xl font-semibold text-center mb-4">Edit Group</h1>
-            {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}
+
+            {errorMessage && <p className="text-red-500 text-left mb-4">{errorMessage}</p>}
 
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                    <label htmlFor="group_name" className="block text-sm font-medium text-gray-700 mb-1">
-                        Group Name
+                    <label htmlFor="group_name" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">
+                        Group Name:
                     </label>
                     <input
                         type="text"

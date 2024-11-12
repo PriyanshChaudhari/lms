@@ -26,14 +26,8 @@ const CreateUser = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!user.userId || !user.firstName || !user.lastName || !user.email || !user.role) {
-            let missingFields = [];
-            if (!user.userId) missingFields.push('User ID');
-            if (!user.firstName) missingFields.push('First Name');
-            if (!user.lastName) missingFields.push('Last Name');
-            if (!user.email) missingFields.push('Email');
-            if (!user.role) missingFields.push('Role');
-            alert('Please fill in all the required fields\n Missing fields: ' + missingFields.join(', '));
+        if (user.userId.trim() === "" || user.firstName.trim() === "" || user.lastName.trim() === "" || user.email.trim() === "" || user.role.trim() === "") {
+            setError("Please Fill All Required Fields.")
             return;
         } else {
             try {
@@ -42,7 +36,7 @@ const CreateUser = () => {
                 // Check if the response status indicates success
                 if (response.status === 201) {
                     console.log('User created successfully');
-                    router.push(`/admin/${userId}/dashboard`);
+                    router.push(`/admin/${userId}/(user-administration)/create-user`);
                 } else {
                     setError(response.data.error || 'Error creating user'); // Set error message if response status is not 201
                 }
@@ -70,7 +64,7 @@ const CreateUser = () => {
 
                 {/* Error message display */}
                 {error && (
-                    <div className="mb-4 text-red-500 font-semibold text-center">
+                    <div className="mb-4 text-red-500 font-semibold text-left">
                         {error}
                     </div>
                 )}
@@ -81,6 +75,7 @@ const CreateUser = () => {
                         type="text"
                         id="userId"
                         name="userId"
+                        required
                         value={user.userId}
                         onChange={handleChange}
                         className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg-md focus:outline-none focus:border-blue-500 dark:focus:border-white"
@@ -93,6 +88,7 @@ const CreateUser = () => {
                         type="text"
                         id="firstName"
                         name="firstName"
+                        required
                         value={user.firstName}
                         onChange={handleChange}
                         className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg-md focus:outline-none focus:border-blue-500 dark:focus:border-white capitalize"
@@ -105,6 +101,7 @@ const CreateUser = () => {
                         type="text"
                         id="lastName"
                         name="lastName"
+                        required
                         value={user.lastName}
                         onChange={handleChange}
                         className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg-md focus:outline-none focus:border-blue-500 dark:focus:border-white capitalize"
@@ -117,6 +114,7 @@ const CreateUser = () => {
                         type="email"
                         id="email"
                         name="email"
+                        required
                         value={user.email}
                         onChange={handleChange}
                         className="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg-md focus:outline-none focus:border-blue-500 dark:focus:border-white"

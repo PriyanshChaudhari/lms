@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 interface User {
     id: string;
@@ -14,7 +14,10 @@ interface User {
 const ViewUsers = () => {
     const [users, setUsers] = useState<User[]>([]);
     const [isEditMode, setIsEditMode] = useState(false);
+    
     const router = useRouter();
+    const params = useParams();
+    const userId = params.userId as string;
 
     const fetchUsers = async () => {
         try {
@@ -37,8 +40,8 @@ const ViewUsers = () => {
         return date.toLocaleDateString();
     };
 
-    const handleEdit = (userId: string) => {
-        router.push(`/admin/edit-user?id=${userId}`);
+    const handleEdit = (id: string) => {
+        router.push(`/admin/${userId}/edit-user?id=${id}`);
     };
 
     const handleDelete = async (userId: string) => {
