@@ -160,7 +160,7 @@ const ManageCategories = () => {
 
     return (
         <div className="container mx-auto p-4">
-            <h1 className="text-2xl font-bold mb-4">Manage Categories and Courses</h1>
+            <h1 className="text-2xl text-black dark:text-gray-300 font-semibold mb-4">Manage Categories and Courses</h1>
             <div className="flex">
                 <div className="w-1/2 pr-4">
                     <h2 className="text-xl font-semibold mb-2">Categories</h2>

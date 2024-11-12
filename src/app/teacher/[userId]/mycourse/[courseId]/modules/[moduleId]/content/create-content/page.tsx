@@ -19,17 +19,9 @@ const CreateContent = () => {
         attachments: ""
     });
 
-    const [errors, setErrors] = useState({
-        course_id: "",
-        module_id: "",
-        title: "",
-        description: "",
-        content_type: "",
-        attachments: ""
-    });
-
     const [files, setFiles] = useState<File[]>([]);
     const [showModal, setShowModal] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const handleChange = (e: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -46,27 +38,11 @@ const CreateContent = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         let valid = true;
-        const newErrors = {
-            course_id: "",
-            module_id: "",
-            title: "",
-            description: "",
-            content_type: "",
-            attachments: ""
-        };
 
-        if (content.title.trim() === "") {
-            newErrors.title = "Title is required";
+        if (content.title.trim() === "" || content.content_type === "" || content.description.trim() === "" || content.module_id.trim() === "" || content.course_id.trim() === "") {
+            setError("Please Fill All Required Fields.")
             valid = false;
         }
-
-        if (content.content_type === "") {
-            newErrors.content_type = "Content type is required";
-            valid = false;
-        }
-
-        setErrors(newErrors);
-
         if (valid) {
             try {
                 const formData = new FormData();
@@ -96,14 +72,6 @@ const CreateContent = () => {
                     description: "",
                     attachments: ""
                 });
-                setErrors({
-                    course_id: "",
-                    module_id: "",
-                    title: "",
-                    content_type: "",
-                    description: "",
-                    attachments: ""
-                });
                 setFiles([]);
                 setShowModal(false);
                 router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/`);
@@ -123,12 +91,17 @@ const CreateContent = () => {
     return (
         <div className="flex justify-center items-center h-screen">
             <div className="w-full max-w-md mx-auto mt-8 p-6 dark:bg-[#151b23] rounded-lg shadow-md">
-                <h2 className="text-2xl font-bold mb-4">Create Content</h2>
+                <h2 className="text-2xl font-semibold text-black dark:text-gray-300 mb-4">Create Content</h2>
 
                 <form onSubmit={handleSubmit}>
+                    {error && (
+                        <div className="mb-4 text-red-500 font-semibold text-left">
+                            {error}
+                        </div>
+                    )}
                     <div className="mb-4">
-                        <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-white">
-                            Title
+                        <label htmlFor="title" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">
+                            Title:
                         </label>
                         <input
                             type="text"
@@ -139,12 +112,11 @@ const CreateContent = () => {
                             className="mt-1 p-2 w-full border border-gray-300 rounded-lg dark:bg-gray-700"
                             required
                         />
-                        {errors.title && <p className="text-red-600 text-sm">{errors.title}</p>}
                     </div>
 
                     <div className="mb-4">
-                        <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-white">
-                            Description
+                        <label htmlFor="description" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">
+                            Description:
                         </label>
                         <input
                             type="text"
@@ -155,12 +127,11 @@ const CreateContent = () => {
                             className="mt-1 p-2 w-full border border-gray-300 rounded-lg dark:bg-gray-700"
                             required
                         />
-                        {errors.description && <p className="text-red-600 text-sm">{errors.description}</p>}
                     </div>
 
                     <div className="mb-4">
-                        <label htmlFor="content_type" className="block text-sm font-medium text-gray-700 dark:text-white">
-                            Content Type
+                        <label htmlFor="content_type" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">
+                            Content Type:
                         </label>
                         <select
                             id="content_type"
@@ -174,13 +145,12 @@ const CreateContent = () => {
                             <option value="file">File</option>
                             <option value="url">URL</option>
                         </select>
-                        {errors.content_type && <p className="text-red-600 text-sm">{errors.content_type}</p>}
                     </div>
 
                     {content.content_type === "url" && (
                         <div className="mb-4">
-                            <label htmlFor="attachments" className="block text-sm font-medium text-gray-700 dark:text-white">
-                                Attachments
+                            <label htmlFor="attachments" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">
+                                Attachments:
                             </label>
                             <input
                                 type="text"
@@ -196,8 +166,8 @@ const CreateContent = () => {
 
                     {content.content_type === "file" && (
                         <div className="mb-4">
-                            <label htmlFor="file" className="block text-sm font-medium text-gray-700 dark:text-white">
-                                Upload Files
+                            <label htmlFor="file" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">
+                                Upload Files:
                             </label>
                             <input type="file" name="file" required multiple onChange={handleFileChange} />
                         </div>

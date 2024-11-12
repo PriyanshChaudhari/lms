@@ -156,22 +156,18 @@ export default function ViewModuleAssignments() {
                 </nav>
 
                 <div className="space-y-6">
-
                     <div className='min-w-md'>
                         <button
-                            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200 "
                             onClick={handleAddAssignment} // Replace with your add module logic
                         >
-                            Add Assignments
+                            <span className="text-lg">+</span>
+                            Add Assignment
                         </button>
                     </div>
                     <div>
-
                         <div className="grid gap-4 ">
-
-
                             <div>
-
                                 <div className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm hover:shadow-md transition-shadow flex items-center justify-between p-6">
 
                                     {assignments.length > 0 ? (

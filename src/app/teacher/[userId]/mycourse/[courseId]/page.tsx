@@ -130,7 +130,7 @@ const CourseDetails = () => {
     }
 
     const addModule = () => {
-        router.push(`/teacher/${userId}/mycourse/${courseId}/modules`)
+        router.push(`/teacher/${userId}/mycourse/${courseId}/modules/create-module`)
     }
 
     const handleAssignmentClick = (assignmentId: string, moduleId: string) => {
@@ -197,14 +197,14 @@ const CourseDetails = () => {
                             <div className="flex justify-end mb-6">
                                 <button
                                     onClick={addModule}
-                                    className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg-lg transition-colors shadow-sm"
-                                >
+                                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200"
+                                ><span className="text-lg">+</span>
                                     Add Module
                                 </button>
                             </div>
                             <div className="grid gap-4">
                                 {sortedModules.map((module) => (
-                                    <div 
+                                    <div
                                         key={module.id}
                                         className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm hover:shadow-md transition-shadow"
                                     >
@@ -239,7 +239,7 @@ const CourseDetails = () => {
                     {activeSection === 'assignments' && (
                         <div className="grid md:grid-cols-2 gap-6">
                             {assignments.map((assignment) => (
-                                <div 
+                                <div
                                     key={assignment.id}
                                     onClick={() => handleAssignmentClick(assignment.id, assignment.module_id)}
                                     className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer p-6"
@@ -328,7 +328,7 @@ const CourseDetails = () => {
                                                 </thead>
                                                 <tbody>
                                                     {filteredParticipants.map((participant) => (
-                                                        <tr 
+                                                        <tr
                                                             key={participant.user_id}
                                                             className="border-t border-gray-100 dark:border-gray-700"
                                                         >
@@ -369,11 +369,10 @@ const CourseDetails = () => {
                                                     setShowAddStudent(true);
                                                     setShowAddTeacher(false);
                                                 }}
-                                                className={`px-4 py-2 rounded-lg-lg transition-colors ${
-                                                    showAddStudent
+                                                className={`px-4 py-2 rounded-lg-lg transition-colors ${showAddStudent
                                                         ? 'bg-blue-500 text-white'
                                                         : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
-                                                }`}
+                                                    }`}
                                             >
                                                 Add Student
                                             </button>
@@ -382,11 +381,10 @@ const CourseDetails = () => {
                                                     setShowAddStudent(false);
                                                     setShowAddTeacher(true);
                                                 }}
-                                                className={`px-4 py-2 rounded-lg-lg transition-colors ${
-                                                    showAddTeacher
+                                                className={`px-4 py-2 rounded-lg-lg transition-colors ${showAddTeacher
                                                         ? 'bg-blue-500 text-white'
                                                         : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
-                                                }`}
+                                                    }`}
                                             >
                                                 Add Teacher
                                             </button>

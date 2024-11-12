@@ -72,7 +72,7 @@ export default function ViewModule() {
     }, [moduleId, courseId]);
 
     const addContent = () => {
-        router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/content/`);
+        router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/content/create-content`);
     }
 
     const handleContentClick = (contentId: string) => {
@@ -225,9 +225,10 @@ export default function ViewModule() {
                                 <h2 className="text-xl font-bold my-2">Module Content:</h2>
                                 <div className="max-w-md">
                                     <button
-                                        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 my-2"
+                                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200"
                                         onClick={addContent} // Replace with your add module logic
                                     >
+                                        <span className="text-lg">+</span>
                                         Add Content
                                     </button>
                                 </div>

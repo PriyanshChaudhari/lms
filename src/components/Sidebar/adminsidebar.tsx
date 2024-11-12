@@ -164,10 +164,15 @@ const Sidebar: React.FC = () => {
                     href={`/admin/${userId}/view-users`}
                     className={`flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 rounded transition-colors duration-200 ${isActive(`/admin/${userId}/view-users`) ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
                       }`}
-
-
                   >
                     → View Users
+                  </Link>
+                  <Link
+                    href={`/admin/${userId}/delete-users`}
+                    className={`flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 rounded transition-colors duration-200 ${isActive(`/admin/${userId}/delete-users`) ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                      }`}
+                  >
+                    → Delete Users
                   </Link>
                 </div>
               )}

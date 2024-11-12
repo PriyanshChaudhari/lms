@@ -22,7 +22,7 @@ const CreateCourse = () => {
     const [categories, setCategories] = useState<{ id: string; category_name: string; parent_category_id: string | null }[]>([]);
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const [file, setFile] = useState<File | null>(null); // File state
-    const [error, setError] = useState('');
+    const [error, setError] = useState<string | null>(null);
 
 
     const fetchCategories = async () => {
@@ -77,9 +77,8 @@ const CreateCourse = () => {
     };
 
     const validateForm = () => {
-        const { title, description, category, teacher_id } = course;
-        if (!title || !description || !category || !teacher_id) {
-            setError('Please fill in all required fields.');
+        if (course.title.trim() === "" || course.description.trim() === "" || course.category.trim() === "" || course.teacher_id === "") {
+            setError("Please Fill All Required Fields.")
             return false;
         }
         // if (!file) {
@@ -139,8 +138,8 @@ const CreateCourse = () => {
 
             dropdowns.push(
                 <div key={i} className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700">
-                        {i === 0 ? "Top-Level Category" : `Subcategory Level ${i}`}
+                    <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">
+                        {i === 0 ? "Top-Level Category:" : `Subcategory Level ${i}:`}
                     </label>
                     <select
                         value={selectedCategories[i] || ""}
@@ -164,12 +163,16 @@ const CreateCourse = () => {
     return (
         <div className=''>
             <div className="max-w-md mx-auto mt-8 p-6 bg-white dark:bg-[#151b23] rounded-lg shadow-md">
-                <h2 className="text-2xl font-bold mb-4">Create a New Course</h2>
-                {error}
+                <h2 className="text-2xl font-semibold text-black dark:text-gray-300 mb-4">Create New Course</h2>
                 <form onSubmit={handleSubmit}>
+                    {error && (
+                        <div className="mb-4 text-red-500 font-semibold text-left">
+                            {error}
+                        </div>
+                    )}
                     <div className="mb-4">
-                        <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-100">
-                            Course Title
+                        <label htmlFor="title" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">
+                            Course Title:
                         </label>
                         <input
                             type="text"
@@ -183,8 +186,8 @@ const CreateCourse = () => {
                     </div>
 
                     <div className="mb-4">
-                        <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-100">
-                            Description
+                        <label htmlFor="description" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">
+                            Description:
                         </label>
                         <textarea
                             id="description"
@@ -198,8 +201,8 @@ const CreateCourse = () => {
                     </div>
 
                     <div className="mb-4">
-                        <label htmlFor="courseImage" className="block text-sm font-medium">
-                            Upload File
+                        <label htmlFor="courseImage" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">
+                            Course Image  (PNG, JPG, JPEG):
                         </label>
                         <input
                             type="file"

@@ -51,7 +51,7 @@ const CreateGroup = () => {
     return (
         <div className="flex h-screen justify-center items-center">
             <div className="w-full max-w-md mx-auto mt-10 p-6 bg-white dark:bg-[#151b23] rounded-lg-lg shadow-md">
-            <h1 className="text-2xl font-semibold text-center mb-4">Create Group</h1>
+            <h1 className="text-2xl font-semibold text-black dark:text-gray-300 mb-4">Create Group</h1>
 
             {errorMessage && <p className="text-red-500 text-left mb-4">{errorMessage}</p>}
 

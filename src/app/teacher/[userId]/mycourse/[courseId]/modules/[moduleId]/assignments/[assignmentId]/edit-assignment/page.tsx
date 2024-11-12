@@ -110,12 +110,16 @@ export default function EditAssignment() {
     return (
         <div className='h-screen flex justify-center items-center'>
             <div className="w-full max-w-md mx-auto dark:bg-[#151b23] p-8 shadow-md rounded-lg">
-                <h1 className="text-2xl font-bold mb-6">Edit Assignment</h1>
+                <h1 className="text-2xl font-semibold text-black dark:text-gray-300 mb-4">Edit Assignment</h1>
                 {message && <p className="text-green-500">{message}</p>}
-                {error && <p className="text-red-500">{error}</p>}
+                {error && (
+                    <div className="mb-4 text-red-500 font-semibold text-left">
+                        {error}
+                    </div>
+                )}
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-100">Title</label>
+                        <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Title:</label>
                         <input
                             type="text"
                             name="title"
@@ -126,7 +130,7 @@ export default function EditAssignment() {
                         />
                     </div>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-100">Description</label>
+                        <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Description:</label>
                         <textarea
                             name="description"
                             value={formData.description}
@@ -136,7 +140,7 @@ export default function EditAssignment() {
                         />
                     </div>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-100">Total Marks</label>
+                        <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Total Marks:</label>
                         <input
                             type="number"
                             name="total_marks"
@@ -148,7 +152,7 @@ export default function EditAssignment() {
                         />
                     </div>
                     <div className="mb-6">
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-100">Due Date</label>
+                        <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Due Date:</label>
                         <input
                             type="date"
                             name="due_date"
@@ -160,7 +164,7 @@ export default function EditAssignment() {
                         />
                     </div>
 
-                    <h3 className="mb-2">Existing Attachments</h3>
+                    <h3 className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Existing Attachments:</h3>
                     <ul className="mb-4">
                         {formData.attachment_url.map((fileUrl) => (
                             <li key={fileUrl} className="flex items-center justify-between">
@@ -175,7 +179,7 @@ export default function EditAssignment() {
                     </ul>
 
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-100">Upload New Files</label>
+                        <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Upload New Files:</label>
                         <p className='text-red-600'>Upload all previous files, as it will overwrite previous files for multiple uploads.</p>
                         <input type="file" multiple onChange={handleFileChange} className="mt-1" />
                     </div>

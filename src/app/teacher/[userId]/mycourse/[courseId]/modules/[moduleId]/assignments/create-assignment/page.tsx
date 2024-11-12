@@ -44,12 +44,12 @@ export default function CreateAssignment() {
 
     const validateForm = () => {
         const { title, description, total_marks, due_date } = formData;
-        if (!title || !description || !total_marks || !due_date) {
-            setError('Please fill in all required fields.');
+        if (title.trim() === '' || description.trim() === '' || total_marks.trim() === '' || due_date.trim() === '') {
+            setError('Please Fill All Required Fields.');
             return false;
         }
         if (formData.attachments.length === 0) {
-            setError('Please upload at least one file.');
+            setError('Please Upload At Least One File.');
             return false;
         }
         return true;
@@ -104,12 +104,16 @@ export default function CreateAssignment() {
     return (
         <div className='h-screen flex justify-center items-center'>
             <div className="w-full max-w-md mx-auto dark:bg-[#151b23] p-8 shadow-md rounded-lg">
-                <h1 className="text-2xl font-bold mb-6">Add New Assessment</h1>
+                <h1 className="text-2xl font-semibold text-black dark:text-gray-300 mb-4">Add New Assessment</h1>
                 {message && <p className="text-green-500">{message}</p>}
-                {error && <p className="text-red-500">{error}</p>}
+                {error && (
+                    <div className="mb-4 text-red-500 font-semibold text-left">
+                        {error}
+                    </div>
+                )}
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-100">Title</label>
+                        <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Title:</label>
                         <input
                             type="text"
                             name="title"
@@ -121,7 +125,7 @@ export default function CreateAssignment() {
                     </div>
 
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-100">Description</label>
+                        <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Description:</label>
                         <textarea
                             name="description"
                             value={formData.description}
@@ -132,7 +136,7 @@ export default function CreateAssignment() {
                     </div>
 
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-100">Total Marks</label>
+                        <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Total Marks:</label>
                         <input
                             type="number"
                             name="total_marks"
@@ -145,7 +149,7 @@ export default function CreateAssignment() {
                     </div>
 
                     <div className="mb-6">
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-100">Due Date</label>
+                        <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Due Date:</label>
                         <input
                             type="date"
                             name="due_date"
@@ -158,7 +162,7 @@ export default function CreateAssignment() {
                     </div>
 
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-100">Upload Files</label>
+                        <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Upload Files:</label>
                         <input
                             type="file"
                             multiple

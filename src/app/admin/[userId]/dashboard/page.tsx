@@ -147,12 +147,12 @@ export default function CourseDetails() {
                         )}
                     </div>
                 </div>
-                </div>
-                
             </div>
 
+        </div>
 
 
-            );
+
+    );
 };
 

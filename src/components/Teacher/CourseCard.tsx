@@ -90,8 +90,8 @@ const CourseCard: React.FC<CourseCardProps> = ({ courses, userId }) => {
                         onClick={createCourse}
                         className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200"
                     >
-                        <span className="text-lg">+</span>
-                        Add New Course
+                        <span className="text-lg">+ </span>
+                           Add New Course
                     </button>
                 </div>
 

@@ -95,12 +95,15 @@ const Sidebar: React.FC = () => {
     setCoursesVisible(!isCoursesVisible);
     setSectionVisible(!isSectionVisible);
     setActiveSection('courses');
+    setCalender(false)
   };
 
   const toggleDashboardVisibility = () => {
     setActiveSection('dashboard');
     setCoursesVisible(false);
+    setCalender(false)
   }
+
 
   const toggleCalenderSection = () => {
     setCalender(true);

@@ -22,7 +22,7 @@ const EditCourse = () => {
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const [loading, setLoading] = useState(true); // To manage loading state
     const [file, setFile] = useState<File | null>(null); // File state
-    const [error, setError] = useState('');
+    const [error, setError] = useState<string | null>(null);
 
     const firebaseStorageId = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET;
     const defaultCoursePicUrl = `https://firebasestorage.googleapis.com/v0/b/${firebaseStorageId}/o/default-course-pic.png?alt=media`;
@@ -68,10 +68,9 @@ const EditCourse = () => {
         }
     };
 
-    const validateForm = () => {
-        const { title, description, category, teacher_id } = course;
-        if (!title || !description || !category || !teacher_id) {
-            setError('Please fill in all required fields.');
+    const validateForm = () => {        
+        if (course.title.trim() === "" || course.description.trim() === "" || course.category.trim() === "" || course.teacher_id === "") {
+            setError("Please Fill All Required Fields.")
             return false;
         }
         return true;
@@ -108,7 +107,7 @@ const EditCourse = () => {
 
             // Send form data to the backend
             const res = await axios.put(`/api/put/update-course/${courseId}`, formSubmissionData);
-            router.push(`/teacher/${userId}/mycourse/`);
+            router.push(`/teacher/${userId}/dashboard/`);
         } catch (error) {
             setError('An error occurred. Please try again.');
         }
@@ -126,8 +125,8 @@ const EditCourse = () => {
 
             dropdowns.push(
                 <div key={i} className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700">
-                        {i === 0 ? "Top-Level Category" : `Subcategory Level ${i}`}
+                    <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">
+                        {i === 0 ? "Top-Level Category:" : `Subcategory Level ${i}:`}
                     </label>
                     <select
                         value={selectedCategories[i] || ""}
@@ -169,9 +168,14 @@ const EditCourse = () => {
             <div className="w-full max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
                 <h2 className="text-2xl font-bold mb-4">Edit Course</h2>
                 <form onSubmit={handleSubmit}>
+                {error && (
+                    <div className="mb-4 text-red-500 font-semibold text-left">
+                        {error}
+                    </div>
+                )}
                     <div className="mb-4">
-                        <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-                            Course Title
+                        <label htmlFor="title" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">
+                            Course Title:
                         </label>
                         <input
                             type="text"
@@ -185,8 +189,8 @@ const EditCourse = () => {
                     </div>
 
                     <div className="mb-4">
-                        <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-                            Description
+                        <label htmlFor="description" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">
+                            Description:
                         </label>
                         <textarea
                             id="description"
@@ -199,8 +203,8 @@ const EditCourse = () => {
                     </div>
 
                     <div className="mb-4">
-                        <label htmlFor="courseImage" className="block text-sm font-medium">
-                            Course Image (PNG, JPG, JPEG)
+                        <label htmlFor="courseImage" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">
+                            Course Image (PNG, JPG, JPEG):
                         </label>
                         <input
                             type="file"

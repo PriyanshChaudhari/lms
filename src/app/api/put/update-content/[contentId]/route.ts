@@ -44,6 +44,7 @@ export async function PUT(req: NextRequest, { params }: { params: { contentId: s
         const deleteFilesJson = formData.get('deleteFiles') as string;
         const deleteFiles = JSON.parse(deleteFilesJson) as string[];
         const newFiles = formData.getAll('newFiles') as File[];
+        const urlAttachment = formData.get('attachments') as string;
         let attachments: string[] = [];
 
         if (!contentId || !module_id || !title || !content_type || !description) {
@@ -71,13 +72,17 @@ export async function PUT(req: NextRequest, { params }: { params: { contentId: s
         }
 
         // Handle new file uploads
-        if (newFiles && newFiles.length > 0) {
-            for (const file of newFiles) {
-                const arrayBuffer = await file.arrayBuffer();
-                const fileBuffer = new Uint8Array(arrayBuffer);
-                const fileUrl = await uploadFile(fileBuffer, file.name, file.type, contentId, course_id, module_id);
-                updatedAttachments.push(fileUrl); // Add new file to attachments
+        if (content_type === "file") {
+            if (newFiles && newFiles.length > 0) {
+                for (const file of newFiles) {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const fileBuffer = new Uint8Array(arrayBuffer);
+                    const fileUrl = await uploadFile(fileBuffer, file.name, file.type, contentId, course_id, module_id);
+                    updatedAttachments.push(fileUrl); // Add new file to attachments
+                }
             }
+        } else if (content_type === "url" && urlAttachment) {
+            updatedAttachments = [urlAttachment]; // Replace attachments with the URL
         }
 
         // Prepare the data to update

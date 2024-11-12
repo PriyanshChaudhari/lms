@@ -116,7 +116,7 @@ const CreateCategory = () => {
     return (
         <div className='flex h-screen justify-center items-center'>
             <div className="w-full max-w-md mx-auto mt-8 p-6 dark:bg-[#151b23] rounded-lg shadow-md">
-                <h2 className="text-2xl font-bold mb-4">Create a New Category</h2>
+                <h2 className="text-2xl font-semibold text-black dark:text-gray-300 mb-4">Create New Category</h2>
                 <form onSubmit={handleSubmit}>
                     {error && (
                         <div className="mb-4 text-red-500 font-semibold text-left">
