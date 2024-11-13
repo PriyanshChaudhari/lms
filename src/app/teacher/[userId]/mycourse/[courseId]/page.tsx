@@ -71,9 +71,11 @@ const CourseDetails = () => {
         : participantData.filter(
             (item) =>
                 item.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                item.last_name.toLowerCase().includes(searchTerm.toLowerCase())
+                item.last_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.role.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                item.email.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                item.user_id.includes(searchTerm)
         );
-
     useEffect(() => {
         const getCourse = async () => {
             try {

@@ -14,7 +14,7 @@ interface User {
 const ViewUsers = () => {
     const [users, setUsers] = useState<User[]>([]);
     const [isEditMode, setIsEditMode] = useState(false);
-    
+
     const router = useRouter();
     const params = useParams();
     const userId = params.userId as string;
@@ -39,6 +39,19 @@ const ViewUsers = () => {
         const date = new Date(timestamp.seconds * 1000);
         return date.toLocaleDateString();
     };
+
+    const [searchTerm, setSearchTerm] = useState<string>('');
+
+    const filteredParticipants = searchTerm === ''
+        ? users
+        : users.filter(
+            (item) =>
+                item.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.last_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.role.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                item.email.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                item.id.includes(searchTerm)
+        );
 
     const handleEdit = (id: string) => {
         router.push(`/admin/${userId}/edit-user?id=${id}`);
@@ -72,7 +85,7 @@ const ViewUsers = () => {
                 ) : (
                     <div>
                         <div className="mb-4 flex gap-4 justify-end">
-                            <span className="ml-2 text-sm text-gray-700">
+                            <span className="ml-2 text-sm text-gray-700 dark:text-gray-200">
                                 {isEditMode ? 'Edit Mode Enabled' : 'Edit Mode Disabled'}
                             </span>
                             <button
@@ -84,16 +97,22 @@ const ViewUsers = () => {
                                 />
                             </button>
                         </div>
-
+                        <input
+                            type="text"
+                            placeholder="Search participants..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full mb-6 px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg-lg focus:ring-2 focus:ring-blue-500 dark:bg-[#151b23]"
+                        />
                         <table className="min-w-full table-auto">
                             <thead>
                                 <tr>
-                                    <th className="px-4 py-2 text-gray-700 dark:text-gray-300">User ID</th>
-                                    <th className="px-4 py-2 text-gray-700 dark:text-gray-300">First Name</th>
-                                    <th className="px-4 py-2 text-gray-700 dark:text-gray-300">Last Name</th>
-                                    <th className="px-4 py-2 text-gray-700 dark:text-gray-300">Email</th>
-                                    <th className="px-4 py-2 text-gray-700 dark:text-gray-300">Role</th>
-                                    <th className="px-4 py-2 text-gray-700 dark:text-gray-300">Profile Picture</th>
+                                    <th className="border px-4 py-2 text-gray-700 dark:text-gray-300">User ID</th>
+                                    <th className="border px-4 py-2 text-gray-700 dark:text-gray-300">First Name</th>
+                                    <th className="border px-4 py-2 text-gray-700 dark:text-gray-300">Last Name</th>
+                                    <th className="border px-4 py-2 text-gray-700 dark:text-gray-300">Email</th>
+                                    <th className="border px-4 py-2 text-gray-700 dark:text-gray-300">Role</th>
+                                    <th className="border px-4 py-2 text-gray-700 dark:text-gray-300">Profile Picture</th>
                                     {isEditMode && (
                                         <>
                                             <th className="px-4 py-2 text-gray-700 dark:text-gray-300">Edit User</th>
@@ -103,15 +122,15 @@ const ViewUsers = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {users.map((user) => (
+                                {filteredParticipants.map((user) => (
                                     <tr key={user.id}>
-                                        <td className="border px-4 py-2 text-gray-700 dark:text-gray-300">{user.id}</td>
-                                        <td className="border px-4 py-2 text-gray-700 dark:text-gray-300">{user.first_name}</td>
-                                        <td className="border px-4 py-2 text-gray-700 dark:text-gray-300">{user.last_name}</td>
-                                        <td className="border px-4 py-2 text-gray-700 dark:text-gray-300">{user.email}</td>
-                                        <td className="border px-4 py-2 text-gray-700 dark:text-gray-300">{user.role}</td>
-                                        <td className="border px-4 py-2 text-gray-700 dark:text-gray-300">
-                                            <img src={user?.profilePicUrl} alt="Profile Pic" className="border border-gray-300 h-7 w-7 object-cover rounded-full" />
+                                        <td className="border px-4 py-2 text-center text-gray-700 dark:text-gray-300">{user.id}</td>
+                                        <td className="border px-4 py-2 text-center text-gray-700 dark:text-gray-300">{user.first_name}</td>
+                                        <td className="border px-4 py-2 text-center text-gray-700 dark:text-gray-300">{user.last_name}</td>
+                                        <td className="border px-4 py-2 text-center text-gray-700 dark:text-gray-300">{user.email}</td>
+                                        <td className="border px-4 py-2 text-center text-gray-700 dark:text-gray-300">{user.role}</td>
+                                        <td className="border px-4 py-2  text-gray-700 dark:text-gray-300">
+                                            <img src={user?.profilePicUrl} alt="Profile Pic" className="border border-gray-300 h-7 w-7 object-cover rounded-full mx-auto" />
                                         </td>
                                         {isEditMode && (
                                             <>

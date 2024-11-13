@@ -60,6 +60,7 @@ const Sidebar: React.FC = () => {
     setUserSectionVisible(false);
     setCourseSectionVisible(false);
     setGroupSectionVisible(false);
+    setCalender(false)
   };
 
   const toggleCalenderSection = () => {

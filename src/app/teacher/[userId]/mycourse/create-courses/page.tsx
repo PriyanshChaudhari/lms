@@ -8,7 +8,7 @@ import { storage } from "@/lib/firebaseConfig";
 const CreateCourse = () => {
     const params = useParams()
     const router = useRouter()
-    const userId = params.userId;
+    const userId = params.userId as string;
     const [course, setCourse] = useState({
         title: "",
         description: "",
@@ -77,7 +77,7 @@ const CreateCourse = () => {
     };
 
     const validateForm = () => {
-        if (course.title.trim() === "" || course.description.trim() === "" || course.category.trim() === "" || course.teacher_id === "") {
+        if (course.title.trim() === "" || course.description.trim() === "" || course.category.trim() === "" ) {
             setError("Please Fill All Required Fields.")
             return false;
         }

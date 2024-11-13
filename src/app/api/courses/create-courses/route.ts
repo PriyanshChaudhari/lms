@@ -48,7 +48,7 @@ async function uploadFile(
 export async function POST(req: NextRequest) {
     try {
         const formData = await req.formData();
-        const title = formData.get('title') as string;
+        const title = formData.get('title')?.toString().toUpperCase() as string;
         const description = formData.get('description') as string;
         const teacher_id = formData.get('teacher_id') as string;
         const category = formData.get('category') as string;
@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
         const courseRef = {
-            title,
+            title ,
             description,
             teacher_id,
             category,
