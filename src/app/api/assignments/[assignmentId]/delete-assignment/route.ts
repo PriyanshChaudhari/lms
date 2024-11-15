@@ -17,7 +17,7 @@ async function deleteFile(fileUrl: string) {
 
 // Function to delete related documents from a specific collection
 async function deleteRelatedDocuments(assignmentId: string) {
-    const relatedCollectionRef = collection(db, "related_collection_name"); // Replace with actual collection name
+    const relatedCollectionRef = collection(db, "submissions"); // Replace with actual collection name
     const q = query(relatedCollectionRef, where("assignment_id", "==", assignmentId));
     const relatedDocs = await getDocs(q);
 
