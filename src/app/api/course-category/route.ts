@@ -1,5 +1,5 @@
 import { db } from "@/lib/firebaseConfig";
-import { addDoc, collection, doc, updateDoc, deleteDoc } from "firebase/firestore";
+import { addDoc, collection, doc, updateDoc, deleteDoc, getDoc, query, where, getDocs, writeBatch} from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -41,24 +41,50 @@ export async function PUT(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-    try {
-        // Extract the categoryId from the query parameters
-        const { searchParams } = new URL(req.url);
-        const categoryId = searchParams.get("categoryId");
+    const categoryId = req.nextUrl.searchParams.get('id');
 
-        if (!categoryId) {
-            return NextResponse.json({ error: "Category ID is required." }, { status: 400 });
+    if (!categoryId) {
+        return NextResponse.json({ error: 'Category ID is required' }, { status: 400 });
+    }
+
+    try {
+        const categoryRef = doc(db, 'course-category', categoryId);
+        const categorySnap = await getDoc(categoryRef);
+
+        if (!categorySnap.exists()) {
+            return NextResponse.json({ error: 'Category not found' }, { status: 404 });
         }
 
-        // Reference the document in Firestore
-        const categoryRef = doc(db, "course-category", categoryId);
+        // Step 1: Get the parent_category_id of the category to delete
+        const parentCategoryId = categorySnap.data().parent_category_id || null;
 
-        // Delete the category document from Firestore
+        // Step 2: Update related courses' category_id to the parent category if available, else set to null
+        await updateRelatedCourses(categoryId, parentCategoryId);
+
+        // Step 3: Delete the category itself
         await deleteDoc(categoryRef);
+        console.log(`Category with categoryId ${categoryId} deleted successfully.`);
 
-        return NextResponse.json({ message: "Course category deleted successfully." }, { status: 200 });
+        return NextResponse.json({ message: 'Category deleted successfully and related courses updated' }, { status: 200 });
     } catch (error) {
-        console.error("Error deleting course category:", error);
-        return NextResponse.json({ error: "Failed to delete course category." }, { status: 500 });
+        console.error('Error deleting category:', error);
+        return NextResponse.json({ error: 'Failed to delete category' }, { status: 500 });
+    }
+}
+
+// Helper function to update related courses
+async function updateRelatedCourses(categoryId: string, parentCategoryId: string | null) {
+    const batch = writeBatch(db);
+    const coursesRef = collection(db, 'courses');
+    const q = query(coursesRef, where('category', '==', categoryId));
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((docSnap) => {
+        batch.update(docSnap.ref, { category: parentCategoryId }); // Set to parent category ID, or null if no parent exists
+    });
+
+    if (!querySnapshot.empty) {
+        await batch.commit();
+        console.log(`Updated category_id for all courses with categoryId ${categoryId} to ${parentCategoryId || 'null'}.`);
     }
 }
