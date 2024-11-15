@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 interface CalenderComponentProps {
   onClose: () => void;
@@ -10,6 +11,7 @@ const Calendar: React.FC<CalenderComponentProps> = ({ onClose }) => {
   const [events, setEvents] = useState({});
   const [showAddEvent, setShowAddEvent] = useState(false);
   const [newEvent, setNewEvent] = useState({ title: '', description: '' });
+  const userId = sessionStorage.getItem('userId');
 
   const monthNames = [
     "January", "February", "March", "April", "May", "June",
@@ -45,27 +47,117 @@ const Calendar: React.FC<CalenderComponentProps> = ({ onClose }) => {
   };
 
   // Handle event addition
-  const handleAddEvent = () => {
+  // const handleAddEvent = () => {
+  //   if (selectedDate && newEvent.title) {
+  //     setEvents(prev => ({
+  //       ...prev,
+  //       [selectedDate]: [...(prev[selectedDate] || []), newEvent]
+  //     }));
+  //     setNewEvent({ title: '', description: '' });
+  //     setShowAddEvent(false);
+  //   }
+  // };
+
+  const handleAddEvent = async () => {
+    console.log("handling add Event")
     if (selectedDate && newEvent.title) {
-      setEvents(prev => ({
-        ...prev,
-        [selectedDate]: [...(prev[selectedDate] || []), newEvent]
-      }));
-      setNewEvent({ title: '', description: '' });
-      setShowAddEvent(false);
+      const userId = sessionStorage.getItem('userId');
+      try {
+        const response = await axios.post('/api/calendar-events', {
+          eventTitle: newEvent.title,
+          description: newEvent.description,
+          date: selectedDate,
+          createdByUserId: userId,
+          notifiedUserIds: [userId] // Initially notify only the creator
+        });
+
+        if (response.status === 201) {
+          // Refresh events after creation
+          fetchEvents();
+          setNewEvent({ title: '', description: '' });
+          setShowAddEvent(false);
+        }
+      } catch (error) {
+        console.error('Error creating event:', error);
+      }
     }
   };
 
-  // Handle event deletion
-  const handleDeleteEvent = (eventIndex) => {
-    setEvents(prev => ({
-      ...prev,
-      [selectedDate]: prev[selectedDate].filter((_, index) => index !== eventIndex)
-    }));
+  const handleUpdateEvent = async (eventId: string, updatedEvent: any) => {
+    try {
+      const response = await axios.put('/api/calendar-events', {
+        eventId,
+        eventTitle: updatedEvent.title,
+        description: updatedEvent.description,
+        date: selectedDate,
+        notifiedUserIds: updatedEvent.notifiedUserIds
+      });
+
+      if (response.status === 200) {
+        // Refresh events after update
+        fetchEvents();
+      }
+    } catch (error) {
+      console.error('Error updating event:', error);
+    }
   };
 
+
+  // Handle event deletion
+  // const handleDeleteEvent = (eventIndex) => {
+  //   setEvents(prev => ({
+  //     ...prev,
+  //     [selectedDate]: prev[selectedDate].filter((_, index) => index !== eventIndex)
+  //   }));
+  // };
+
+  const handleDeleteEvent = async (eventId: string) => {
+    try {
+      const response = await axios.delete(`/api/calendar-events?eventId=${eventId}`);
+
+      if (response.status === 200) {
+        // Refresh events after deletion
+        fetchEvents();
+      }
+    } catch (error) {
+      console.error('Error deleting event:', error);
+    }
+  };
+
+
+  const fetchEvents = async () => {
+    try {
+      const response = await axios.get(`/api/get/calendar-events/by-userid?userId=${userId}`);
+      if (response.status === 200) {
+        const formattedEvents = response.data.reduce((acc, event) => {
+          // Ensure the date is properly parsed before converting to ISO string
+          const eventDate = new Date(event.date.seconds * 1000); // Convert Firestore timestamp to JS Date
+          const dateKey = eventDate.toISOString().split('T')[0];
+
+          if (!acc[dateKey]) acc[dateKey] = [];
+          acc[dateKey].push({
+            id: event.id,
+            title: event.event_title,
+            description: event.description,
+            notifiedUserIds: event.notified_user_ids
+          });
+          return acc;
+        }, {});
+        setEvents(formattedEvents);
+      }
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    }
+  };
+
+
+  // // Fetch events when component mounts or userId changes
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
   return (
-    <div  className="fixed  bottom-0 right-0 m-4 w-full max-w-sm transform translate-y-full animate-slide-in ">
+    <div className="fixed  bottom-0 right-0 m-4 w-full max-w-sm transform translate-y-full animate-slide-in ">
       <div className="relative w-full max-w-sm mx-auto p-4 bg-gray-100 dark:bg-[#151b23] rounded-lg shadow-2xl ">
         {/* Calendar Header */}
         <div className="flex items-center justify-between mb-4">
@@ -143,7 +235,7 @@ const Calendar: React.FC<CalenderComponentProps> = ({ onClose }) => {
           )}
           {showAddEvent && (
             < >
-             
+
             </>
           )}
 
@@ -193,7 +285,7 @@ const Calendar: React.FC<CalenderComponentProps> = ({ onClose }) => {
                     <p className="text-gray-600 dark:text-gray-400 text-xs">{event.description}</p>
                   </div>
                   <div className=" grid grid-cols-2 gap-4 items-center justify-center mx-auto">
-                    <p onClick={() => handleDeleteEvent(index)} className="bg-red-500 hover:bg-red-600 text-white flex p-2 justify-center items-center cursor-pointer">
+                    <p onClick={() => handleDeleteEvent(event.id)} className="bg-red-500 hover:bg-red-600 text-white flex p-2 justify-center items-center cursor-pointer">
                       Delete 🗑️
                     </p>
                     <p className="bg-green-500 hover:bg-green-600 text-white flex p-2 justify-center items-center cursor-pointer">
