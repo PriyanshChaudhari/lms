@@ -1,4 +1,4 @@
-import { deleteRelatedAssignments, deleteRelatedContent, logAuditAction } from "@/lib/cascadehelper";
+import { deleteRelatedAssignments, deleteRelatedContent, logAuditAction } from "@/lib/cascadeHelper";
 import { db } from "@/lib/firebaseConfig";
 import { doc, deleteDoc } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";

@@ -2,7 +2,7 @@ import { db, storage } from "@/lib/firebaseConfig";
 import { doc, deleteDoc, getDoc } from "firebase/firestore";
 import { ref, deleteObject } from "firebase/storage";
 import { NextRequest, NextResponse } from "next/server";
-import { deleteRelatedModules, logAuditAction} from "@/lib/cascadehelper";
+import { deleteRelatedModules, logAuditAction} from "@/lib/cascadeHelper";
 
 // The handler for the DELETE request
 export async function DELETE(req: NextRequest, { params }: { params: { courseId: string } }) {
