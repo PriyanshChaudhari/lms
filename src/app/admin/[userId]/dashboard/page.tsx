@@ -56,50 +56,50 @@ const UserTable = ({
             )
         );
 
-        async function getUserCoursesAndCount(userId: string) {
-            // Query the 'enrolled_at' collection to find all documents with the given userId
-            const enrollmentsQuery = query(
-                collection(db, 'enrolled_at'),
-                where('user_id', '==', userId)  // Filtering by userId
-            );
-    
-            try {
-                const enrollmentsSnapshot = await getDocs(enrollmentsQuery);
-    
-                // If no documents are found, the user is not enrolled in any course
-                if (enrollmentsSnapshot.empty) {
-                    console.log('User is not enrolled in any courses');
-                    return { courses: [], count: 0 };
-                }
-    
-                // Retrieve the course_ids from the enrolled documents
-                const courses = enrollmentsSnapshot.docs.map(doc => doc.data().course_id);
-    
-                // Count the number of courses the user is enrolled in
-                const courseCount = courses.length;
-    
-                // Optionally, you can fetch detailed information about each course by querying the 'courses' collection
-                // Example: Query courses collection if you want more details about each course
-                const courseDetails = await Promise.all(
-                    courses.map(async (courseId) => {
-                        const courseDoc = await getDoc(doc(db, 'courses', courseId));
-                        if (courseDoc.exists()) {
-                            return { id: courseDoc.id, ...courseDoc.data() };
-                        } else {
-                            return null; // In case course info is not found
-                        }
-                    })
-                );
-    
-                // Filter out any null values if some courses couldn't be fetched
-                const validCourses = courseDetails.filter(course => course !== null);
-    
-                return { courses: validCourses, count: courseCount };
-            } catch (error) {
-                console.error('Error fetching user courses:', error);
+    async function getUserCoursesAndCount(userId: string) {
+        // Query the 'enrolled_at' collection to find all documents with the given userId
+        const enrollmentsQuery = query(
+            collection(db, 'enrolled_at'),
+            where('user_id', '==', userId)  // Filtering by userId
+        );
+
+        try {
+            const enrollmentsSnapshot = await getDocs(enrollmentsQuery);
+
+            // If no documents are found, the user is not enrolled in any course
+            if (enrollmentsSnapshot.empty) {
+                console.log('User is not enrolled in any courses');
                 return { courses: [], count: 0 };
             }
+
+            // Retrieve the course_ids from the enrolled documents
+            const courses = enrollmentsSnapshot.docs.map(doc => doc.data().course_id);
+
+            // Count the number of courses the user is enrolled in
+            const courseCount = courses.length;
+
+            // Optionally, you can fetch detailed information about each course by querying the 'courses' collection
+            // Example: Query courses collection if you want more details about each course
+            const courseDetails = await Promise.all(
+                courses.map(async (courseId) => {
+                    const courseDoc = await getDoc(doc(db, 'courses', courseId));
+                    if (courseDoc.exists()) {
+                        return { id: courseDoc.id, ...courseDoc.data() };
+                    } else {
+                        return null; // In case course info is not found
+                    }
+                })
+            );
+
+            // Filter out any null values if some courses couldn't be fetched
+            const validCourses = courseDetails.filter(course => course !== null);
+
+            return { courses: validCourses, count: courseCount };
+        } catch (error) {
+            console.error('Error fetching user courses:', error);
+            return { courses: [], count: 0 };
         }
+    }
 
     const [userCourses, setUserCourses] = useState<any>({}); // Store courses per user
 
@@ -213,7 +213,7 @@ export default function Dashboard() {
     const admins = users.filter((user) => user.role === 'Admin');
     const students = users.filter((user) => user.role === 'Student');
 
-    
+
 
     async function fetchParticipantCount(course_id: string) {
         if (participantCounts[course_id] === undefined) {

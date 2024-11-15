@@ -17,9 +17,9 @@ export async function PUT(req: NextRequest, { params }: { params: { userId: stri
 
         const updateData = {
             email: email,
-            first_name: first_name,
-            last_name: last_name,
-            role: role,
+            first_name: capitalizeName(first_name),
+            last_name: capitalizeName(last_name),
+            role: capitalizeName(role),
         };
         console.log("updated data: ",updateData)
 
@@ -32,3 +32,7 @@ export async function PUT(req: NextRequest, { params }: { params: { userId: stri
         return NextResponse.json({ error: 'Failed to update user' }, { status: 500 });
     }
 }
+
+const capitalizeName = (name: string) => {
+    return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+};
