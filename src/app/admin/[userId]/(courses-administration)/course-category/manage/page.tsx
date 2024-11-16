@@ -3,6 +3,7 @@ import React, { useState, useEffect, ChangeEvent } from 'react';
 import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
 import { CACHE_ONE_YEAR } from 'next/dist/lib/constants';
+import { MdDeleteForever, MdModeEdit } from 'react-icons/md';
 
 interface Category {
     id: string;
@@ -27,8 +28,10 @@ const ManageCategories = () => {
     const [editingCategory, setEditingCategory] = useState<Category | null>(null);
     const [deletingCategoryId, setDeletingCategoryId] = useState<string | null>(null);
     const router = useRouter();
-
+    const [loading, setLoading] = useState<boolean>(true);
+    const [courseLoading, setCourseLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [searchTerm, setSearchTerm] = useState<string>('');
 
     useEffect(() => {
         fetchCategories();
@@ -44,6 +47,7 @@ const ManageCategories = () => {
         try {
             const res = await axios.get('/api/get/categories');
             setCategories(res.data.categories);
+            setLoading(false)
             console.log(categories)
 
         } catch (error) {
@@ -55,6 +59,7 @@ const ManageCategories = () => {
         try {
             const res = await axios.get(`/api/get/courses/categoryId?categoryId=${categoryId}`);
             setCourses(res.data);
+            setCourseLoading(false)
         } catch (error) {
             console.error('Error fetching courses:', error);
         }
@@ -62,6 +67,7 @@ const ManageCategories = () => {
 
     const handleCategoryClick = (categoryId: string) => {
         setSelectedCategory(categoryId);
+
     };
 
     // Open the edit modal
@@ -125,29 +131,40 @@ const ManageCategories = () => {
     const renderCategoryTree = (parentId: string | null = null, level: number = 0) => {
         const filteredCategories = categories.filter(cat => cat.parent_category_id === parentId);
 
+        const filteredCategory = searchTerm === ''
+            ? filteredCategories
+            : filteredCategories.filter(
+                (item) =>
+                    item.category_name.toLowerCase().includes(searchTerm.toLowerCase())
+
+            );
+
         return (
             <ul className={`space-y-2 ${level > 0 ? 'ml-4' : ''}`}>
-                {filteredCategories.map(category => (
+                {filteredCategory.map(category => (
                     <li key={category.id} className='space-y-2'>
-                        <div className="flex items-center justify-between p-2 border rounded-lg">
+                        <div className={`flex items-center justify-between p-2 border rounded-lg ${selectedCategory === category.id ? 'bg-gray-100 text-blue-500 font-semibold' : ''
+                            }`}>
                             <span
                                 className="cursor-pointer hover:text-blue-600"
                                 onClick={() => handleCategoryClick(category.id)}
                             >
                                 {category.category_name}
                             </span>
-                            <div>
+                            <div className="flex">
                                 <button
                                     onClick={() => handleEdit(category)}
-                                    className="mr-2 px-2 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                                    className="mr-2 py-2 bg-blue-500 hover:bg-blue-600 text-white flex items-center gap-1  px-3 rounded-[9px] transition-all duration-200 ease-in-out transform focus:outline-none"
                                 >
                                     Edit
+                                    <MdModeEdit className="text-white text-lg" />
                                 </button>
                                 <button
                                     onClick={() => handleDelete(category.id)}
-                                    className="px-2 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                                    className="mr-2 py-2 bg-red-500 hover:bg-red-600 text-white flex items-center gap-1 px-3 rounded-[9px] transition-all duration-200 ease-in-out transform focus:outline-none"
                                 >
                                     Delete
+                                    <MdDeleteForever className="text-white text-lg" />
                                 </button>
                             </div>
                         </div>
@@ -164,13 +181,21 @@ const ManageCategories = () => {
             <div className="flex">
                 <div className="w-1/2 pr-4">
                     <h2 className="text-xl font-semibold mb-2">Categories</h2>
-                    {renderCategoryTree()}
+                    <input
+                        type="text"
+                        placeholder="Search Category..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full mb-6 px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg-lg focus:ring-2 focus:ring-blue-500 dark:bg-[#151b23]"
+                    />
+                    {loading ? (<div>Loading...</div>) : (renderCategoryTree())}
                 </div>
+
                 <div className="w-1/2 pl-4">
                     <h2 className="text-xl font-semibold mb-2">Courses</h2>
                     {selectedCategory ? (
                         <ul className="space-y-2">
-                            {courses.length > 0 ? (
+                            {courseLoading ? (<div>Loading..</div>) : (courses.length > 0 ? (
                                 courses.map(course => (
                                     <li key={course.id} className="p-2 border rounded-lg">
                                         {course.title}
@@ -180,7 +205,7 @@ const ManageCategories = () => {
                                 <li className="p-2 border rounded-lg">
                                     This category has no courses.
                                 </li>
-                            )}
+                            ))}
                         </ul>
                     ) : (
                         <p>Select a category to view courses</p>

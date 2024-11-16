@@ -3,6 +3,8 @@ import axios from 'axios';
 import { group } from 'console';
 import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { MdModeEdit } from "react-icons/md";
+import { MdDeleteForever } from "react-icons/md";
 
 interface Group {
     id: string;
@@ -14,11 +16,14 @@ const Groups = () => {
     const userId = params.userId as string;
     const [groups, setGroups] = useState<Group[]>([]);
     const router = useRouter();
+    const [loading, setLoading] = useState<boolean>(true);
+
 
     const getGroups = async () => {
         try {
             const res = await axios.get('/api/groups'); // Added leading slash to the API path
             setGroups(res.data.groups); // Make sure `groups` key exists in the response
+            setLoading(false)
         } catch (error) {
             console.error('Error fetching groups:', error);
         }
@@ -28,6 +33,14 @@ const Groups = () => {
         getGroups();
     }, [])
 
+    const [searchTerm, setSearchTerm] = useState<string>('');
+
+    const filteredGroups = searchTerm === ''
+        ? groups
+        : groups.filter(
+            (item) =>
+                item.group_name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
 
     const handleClick = (groupId: string) => {
         router.push(`/admin/${userId}/groups/${groupId}`)
@@ -64,29 +77,59 @@ const Groups = () => {
                         </button>
                     </div> */}
                 </div>
-
-
-                {/* Display group members */}
-                <table className="min-w-full   border border-gray-300 rounded-lg-lg">
-                    <thead>
-                        <tr className="text-center">
-                            <th className="px-4 py-2 border-b font-semibold ">Name</th>
-                            <th className="px-4 py-2 border-b font-semibold ">Edit Group</th>
-                            <th className="px-4 py-2 border-b font-semibold ">Delete Group</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {groups.map(group => (
-                            <tr key={group.id} className="text-center">
-                                <td onClick={() => handleClick(group.id)} className="px-4 py-2 border-b hover:underline cursor-pointer">{group.group_name}</td>
-                                <td className="px-4 py-2 border-b"><button onClick={() => handleEditGroup(group.id)}>Edit group</button></td>
-                                <td className="px-4 py-2 border-b"><button className='bg-red-500 hover:bg-red-600 text-sm text-white p-1 rounded-lg' onClick={() => handleDeleteGroup(group.id)}>Delete</button></td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-
-
+                <input
+                    type="text"
+                    placeholder="Search Groups..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full mb-6 px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg-lg focus:ring-2 focus:ring-blue-500 dark:bg-[#151b23]"
+                />
+                {loading ?
+                    (<div>Loading..</div>) : (
+                        <table className="min-w-full border border-gray-300 rounded-lg-lg">
+                            <thead>
+                                <tr className="text-center">
+                                    <th className="border px-4 py-2 border-b font-semibold dark:text-gray-300">Name</th>
+                                    <th className="border px-4 py-2 border-b font-semibold dark:text-gray-300">Edit Group</th>
+                                    <th className="border px-4 py-2 border-b font-semibold dark:text-gray-300">Delete Group</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {filteredGroups.map((group) => (
+                                    <tr key={group.id}>
+                                        <td
+                                            onClick={() => handleClick(group.id)}
+                                            className="border px-4 py-2 border-b hover:underline cursor-pointer text-center"
+                                        >
+                                            {group.group_name}
+                                        </td>
+                                        <td className="border px-4 py-2 border-b text-center">
+                                            <div className="flex justify-center items-center">
+                                                <button
+                                                    className="bg-blue-500 hover:bg-blue-600 text-white flex items-center gap-2 py-2 px-5 rounded-[9px] transition-all duration-200 ease-in-out transform focus:outline-none"
+                                                    onClick={() => handleEditGroup(group.id)}
+                                                >
+                                                    Edit
+                                                    <MdModeEdit className="text-white text-lg" />
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td className="border px-4 py-2 border-b text-center">
+                                            <div className="flex justify-center items-center">
+                                                <button
+                                                    className="bg-red-500 hover:bg-red-600 text-white flex items-center gap-2 py-2 px-5 rounded-[9px] transition-all duration-200 ease-in-out transform focus:outline-none"
+                                                    onClick={() => handleDeleteGroup(group.id)}
+                                                >
+                                                    Delete
+                                                    <MdDeleteForever className="text-white text-lg" />
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    )}
             </div>
         </div>
     );

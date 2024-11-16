@@ -1,6 +1,9 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import TableSkeleton from './TableSkeleton';
+import { FaUserEdit } from "react-icons/fa";
+import { TiUserDelete } from "react-icons/ti";
 
 interface User {
     id: string;
@@ -14,6 +17,7 @@ interface User {
 const ViewUsers = () => {
     const [users, setUsers] = useState<User[]>([]);
     const [isEditMode, setIsEditMode] = useState(false);
+    const [loading, setLoading] = useState<boolean>(true);
 
     const router = useRouter();
     const params = useParams();
@@ -24,6 +28,7 @@ const ViewUsers = () => {
             const response = await fetch('/api/get/users');
             const data = await response.json();
             setUsers(data);
+            setLoading(false);
             console.log(data);
         } catch (error) {
             console.error('Error fetching users:', error);
@@ -48,8 +53,8 @@ const ViewUsers = () => {
             (item) =>
                 item.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 item.last_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                item.role.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                item.email.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                item.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 item.id.includes(searchTerm)
         );
 
@@ -80,8 +85,9 @@ const ViewUsers = () => {
         <div className="bg-gray-50 dark:dark:bg-[#212830] min-h-screen flex items-center justify-center p-6">
             <div className="bg-white dark:bg-[#151b23] p-8 rounded-lg-lg shadow-md w-full max-w-6xl">
                 <h2 className="text-2xl font-semibold mb-4 text-black dark:text-gray-300 text-center">View Users</h2>
-                {users.length === 0 ? (
-                    <p className="text-gray-700 dark:text-gray-300 text-center">No users available</p>
+                {loading ? (
+                    <TableSkeleton rows={5} columns={6} isEditMode={isEditMode} />
+                    // <div>Loading....</div>
                 ) : (
                     <div>
                         <div className="mb-4 flex gap-4 justify-end">
@@ -115,8 +121,8 @@ const ViewUsers = () => {
                                     <th className="border px-4 py-2 text-gray-700 dark:text-gray-300">Profile Picture</th>
                                     {isEditMode && (
                                         <>
-                                            <th className="px-4 py-2 text-gray-700 dark:text-gray-300">Edit User</th>
-                                            <th className="px-4 py-2 text-gray-700 dark:text-gray-300">Delete User</th>
+                                            <th className="border px-4 py-2 text-gray-700 dark:text-gray-300">Edit User</th>
+                                            <th className="border px-4 py-2 text-gray-700 dark:text-gray-300">Delete User</th>
                                         </>
                                     )}
                                 </tr>
@@ -134,11 +140,33 @@ const ViewUsers = () => {
                                         </td>
                                         {isEditMode && (
                                             <>
-                                                <td className="px-4 py-2 border border-gray-300">
+                                                {/* <td className="px-4 py-2 border border-gray-300">
                                                     <button className="text-blue-500 bg-transparent px-3 py-1  rounded-lg" onClick={() => handleEdit(user.id)}>Edit</button>
+                                                </td> */}
+                                                <td className="border px-4 py-2 border-b text-center">
+                                                    <div className="flex justify-center items-center">
+                                                        <button
+                                                            className="bg-blue-500 hover:bg-blue-600 text-white flex items-center gap-2 py-2 px-5 rounded-[9px] transition-all duration-200 ease-in-out transform focus:outline-none"
+                                                            onClick={() => handleEdit(user.id)}
+                                                        >
+                                                            Edit
+                                                            <FaUserEdit className="text-white text-lg" />
+                                                        </button>
+                                                    </div>
                                                 </td>
-                                                <td className="px-4 py-2 border border-gray-300">
+                                                {/* <td className="px-4 py-2 border border-gray-300">
                                                     <button className="text-red-500 bg-transparent px-3 py-1  rounded-lg" onClick={() => handleDelete(user.id)}>Delete</button>
+                                                </td> */}
+                                                <td className="border px-4 py-2 border-b text-center">
+                                                    <div className="flex justify-center items-center">
+                                                        <button
+                                                            className="bg-red-500 hover:bg-red-600 text-white flex items-center gap-2 py-2 px-5 rounded-[9px] transition-all duration-200 ease-in-out transform focus:outline-none"
+                                                            onClick={() => handleDelete(user.id)}
+                                                        >
+                                                            Delete
+                                                            <TiUserDelete className="text-white text-xl" />
+                                                        </button>
+                                                    </div>
                                                 </td>
                                             </>
                                         )}
