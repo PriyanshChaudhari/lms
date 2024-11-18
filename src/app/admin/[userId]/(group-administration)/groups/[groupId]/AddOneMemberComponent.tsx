@@ -48,15 +48,15 @@ const AddOneMemberComponent: React.FC<AddOneMemberComponentProps> = ({ onClose }
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div className="relative w-full max-w-md mx-auto p-6 bg-gray-50 dark:bg-[#151b23] rounded-lg-lg shadow-md ">
-                <h1 className="text-2xl font-semibold text-center mb-6">Add Group Member</h1>
+                <h1 className="text-2xl font-semibold text-left mb-6">Add Group Member</h1>
 
                 {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}
                 {successMessage && <p className="text-green-500 text-center mb-4">{successMessage}</p>}
 
                 <form onSubmit={handleAddUser} className="mb-6">
                     <div className="mb-4">
-                        <label htmlFor="userId" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Add User by Id
+                        <label htmlFor="userId" className="block text-left text-gray-700 dark:text-gray-300 font-semibold mb-2">
+                            Add User By Id:
                         </label>
                         <input
                             type="text"

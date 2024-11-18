@@ -14,7 +14,10 @@ export async function POST(req: NextRequest) {
         console.log('Received data:', jsonData);
 
         // Access the userIds array from the request
-        const userIds = jsonData.userIds;
+        const userIds = jsonData.userId;
+        if (!Array.isArray(userIds)) {
+            throw new Error("Invalid userIds format. Expected an array.");
+        }
         console.log('Processing userIds:', userIds);
 
         // Call the batch deletion function

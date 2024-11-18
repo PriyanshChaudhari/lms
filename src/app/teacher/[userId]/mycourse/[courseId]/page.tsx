@@ -28,7 +28,7 @@ interface modules {
     course_id: string;
     title: string;
     description: string;
-    position: number;
+    created_at: Date
 }
 
 interface assignments {
@@ -72,8 +72,8 @@ const CourseDetails = () => {
             (item) =>
                 item.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 item.last_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                item.role.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                item.email.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                item.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 item.user_id.includes(searchTerm)
         );
     useEffect(() => {
@@ -125,7 +125,11 @@ const CourseDetails = () => {
         return date.toLocaleDateString(); // Format the date as a readable string
     };
 
-    const sortedModules = courseModules.sort((a, b) => a.position - b.position);
+    const sortedModules = courseModules.sort((a, b) => {
+        const dateA = new Date(a.created_at);
+        const dateB = new Date(b.created_at);
+        return dateB - dateA; // Ascending order (earliest to latest)
+    });
 
     const handleModuleClick = (moduleId: string) => {
         router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}`);
@@ -213,7 +217,7 @@ const CourseDetails = () => {
                                         <div className="flex items-center justify-between p-6">
                                             <span className="flex items-center gap-6">
                                                 <span className="w-8 h-8 flex items-center justify-center bg-blue-100 text-blue-600 rounded-full">
-                                                    {module.position}
+                                                    
                                                 </span>
                                                 <div>
                                                     <h3 className="font-semibold text-lg text-gray-900 dark:text-white">
@@ -372,8 +376,8 @@ const CourseDetails = () => {
                                                     setShowAddTeacher(false);
                                                 }}
                                                 className={`px-4 py-2 rounded-lg-lg transition-colors ${showAddStudent
-                                                        ? 'bg-blue-500 text-white'
-                                                        : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
+                                                    ? 'bg-blue-500 text-white'
+                                                    : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
                                                     }`}
                                             >
                                                 Add Student
@@ -384,8 +388,8 @@ const CourseDetails = () => {
                                                     setShowAddTeacher(true);
                                                 }}
                                                 className={`px-4 py-2 rounded-lg-lg transition-colors ${showAddTeacher
-                                                        ? 'bg-blue-500 text-white'
-                                                        : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
+                                                    ? 'bg-blue-500 text-white'
+                                                    : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
                                                     }`}
                                             >
                                                 Add Teacher

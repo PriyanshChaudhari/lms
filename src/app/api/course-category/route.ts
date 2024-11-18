@@ -41,7 +41,7 @@ export async function PUT(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-    const categoryId = req.nextUrl.searchParams.get('id');
+    const categoryId = req.nextUrl.searchParams.get('categoryId');
 
     if (!categoryId) {
         return NextResponse.json({ error: 'Category ID is required' }, { status: 400 });

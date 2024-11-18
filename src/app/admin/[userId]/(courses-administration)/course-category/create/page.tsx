@@ -70,7 +70,7 @@ const CreateCategory = () => {
 
                 // Optionally, show a success message
                 alert("Category created successfully!");
-                router.push(`/admin/${userId}/dashboard`);
+                router.push(`/admin/${userId}/course-category/manage`);
             } catch (error) {
                 console.error(error);
                 // Optionally, show an error message

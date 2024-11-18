@@ -5,11 +5,12 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
     try {
         const { title, description, course_id } = await req.json();
-        if(!title || !description || !course_id){
-            return NextResponse.json({message:'missing required fields',status:'400'})
+        if (!title || !description || !course_id) {
+            return NextResponse.json({ message: 'missing required fields', status: '400' })
         }
+        const newTitle = title.toString().toUpperCase()
         const docRef = await addDoc(collection(db, 'course-module'), {
-            title,
+            title: newTitle,
             description,
             course_id,
             created_at: Timestamp.now()

@@ -184,10 +184,7 @@ export default function ViewModule() {
                 </nav>
 
                 <div className="space-y-6">
-
-
                     <div>
-
                         <div className="grid gap-4 ">
                             <div
                                 key={module.id}
@@ -200,7 +197,7 @@ export default function ViewModule() {
                                 <div className='flex justify-start gap-10 max-w-lg'>
                                     <button
                                         className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
-                                        onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments`)} // Replace with your add module logic
+                                        onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments`)} 
                                     >
                                         Assignments
                                     </button>

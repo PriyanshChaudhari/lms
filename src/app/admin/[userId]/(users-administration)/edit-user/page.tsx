@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect, ChangeEvent } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams, useRouter, useParams } from 'next/navigation';
 import axios from 'axios';
 
 interface User {
@@ -13,8 +13,10 @@ interface User {
 
 const EditUser = () => {
     const router = useRouter();
+    const params = useParams();
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
+    const userId = params.userId as string;
 
     const [user, setUser] = useState<User>({
         id: "",
@@ -88,7 +90,7 @@ const EditUser = () => {
 
                 if (response.status === 200) {
                     console.log('User updated successfully');
-                    router.push('/admin/dashboard');
+                    router.push(`/admin/${userId}/view-users`);
                 } else {
                     setError(response.data.error || 'Error updating user');
                 }

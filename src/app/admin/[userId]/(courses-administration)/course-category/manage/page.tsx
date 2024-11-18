@@ -2,7 +2,6 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
-import { CACHE_ONE_YEAR } from 'next/dist/lib/constants';
 import { MdDeleteForever, MdModeEdit } from 'react-icons/md';
 
 interface Category {
@@ -119,7 +118,9 @@ const ManageCategories = () => {
         if (!deletingCategoryId) return;
 
         try {
+            console.log((deletingCategoryId))
             await axios.delete(`/api/course-category?categoryId=${deletingCategoryId}`);
+
             alert("Category has been deleted successfully.");
             setIsDeleteModalOpen(false);
             fetchCategories();

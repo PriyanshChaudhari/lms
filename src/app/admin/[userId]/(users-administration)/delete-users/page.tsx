@@ -1,13 +1,15 @@
 "use client"
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import axios from 'axios';
 
 const ExcelDeleteUploader = () => {
     const [file, setFile] = useState<File | null>(null);
     const [error, setError] = useState<string>('');
     const [isDeleted, setIsDeleted] = useState<boolean>(false);
+    const params = useParams()
+    const userId = params.userId as string
 
     const router = useRouter();
 
@@ -44,13 +46,14 @@ const ExcelDeleteUploader = () => {
                 console.log(JSON.stringify(userIds) )
                 try {
                     // Send request to delete users by userId
-                    const response = await axios.post('/api/auth/delete-users', userIds, {
+                    const response = await axios.post('/api/auth/delete-users',  { userId: userIds }, {
                         headers: { 'Content-Type': 'application/json' },
                     });
 
                     if (response.status === 200) {
                         alert('Users deleted successfully');
                         setIsDeleted(true);
+                        router.push(`/admin/${userId}/view-users`)
                         console.log('Users deleted successfully');
                     } else {
                         alert('Failed to delete users');
@@ -58,6 +61,7 @@ const ExcelDeleteUploader = () => {
                     }
                 } catch (error) {
                     console.error('Error deleting users:', error);
+                    setError("Error deleting Users")
                 }
             }
         };

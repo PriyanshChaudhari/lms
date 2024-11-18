@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { MdModeEdit } from "react-icons/md";
 import { MdDeleteForever } from "react-icons/md";
+import { TiGroup } from "react-icons/ti";
 
 interface Group {
     id: string;
@@ -86,10 +87,11 @@ const Groups = () => {
                 />
                 {loading ?
                     (<div>Loading..</div>) : (
-                        <table className="min-w-full border border-gray-300 rounded-lg-lg">
+                        <table className="min-w-full border border-gray-300 rounded-lg">
                             <thead>
                                 <tr className="text-center">
                                     <th className="border px-4 py-2 border-b font-semibold dark:text-gray-300">Name</th>
+                                    <th className="border px-4 py-2 border-b font-semibold dark:text-gray-300">View Group</th>
                                     <th className="border px-4 py-2 border-b font-semibold dark:text-gray-300">Edit Group</th>
                                     <th className="border px-4 py-2 border-b font-semibold dark:text-gray-300">Delete Group</th>
                                 </tr>
@@ -98,10 +100,21 @@ const Groups = () => {
                                 {filteredGroups.map((group) => (
                                     <tr key={group.id}>
                                         <td
-                                            onClick={() => handleClick(group.id)}
-                                            className="border px-4 py-2 border-b hover:underline cursor-pointer text-center"
+                                            
+                                            className="border px-4 py-2 border-b text-center"
                                         >
                                             {group.group_name}
+                                        </td>
+                                        <td className="border px-4 py-2 border-b text-center">
+                                            <div className="flex justify-center items-center">
+                                                <button
+                                                    className="bg-yellow-500 hover:bg-yellow-600 text-white flex items-center gap-2 py-2 px-5 rounded-[9px] transition-all duration-200 ease-in-out transform focus:outline-none"
+                                                    onClick={() => handleClick(group.id)}
+                                                >
+                                                    View 
+                                                    <TiGroup className="text-white text-lg" />
+                                                </button>
+                                            </div>
                                         </td>
                                         <td className="border px-4 py-2 border-b text-center">
                                             <div className="flex justify-center items-center">

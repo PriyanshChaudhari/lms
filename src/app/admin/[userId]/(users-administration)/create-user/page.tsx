@@ -36,7 +36,7 @@ const CreateUser = () => {
                 // Check if the response status indicates success
                 if (response.status === 201) {
                     console.log('User created successfully');
-                    router.push(`/admin/${userId}/(user-administration)/create-user`);
+                    router.push(`/admin/${userId}/view-users`);
                 } else {
                     setError(response.data.error || 'Error creating user'); // Set error message if response status is not 201
                 }

@@ -4,13 +4,12 @@ import { addDoc, collection, query, where, getDocs } from "firebase/firestore";
 
 export async function POST(req: NextRequest) {
     try {
-        const { group_name } = await req.json();
+        const group_name = (await req.json()).group_name.toString().toUpperCase();
         console.log(group_name);
 
         if (!group_name) {
             return NextResponse.json({ success: false, message: 'Group name is required' }, { status: 400 });
         }
-
         // Query to check if the group already exists
         const groupQuery = query(collection(db, 'groups'), where('group_name', '==', group_name));
         const groupSnapshot = await getDocs(groupQuery);

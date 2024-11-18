@@ -12,9 +12,9 @@ export async function DELETE(req: NextRequest, { params }: { params: { courseId:
             return NextResponse.json({ error: "Course ID is required" }, { status: 400 });
         }
 
-        await logAuditAction('DELETE_COURSE', courseId, 'Deleting course and related data');
+        // await logAuditAction('DELETE_COURSE', courseId, 'Deleting course and related data');
 
-        await deleteRelatedModules(courseId);
+        // await deleteRelatedModules(courseId);
 
         const courseRef = doc(db, "courses", courseId);
         const courseDoc = await getDoc(courseRef);
