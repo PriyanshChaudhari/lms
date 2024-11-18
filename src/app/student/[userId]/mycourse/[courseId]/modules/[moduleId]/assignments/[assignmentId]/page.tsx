@@ -182,11 +182,7 @@ export default function ViewModuleAssignment() {
 
                 <nav className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm mb-8">
                     <ul className="flex p-2 gap-2">
-                        <li className="p-3 rounded-lg-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/student/${userId}/mycourse/${courseId}`)}>{courses?.title}</li>
-                        <li className="p-3 rounded-lg-xl text-black cursor-pointer">/</li>
-                        <li className="p-3 rounded-lg-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/student/${userId}/mycourse/${courseId}/modules/${moduleId}`)}>Module {oneModule?.title}</li>
-                        <li className="p-3 rounded-lg-xl text-black cursor-pointer">/</li>
-                        <li className="p-3 rounded-lg-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/student/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments`)}>Assignments</li>
+                        <li className="p-3 rounded-lg-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/student/${userId}/mycourse/${courseId}?section=assignments`)}>{courses?.title}</li>
                         <li className="p-3 rounded-lg-xl text-black cursor-pointer">/</li>
                         <li className="p-3 rounded-lg-xl text-black cursor-pointer">{oneAssignment?.title}</li>
                     </ul>
@@ -198,7 +194,7 @@ export default function ViewModuleAssignment() {
                     <div>
 
                         <div className="grid gap-4 ">
-                            
+
 
                             <div>
                                 <div className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm hover:shadow-md transition-shadow flex items-center justify-between p-6">
@@ -212,11 +208,11 @@ export default function ViewModuleAssignment() {
                                         ></iframe>
 
                                         {oneAssignment?.attachment_url && (
-                                           <div className="flex justify-center items-center">
-                                             <a href={oneAssignment.attachment_url} className="block mt-2 text-blue-600 hover:underline">
-                                                Download Attachment
-                                            </a>
-                                           </div>
+                                            <div className="flex justify-center items-center">
+                                                <a href={oneAssignment.attachment_url} className="block mt-2 text-blue-600 hover:underline">
+                                                    Download Attachment
+                                                </a>
+                                            </div>
                                         )}
                                     </div>
                                 </div>
@@ -248,6 +244,6 @@ export default function ViewModuleAssignment() {
                     </div>
                 </div>
             </div>
-            </div>
-            );
+        </div>
+    );
 }
