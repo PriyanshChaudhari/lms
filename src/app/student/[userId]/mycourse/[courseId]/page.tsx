@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import axios from 'axios';
+import GradesTable from './GradesComponent';
+import StudentGrades from './GradesComponent';
 
 interface users {
     user_id: string;
@@ -422,8 +424,7 @@ const CourseDetails = () => {
 
                     
                     {activeSection === 'grades' && (
-                    // <GradesTable courseId={courseId} />
-                    <></>
+                    <StudentGrades courseId={courseId} studentId={userId} />
                 )}
 
                     

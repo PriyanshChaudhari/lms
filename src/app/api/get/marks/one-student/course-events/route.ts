@@ -6,7 +6,6 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 interface marksData {
     userId: string;
     marks: string;
-    event_name: string;
     course_id: string;
 }
 
@@ -22,6 +21,7 @@ export async function GET(req: NextRequest) {
         }
 
         const eventMarks = await fetchEventMarksByCourse(userId, courseId);
+        console.log("eventMarks: ",eventMarks);
 
         return NextResponse.json({ user_id: userId, course_id: courseId, event_marks: eventMarks }, { status: 200 });
     } catch (error) {
@@ -41,7 +41,6 @@ async function fetchEventMarksByCourse(userId: string, courseId: string) {
         const data = doc.data();
         return {
             event_id: data.event_id,
-            event_name: data.event_name,
             marks: data.marks
         };
     });
