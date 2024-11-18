@@ -8,6 +8,7 @@ import Calendar from "../Calender/calender";
 interface Module {
   id: string;
   description: string;
+  title: string;
   position: number;
 }
 
@@ -210,7 +211,7 @@ const Sidebar: React.FC = () => {
                                   href={`/student/${userId}/mycourse/${course.course_id}/modules/${module.id}`}
                                 >
                                   <li className="p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100  dark:hover:bg-gray-700 rounded ">
-                                    {module.position}→ {module.description}
+                                    {module.position}→ {module.title}
                                   </li>
                                 </Link>
                               ))}

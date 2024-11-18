@@ -109,7 +109,7 @@ export default function ViewModule() {
                             <div>
                                 {oneContent?.attachments.map((attachment, index) => (
                                     <div key={index} className="mb-4">
-                                        <a href={attachment} target="_blank" rel="noopener noreferrer">LINK {index + 1}</a>
+                                        {/* <a href={attachment} target="_blank" rel="noopener noreferrer">LINK {index + 1}</a> */}
                                         <iframe
                                             src={attachment}
                                             width="100%"
