@@ -1,0 +1,19 @@
+.custom-dialog-content {
+    background-color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.custom-dialog-content .dialog-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.custom-dialog-content .dialog-description {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 20px;
+}

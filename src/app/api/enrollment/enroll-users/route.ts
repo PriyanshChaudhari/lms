@@ -40,7 +40,7 @@ export async function DELETE(request: NextRequest) {
 }
 
 // Function to batch enroll users
-export async function batchEnrollment(users: Enrollment[], idOfCourse: string) {
+async function batchEnrollment(users: Enrollment[], idOfCourse: string) {
     const batch = writeBatch(db);
 
     try {
@@ -102,7 +102,7 @@ export async function batchEnrollment(users: Enrollment[], idOfCourse: string) {
 }
 
 // Function to batch process enrolled users deletion
-export async function batchEnrollmentDeletion(users: Enrollment[], idOfCourse: string) {
+async function batchEnrollmentDeletion(users: Enrollment[], idOfCourse: string) {
     const batch = writeBatch(db);
 
     try {
@@ -225,7 +225,7 @@ async function checkIfUserEnrolledInCourse(userId: string, courseId: string): Pr
 // }
 
 // // Function to batch enroll users
-// export async function batchEnrollment(users: Enrollment[], idOfCourse: string) {
+// async function batchEnrollment(users: Enrollment[], idOfCourse: string) {
 //     const batch = writeBatch(db);
 
 //     try {

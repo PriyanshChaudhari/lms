@@ -7,6 +7,8 @@ import AddOneTeacher from '@/components/Upload/AddOneTeacher';
 import ExcelEnrollComponent from './ExcelEnrollComponent';
 import EnrollByGroupComponent from './EnrollByGroupComponent';
 import GradesTable from './GradesComponent';
+import UploadGrades from './UploadGrades';
+import UploadGradesDialog from './UploadGradesDialog';
 
 interface users {
     user_id: string;
@@ -65,6 +67,8 @@ const CourseDetails = () => {
     const [addUser, setAddUser] = useState(false);  // Controls showing the add participants section
     const [showAddStudent, setShowAddStudent] = useState(false);  // Controls showing Add Student form
     const [showAddTeacher, setShowAddTeacher] = useState(false);  // Controls showing Add Teacher form
+
+    const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
 
     const filteredParticipants = searchTerm === ''
         ? participantData
@@ -154,12 +158,19 @@ const CourseDetails = () => {
         }
     };
 
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-transparent py-8 px-4">
             <div className="max-w-7xl mx-auto">
                 {/* Course Header */}
-                <div className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm p-6 mb-8">
+                <div className="bg-white dark:bg-[#151b23] rounded-lg shadow-sm p-6 mb-8">
                     <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
                         {courses?.title}
                     </h1>
@@ -167,7 +178,7 @@ const CourseDetails = () => {
                 </div>
 
                 {/* Navigation */}
-                <nav className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm mb-8">
+                <nav className="bg-white dark:bg-[#151b23] rounded-lg shadow-sm mb-8">
                     <ul className="flex p-2 gap-2">
                         {['course', 'assignments', 'grades', 'participants'].map((section) => (
                             <li key={section}>
@@ -181,12 +192,12 @@ const CourseDetails = () => {
                                 >
                                     {section.charAt(0).toUpperCase() + section.slice(1)}
                                     {(section === 'assignments' && assignments.length > 0) && (
-                                        <span className="ml-2 bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded-lg-full">
+                                        <span className="ml-2 bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded-full">
                                             {assignments.length}
                                         </span>
                                     )}
                                     {(section === 'participants' && participantData.length > 0) && (
-                                        <span className="ml-2 bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded-lg-full">
+                                        <span className="ml-2 bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded-full">
                                             {participantData.length}
                                         </span>
                                     )}
@@ -212,7 +223,7 @@ const CourseDetails = () => {
                                 {sortedModules.map((module) => (
                                     <div
                                         key={module.id}
-                                        className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm hover:shadow-md transition-shadow"
+                                        className="bg-white dark:bg-[#151b23] rounded-lg shadow-sm hover:shadow-md transition-shadow"
                                     >
                                         <div className="flex items-center justify-between p-6">
                                             <span className="flex items-center gap-6">
@@ -230,7 +241,7 @@ const CourseDetails = () => {
                                             </span>
                                             <button
                                                 onClick={() => handleModuleClick(module.id)}
-                                                className="px-4 py-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg-lg transition-colors"
+                                                className="px-4 py-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
                                             >
                                                 View Module →
                                             </button>
@@ -248,7 +259,7 @@ const CourseDetails = () => {
                                 <div
                                     key={assignment.id}
                                     onClick={() => handleAssignmentClick(assignment.id, assignment.module_id)}
-                                    className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer p-6"
+                                    className="bg-white dark:bg-[#151b23] rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer p-6"
                                 >
                                     <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
                                         {assignment.title}
@@ -258,7 +269,7 @@ const CourseDetails = () => {
                                             {assignment.description}
                                         </p>
                                         <div className="grid grid-cols-2 gap-4">
-                                            <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg-lg">
+                                            <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
                                                 <p className="text-sm text-gray-500 dark:text-gray-400">
                                                     Total Marks
                                                 </p>
@@ -266,7 +277,7 @@ const CourseDetails = () => {
                                                     {assignment.total_marks}
                                                 </p>
                                             </div>
-                                            <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg-lg">
+                                            <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
                                                 <p className="text-sm text-gray-500 dark:text-gray-400">
                                                     Due Date
                                                 </p>
@@ -283,12 +294,21 @@ const CourseDetails = () => {
 
                     {/* Grades Section */}
                     {activeSection === 'grades' && (
-                        <GradesTable courseId={courseId} />
+                        <div>
+                            {/* <button
+                                onClick={openModal}
+                                className="mb-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
+                            >
+                                Upload Grades
+                            </button> */}
+                            <UploadGradesDialog courseId={courseId}/>
+                            <GradesTable courseId={courseId} teacherId={userId} />
+                        </div>
                     )}
 
                     {/* Participants Section */}
                     {activeSection === 'participants' && (
-                        <div className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm">
+                        <div className="bg-white dark:bg-[#151b23] rounded-lg shadow-sm">
                             <div className="p-6">
                                 <div className="flex justify-between items-center mb-6">
                                     <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
@@ -297,14 +317,14 @@ const CourseDetails = () => {
                                     {!addUser ? (
                                         <button
                                             onClick={() => setAddUser(true)}
-                                            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg-lg transition-colors"
+                                            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
                                         >
                                             Add Participants
                                         </button>
                                     ) : (
                                         <button
                                             onClick={() => setAddUser(false)}
-                                            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg-lg transition-colors"
+                                            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors"
                                         >
                                             Close
                                         </button>
@@ -318,7 +338,7 @@ const CourseDetails = () => {
                                             placeholder="Search participants..."
                                             value={searchTerm}
                                             onChange={(e) => setSearchTerm(e.target.value)}
-                                            className="w-full mb-6 px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg-lg focus:ring-2 focus:ring-blue-500 dark:bg-[#151b23]"
+                                            className="w-full mb-6 px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-[#151b23]"
                                         />
                                         <div className="overflow-x-auto">
                                             <table className="w-full">
@@ -375,9 +395,9 @@ const CourseDetails = () => {
                                                     setShowAddStudent(true);
                                                     setShowAddTeacher(false);
                                                 }}
-                                                className={`px-4 py-2 rounded-lg-lg transition-colors ${showAddStudent
-                                                    ? 'bg-blue-500 text-white'
-                                                    : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
+                                                className={`px-4 py-2 rounded-lg transition-colors ${showAddStudent
+                                                        ? 'bg-blue-500 text-white'
+                                                        : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
                                                     }`}
                                             >
                                                 Add Student
@@ -387,9 +407,9 @@ const CourseDetails = () => {
                                                     setShowAddStudent(false);
                                                     setShowAddTeacher(true);
                                                 }}
-                                                className={`px-4 py-2 rounded-lg-lg transition-colors ${showAddTeacher
-                                                    ? 'bg-blue-500 text-white'
-                                                    : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
+                                                className={`px-4 py-2 rounded-lg transition-colors ${showAddTeacher
+                                                        ? 'bg-blue-500 text-white'
+                                                        : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
                                                     }`}
                                             >
                                                 Add Teacher

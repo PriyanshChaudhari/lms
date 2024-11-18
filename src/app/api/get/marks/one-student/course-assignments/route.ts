@@ -38,7 +38,7 @@ async function fetchAssignmentMarksByCourse(userId: string, courseId: string) {
     const courseModulesSnapshot = await getDocs(courseModulesQuery);
 
     const moduleIds = courseModulesSnapshot.docs.map(doc => doc.id);
-    console.log("moduleIds: ", moduleIds);
+    // console.log("moduleIds: ", moduleIds);
 
     // Step 2: Fetch assessment_id for the given module_id
     const assessmentsCollection = collection(db, 'assessments');
@@ -46,7 +46,6 @@ async function fetchAssignmentMarksByCourse(userId: string, courseId: string) {
     const assessmentsSnapshot = await getDocs(assessmentsQuery);
 
     const assessmentIds = assessmentsSnapshot.docs.map(doc => doc.id);
-    console.log("asassessmentIds: ",assessmentIds);
 
     // Step 3: Fetch marks for the given assessment_id
     const submissionsCollection = collection(db, 'submissions');
@@ -65,8 +64,8 @@ async function fetchAssignmentMarksByCourse(userId: string, courseId: string) {
 
     // Combine obtained marks with total marks
     return obtainedMarksData.map(obtained => {
-        console.log(obtained.assignment_id);
-        console.log(totalMarksData[0].assignment_id);
+        // console.log(obtained.assignment_id);
+        // console.log(totalMarksData[0].assignment_id);
         const totalMarks = totalMarksData.find(total => total.assignment_id === obtained.assignment_id);
         return {
             assessment_id: obtained.assignment_id,

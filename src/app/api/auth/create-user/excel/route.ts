@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     }
 }
 
-export async function batchUsersCreation(jsonData: UserData[]) {
+async function batchUsersCreation(jsonData: UserData[]) {
     const batch = writeBatch(db);
 
     try {

@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     }
 }
 
-export async function batchUsersDeletion(userIds: UserData[]) {
+async function batchUsersDeletion(userIds: UserData[]) {
     const batch = writeBatch(db);
 
     try {

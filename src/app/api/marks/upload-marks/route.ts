@@ -7,7 +7,7 @@ interface marksData {
     user_id: string;
     course_id: string;
     marks: string;
-    event_name: string;
+    event_id: string;
 }
 
 export async function POST(req: NextRequest) {
@@ -15,9 +15,16 @@ export async function POST(req: NextRequest) {
         const jsonData = await req.json();
         console.log(jsonData);
 
+        const eventName = jsonData[0].event_name; // Assuming all rows have the same event_name
+        const courseId = jsonData[0].course_id;
+
+        const eventId = await getOrCreateEvent(eventName, courseId);
+
         const formattedJsonData = jsonData.map((user: any) => ({
             ...user,
             user_id: String(user.user_id),
+            event_id: eventId,
+            event_name: undefined // Remove event_name as it's no longer needed
         }));
 
         const userRecords = await batchUsersCreation(formattedJsonData);
@@ -30,34 +37,40 @@ export async function POST(req: NextRequest) {
     }
 }
 
-export async function batchUsersCreation(jsonData: marksData[]) {
+// Helper function to get or create an event
+async function getOrCreateEvent(eventName: string, courseId: string) {
+    const eventsCollection = collection(db, 'events');
+    const eventsQuery = query(eventsCollection, where('event_name', '==', eventName), where('course_id', '==', courseId));
+    const eventsSnapshot = await getDocs(eventsQuery);
+
+    if (!eventsSnapshot.empty) {
+        // Event already exists, return the existing event ID
+        return eventsSnapshot.docs[0].id;
+    } else {
+        // Event does not exist, create a new event
+        const newEvent = {
+            event_name: eventName,
+            course_id: courseId
+        };
+        const eventDocRef = await addDoc(eventsCollection, newEvent);
+        return eventDocRef.id;
+    }
+}
+
+async function batchUsersCreation(jsonData: marksData[]) {
     const batch = writeBatch(db);
 
     try {
         for (const user of jsonData) {
             console.log(user);
-            const { user_id, course_id, event_name, marks } = user;
+            const { user_id, course_id, event_id, marks } = user;
 
             // Validate inputs
             if (!user_id) {
                 throw new Error('User ID is required');
             }
 
-            // Check if the event exists in the events collection
-            const eventsCollection = collection(db, 'events');
-            const eventsQuery = query(eventsCollection, where('course_id', '==', course_id), where('event_name', '==', event_name));
-            const eventsSnapshot = await getDocs(eventsQuery);
-
-            if (eventsSnapshot.empty) {
-                // Create a new event if it does not exist
-                console.log(`Creating a new event with courseId ${course_id} and eventName ${event_name}...`);
-                await addDoc(eventsCollection, {
-                    course_id: course_id,
-                    event_name: event_name,
-                });
-            }
-
-            const userRef = doc(db, "marks", `${course_id}_${event_name}_${user_id}`);
+            const userRef = doc(db, "marks", `${course_id}_${event_id}_${user_id}`);
             const userSnap = await getDoc(userRef);
 
             // Create a new user if they do not exist
@@ -67,7 +80,7 @@ export async function batchUsersCreation(jsonData: marksData[]) {
                 user_id: user_id,
                 course_id: course_id,
                 marks: marks,
-                event_name: event_name,
+                event_id: event_id,
             });
         }
 
@@ -78,7 +91,7 @@ export async function batchUsersCreation(jsonData: marksData[]) {
         return jsonData.map(user => ({
             user_id: Number(user.user_id), // Return userId as a number
             course_id: user.course_id,
-            event_name: user.event_name
+            event_id: user.event_id
         }));
 
     } catch (error) {
