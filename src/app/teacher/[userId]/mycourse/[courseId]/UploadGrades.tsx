@@ -65,7 +65,7 @@ const UploadGrades: React.FC<UploadGradesProps> = ({ courseId }) => {
     if (isUploaded) {
         return (
             <div className="min-h-screen flex items-center justify-center">
-                <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full">
+                <div className="bg-white dark:bg-transparent p-8 rounded-lg shadow-md max-w-md w-full">
                     <div className="text-center">
                         <h2 className="text-2xl font-semibold mb-4">File Uploaded Successfully</h2>
                         <p className="mb-6 text-gray-600">Your Excel file has been uploaded and processed.</p>

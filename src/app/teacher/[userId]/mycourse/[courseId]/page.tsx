@@ -61,7 +61,7 @@ const CourseDetails = () => {
     const [searchTerm, setSearchTerm] = useState<string>(''); // New state for search term
 
     const [addUser, setAddUser] = useState(false);  // Controls showing the add participants section
-    const [showAddStudent, setShowAddStudent] = useState(false);  // Controls showing Add Student form
+    const [showAddStudent, setShowAddStudent] = useState(true);  // Controls showing Add Student form
     const [showAddTeacher, setShowAddTeacher] = useState(false);  // Controls showing Add Teacher form
 
     const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
