@@ -108,7 +108,7 @@ export default function Dashboard() {
 
     return (
         <div className="bg-gray-50 dark:bg-[#212830] min-h-screen p-6">
-            <div className="bg-gray-300 rounded-lg shadow-md my-4 p-6">
+            <div className="bg-gray-100 dark:bg-[#151b23] rounded-lg shadow-md my-4 p-6">
                 <div className="flex flex-col sm:flex-row items-center justify-around space-y-4 sm:space-y-0">
                     <p className="font-semibold text-xl text-blue-600 flex items-center space-x-2">
                         <span>Total Users</span>
@@ -133,6 +133,7 @@ export default function Dashboard() {
                 </div>
             </div>
 
+            <div className="py-4">
             <UserTable
                 title="Students"
                 users={students}
@@ -140,7 +141,9 @@ export default function Dashboard() {
                 searchState={studentSearch}
                 setSearchState={setStudentSearch}
             />
+            </div>
 
+            <div className="py-4">
             <UserTable
                 title="Teachers"
                 users={teachers}
@@ -148,7 +151,9 @@ export default function Dashboard() {
                 searchState={teacherSearch}
                 setSearchState={setTeacherSearch}
             />
+            </div>
 
+            <div className="py-4">
             <UserTable
                 title="Admins"
                 users={admins}
@@ -156,11 +161,14 @@ export default function Dashboard() {
                 searchState={adminSearch}
                 setSearchState={setAdminSearch}
             />
+            </div>
 
-            <div>
-                <p>Total Courses: {courses.length}</p>
+            <div className="py-4">
                 <div>
-                    <p className='font-bold'>Courses</p>
+                   <div className="my-2">
+                   <p className='font-bold '>Courses</p>
+                   <p>Total Courses: {courses.length}</p>
+                   </div>
                     <input
                         type="text"
                         placeholder="Search participants..."
@@ -186,7 +194,7 @@ export default function Dashboard() {
                                     <td className="border px-4 py-2 text-gray-700 text-center dark:text-gray-300">
                                         {participantCounts[course.id] !== undefined ? (
                                             <>
-                                                {participantCounts[course.id]}
+                                                <b>No. of Participants :</b> {participantCounts[course.id]}
                                                 <ul>
                                                     {participantRoles[course.id]?.map((participant) => (
                                                         <li key={participant.userId}>

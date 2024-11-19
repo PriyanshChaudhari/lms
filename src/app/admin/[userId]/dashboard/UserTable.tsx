@@ -55,7 +55,7 @@ const UserTable = ({
 
     return (
         <div>
-            <p className='font-bold'>{title}</p>
+            <p className='font-bold my-2'>{title}</p>
             <input
                 type="text"
                 placeholder={searchPlaceholder}

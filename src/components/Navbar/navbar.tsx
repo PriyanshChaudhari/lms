@@ -278,7 +278,22 @@ const Navbar: React.FC = () => {
   };
 
   const navigateToProfile = () => {
-    window.location.replace('/profile');
+    // window.location.replace('/profile');
+    if (user?.role === 'Admin') {
+      const adminId = user.userId;
+      router.push(`/admin/${adminId}/profile`);
+    }
+    else if (user?.role === 'Student') {
+      const studentId = user.userId;
+      router.push(`/student/${studentId}/profile`);
+    }
+    else if (user?.role === 'Teacher') {
+      const teacherId = user.userId;
+      router.push(`/teacher/${teacherId}/profile`);
+    }
+    else {
+      router.push('/dashboard');
+    }
   };
 
   const navigateToCalender = () => {
