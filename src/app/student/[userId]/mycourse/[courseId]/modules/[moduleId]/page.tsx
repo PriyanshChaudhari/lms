@@ -167,7 +167,7 @@ export default function ViewModule() {
                                                 <h2 className="text-xl font-semibold">{content.title}</h2>
                                                 <h2 className="text-xl font-semibold">{content.description}</h2>
                                                 <h2 className="text-xl font-semibold">{content.position}</h2>
-                                                <div className='px-3 rounded-lg-xl cursor-pointer bg-gray-300  hover:bg-gray-200' onClick={() => handleContentClick(content.id)} > GO -> </div>
+                                                <div className='px-3 rounded-lg-xl cursor-pointer bg-gray-300  hover:bg-gray-200' onClick={() => handleContentClick(content.id)} > GO -&gt; </div>
                                             </div>
                                         </div>
                                     ))}

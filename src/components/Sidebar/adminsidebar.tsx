@@ -116,7 +116,7 @@ const Sidebar: React.FC = () => {
               <span>Dashboard</span>
             </Link>
 
-            <button
+            {/* <button
               onClick={toggleCalenderSection}
               className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors duration-200 ${activeSection === 'calender'
                   ? 'bg-blue-500 text-white'
@@ -127,7 +127,7 @@ const Sidebar: React.FC = () => {
                 <span className="text-lg">📅</span>
                 <span>Events</span>
               </div>
-            </button>
+            </button> */}
 
             {/* Users Section */}
             <div className="space-y-1">

@@ -3,6 +3,8 @@ import React, { useState, useEffect, ChangeEvent } from 'react';
 import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
 import { MdDeleteForever, MdModeEdit } from 'react-icons/md';
+import { FaChevronDown, FaChevronRight } from 'react-icons/fa';
+import CreateCategory from '../create/page';
 
 interface Category {
     id: string;
@@ -31,6 +33,7 @@ const ManageCategories = () => {
     const [courseLoading, setCourseLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState<string>('');
+    const [expandedCategories, setExpandedCategories] = useState<{ [key: string]: boolean }>({});
 
     useEffect(() => {
         fetchCategories();
@@ -130,6 +133,14 @@ const ManageCategories = () => {
     };
 
     const renderCategoryTree = (parentId: string | null = null, level: number = 0) => {
+
+        const toggleExpand = (categoryId: string) => {
+            setExpandedCategories(prevState => ({
+                ...prevState,
+                [categoryId]: !prevState[categoryId],
+            }));
+        };
+
         const filteredCategories = categories.filter(cat => cat.parent_category_id === parentId);
 
         const filteredCategory = searchTerm === ''
@@ -137,25 +148,43 @@ const ManageCategories = () => {
             : filteredCategories.filter(
                 (item) =>
                     item.category_name.toLowerCase().includes(searchTerm.toLowerCase())
-
             );
 
         return (
             <ul className={`space-y-2 ${level > 0 ? 'ml-4' : ''}`}>
                 {filteredCategory.map(category => (
-                    <li key={category.id} className='space-y-2'>
-                        <div className={`flex items-center justify-between p-2 border rounded-lg ${selectedCategory === category.id ? 'bg-gray-100 text-blue-500 font-semibold' : ''
-                            }`}>
-                            <span
-                                className="cursor-pointer hover:text-blue-600"
-                                onClick={() => handleCategoryClick(category.id)}
-                            >
-                                {category.category_name}
-                            </span>
+                    <li key={category.id} className="space-y-2">
+                        <div
+                            className={`flex items-center justify-between p-2 bg-gray-50 border rounded-lg ${selectedCategory === category.id
+                                ? 'bg-gray-100 text-blue-500 font-semibold'
+                                : ''
+                                }`}
+                        >
+                            <div className="flex items-center gap-2">
+                                {/* Toggle Icon */}
+                                {categories.some(cat => cat.parent_category_id === category.id) && (
+                                    <button
+                                        onClick={() => toggleExpand(category.id)}
+                                        className="focus:outline-none"
+                                    >
+                                        {expandedCategories[category.id] ? (
+                                            <FaChevronDown className="text-gray-600" />
+                                        ) : (
+                                            <FaChevronRight className="text-gray-600" />
+                                        )}
+                                    </button>
+                                )}
+                                <span
+                                    className="cursor-pointer hover:text-blue-600"
+                                    onClick={() => handleCategoryClick(category.id)}
+                                >
+                                    {category.category_name}
+                                </span>
+                            </div>
                             <div className="flex">
                                 <button
                                     onClick={() => handleEdit(category)}
-                                    className="mr-2 py-2 bg-blue-500 hover:bg-blue-600 text-white flex items-center gap-1  px-3 rounded-[9px] transition-all duration-200 ease-in-out transform focus:outline-none"
+                                    className="mr-2 py-2 bg-blue-500 hover:bg-blue-600 text-white flex items-center gap-1 px-3 rounded-[9px] transition-all duration-200 ease-in-out transform focus:outline-none"
                                 >
                                     Edit
                                     <MdModeEdit className="text-white text-lg" />
@@ -169,12 +198,13 @@ const ManageCategories = () => {
                                 </button>
                             </div>
                         </div>
-                        {renderCategoryTree(category.id, level + 1)}
+                        {/* Render children if expanded */}
+                        {expandedCategories[category.id] && renderCategoryTree(category.id, level + 1)}
                     </li>
                 ))}
             </ul>
         );
-    };
+    }
 
     return (
         <div className="container mx-auto p-4">
@@ -219,6 +249,7 @@ const ManageCategories = () => {
                 <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
                     <div className="bg-white p-6 rounded-lg shadow-md">
                         <h2 className="text-2xl font-bold mb-4">Edit Category</h2>
+                        
                         <form onSubmit={handleEditSubmit}>
                             {error && (
                                 <div className="mb-4 text-red-500 font-semibold text-left">
@@ -253,7 +284,7 @@ const ManageCategories = () => {
                                     <option value="">No Parent (Top-Level Category)</option>
                                     {categories.filter(cat => cat.id !== editingCategory.id).map(cat => (
                                         <option key={cat.id} value={cat.id}>
-                                            {cat.category_name}
+                                            {cat.category_name} {cat.parent_category_id}
                                         </option>
                                     ))}
                                 </select>
@@ -268,6 +299,7 @@ const ManageCategories = () => {
                             </div>
                         </form>
                     </div>
+                    {/* <CreateCategory editingCategory={editingCategory} /> */}
                 </div>
             )}
 

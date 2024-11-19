@@ -371,8 +371,8 @@ const Navbar: React.FC = () => {
                 <div className="absolute top-full right-0 mt-2 w-44 bg-white dark:bg-[#151b23] border border-gray-300 dark:border-gray-500 rounded shadow-lg">
                   <ul className="list-none p-2">
                     <li className="p-2 text-sm bg-gray-100 dark:bg-[#212830] rounded-lg mb-2 hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer" onClick={navigateToDashboard}>Dashboard</li>
-                    <li className="p-2 text-sm bg-gray-100 dark:bg-[#212830] mb-2 rounded-lg hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer" onClick={navigateToProfile}>Profile</li>
-                    <li className="p-2 text-sm bg-gray-100 dark:bg-[#212830] mb-2 rounded-lg hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer" onClick={navigateToCalender}>Events</li>
+                    <li className="p-2 text-sm bg-gray-100 dark:bg-[#212830] mb-2 rounded-lg hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer" onClick={navigateToProfile}>View Profile</li>
+                    {/* <li className="p-2 text-sm bg-gray-100 dark:bg-[#212830] mb-2 rounded-lg hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer" onClick={navigateToCalender}>Events</li> */}
                     <li className="text-sm bg-gray-100 dark:bg-[#212830] rounded-lg cursor-pointer">
                       <button className='text-red-500 hover:text-red-600 p-2 rounded-lg-xl' onClick={handleLogout}>Log Out</button>
                     </li>

@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import { useRouter, useParams } from 'next/navigation'
+import { useRouter, useParams, useSearchParams } from 'next/navigation'
 import axios from 'axios';
 import AddOneStudent from '@/components/Upload/AddOneStudent';
 import AddOneTeacher from '@/components/Upload/AddOneTeacher';
@@ -9,6 +9,7 @@ import EnrollByGroupComponent from './EnrollByGroupComponent';
 import GradesTable from './GradesComponent';
 import UploadGrades from './UploadGrades';
 import UploadGradesDialog from './UploadGradesDialog';
+import TeacherModulesComponent from './TeacherModulesComponent';
 
 interface users {
     user_id: string;
@@ -47,6 +48,7 @@ const CourseDetails = () => {
     const params = useParams();
     const userId = params.userId as string;
     const courseId = params.courseId as string;
+    const searchParams = useSearchParams();
 
     const [courses, setCourses] = useState<courses | null>(null)
     const [courseModules, setCourseModules] = useState<modules[]>([])
@@ -54,13 +56,6 @@ const CourseDetails = () => {
     const [participantData, setParticipantData] = useState<users[]>([]);
 
     const [activeSection, setActiveSection] = useState<string>('course');
-    const [data, setData] = useState([
-        { grade: 'Succelens99@yahoo.com', range: '$316.00', email: 'Succelens99@yahoo.com' },
-        { grade: 'Succelens99@yahoo.com', range: '$316.00', email: 'Succelens99@yahoo.com' },
-        { grade: 'Succelens99@yahoo.com', range: '$316.00', email: 'Succelens99@yahoo.com' },
-        { grade: 'Succelens99@yahoo.com', range: '$316.00', email: 'Succelens99@yahoo.com' },
-        { grade: 'Succelens99@yahoo.com', range: '$316.00', email: 'Succelens99@yahoo.com' },
-    ]);
 
     const [searchTerm, setSearchTerm] = useState<string>(''); // New state for search term
 
@@ -81,6 +76,11 @@ const CourseDetails = () => {
                 item.user_id.includes(searchTerm)
         );
     useEffect(() => {
+        const section = searchParams.get('section');
+        if (section) {
+            setActiveSection(section);
+        }
+
         const getCourse = async () => {
             try {
                 const res = await axios.post(`/api/get/course-details`, { courseId })
@@ -180,7 +180,7 @@ const CourseDetails = () => {
                 {/* Navigation */}
                 <nav className="bg-white dark:bg-[#151b23] rounded-lg shadow-sm mb-8">
                     <ul className="flex p-2 gap-2">
-                        {['course', 'assignments', 'grades', 'participants'].map((section) => (
+                        {['modules', 'assignments', 'grades', 'participants'].map((section) => (
                             <li key={section}>
                                 <button
                                     onClick={() => setActiveSection(section)}
@@ -209,7 +209,7 @@ const CourseDetails = () => {
 
                 <div className="space-y-6">
                     {/* Course Section */}
-                    {activeSection === 'course' && (
+                    {activeSection === 'modules' && (
                         <div>
                             <div className="flex justify-end mb-6">
                                 <button
@@ -225,8 +225,8 @@ const CourseDetails = () => {
                                         key={module.id}
                                         className="bg-white dark:bg-[#151b23] rounded-lg shadow-sm hover:shadow-md transition-shadow"
                                     >
-                                        <div className="flex items-center justify-between p-6">
-                                            <span className="flex items-center gap-6">
+                                        <div className="flex flex-col items-center justify-between p-6">
+                                            {/* <span className="flex items-center gap-6 w-full">
                                                 <span className="w-8 h-8 flex items-center justify-center bg-blue-100 text-blue-600 rounded-full">
                                                     
                                                 </span>
@@ -238,13 +238,14 @@ const CourseDetails = () => {
                                                         {module.description}
                                                     </p>
                                                 </div>
-                                            </span>
-                                            <button
+                                            </span> */}
+                                            <TeacherModulesComponent moduleId={module.id} module={module} courseId={courseId} userId={userId}/>
+                                            {/* <button
                                                 onClick={() => handleModuleClick(module.id)}
                                                 className="px-4 py-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
                                             >
                                                 View Module →
-                                            </button>
+                                            </button> */}
                                         </div>
                                     </div>
                                 ))}
