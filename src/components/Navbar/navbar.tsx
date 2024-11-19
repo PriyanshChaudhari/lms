@@ -291,9 +291,7 @@ const Navbar: React.FC = () => {
       const teacherId = user.userId;
       router.push(`/teacher/${teacherId}/profile`);
     }
-    else {
-      router.push('/dashboard');
-    }
+    
   };
 
   const navigateToCalender = () => {
