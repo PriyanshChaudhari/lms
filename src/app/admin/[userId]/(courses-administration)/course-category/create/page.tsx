@@ -3,7 +3,7 @@ import React, { ChangeEvent, useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
 
-const CreateCategory = () => {
+const CreateCategory = ({ editingCategory = null }: { editingCategory?: any }) => {
     const router = useRouter();
     const params = useParams();
     const userId = params.userId as string;
@@ -28,6 +28,26 @@ const CreateCategory = () => {
 
     useEffect(() => {
         fetchCategories();
+
+        if (editingCategory) {
+            // Set initial category data for editing
+            setCategory({
+                category_name: editingCategory.category_name,
+                parent_category_id: editingCategory.parent_category_id || "",
+            });
+
+            // Populate selectedCategories for dropdowns
+            const initialSelectedCategories = [];
+            let currentParentId = editingCategory.parent_category_id;
+
+            while (currentParentId) {
+                initialSelectedCategories.unshift(currentParentId);
+                const parent = categories.find((cat) => cat.id === currentParentId);
+                currentParentId = parent ? parent.parent_category_id : null;
+            }
+
+            setSelectedCategories(initialSelectedCategories);
+        }
     }, []);
 
     const handleCategoryChange = (index: number, e: ChangeEvent<HTMLSelectElement>) => {
@@ -54,23 +74,30 @@ const CreateCategory = () => {
         }
         else {
             try {
-                const res = await axios.post('/api/course-category/', category);
-                const data = res.data.categories;
-                console.log(data);
+                if (editingCategory) {
+                    // Update existing category
+                    await axios.put(`/api/course-category/${editingCategory.id}`, category);
+                    alert("Category updated successfully!");
+                }
+                else {
+                    const res = await axios.post('/api/course-category/', category);
+                    const data = res.data.categories;
+                    console.log(data);
 
-                // Reset the form
-                setCategory({
-                    category_name: "",
-                    parent_category_id: ""
-                });
-                setSelectedCategories([]);
+                    // Reset the form
+                    setCategory({
+                        category_name: "",
+                        parent_category_id: ""
+                    });
+                    setSelectedCategories([]);
 
-                // Fetch updated categories
-                await fetchCategories();
+                    // Fetch updated categories
+                    await fetchCategories();
 
-                // Optionally, show a success message
-                alert("Category created successfully!");
-                router.push(`/admin/${userId}/course-category/manage`);
+                    // Optionally, show a success message
+                    alert("Category created successfully!");
+                    router.push(`/admin/${userId}/course-category/manage`);
+                }
             } catch (error) {
                 console.error(error);
                 // Optionally, show an error message
@@ -116,7 +143,7 @@ const CreateCategory = () => {
     return (
         <div className='flex h-screen justify-center items-center'>
             <div className="w-full max-w-md mx-auto mt-8 p-6 dark:bg-[#151b23] rounded-lg shadow-md">
-                <h2 className="text-2xl font-semibold text-black dark:text-gray-300 mb-4">Create New Category</h2>
+                <h2 className="text-2xl font-semibold text-black dark:text-gray-300 mb-4">{editingCategory ? "Edit Category" : "Create New Category"}</h2>
                 <form onSubmit={handleSubmit}>
                     {error && (
                         <div className="mb-4 text-red-500 font-semibold text-left">
@@ -145,7 +172,7 @@ const CreateCategory = () => {
                             type="submit"
                             className="w-full bg-blue-600 text-white py-2 px-4 mt-4 rounded-lg hover:bg-blue-700"
                         >
-                            Create Category
+                            {editingCategory ? "Update Category" : "Create Category"}
                         </button>
                     </div>
                 </form>

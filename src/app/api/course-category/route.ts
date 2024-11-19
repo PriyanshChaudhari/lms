@@ -1,12 +1,13 @@
 import { db } from "@/lib/firebaseConfig";
-import { addDoc, collection, doc, updateDoc, deleteDoc, getDoc, query, where, getDocs, writeBatch} from "firebase/firestore";
+import { addDoc, collection, doc, updateDoc, deleteDoc, getDoc, query, where, getDocs, writeBatch } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
     try {
         const { category_name, parent_category_id } = await req.json();
+        const category_upperName = category_name.toString().toUpperCase();
         const docRef = await addDoc(collection(db, 'course-category'), {
-            category_name,
+            category_name: category_upperName,
             parent_category_id: parent_category_id || null, // Set to null if parent_id is not provided for top-level categories
         });
         return NextResponse.json({ message: 'Course category added' }, { status: 201 });
@@ -23,13 +24,13 @@ export async function PUT(req: NextRequest) {
         if (!id || !category_name) {
             return NextResponse.json({ error: "ID and category name are required." }, { status: 400 });
         }
-
+        const category_upperName = category_name.toString().toUpperCase();
         // Get the document reference of the category to modify
         const categoryRef = doc(db, 'course-category', id);
 
         // Update the category in Firestore
         await updateDoc(categoryRef, {
-            category_name,
+            category_name: category_upperName,
             parent_category_id: parent_category_id || null, // Set to null if no parent category
         });
 
