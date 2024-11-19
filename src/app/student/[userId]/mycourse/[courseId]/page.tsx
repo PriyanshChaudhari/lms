@@ -211,7 +211,8 @@ const CourseDetails = () => {
                     
                     {activeSection === 'assignments' && (
                         <div className="grid md:grid-cols-2 gap-6">
-                            {assignments.map((assignment) => (
+                            {assignments.length > 0 ? (
+                            assignments.map((assignment) => (
                                 <div
                                     key={assignment.id}
                                     onClick={() => handleAssignmentClick(assignment.id, assignment.module_id)}
@@ -251,7 +252,14 @@ const CourseDetails = () => {
                                         </div>
                                     </div>
                                 </div>
-                            ))}
+                            ))
+                        ) : (
+                            <div className="col-span-2 text-center">
+                                <p className="text-gray-600 dark:text-gray-400 text-lg">
+                                    No assignments available.
+                                </p>
+                            </div>
+                        )}
                         </div>
                     )}
 
@@ -293,7 +301,8 @@ const CourseDetails = () => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {filteredParticipants.map((participant) => (
+                                            {filteredParticipants.length > 0 ? (
+                                                filteredParticipants.map((participant) => (
                                                     <tr
                                                         key={participant.user_id}
                                                         className="border-t border-gray-100 dark:border-gray-700"
@@ -315,7 +324,18 @@ const CourseDetails = () => {
                                                         </td>
 
                                                     </tr>
-                                                ))}
+                                                ))
+                                            ): (
+                                                    <tr className="col-span-5 text-center">
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td className=" text-gray-600 dark:text-gray-400 text-center text-lg">
+                                                            No specific participant available.
+                                                        </td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                )}
                                             </tbody>
                                         </table>
                                     </div>

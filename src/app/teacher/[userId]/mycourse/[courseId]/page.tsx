@@ -259,47 +259,55 @@ const CourseDetails = () => {
                     {/* Assignments Section */}
                     {activeSection === 'assignments' && (
                         <div className="grid md:grid-cols-2 gap-6">
-                            {assignments.map((assignment) => (
-                                <div
-                                    key={assignment.id}
-                                    onClick={() => handleAssignmentClick(assignment.id, assignment.module_id)}
-                                    className="bg-white dark:bg-[#151b23] rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer p-6"
-                                >
-                                    <div className="flex justify-between">
-                                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                                            {assignment.title}
-                                        </h3>
+                            {assignments.length > 0 ? (
+                                assignments.map((assignment) => (
+                                    <div
+                                        key={assignment.id}
+                                        onClick={() => handleAssignmentClick(assignment.id, assignment.module_id)}
+                                        className="bg-white dark:bg-[#151b23] rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer p-6"
+                                    >
+                                        <div className="flex justify-between">
+                                            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                                                {assignment.title}
+                                            </h3>
                                             <div >
                                                 <span className="bg-zinc-300 dark:bg-gray-700 p-3 text-clip bg-opacity-20 text-sm text-gray-500 dark:text-gray-400  px-2 py-1 rounded-lg">
-                                                View
+                                                    View
                                                 </span>
                                             </div>
-                                    </div>
-                                    <div className="space-y-4">
-                                        <p className="text-gray-600 dark:text-gray-300">
-                                            {assignment.description}
-                                        </p>
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
-                                                <p className="text-sm text-gray-500 dark:text-gray-400">
-                                                    Total Marks
-                                                </p>
-                                                <p className="font-semibold text-gray-900 dark:text-white">
-                                                    {assignment.total_marks}
-                                                </p>
-                                            </div>
-                                            <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
-                                                <p className="text-sm text-gray-500 dark:text-gray-400">
-                                                    Due Date
-                                                </p>
-                                                <p className="font-semibold text-gray-900 dark:text-white">
-                                                    {formatDate(assignment.due_date)}
-                                                </p>
+                                        </div>
+                                        <div className="space-y-4">
+                                            <p className="text-gray-600 dark:text-gray-300">
+                                                {assignment.description}
+                                            </p>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                                        Total Marks
+                                                    </p>
+                                                    <p className="font-semibold text-gray-900 dark:text-white">
+                                                        {assignment.total_marks}
+                                                    </p>
+                                                </div>
+                                                <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                                        Due Date
+                                                    </p>
+                                                    <p className="font-semibold text-gray-900 dark:text-white">
+                                                        {formatDate(assignment.due_date)}
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                ))
+                            ) : (
+                                <div className="col-span-2 text-center">
+                                    <p className="text-gray-600 dark:text-gray-400 text-lg">
+                                        No assignments available.
+                                    </p>
                                 </div>
-                            ))}
+                            )}
                         </div>
                     )}
 
@@ -367,36 +375,48 @@ const CourseDetails = () => {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {filteredParticipants.map((participant) => (
-                                                        <tr
-                                                            key={participant.user_id}
-                                                            className="border-t border-gray-100 dark:border-gray-700"
-                                                        >
-                                                            <td className="p-4 text-gray-700 dark:text-gray-300">
-                                                                {participant.user_id}
+                                                    {filteredParticipants.length > 0 ? (
+                                                        filteredParticipants.map((participant) => (
+                                                            <tr
+                                                                key={participant.user_id}
+                                                                className="border-t border-gray-100 dark:border-gray-700"
+                                                            >
+                                                                <td className="p-4 text-gray-700 dark:text-gray-300">
+                                                                    {participant.user_id}
+                                                                </td>
+                                                                <td className="p-4 text-gray-700 dark:text-gray-300">
+                                                                    {participant.first_name}
+                                                                </td>
+                                                                <td className="p-4 text-gray-700 dark:text-gray-300">
+                                                                    {participant.last_name}
+                                                                </td>
+                                                                <td className="p-4 text-gray-700 dark:text-gray-300">
+                                                                    {participant.email}
+                                                                </td>
+                                                                <td className="p-4 text-gray-700 dark:text-gray-300 capitalize">
+                                                                    {participant.role}
+                                                                </td>
+                                                                <td className="p-4">
+                                                                    <button
+                                                                        onClick={() => handleRemoveParticipant(participant.user_id, courseId)}
+                                                                        className="text-red-500 hover:text-red-600"
+                                                                    >
+                                                                        Remove
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        ))
+                                                    ) : (
+                                                        <tr className="col-span-5 text-center">
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td className=" text-gray-600 dark:text-gray-400 text-center text-lg">
+                                                                No specific participant available.
                                                             </td>
-                                                            <td className="p-4 text-gray-700 dark:text-gray-300">
-                                                                {participant.first_name}
-                                                            </td>
-                                                            <td className="p-4 text-gray-700 dark:text-gray-300">
-                                                                {participant.last_name}
-                                                            </td>
-                                                            <td className="p-4 text-gray-700 dark:text-gray-300">
-                                                                {participant.email}
-                                                            </td>
-                                                            <td className="p-4 text-gray-700 dark:text-gray-300 capitalize">
-                                                                {participant.role}
-                                                            </td>
-                                                            <td className="p-4">
-                                                                <button
-                                                                    onClick={() => handleRemoveParticipant(participant.user_id, courseId)}
-                                                                    className="text-red-500 hover:text-red-600"
-                                                                >
-                                                                    Remove
-                                                                </button>
-                                                            </td>
+                                                            <td></td>
+                                                            <td></td>
                                                         </tr>
-                                                    ))}
+                                                    )}
                                                 </tbody>
                                             </table>
                                         </div>
