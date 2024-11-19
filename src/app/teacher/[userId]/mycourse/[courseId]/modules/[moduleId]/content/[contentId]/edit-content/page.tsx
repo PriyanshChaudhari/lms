@@ -124,9 +124,7 @@ const EditContent = () => {
             <div className="w-full max-w-md mx-auto mt-8 p-6 dark:bg-[#151b23] rounded-lg shadow-md">
                 <div className='flex justify-between mb-4 items-center'>
                     <div className="text-2xl font-semibold text-black dark:text-gray-300">Edit Content</div>
-                    <div className=''
-                        onClick={() => (router.back())}
-                    >
+                    <div onClick={() => (router.back())}>
                         <IoMdClose className='font-semibold text-3xl cursor-pointer hover:scale-125 transition-transform ease-linear text-red-500'/>
                     </div>
                 </div>

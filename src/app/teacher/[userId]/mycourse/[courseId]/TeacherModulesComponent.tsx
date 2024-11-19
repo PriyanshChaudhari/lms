@@ -144,31 +144,19 @@ const TeacherModulesComponent = ({ moduleId, module, courseId, userId }: Teacher
 
 
                                 
-                                <div data-tooltip-id="add-content-tooltip" data-tooltip-content="Add Content" className='p-3  bg-white dark:bg-[#151b23] shadow-sm hover:shadow-md transition-shadow'>
-                                    <Plus
-                                        className="text-blue-600 cursor-pointer"
-                                        onClick={addContent}
-                                    />
+                                <div data-tooltip-id="add-content-tooltip" data-tooltip-content="Add Content" className='p-3 cursor-pointer  bg-white dark:bg-[#151b23] shadow-sm hover:shadow-md transition-shadow' onClick={addContent}>
+                                    <Plus className="text-blue-600" />
                                 </div>
 
-                                <div data-tooltip-id="add-assignment-tooltip" data-tooltip-content="Add Assignment" className='p-3  bg-white dark:bg-[#151b23] shadow-sm hover:shadow-md transition-shadow'>
-                                    <FilePenLine
-                                        className="text-green-500 cursor-pointer"
-                                        onClick={handleAddAssignment}
-                                    />
+                                <div data-tooltip-id="add-assignment-tooltip" data-tooltip-content="Add Assignment" className='p-3 cursor-pointer  bg-white dark:bg-[#151b23] shadow-sm hover:shadow-md transition-shadow' onClick={handleAddAssignment}>
+                                    <FilePenLine className="text-green-500" />
                                 </div>
 
-                                <div data-tooltip-id="edit-tooltip" data-tooltip-content="Edit Module" className='p-3  bg-white dark:bg-[#151b23] shadow-sm hover:shadow-md transition-shadow'>
-                                    <Edit
-                                        className="text-blue-500 cursor-pointer"
-                                        onClick={handleEditModule}
-                                    />
+                                <div data-tooltip-id="edit-tooltip" data-tooltip-content="Edit Module" className='p-3 cursor-pointer  bg-white dark:bg-[#151b23] shadow-sm hover:shadow-md transition-shadow' onClick={handleEditModule}>
+                                    <Edit className="text-blue-500"/>
                                 </div>
-                                <div data-tooltip-id="delete-tooltip" data-tooltip-content="Delete Module" className='p-3  bg-white dark:bg-[#151b23] shadow-sm hover:shadow-md transition-shadow'>
-                                    <Trash2
-                                        className="text-red-500 cursor-pointer"
-                                        onClick={handleDeleteModule}
-                                    />
+                                <div data-tooltip-id="delete-tooltip" data-tooltip-content="Delete Module" className='p-3 cursor-pointer  bg-white dark:bg-[#151b23] shadow-sm hover:shadow-md transition-shadow' onClick={handleDeleteModule}>
+                                    <Trash2 className="text-red-500"/>
                                 </div>
                                 <Tooltip id="edit-tooltip" place="top" />
                                 <Tooltip id="delete-tooltip" place="top" />
