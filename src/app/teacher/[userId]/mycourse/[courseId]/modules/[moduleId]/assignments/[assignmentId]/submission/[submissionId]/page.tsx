@@ -3,6 +3,15 @@ import axios from "axios";
 import { useState, useEffect, ChangeEvent } from "react";
 import { useParams, useRouter } from "next/navigation";
 
+interface assignments {
+    id: string;
+    title: string;
+    created_at: object;
+    due_date: object;
+    description: string;
+    total_marks: number;
+}
+
 export default function ReviewSubmission() {
     const params = useParams();
     const { userId, courseId, moduleId, assignmentId, submissionId } = params;
@@ -15,6 +24,7 @@ export default function ReviewSubmission() {
         feedback: '',
         marks_obtained: 0
     });
+    const [oneAssignment, setOneAssignment] = useState<assignments | null>(null);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
@@ -39,7 +49,17 @@ export default function ReviewSubmission() {
             }
         };
 
+        const getModuleAssignments = async () => {
+            try {
+                const res = await axios.post('/api/get/assignments/one-assignments', { assignmentId });
+                setOneAssignment(res.data.assignment);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
         fetchSubmissionDetails();
+        getModuleAssignments();
     }, [submissionId,assignmentId]);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -75,8 +95,8 @@ export default function ReviewSubmission() {
                     <ul className="flex p-2 gap-2">
                         {/* <li className="p-3 rounded-lg-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}`)}>{courses?.title}</li>
                         <li className="p-3 rounded-lg-xl text-black cursor-pointer">/</li> */}
-                        {/* <li className="p-3 rounded-lg-xl text-black cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments/${assignmentId}`)}>{oneAssignment?.title}</li>
-                        <li className="p-3 rounded-lg-xl text-black cursor-pointer">/</li> */}
+                        <li className="p-3 rounded-lg-xl text-black cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments/${assignmentId}`)}>{oneAssignment?.title}</li>
+                        <li className="p-3 rounded-lg-xl text-black cursor-pointer">/</li>
                         <li className="p-3 rounded-lg-xl text-black cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments/${assignmentId}`)}>Submissions</li>
                     </ul>
                 </nav>

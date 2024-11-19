@@ -3,6 +3,7 @@
 import axios from "axios";
 import { useRouter, useParams } from "next/navigation";
 import { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import { IoMdClose } from "react-icons/io";
 
 export default function AddSubmission() {
     const router = useRouter();
@@ -101,7 +102,12 @@ export default function AddSubmission() {
     return (
         <div className="h-screen flex justify-center items-center">
             <div className="w-full max-w-md mx-auto dark:bg-[#151b23] p-8 shadow-md rounded-lg">
-                <h1 className="text-2xl font-bold mb-6">Submit Assignment</h1>
+            <div className='flex justify-between mb-4 items-center'>
+                    <div className="text-2xl font-semibold text-black dark:text-gray-300">Submit Assignment</div>
+                    <div onClick={() => (router.back())}>
+                        <IoMdClose className='font-semibold text-3xl cursor-pointer hover:scale-125 transition-transform ease-linear text-red-500' />
+                    </div>
+                </div>
                 {message && <p className="text-green-500">{message}</p>}
                 {error && <p className="text-red-500">{error}</p>}
 

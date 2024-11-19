@@ -50,7 +50,7 @@ const CourseDetails = () => {
     const [assignments, setAssignments] = useState<assignments[]>([])
     const [participantData, setParticipantData] = useState<users[]>([]);
 
-    const [activeSection, setActiveSection] = useState<string>('course');
+    const [activeSection, setActiveSection] = useState<string>('modules');
     const [searchTerm, setSearchTerm] = useState<string>(''); // New state for search term
     const [addUser, setAddUser] = useState(false);
 

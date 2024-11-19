@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import axios from 'axios';
+import SubmissionsTable from './SubmissionsTable';
 
 interface courses {
     course_id: string;
@@ -27,6 +28,19 @@ interface assignments {
     total_marks: number;
 }
 
+interface Submission {
+    submission_id: string;
+    user: {
+        id: string;
+        first_name: string;
+        last_name: string;
+    };
+    submission_date: {
+        seconds: number;
+    };
+    graded: boolean;
+}
+
 export default function ViewModuleAssignment() {
     const router = useRouter();
     const params = useParams();
@@ -35,10 +49,11 @@ export default function ViewModuleAssignment() {
     const moduleId = params.moduleId as string;
     const assignmentId = params.assignmentId as string;
 
-
+    const [submissions, setSubmissions] = useState<Submission[]>([]);
     const [courses, setCourses] = useState<courses | null>(null);
     const [oneAssignment, setOneAssignment] = useState<assignments | null>(null);
     const [oneModule, setOneModule] = useState<modules | null>(null);
+    const [error, setError] = useState('');
 
     useEffect(() => {
         const getCourse = async () => {
@@ -72,6 +87,22 @@ export default function ViewModuleAssignment() {
             }
         }
         getModuleAssignments();
+
+        const fetchSubmissions = async () => {
+            try {
+                const response = await axios.post(`/api/assignments/${assignmentId}/submission/`, { assignmentId });
+                if (response.status === 200) {
+                    setSubmissions(response.data.submissions);
+                } else {
+                    setError('Failed to fetch submissions');
+                }
+            } catch (error) {
+                console.log(error);
+                setError('An error occurred while fetching submissions.');
+            }
+        };
+        fetchSubmissions();
+
     }, [assignmentId, moduleId, courseId])
 
     const handleDeleteAssignment = async () => {
@@ -178,15 +209,10 @@ export default function ViewModuleAssignment() {
                 </nav>
 
                 <div className="space-y-6">
-
-
                     <div>
-
                         <div className="grid gap-4 ">
-
-
                             <div>
-                                <div className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm hover:shadow-md transition-shadow flex items-center justify-between p-6">
+                                <div className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm hover:shadow-md transition-shadow flex flex-col items-start justify-start p-6">
                                     <div className=" w-full p-6  h-26">
                                         <h2 className="text-xl font-semibold mb-2">{oneAssignment?.title} </h2>
                                         <p className="text-sm text-gray-600">Opened : {formatDate(oneAssignment?.created_at)}</p>
@@ -197,31 +223,33 @@ export default function ViewModuleAssignment() {
                                                     className="bg-blue-500 text-white px-4 py-2 rounded-lg-lg hover:bg-blue-600"
                                                     onClick={handleEditAssignment} // Replace with your add module logic
                                                 >
-                                                    Edit Assignments
+                                                    Edit Assignment
                                                 </button>
                                                 <button
                                                     className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
                                                     onClick={handleDeleteAssignment} // Replace with your add module logic
                                                 >
-                                                    Delete Assignments
+                                                    Delete Assignment
                                                 </button>
-                                                <button
+                                                {/* <button
                                                     className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
                                                     onClick={handleViewSubmission} // Replace with your add module logic
                                                 >
                                                     View Submissions
-                                                </button>
+                                                </button> */}
                                             </div>
                                         </div>
                                     </div>
-                                    {/* <div>
-                        <button
-                            className="dark:bg-[#212830] text-white rounded-lg-xl p-3 my-5"
-                            onClick={() => router.push(params.moduleId ? `/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments/${assignmentId}/add-submission` : `/teacher/${userId}/mycourse/${courseId}/assignments/${assignmentId}/add-submission`)}
-                        >
-                            Add Submission
-                        </button>
-                    </div> */}
+                                    <div className='flex w-full'>
+
+                                        <SubmissionsTable
+                                            submissions={submissions}
+                                            userId={userId}
+                                            courseId={courseId}
+                                            moduleId={moduleId}
+                                            assignmentId={assignmentId}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
