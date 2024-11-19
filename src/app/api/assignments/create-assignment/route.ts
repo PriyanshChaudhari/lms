@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
         const formData = await req.formData();
         const course_id = formData.get('course_id') as string;
         const module_id = formData.get('module_id') as string;
-        const title = formData.get('title') as string;
+        const title = formData.get('title')?.toString()?.toUpperCase() as string;
         const assessment_type = formData.get('assessment_type') as string;
         const description = formData.get('description') as string;
         const total_marks = formData.get('total_marks') as string;
