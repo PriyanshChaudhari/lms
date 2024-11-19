@@ -10,6 +10,7 @@ import GradesTable from './GradesComponent';
 import UploadGrades from './UploadGrades';
 import UploadGradesDialog from './UploadGradesDialog';
 import TeacherModulesComponent from './TeacherModulesComponent';
+import { Plus } from 'lucide-react';
 
 interface users {
     user_id: string;
@@ -55,7 +56,7 @@ const CourseDetails = () => {
     const [assignments, setAssignments] = useState<assignments[]>([])
     const [participantData, setParticipantData] = useState<users[]>([]);
 
-    const [activeSection, setActiveSection] = useState<string>('course');
+    const [activeSection, setActiveSection] = useState<string>('modules');
 
     const [searchTerm, setSearchTerm] = useState<string>(''); // New state for search term
 
@@ -208,14 +209,16 @@ const CourseDetails = () => {
                 </nav>
 
                 <div className="space-y-6">
-                    {/* Course Section */}
+                    {/* Module Section */}
                     {activeSection === 'modules' && (
                         <div>
                             <div className="flex justify-end mb-6">
                                 <button
                                     onClick={addModule}
-                                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200"
-                                ><span className="text-lg">+</span>
+                                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center font-medium gap-1 transition-colors duration-200"
+                                ><Plus
+                                        className="text-white  cursor-pointer"
+                                    />
                                     Add Module
                                 </button>
                             </div>
@@ -223,7 +226,7 @@ const CourseDetails = () => {
                                 {sortedModules.map((module) => (
                                     <div
                                         key={module.id}
-                                        className="bg-white dark:bg-[#151b23] rounded-lg shadow-sm hover:shadow-md transition-shadow"
+                                        className="bg-white dark:bg-[#151b23] rounded-lg shadow-lg hover:shadow-2xl transition-shadow"
                                     >
                                         <div className="flex flex-col items-center justify-between p-6">
                                             {/* <span className="flex items-center gap-6 w-full">
@@ -239,7 +242,7 @@ const CourseDetails = () => {
                                                     </p>
                                                 </div>
                                             </span> */}
-                                            <TeacherModulesComponent moduleId={module.id} module={module} courseId={courseId} userId={userId}/>
+                                            <TeacherModulesComponent moduleId={module.id} module={module} courseId={courseId} userId={userId} />
                                             {/* <button
                                                 onClick={() => handleModuleClick(module.id)}
                                                 className="px-4 py-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
@@ -302,7 +305,7 @@ const CourseDetails = () => {
                             >
                                 Upload Grades
                             </button> */}
-                            <UploadGradesDialog courseId={courseId}/>
+                            <UploadGradesDialog courseId={courseId} />
                             <GradesTable courseId={courseId} teacherId={userId} />
                         </div>
                     )}
@@ -318,10 +321,13 @@ const CourseDetails = () => {
                                     {!addUser ? (
                                         <button
                                             onClick={() => setAddUser(true)}
-                                            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
+                                            className="flex bg-blue-500 gap-1 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors font-medium"
                                         >
-                                            Add Participants
+                                            <Plus
+                                                className="text-white cursor-pointer"
+                                            />Add Participants
                                         </button>
+
                                     ) : (
                                         <button
                                             onClick={() => setAddUser(false)}
@@ -397,8 +403,8 @@ const CourseDetails = () => {
                                                     setShowAddTeacher(false);
                                                 }}
                                                 className={`px-4 py-2 rounded-lg transition-colors ${showAddStudent
-                                                        ? 'bg-blue-500 text-white'
-                                                        : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
+                                                    ? 'bg-blue-500 text-white'
+                                                    : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
                                                     }`}
                                             >
                                                 Add Student
@@ -409,8 +415,8 @@ const CourseDetails = () => {
                                                     setShowAddTeacher(true);
                                                 }}
                                                 className={`px-4 py-2 rounded-lg transition-colors ${showAddTeacher
-                                                        ? 'bg-blue-500 text-white'
-                                                        : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
+                                                    ? 'bg-blue-500 text-white'
+                                                    : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
                                                     }`}
                                             >
                                                 Add Teacher
