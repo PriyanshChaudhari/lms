@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { storage } from "@/lib/firebaseConfig";
+import { IoMdClose } from 'react-icons/io';
 
 const EditCourse = () => {
     const params = useParams();
@@ -166,7 +167,14 @@ const EditCourse = () => {
     return (
         <div className='flex justify-center items-center h-screen'>
             <div className="w-full max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
-                <h2 className="text-2xl font-bold mb-4">Edit Course</h2>
+            <div className='flex justify-between mb-4 items-center'>
+                    <div className="text-2xl font-semibold text-black dark:text-gray-300">Edit Course</div>
+                    <div className=''
+                        onClick={() => (router.back())}
+                    >
+                        <IoMdClose className='font-semibold text-3xl cursor-pointer hover:scale-125 transition-transform ease-linear text-red-500' />
+                    </div>
+                </div>
                 <form onSubmit={handleSubmit}>
                 {error && (
                     <div className="mb-4 text-red-500 font-semibold text-left">
