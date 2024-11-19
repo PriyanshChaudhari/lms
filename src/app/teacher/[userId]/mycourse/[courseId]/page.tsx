@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import { useRouter, useParams, useSearchParams } from 'next/navigation'
+import { useRouter, useParams, useSearchParams, usePathname } from 'next/navigation'
 import axios from 'axios';
 import AddOneStudent from '@/components/Upload/AddOneStudent';
 import AddOneTeacher from '@/components/Upload/AddOneTeacher';
@@ -50,6 +50,7 @@ const CourseDetails = () => {
     const userId = params.userId as string;
     const courseId = params.courseId as string;
     const searchParams = useSearchParams();
+    const pathname = usePathname();
 
     const [courses, setCourses] = useState<courses | null>(null)
     const [courseModules, setCourseModules] = useState<modules[]>([])
@@ -77,10 +78,31 @@ const CourseDetails = () => {
                 item.user_id.includes(searchTerm)
         );
     useEffect(() => {
-        const section = searchParams.get('section');
-        if (section) {
-            setActiveSection(section);
-        }
+        // const section = searchParams.get('section');
+        // if (section) {
+        //     setActiveSection(section);
+        // }
+
+        const getActiveSection = () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const section = urlParams.get('section');
+            if (section) {
+                setActiveSection(section);
+            }
+        };
+
+        const scrollToModule = () => {
+            const hash = window.location.hash;
+            if (hash) {
+                const element = document.getElementById(hash.substring(1));
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        };
+
+        getActiveSection();
+        scrollToModule();
 
         const getCourse = async () => {
             try {
@@ -123,7 +145,7 @@ const CourseDetails = () => {
             }
         }
         getParticipants()
-    }, [courseId])
+    }, [courseId, searchParams])
 
     const formatDate = (timestamp: any) => {
         const date = new Date(timestamp.seconds * 1000); // Convert seconds to milliseconds
@@ -226,6 +248,7 @@ const CourseDetails = () => {
                                 {sortedModules.map((module) => (
                                     <div
                                         key={module.id}
+                                        id={module.id}
                                         className="bg-white dark:bg-[#151b23] rounded-lg shadow-lg hover:shadow-2xl transition-shadow"
                                     >
                                         <div className="flex flex-col items-center justify-between p-6">
