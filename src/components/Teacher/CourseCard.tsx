@@ -44,7 +44,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ courses, userId }) => {
     }
 
     // Filter courses based on search term
-    const filteredCourses = courses.filter(course => 
+    const filteredCourses = courses.filter(course =>
         course.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -63,7 +63,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ courses, userId }) => {
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="sm:w-1/2 w-full px-4 py-2 border border-gray-200 dark:border-gray-700  rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-[#151b23]"
                     />
-                    
+
                     <button
                         onClick={createCourse}
                         className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200"
@@ -73,9 +73,13 @@ const CourseCard: React.FC<CourseCardProps> = ({ courses, userId }) => {
                     </button>
                 </div>
 
-                {filteredCourses.length === 0 ? (
+                {filteredCourses.length === 0 && searchTerm.length === 0 ? (
                     <div className="text-center text-gray-500 dark:text-gray-400">
-                        No courses found matching your search.
+                        Courses Loading...
+                    </div>
+                ) : filteredCourses.length === 0 && searchTerm.length > 0 ? (
+                    <div className="text-center text-gray-500 dark:text-gray-400">
+                        No courses found.
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
