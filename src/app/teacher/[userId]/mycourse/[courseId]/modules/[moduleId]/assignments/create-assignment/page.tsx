@@ -2,6 +2,7 @@
 import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
 import { useState, ChangeEvent, FormEvent } from 'react';
+import { IoMdClose } from 'react-icons/io';
 
 export default function CreateAssignment() {
     const router = useRouter();
@@ -104,7 +105,14 @@ export default function CreateAssignment() {
     return (
         <div className='h-screen flex justify-center items-center'>
             <div className="w-full max-w-md mx-auto dark:bg-[#151b23] p-8 shadow-md rounded-lg">
-                <h1 className="text-2xl font-semibold text-black dark:text-gray-300 mb-4">Add New Assessment</h1>
+                <div className='flex justify-between mb-4 items-center'>
+                    <div className="text-2xl font-semibold text-black dark:text-gray-300">Add New Assignment</div>
+                    <div className=''
+                        onClick={() => (router.back())}
+                    >
+                        <IoMdClose className='font-semibold text-3xl cursor-pointer hover:scale-125 transition-transform ease-linear text-red-500' />
+                    </div>
+                </div>
                 {message && <p className="text-green-500">{message}</p>}
                 {error && (
                     <div className="mb-4 text-red-500 font-semibold text-left">

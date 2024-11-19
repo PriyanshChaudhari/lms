@@ -139,8 +139,8 @@ const Sidebar: React.FC = () => {
               href={`/teacher/${userId}/dashboard`}
               onClick={toggleDashboardVisibility}
               className={`flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200 ${activeSection === 'dashboard'
-                  ? 'bg-blue-500 text-white'
-                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                ? 'bg-blue-500 text-white'
+                : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
                 }`}
             >
               <span className="text-lg">📊</span>
@@ -163,8 +163,8 @@ const Sidebar: React.FC = () => {
             <button
               onClick={toggleCoursesVisibility}
               className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors duration-200 ${activeSection === 'courses'
-                  ? 'bg-blue-500 text-white'
-                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                ? 'bg-blue-500 text-white'
+                : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
                 }`}
             >
               <div className="flex items-center space-x-3">
@@ -207,7 +207,7 @@ const Sidebar: React.FC = () => {
                                 {modules[course.course_id].map((module) => (
                                   <Link
                                     key={module.id}
-                                    href={`/teacher/${userId}/mycourse/${course.course_id}/modules/${module.id}`}
+                                    href={`/teacher/${userId}/mycourse`}
                                   >
                                     <li className="p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100  dark:hover:bg-gray-700 rounded ">
                                       {module.position}→ {module.title}

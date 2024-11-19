@@ -192,7 +192,7 @@ const CourseDetails = () => {
                                         }`}
                                 >
                                     {section.charAt(0).toUpperCase() + section.slice(1)}
-                                    {(section === 'assignments' && assignments.length > 0) && (
+                                    {(section === 'assignments' && assignments.length >= 0) && (
                                         <span className="ml-2 bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded-full">
                                             {assignments.length}
                                         </span>
@@ -265,9 +265,16 @@ const CourseDetails = () => {
                                     onClick={() => handleAssignmentClick(assignment.id, assignment.module_id)}
                                     className="bg-white dark:bg-[#151b23] rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer p-6"
                                 >
-                                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                                        {assignment.title}
-                                    </h3>
+                                    <div className="flex justify-between">
+                                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                                            {assignment.title}
+                                        </h3>
+                                            <div >
+                                                <span className="bg-zinc-300 dark:bg-gray-700 p-3 text-clip bg-opacity-20 text-sm text-gray-500 dark:text-gray-400  px-2 py-1 rounded-lg">
+                                                View
+                                                </span>
+                                            </div>
+                                    </div>
                                     <div className="space-y-4">
                                         <p className="text-gray-600 dark:text-gray-300">
                                             {assignment.description}

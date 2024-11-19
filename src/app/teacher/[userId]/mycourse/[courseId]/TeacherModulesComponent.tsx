@@ -203,7 +203,7 @@ const TeacherModulesComponent = ({ moduleId, module, courseId, userId }: Teacher
                                             <td className="py-2 px-4 text-center border-b border-gray-200 dark:border-gray-600">{content.title}</td>
                                             <td className="py-2 px-4 text-center border-b border-gray-200 dark:border-gray-600">{content.description}</td>
                                             <td className="py-2 px-4 flex items-center justify-center border-b border-gray-200 dark:border-gray-600 space-x-2">
-                                                <div className='px-3 rounded-xl py-1 cursor-pointer bg-gray-200 hover:bg-gray-300 transition-all ease-in' onClick={() => handleViewClick(content.id)}>View</div>
+                                                <div className='bg-zinc-400 dark:bg-zinc-300 p-3 text-clip bg-opacity-20 text-sm text-gray-500 dark:text-gray-500  px-2 py-1 rounded-lg cursor-pointer' onClick={() => handleViewClick(content.id)}>View</div>
                                                 {/* <div className='px-3 rounded-lg-xl cursor-pointer bg-gray-300 hover:bg-gray-200' onClick={() => handleDownloadClick(content.id)}>Download</div> */}
                                             </td>
                                         </tr>

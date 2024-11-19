@@ -194,7 +194,7 @@ export default function ViewModuleAssignment() {
 
                 <div className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm p-6 mb-8">
                     <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                        {courses?.title}
+                        {courses?.title} - Assignment
                     </h1>
                     <p className="text-gray-600 dark:text-gray-300">{courses?.description}</p>
                 </div>
@@ -214,7 +214,7 @@ export default function ViewModuleAssignment() {
                             <div>
                                 <div className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm hover:shadow-md transition-shadow flex flex-col items-start justify-start p-6">
                                     <div className=" w-full p-6  h-26">
-                                        <h2 className="text-xl font-semibold mb-2">{oneAssignment?.title}</h2>
+                                        <h2 className="text-xl font-semibold mb-2">{oneAssignment?.title} </h2>
                                         <p className="text-sm text-gray-600">Opened : {formatDate(oneAssignment?.created_at)}</p>
                                         <p className="text-sm text-gray-600">Due date : {formatDate(oneAssignment?.due_date)}</p>
                                         <div className='flex justify-start gap-6 items-center'>

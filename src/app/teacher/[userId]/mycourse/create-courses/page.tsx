@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation'; // Firebase storage
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { storage } from "@/lib/firebaseConfig";
+import { IoMdClose } from 'react-icons/io';
 
 const CreateCourse = () => {
     const params = useParams()
@@ -77,7 +78,7 @@ const CreateCourse = () => {
     };
 
     const validateForm = () => {
-        if (course.title.trim() === "" || course.description.trim() === "" || course.category.trim() === "" ) {
+        if (course.title.trim() === "" || course.description.trim() === "") {
             setError("Please Fill All Required Fields.")
             return false;
         }
@@ -163,7 +164,14 @@ const CreateCourse = () => {
     return (
         <div className=''>
             <div className="max-w-md mx-auto mt-8 p-6 bg-white dark:bg-[#151b23] rounded-lg shadow-md">
-                <h2 className="text-2xl font-semibold text-black dark:text-gray-300 mb-4">Create New Course</h2>
+                <div className='flex justify-between mb-4 items-center'>
+                    <div className="text-2xl font-semibold text-black dark:text-gray-300">Create Course</div>
+                    <div className=''
+                        onClick={() => (router.back())}
+                    >
+                        <IoMdClose className='font-semibold text-3xl cursor-pointer hover:scale-125 transition-transform ease-linear text-red-500' />
+                    </div>
+                </div>
                 <form onSubmit={handleSubmit}>
                     {error && (
                         <div className="mb-4 text-red-500 font-semibold text-left">
