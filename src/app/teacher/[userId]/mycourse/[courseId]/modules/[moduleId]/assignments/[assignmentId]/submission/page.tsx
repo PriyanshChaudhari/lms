@@ -160,10 +160,6 @@ export default function ViewSubmissions() {
                     <ul className="flex p-2 gap-2">
                         <li className="p-3 rounded-lg-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}`)}>{courses?.title}</li>
                         <li className="p-3 rounded-lg-xl text-black cursor-pointer">/</li>
-                        <li className="p-3 rounded-lg-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}`)}> {oneModule?.title}</li>
-                        <li className="p-3 rounded-lg-xl text-black cursor-pointer">/</li>
-                        <li className="p-3 rounded-lg-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments`)}>Assignments</li>
-                        <li className="p-3 rounded-lg-xl text-black cursor-pointer">/</li>
                         <li className="p-3 rounded-lg-xl text-black cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments/${assignmentId}`)}>{oneAssignment?.title}</li>
                         <li className="p-3 rounded-lg-xl text-black cursor-pointer">/</li>
                         <li className="p-3 rounded-lg-xl text-black cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments/${assignmentId}`)}>Submissions</li>

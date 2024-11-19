@@ -95,9 +95,7 @@ export default function ViewModule() {
                 <p className="text-lg text-gray-700 mb-6">{course?.description}</p>
                 <nav className="mb-6 p-2">
                     <ul className="flex justify-start space-x-4 list-none p-0">
-                        <li className=" p-3 rounded-lg-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}`)}>{course?.title}</li>
-                        <li className=" p-3 rounded-lg-xl text-black cursor-pointer">/</li>
-                        <li className=" p-3 rounded-lg-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}`)}>{oneModule?.title}</li>
+                        <li className=" p-3 rounded-lg-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}?section=modules`)}>{course?.title}</li>
                         <li className=" p-3 rounded-lg-xl text-black cursor-pointer">/</li>
                         <li className=" p-3 rounded-lg-xl text-black cursor-pointer">{oneContent?.title}</li>
                     </ul>

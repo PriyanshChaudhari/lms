@@ -171,11 +171,7 @@ export default function ViewModuleAssignment() {
 
                 <nav className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm mb-8">
                     <ul className="flex p-2 gap-2">
-                        <li className="p-3 rounded-lg-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}`)}>{courses?.title}</li>
-                        <li className="p-3 rounded-lg-xl text-black cursor-pointer">/</li>
-                        <li className="p-3 rounded-lg-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}`)}>{oneModule?.title}</li>
-                        <li className="p-3 rounded-lg-xl text-black cursor-pointer">/</li>
-                        <li className="p-3 rounded-lg-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments`)}>Assignments</li>
+                        <li className="p-3 rounded-lg-xl text-gray-500 cursor-pointer" onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}?section=assignments`)}>{courses?.title}</li>
                         <li className="p-3 rounded-lg-xl text-black cursor-pointer">/</li>
                         <li className="p-3 rounded-lg-xl text-black cursor-pointer">{oneAssignment?.title}</li>
                     </ul>

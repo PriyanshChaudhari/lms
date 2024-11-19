@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import CourseCard from "@/components/Teacher/CourseCard";
 
@@ -19,7 +19,7 @@ const MyCourse: React.FC = () => {
     const [courses, setCourses] = useState<courses[]>([]);
     const params = useParams();
     const userId = params.userId;
-    const router = useRouter()
+    const router = useRouter();
 
     useEffect(() => {
         const getTeacherCourses = async () => {
