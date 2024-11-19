@@ -114,9 +114,9 @@ const TeacherModulesComponent = ({ moduleId, module, courseId, userId }: Teacher
     const sortedContent = courseContent.sort((a, b) => a.position - b.position);
 
     return (
-        <div className="flex w-full dark:bg-transparent py-8 px-4">
+        <div className="flex w-full dark:bg-transparent py-8 px-4 ">
             <div className="flex-auto max-w-7xl mx-auto">
-                <div className="flex flex-col gap-4 space-y-6">
+                <div className="flex flex-col gap-4 space-y-6 ">
                     <div className='flex justify-between items-center'>
                         <span className="flex items-center gap-6 w-full">
                             <span className="w-8 h-8 flex items-center justify-center bg-blue-100 text-blue-600 rounded-full">
@@ -215,7 +215,7 @@ const TeacherModulesComponent = ({ moduleId, module, courseId, userId }: Teacher
                                             <td className="py-2 px-4 text-center border-b border-gray-200 dark:border-gray-600">{content.title}</td>
                                             <td className="py-2 px-4 text-center border-b border-gray-200 dark:border-gray-600">{content.description}</td>
                                             <td className="py-2 px-4 flex items-center justify-center border-b border-gray-200 dark:border-gray-600 space-x-2">
-                                                <div className='px-3 rounded-lg-xl cursor-pointer bg-gray-300 hover:bg-gray-200' onClick={() => handleViewClick(content.id)}>View</div>
+                                                <div className='px-3 rounded-xl py-1 cursor-pointer bg-gray-200 hover:bg-gray-300 transition-all ease-in' onClick={() => handleViewClick(content.id)}>View</div>
                                                 {/* <div className='px-3 rounded-lg-xl cursor-pointer bg-gray-300 hover:bg-gray-200' onClick={() => handleDownloadClick(content.id)}>Download</div> */}
                                             </td>
                                         </tr>

@@ -91,7 +91,7 @@ const AddOneTeacher = ({ courseId }: Props) => {
 
     return (
         <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold mb-4">Enroll teacher in Course</h2>
+            <h2 className="text-2xl font-bold mb-4">Enroll Teacher in Course</h2>
             {generalError && (
                 <div className="mb-4 text-red-600 font-bold text-center">
                     {generalError}
@@ -99,7 +99,7 @@ const AddOneTeacher = ({ courseId }: Props) => {
             )}
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                    <label htmlFor="teacher_id" className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="teacher_id" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">
                         Teacher
                     </label>
                     <select

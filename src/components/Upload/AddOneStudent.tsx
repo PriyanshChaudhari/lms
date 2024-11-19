@@ -84,6 +84,13 @@ const AddOneStudent = ({ courseId }: Props) => {
         }
     };
 
+    // const [searchQuery, setSearchQuery] = useState('');
+    // const filteredStudents = students.filter(student =>
+    //     `${student.id} ${student.first_name} ${student.last_name}`
+    //         .toLowerCase()
+    //         .includes(searchQuery.toLowerCase())
+    // );
+
     return (
         <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
             <h2 className="text-2xl font-bold mb-4">Enroll Student in Course</h2>
@@ -94,9 +101,20 @@ const AddOneStudent = ({ courseId }: Props) => {
             )}
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                    <label htmlFor="student_id" className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="student_id" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">
                         Student
                     </label>
+
+                    {/* Search Field */}
+                    {/* <input
+                        type="text"
+                        placeholder="Search students..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="mt-1 mb-2 p-2 w-full border border-gray-300 rounded-lg"
+                    /> */}
+
+                    {/* Filtered Dropdown */}
                     <select
                         id="student_id"
                         name="student_id"
@@ -112,8 +130,10 @@ const AddOneStudent = ({ courseId }: Props) => {
                             </option>
                         ))}
                     </select>
+
                     {errors.student_id && <p className="text-red-600 text-sm">{errors.student_id}</p>}
                 </div>
+
 
                 {/* <div className="mb-4">
                     <label htmlFor="course_id" className="block text-sm font-medium text-gray-700">
