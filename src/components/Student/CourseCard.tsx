@@ -1,6 +1,7 @@
 "use client"
 import React from "react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface Course {
     course_id: string;
@@ -8,7 +9,7 @@ interface Course {
     description: string;
     teacher_id: string;
     category: string;
-    coursePicUrl:string;
+    coursePicUrl: string;
 }
 
 interface CourseCardProps {
@@ -17,14 +18,20 @@ interface CourseCardProps {
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({ courses, userId }) => {
+    const [searchTerm, setSearchTerm] = useState<string>('');
     const router = useRouter()
 
     const handleClick = (course_id: string) => {
         router.push(`/student/${userId}/mycourse/${course_id}`);
     };
 
+    const filteredCourses = courses.filter(course =>
+        course.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+
     return (
-       
+
 
         // <div className="flex flex-col p-5">
         //     <div className="flex flex-1 gap-10 flex-wrap md:flex-nowrap items-start justify-center border border-gray-300 p-5">
@@ -61,53 +68,69 @@ const CourseCard: React.FC<CourseCardProps> = ({ courses, userId }) => {
 
         <div className="min-h-screen bg-gray-50 dark:bg-transparent p-8">
             <div className="max-w-7xl mx-auto">
-                <div className="flex justify-between items-center mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                <div className="flex justify-start items-center gap-8 mb-8">
+                    <h1 className=" text-3xl font-bold text-gray-900 dark:text-white">
                         My Courses
                     </h1>
+
                     
+                    <input
+                        type="text"
+                        placeholder="Search courses..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="sm:w-1/2 w-full px-4 py-2 border border-gray-200 dark:border-gray-700  rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-[#151b23]"
+                    />
+                    
+
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {courses.map((course) => (
-                        <div 
-                            key={course.course_id} 
-                            className="bg-white dark:bg-[#151b23] rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 p-6"
-                        >
-                            <div className="aspect-video relative overflow-hidden mb-2">
-                                <img
-                                    src={course.coursePicUrl}
-                                    alt={course.title}
-                                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
-                                />
-                            </div>
-                            
-                            <div className="">
-                                <h2 
-                                    className="text-xl font-semibold text-gray-900 dark:text-white mb-2 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer truncate"
-                                    onClick={() => handleClick(course.course_id)}
-                                >
-                                    {course.title}
-                                </h2>
-                                
-                                <p className="text-gray-600 dark:text-gray-300 mb-6 line-clamp-2 text-sm">
-                                    {course.description}
-                                </p>
-                                
-                                <div className="flex gap-4">
-                                    <button 
-                                        className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg transition-colors duration-200 text-sm"
+                {filteredCourses.length === 0 ? (
+                    <div className="text-center text-gray-500 dark:text-gray-400">
+                        No courses found matching your search.
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {filteredCourses.map((course) => (
+                            <div
+                                key={course.course_id}
+                                className="bg-white dark:bg-[#151b23] rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 p-6"
+                            >
+                                <div className="aspect-video relative overflow-hidden mb-2">
+                                    <img
+                                        src={course.coursePicUrl}
+                                        alt={course.title}
+                                        className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
+                                    />
+                                </div>
+
+                                <div className="">
+                                    <h2
+                                        className="text-xl font-semibold text-gray-900 dark:text-white mb-2 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer truncate"
                                         onClick={() => handleClick(course.course_id)}
                                     >
-                                        View
-                                    </button>
-                                   
+                                        {course.title}
+                                    </h2>
+
+                                    <p className="text-gray-600 dark:text-gray-300 mb-6 line-clamp-2 text-sm">
+                                        {course.description}
+                                    </p>
+
+                                    <div className="flex gap-4">
+                                        <button
+                                            className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg transition-colors duration-200 text-sm"
+                                            onClick={() => handleClick(course.course_id)}
+                                        >
+                                            View
+                                        </button>
+
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
-                    
-                </div>
+                        ))}
+
+                    </div>
+                )}
             </div>
         </div>
     );
