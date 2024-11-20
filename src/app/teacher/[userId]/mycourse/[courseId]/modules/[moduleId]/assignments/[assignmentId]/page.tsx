@@ -54,6 +54,12 @@ export default function ViewModuleAssignment() {
     const [oneAssignment, setOneAssignment] = useState<assignments | null>(null);
     const [oneModule, setOneModule] = useState<modules | null>(null);
     const [error, setError] = useState('');
+    const [deleteConfirmation, setDeleteConfirmation] = useState<{ confirmText: string }>({
+        confirmText: ''
+    });
+
+    const [showdeleteConfirmation, setShowDeleteConfirmation] = useState<boolean>(false);
+
 
     useEffect(() => {
         const getCourse = async () => {
@@ -106,17 +112,20 @@ export default function ViewModuleAssignment() {
     }, [assignmentId, moduleId, courseId])
 
     const handleDeleteAssignment = async () => {
-        if (window.confirm("Are you sure you want to delete this assignment? This action cannot be undone.")) {
-            try {
-                const response = await axios.delete(`/api/assignments/${assignmentId}/delete-assignment`);
-                if (response.status === 200) {
-                    router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments`);
-                } else {
-                }
-            } catch (error) {
-                console.error('An error occurred while deleting the assignment.');
-            }
+        if (deleteConfirmation.confirmText.toLowerCase() !== 'confirm') {
+            alert('Deletion cancelled. Please type "confirm" to delete.');
+            return;
         }
+        try {
+            const response = await axios.delete(`/api/assignments/${assignmentId}/delete-assignment`);
+            if (response.status === 200) {
+                router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments`);
+            } else {
+            }
+        } catch (error) {
+            console.error('An error occurred while deleting the assignment.');
+        }
+
     }
 
     const handleEditAssignment = () => {
@@ -189,7 +198,46 @@ export default function ViewModuleAssignment() {
         //     </div>
         // </div >
 
+
+
         <div className="min-h-screen bg-gray-50 dark:bg-transparent py-8 px-4">
+            {showdeleteConfirmation && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white dark:bg-[#1e2631] p-6 rounded-lg shadow-xl w-96">
+                        <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+                            Confirm Assignment Deletion
+                        </h2>
+                        <p className="text-gray-600 dark:text-gray-300 mb-4">
+                            Are you sure you want to delete this assignment?
+                            Type "confirm" below to proceed.
+                        </p>
+                        <input
+                            type="text"
+                            value={deleteConfirmation.confirmText}
+                            onChange={(e) => setDeleteConfirmation({
+                                confirmText: e.target.value
+                            })}
+                            className="w-full px-3 py-2 border rounded-lg mb-4 dark:bg-[#151b23]"
+                            placeholder="Type 'confirm' here"
+                        />
+                        <div className="flex gap-4">
+                            <button
+                                onClick={() => setShowDeleteConfirmation(false)}
+                                className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg"
+                            >
+                                Cancel
+                            </button>
+                            <button
+
+                                onClick={handleDeleteAssignment}
+                                className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
             <div className="max-w-7xl mx-auto">
 
                 <div className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm p-6 mb-8">
@@ -227,7 +275,7 @@ export default function ViewModuleAssignment() {
                                                 </button>
                                                 <button
                                                     className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
-                                                    onClick={handleDeleteAssignment} // Replace with your add module logic
+                                                    onClick={() =>  setShowDeleteConfirmation(true)} // Replace with your add module logic
                                                 >
                                                     Delete Assignment
                                                 </button>

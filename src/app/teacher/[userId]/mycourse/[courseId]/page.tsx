@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import { useRouter, useParams, useSearchParams, usePathname } from 'next/navigation'
+import { useRouter, useParams, useSearchParams } from 'next/navigation'
 import axios from 'axios';
 import AddOneStudent from '@/components/Upload/AddOneStudent';
 import AddOneTeacher from '@/components/Upload/AddOneTeacher';
@@ -50,7 +50,6 @@ const CourseDetails = () => {
     const userId = params.userId as string;
     const courseId = params.courseId as string;
     const searchParams = useSearchParams();
-    const pathname = usePathname();
 
     const [courses, setCourses] = useState<courses | null>(null)
     const [courseModules, setCourseModules] = useState<modules[]>([])
@@ -78,31 +77,10 @@ const CourseDetails = () => {
                 item.user_id.includes(searchTerm)
         );
     useEffect(() => {
-        // const section = searchParams.get('section');
-        // if (section) {
-        //     setActiveSection(section);
-        // }
-
-        const getActiveSection = () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const section = urlParams.get('section');
-            if (section) {
-                setActiveSection(section);
-            }
-        };
-
-        const scrollToModule = () => {
-            const hash = window.location.hash;
-            if (hash) {
-                const element = document.getElementById(hash.substring(1));
-                if (element) {
-                    element.scrollIntoView({ behavior: 'smooth' });
-                }
-            }
-        };
-
-        getActiveSection();
-        scrollToModule();
+        const section = searchParams.get('section');
+        if (section) {
+            setActiveSection(section);
+        }
 
         const getCourse = async () => {
             try {
@@ -145,7 +123,7 @@ const CourseDetails = () => {
             }
         }
         getParticipants()
-    }, [courseId, searchParams])
+    }, [courseId])
 
     const formatDate = (timestamp: any) => {
         const date = new Date(timestamp.seconds * 1000); // Convert seconds to milliseconds
@@ -176,6 +154,7 @@ const CourseDetails = () => {
                 data: { user_id: userId, course_id: courseId } // Use 'data' to pass the body in DELETE request
             });
             console.log('Participant removed:', res.data);
+            alert('Participant removed successfully.');
         } catch (error) {
             console.error('Error removing participant:', error);
         }
@@ -207,7 +186,7 @@ const CourseDetails = () => {
                             <li key={section}>
                                 <button
                                     onClick={() => setActiveSection(section)}
-                                    className={`px-4 py-2 rounded-lg-md font-medium transition-colors
+                                    className={`px-4 py-2 rounded-lg font-medium transition-colors
                                         ${activeSection === section
                                             ? 'bg-blue-500 text-white'
                                             : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
@@ -215,12 +194,12 @@ const CourseDetails = () => {
                                 >
                                     {section.charAt(0).toUpperCase() + section.slice(1)}
                                     {(section === 'assignments' && assignments.length >= 0) && (
-                                        <span className="ml-2 bg-blue-100 text-blue-800 text-xs px-2 py-0.5">
+                                        <span className="ml-2 bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded-full">
                                             {assignments.length}
                                         </span>
                                     )}
                                     {(section === 'participants' && participantData.length > 0) && (
-                                        <span className="ml-2 bg-blue-100 text-blue-800 text-xs px-2 py-0.5">
+                                        <span className="ml-2 bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded-full">
                                             {participantData.length}
                                         </span>
                                     )}
@@ -248,7 +227,6 @@ const CourseDetails = () => {
                                 {sortedModules.map((module) => (
                                     <div
                                         key={module.id}
-                                        id={module.id}
                                         className="bg-white dark:bg-[#151b23] rounded-lg shadow-lg hover:shadow-2xl transition-shadow"
                                     >
                                         <div className="flex flex-col items-center justify-between p-6">
