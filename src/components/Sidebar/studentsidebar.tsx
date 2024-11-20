@@ -208,7 +208,7 @@ const Sidebar: React.FC = () => {
                               {modules[course.course_id].map((module) => (
                                 <Link 
                                   key={module.id}
-                                  href={`/student/${userId}/mycourse`}
+                                  href={`/student/${userId}/mycourse/${course.course_id}?section=modules#${module.id}`}
                                 >
                                   <li className="p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100  dark:hover:bg-gray-700 rounded ">
                                     {module.position}→ {module.title}
