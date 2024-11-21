@@ -1,6 +1,7 @@
 "use client"
 import { useState, ChangeEvent } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import axios from 'axios';
 
 const CreateUser = () => {
@@ -17,11 +18,20 @@ const CreateUser = () => {
     });
 
     const [error, setError] = useState<string | null>(null);
-
+    const [showMessage, setShowMessage] = useState(false);
     const handleChange = (e: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
         const { name, value } = e.target;
         setUser({ ...user, [name]: value });
     };
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setShowMessage(false);
+        }, 5000); // 5 seconds delay
+
+        // Cleanup the timer when the component unmounts or re-renders
+        return () => clearTimeout(timer);
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -36,7 +46,7 @@ const CreateUser = () => {
                 // Check if the response status indicates success
                 if (response.status === 201) {
                     console.log('User created successfully');
-                    router.push(`/admin/${userId}/view-users`);
+                    setShowMessage(true);
                 } else {
                     setError(response.data.error || 'Error creating user'); // Set error message if response status is not 201
                 }
@@ -55,8 +65,35 @@ const CreateUser = () => {
         }
     };
 
+    const closeShowMessage = () => {
+        router.push(`/admin/${userId}/view-users`);
+        setShowMessage(false);
+    }
+
     return (
         <div className="bg-gray-50 dark:dark:bg-[#212830] min-h-screen flex items-center justify-center p-6">
+            {showMessage && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white dark:bg-[#1e2631] p-6 rounded-lg shadow-xl w-96">
+                        <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+                            User Enrolled Sucessfully
+                        </h2>
+                        <p className="text-gray-600 dark:text-gray-300 mb-4">
+                            user added sucessfully.
+                        </p>
+
+                        <div className="flex gap-4">
+                            <button
+                                onClick={closeShowMessage}
+                                className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg"
+                            >
+                                Cancel (Closing in 5 seconds)
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            )}
             <form onSubmit={handleSubmit} className="bg-white dark:bg-[#151b23] p-8 rounded-lg-lg shadow-md w-full max-w-xl">
                 <div className="mb-4">
                     <h2 className="text-2xl font-semibold mb-4 text-black dark:text-gray-300">Add User</h2>
