@@ -126,7 +126,7 @@ const Sidebar: React.FC = () => {
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden sm:block w-64 bg-gray-100 dark:bg-[#151b23] dark:bg-[] shadow-lg h-screen fixed z-50">
+      <aside className="hidden sm:block w-64 bg-gray-100 dark:bg-[#151b23] dark:bg-[] shadow-lg h-screen fixed z-40">
         <div className="flex flex-col h-full">
           {/* Sidebar Header */}
           <div className="p-6 border-b border-gray-200 dark:border-gray-800">

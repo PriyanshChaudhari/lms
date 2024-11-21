@@ -210,6 +210,7 @@ const SearchableTeacherEnrollment = ({ courseId }) => {
     const [generalError, setGeneralError] = useState(null);
     const [loading, setLoading] = useState(false);
     const userId = localStorage.getItem('user_id');
+    const [showMessage, setShowMessage] = useState(false);
 
     useEffect(() => {
         const fetchTeachers = async () => {
@@ -226,6 +227,15 @@ const SearchableTeacherEnrollment = ({ courseId }) => {
         fetchTeachers();
     }, []);
 
+    useEffect(() => {
+        const timer = setTimeout(() => {
+          setShowMessage(false);
+        }, 5000); // 5 seconds delay
+    
+        // Cleanup the timer when the component unmounts or re-renders
+        return () => clearTimeout(timer);
+      }, []);
+
     const handleEnroll = async (teacherId) => {
         setLoading(true);
         try {
@@ -234,6 +244,7 @@ const SearchableTeacherEnrollment = ({ courseId }) => {
                 course_id: courseId
             });
             setGeneralError(null);
+            setShowMessage(true);
         } catch (error) {
             console.error('Error enrolling student:', error);
             setGeneralError(error.response?.data?.error || 'Failed to enroll student');
@@ -251,6 +262,28 @@ const SearchableTeacherEnrollment = ({ courseId }) => {
 
     return (
         <div className="w-full max-w-4xl mx-auto p-6 space-y-6">
+             {showMessage && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white dark:bg-[#1e2631] p-6 rounded-lg shadow-xl w-96">
+                        <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+                            Participant enrolled sucessfully!
+                        </h2>
+                        <p className="text-gray-600 dark:text-gray-300 mb-4">
+                            The participant has been enrolled to the course.
+                        </p>
+                    
+                        <div className="flex gap-4">
+                            <button
+                                onClick={() => setShowMessage(false)}
+                                className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg"
+                            >
+                                Cancel (Closing in 5 seconds)
+                            </button>
+                           
+                        </div>
+                    </div>
+                </div>
+            )}
             <div className="flex items-center space-x-2">
                 <input
                     type="text"

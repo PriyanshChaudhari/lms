@@ -63,6 +63,8 @@ const CourseDetails = () => {
     const [addUser, setAddUser] = useState(false);  // Controls showing the add participants section
     const [showAddStudent, setShowAddStudent] = useState(true);  // Controls showing Add Student form
     const [showAddTeacher, setShowAddTeacher] = useState(false);  // Controls showing Add Teacher form
+    const [showMessage, setShowMessage] = useState(false); //
+    
 
     const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
 
@@ -76,6 +78,16 @@ const CourseDetails = () => {
                 item.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 item.user_id.includes(searchTerm)
         );
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setShowMessage(false);
+        }, 5000); // 5 seconds delay
+
+        // Cleanup the timer when the component unmounts or re-renders
+        return () => clearTimeout(timer);
+    }, []);
+
     useEffect(() => {
         const section = searchParams.get('section');
         if (section) {
@@ -154,7 +166,7 @@ const CourseDetails = () => {
                 data: { user_id: userId, course_id: courseId } // Use 'data' to pass the body in DELETE request
             });
             console.log('Participant removed:', res.data);
-            alert('Participant removed successfully.');
+            setShowMessage(true);
         } catch (error) {
             console.error('Error removing participant:', error);
         }
@@ -170,6 +182,28 @@ const CourseDetails = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-transparent py-8 px-4">
+            {showMessage && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white dark:bg-[#1e2631] p-6 rounded-lg shadow-xl w-96">
+                        <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+                            Participant Removed
+                        </h2>
+                        <p className="text-gray-600 dark:text-gray-300 mb-4">
+                            The participant has been removed from the course.
+                        </p>
+
+                        <div className="flex gap-4">
+                            <button
+                                onClick={() => setShowMessage(false)}
+                                className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg"
+                            >
+                                Cancel (Closing in 5 seconds)
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            )}
             <div className="max-w-7xl mx-auto">
                 {/* Course Header */}
                 <div className="bg-white dark:bg-[#151b23] rounded-lg shadow-sm p-6 mb-8">

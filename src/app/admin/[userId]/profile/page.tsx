@@ -226,7 +226,7 @@ const Profile = () => {
 
             {/* Profile Picture Upload Modal */}
             {showPopup && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 backdrop-blur-sm">
+                <div className="fixed inset-0 bg-black/50 flex items-center z-50 justify-center p-4 backdrop-blur-sm">
                     <div className="bg-white dark:bg-gray-800 rounded p-6 w-full max-w-md">
                         <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
                             Update Profile Picture
