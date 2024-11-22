@@ -1,16 +1,69 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebaseConfig';
+import { NextResponse, NextRequest } from 'next/server';
+import { db } from '@/lib/firebaseConfig'; // Your Firebase config
 import { collection, query, where, getDocs } from 'firebase/firestore';
 
-// Define the type for user data
-interface marksData {
-    userId: string;
-    marks: string;
-    event_name: string;
-    course_id: string;
+async function fetchAssignmentMarksByCourse(userId: string, courseId: string) {
+    // Step 1: Query to get modules based on courseId
+    const modulesQuery = query(
+        collection(db, 'course-module'), // Adjust the collection name if it's different
+        where('course_id', '==', courseId)
+    );
+
+    // Fetch the documents from the modules query
+    const modulesSnapshot = await getDocs(modulesQuery);
+
+    let moduleIds: string[] = [];
+
+    if (!modulesSnapshot.empty) {
+        // Extract module IDs
+        moduleIds = modulesSnapshot.docs.map(doc => doc.id);
+    }
+
+    let assignments = [];
+    if (moduleIds.length > 0) {
+        // Step 2: Query to get assignments based on module IDs
+        const assignmentsQuery = query(
+            collection(db, 'assessments'), // Adjust the collection name if needed
+            where('module_id', 'in', moduleIds), // Use the module IDs
+            where('assessment_type', '==', 'assignment') // Fetch only assignments
+        );
+
+        // Fetch the documents from the assignments query
+        const assignmentsSnapshot = await getDocs(assignmentsQuery);
+
+        if (!assignmentsSnapshot.empty) {
+            // Map through the assignments snapshot and return an array of assignments
+            assignments = assignmentsSnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
+        }
+    }
+
+    return assignments;
 }
 
-// Function to handle GET request to fetch assignment marks for a specific course
+async function fetchParticipantsByCourse(courseId: string) {
+    // Example: Fetch participants based on courseId
+    const participantsQuery = query(
+        collection(db, 'participants'), // Adjust the collection name if needed
+        where('course_id', '==', courseId)
+    );
+
+    const participantsSnapshot = await getDocs(participantsQuery);
+
+    let participants = [];
+
+    if (!participantsSnapshot.empty) {
+        participants = participantsSnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data(),
+        }));
+    }
+
+    return participants;
+}
+
 export async function GET(req: NextRequest) {
     try {
         const { searchParams } = new URL(req.url);
@@ -22,70 +75,12 @@ export async function GET(req: NextRequest) {
         }
 
         const assignmentMarks = await fetchAssignmentMarksByCourse(userId, courseId);
+        const participants = await fetchParticipantsByCourse(courseId);
 
-        return NextResponse.json({ user_id: userId, course_id: courseId, assignment_marks: assignmentMarks }, { status: 200 });
+        // Return the array of assignments and participants
+        return NextResponse.json({ assignments: assignmentMarks, participants, status: 200 });
     } catch (error) {
-        console.error('Error fetching marks:', error);
-        return NextResponse.json({ error: 'Failed to fetch marks' }, { status: 500 });
+        console.error('Error fetching data:', error);
+        return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 });
     }
-}
-
-// Helper function to fetch assignment marks by course
-async function fetchAssignmentMarksByCourse(userId: string, courseId: string) {
-    // Step 1: Fetch module_id for the given course_id
-    const courseModulesCollection = collection(db, 'course-module');
-    const courseModulesQuery = query(courseModulesCollection, where('course_id', '==', String(courseId)));
-    const courseModulesSnapshot = await getDocs(courseModulesQuery);
-
-    const moduleIds = courseModulesSnapshot.docs.map(doc => doc.id);
-    // console.log("moduleIds: ", moduleIds);
-
-    // Step 2: Fetch assessment_id for the given module_id
-    const assessmentsCollection = collection(db, 'assessments');
-    const assessmentsQuery = query(assessmentsCollection, where('module_id', 'in', moduleIds));
-    const assessmentsSnapshot = await getDocs(assessmentsQuery);
-
-    const assessmentIds = assessmentsSnapshot.docs.map(doc => doc.id);
-
-    // Step 3: Fetch marks for the given assessment_id
-    const submissionsCollection = collection(db, 'submissions');
-    const submissionsQuery = query(submissionsCollection, where('user_id', '==', userId), where('assignment_id', 'in', assessmentIds));
-    const submissionsSnapshot = await getDocs(submissionsQuery);
-
-    const obtainedMarksData = submissionsSnapshot.docs.map(doc => {
-        const data = doc.data();
-        return {
-            assignment_id: data.assignment_id,
-            obtained_marks: data.marks_obtained
-        };
-    });
-
-    const totalMarksData = await fetchTotalMarks();
-
-    // Combine obtained marks with total marks
-    return obtainedMarksData.map(obtained => {
-        // console.log(obtained.assignment_id);
-        // console.log(totalMarksData[0].assignment_id);
-        const totalMarks = totalMarksData.find(total => total.assignment_id === obtained.assignment_id);
-        return {
-            assessment_id: obtained.assignment_id,
-            obtained_marks: obtained.obtained_marks,
-            total_marks: totalMarks ? totalMarks.total_marks : 'N/A'
-        };
-    });
-}
-
-// Helper function to fetch total marks for all assignments
-async function fetchTotalMarks() {
-    const assignmentsCollection = collection(db, 'assessments');
-    const assignmentsSnapshot = await getDocs(assignmentsCollection);
-
-    const out = assignmentsSnapshot.docs.map(doc => {
-        const data = doc.data();
-        return {
-            assignment_id: doc.id,
-            total_marks: data.total_marks
-        };
-    });
-    return out;
 }
