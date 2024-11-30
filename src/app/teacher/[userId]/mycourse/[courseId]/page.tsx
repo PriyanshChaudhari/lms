@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import { useRouter, useParams, useSearchParams, usePathname } from 'next/navigation'
+import { useRouter, useParams, useSearchParams } from 'next/navigation'
 import axios from 'axios';
 import AddOneStudent from '@/components/Upload/AddOneStudent';
 import AddOneTeacher from '@/components/Upload/AddOneTeacher';
@@ -50,7 +50,6 @@ const CourseDetails = () => {
     const userId = params.userId as string;
     const courseId = params.courseId as string;
     const searchParams = useSearchParams();
-    const pathname = usePathname();
 
     const [courses, setCourses] = useState<courses | null>(null)
     const [courseModules, setCourseModules] = useState<modules[]>([])
@@ -64,6 +63,8 @@ const CourseDetails = () => {
     const [addUser, setAddUser] = useState(false);  // Controls showing the add participants section
     const [showAddStudent, setShowAddStudent] = useState(true);  // Controls showing Add Student form
     const [showAddTeacher, setShowAddTeacher] = useState(false);  // Controls showing Add Teacher form
+    const [showMessage, setShowMessage] = useState(false); //
+    
 
     const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
 
@@ -77,32 +78,21 @@ const CourseDetails = () => {
                 item.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 item.user_id.includes(searchTerm)
         );
+
     useEffect(() => {
-        // const section = searchParams.get('section');
-        // if (section) {
-        //     setActiveSection(section);
-        // }
+        const timer = setTimeout(() => {
+            setShowMessage(false);
+        }, 5000); // 5 seconds delay
 
-        const getActiveSection = () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const section = urlParams.get('section');
-            if (section) {
-                setActiveSection(section);
-            }
-        };
+        // Cleanup the timer when the component unmounts or re-renders
+        return () => clearTimeout(timer);
+    }, []);
 
-        const scrollToModule = () => {
-            const hash = window.location.hash;
-            if (hash) {
-                const element = document.getElementById(hash.substring(1));
-                if (element) {
-                    element.scrollIntoView({ behavior: 'smooth' });
-                }
-            }
-        };
-
-        getActiveSection();
-        scrollToModule();
+    useEffect(() => {
+        const section = searchParams.get('section');
+        if (section) {
+            setActiveSection(section);
+        }
 
         const getCourse = async () => {
             try {
@@ -145,7 +135,7 @@ const CourseDetails = () => {
             }
         }
         getParticipants()
-    }, [courseId, searchParams])
+    }, [courseId])
 
     const formatDate = (timestamp: any) => {
         const date = new Date(timestamp.seconds * 1000); // Convert seconds to milliseconds
@@ -176,6 +166,7 @@ const CourseDetails = () => {
                 data: { user_id: userId, course_id: courseId } // Use 'data' to pass the body in DELETE request
             });
             console.log('Participant removed:', res.data);
+            setShowMessage(true);
         } catch (error) {
             console.error('Error removing participant:', error);
         }
@@ -191,6 +182,28 @@ const CourseDetails = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-transparent py-8 px-4">
+            {showMessage && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white dark:bg-[#1e2631] p-6 rounded-lg shadow-xl w-96">
+                        <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+                            Participant Removed
+                        </h2>
+                        <p className="text-gray-600 dark:text-gray-300 mb-4">
+                            The participant has been removed from the course.
+                        </p>
+
+                        <div className="flex gap-4">
+                            <button
+                                onClick={() => setShowMessage(false)}
+                                className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg"
+                            >
+                                Cancel (Closing in 5 seconds)
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            )}
             <div className="max-w-7xl mx-auto">
                 {/* Course Header */}
                 <div className="bg-white dark:bg-[#151b23] rounded-lg shadow-sm p-6 mb-8">
@@ -248,7 +261,6 @@ const CourseDetails = () => {
                                 {sortedModules.map((module) => (
                                     <div
                                         key={module.id}
-                                        id={module.id}
                                         className="bg-white dark:bg-[#151b23] rounded-lg shadow-lg hover:shadow-2xl transition-shadow"
                                     >
                                         <div className="flex flex-col items-center justify-between p-6">

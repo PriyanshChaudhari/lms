@@ -125,7 +125,7 @@ const Sidebar: React.FC = () => {
   
     <>
     {/* Desktop Sidebar */}
-    <aside className="hidden sm:block w-64 bg-gray-100 dark:bg-[#151b23] dark:bg-[] shadow-lg h-screen fixed z-50">
+    <aside className="hidden sm:block w-64 bg-gray-100 dark:bg-[#151b23] dark:bg-[] shadow-lg h-screen fixed z-40">
       <div className="flex flex-col h-full">
         {/* Sidebar Header */}
         <div className="p-6 border-b border-gray-200 dark:border-gray-800">
@@ -208,7 +208,7 @@ const Sidebar: React.FC = () => {
                               {modules[course.course_id].map((module) => (
                                 <Link 
                                   key={module.id}
-                                  href={`/student/${userId}/mycourse`}
+                                  href={`/student/${userId}/mycourse/${course.course_id}?section=modules#${module.id}`}
                                 >
                                   <li className="p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100  dark:hover:bg-gray-700 rounded ">
                                     {module.position}→ {module.title}

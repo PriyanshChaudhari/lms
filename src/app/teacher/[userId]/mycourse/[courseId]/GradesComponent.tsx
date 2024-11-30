@@ -3,6 +3,7 @@ import axios from 'axios';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import './GradesComponent.css'; // Make sure to create and import this CSS file
+import StudentGrades from '@/app/student/[userId]/mycourse/[courseId]/GradesComponent';
 
 interface Student {
     user_id: string;
@@ -49,6 +50,7 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
     const [events, setEvents] = useState<Event[]>([]);
     const [assignments, setAssignments] = useState<Assignment[]>([]);
     const [grades, setGrades] = useState<Record<string, GradesResponse>>({});
+    const [selectedStudent, setSelectedStudent] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchStudentsEventsAssignments = async () => {
@@ -96,13 +98,15 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
 
     const calculateTotalMarks = (studentId: string) => {
         const studentGrades = grades[studentId];
-        if (!studentGrades) return { eventTotal: 0, assignmentTotal: 0, overallTotal: 0 };
+        if (!studentGrades) return { eventTotal: 0, assignmentTotal: 0, overallTotal: 0, totalAssignmentMarks: 0, totalEventMarks: 0 };
 
         const eventTotal = studentGrades.event_marks.reduce((sum, grade) => sum + parseFloat(grade.marks), 0);
         const assignmentTotal = studentGrades.assignment_marks.reduce((sum, grade) => sum + grade.obtained_marks, 0);
+        const totalAssignmentMarks = studentGrades.assignment_marks.reduce((sum, grade) => sum + grade.total_marks, 0);
+        const totalEventMarks = studentGrades.event_marks.reduce((sum, grade) => sum + parseFloat(grade.total_marks), 0);
         const overallTotal = eventTotal + assignmentTotal;
 
-        return { eventTotal, assignmentTotal, overallTotal };
+        return { eventTotal, assignmentTotal, overallTotal, totalAssignmentMarks, totalEventMarks };
     };
 
     const downloadReport = () => {
@@ -162,48 +166,30 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
                     Participants' Grades
                 </h2>
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto mt-4">
                     <table className="min-w-full ">
                         <thead>
-                            <tr className="bg-gray-50 dark:bg-gray-700 text-left">
+                            <tr className="bg-gray-50 dark:bg-gray-700 text-center">
                                 <th className="p-4 text-gray-700 dark:text-gray-300">Student Name</th>
-                                {assignments.map(assignment => (
-                                    <th key={assignment.id} className="p-4 text-gray-700 dark:text-gray-300">{assignment.title}</th>
-                                ))}
-                                <th className="separator"></th>
-                                {events.map(event => (
-                                    <th key={event.id} className="p-4 text-gray-700 dark:text-gray-300">{event.event_name}</th>
-                                ))}
-                                <th className="separator"></th>
-                                <th className="p-4 text-gray-700 dark:text-gray-300">Total Event Marks</th>
-                                <th className="p-4 text-gray-700 dark:text-gray-300">Total Assignment Marks</th>
-                                <th className="p-4 text-gray-700 dark:text-gray-300">Overall Total Marks</th>
+                                <th className="p-4 text-gray-700 dark:text-gray-300">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {students.map(student => {
-                                const { eventTotal, assignmentTotal, overallTotal } = calculateTotalMarks(student.user_id);
-                                return (
-                                    <tr key={student.user_id} className="border-t border-gray-100 dark:border-gray-700">
-                                        <td className="p-4 text-gray-700 dark:text-gray-300">{`${student.first_name} ${student.last_name}`}</td>
-                                        {assignments.map(assignment => (
-                                            <td key={assignment.id} className="p-4 text-gray-700 dark:text-gray-300">
-                                                {grades[student.user_id]?.assignment_marks.find(g => g.assessment_id === assignment.id)?.obtained_marks || '-'}
-                                            </td>
-                                        ))}
-                                        <td className="separator"></td>
-                                        {events.map(event => (
-                                            <td key={event.id} className="p-4 text-gray-700 dark:text-gray-300">
-                                                {grades[student.user_id]?.event_marks.find(g => g.event_id === event.id)?.marks || '-'}
-                                            </td>
-                                        ))}
-                                        <td className="separator"></td>
-                                        <td className="p-4 text-gray-700 dark:text-gray-300">{eventTotal}</td>
-                                        <td className="p-4 text-gray-700 dark:text-gray-300">{assignmentTotal}</td>
-                                        <td className="p-4 text-gray-700 dark:text-gray-300">{overallTotal}</td>
-                                    </tr>
-                                );
-                            })}
+                            {students.map(student => (
+                                <tr key={student.user_id} className="border-t border-gray-100 dark:border-gray-700 text-center">
+                                    <td className="p-4 text-gray-700 dark:text-gray-300">
+                                        {`${student.first_name} ${student.last_name}`}
+                                    </td>
+                                    <td className="p-4 text-gray-700 dark:text-gray-300">
+                                        <button
+                                            onClick={() => setSelectedStudent(student.user_id)}
+                                            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
+                                        >
+                                            View Grades Report
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
@@ -213,6 +199,16 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
                 >
                     Download Report
                 </button>
+                {selectedStudent && (
+                    <div className="mt-8">
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                            Grades Report for {students.find(student => student.user_id === selectedStudent)?.first_name} {students.find(student => student.user_id === selectedStudent)?.last_name}
+                        </h3>
+                        <div className="overflow-x-auto mt-4">
+                            <StudentGrades courseId={courseId} studentId={selectedStudent}/>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

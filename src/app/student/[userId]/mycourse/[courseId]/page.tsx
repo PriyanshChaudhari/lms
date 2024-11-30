@@ -152,12 +152,12 @@ const CourseDetails = () => {
                                 >
                                     {section.charAt(0).toUpperCase() + section.slice(1)}
                                     {(section === 'assignments' && assignments.length >= 0) && (
-                                        <span className="ml-2 bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded-lg-full">
+                                        <span className="ml-2 bg-blue-100 text-blue-800 text-xs px-2 py-0.5">
                                             {assignments.length}
                                         </span>
                                     )}
                                     {(section === 'participants' && participantData.length > 0) && (
-                                        <span className="ml-2 bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded-lg-full">
+                                        <span className="ml-2 bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded-lg">
                                             {participantData.length}
                                         </span>
                                     )}
