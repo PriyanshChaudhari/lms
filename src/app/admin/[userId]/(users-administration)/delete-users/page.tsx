@@ -53,7 +53,7 @@ const ExcelDeleteUploader = () => {
                     if (response.status === 200) {
                         alert('Users deleted successfully');
                         setIsDeleted(true);
-                        router.push(`/admin/${userId}/view-users`)
+                        // router.push(`/admin/${userId}/view-users`)
                         console.log('Users deleted successfully');
                     } else {
                         alert('Failed to delete users');

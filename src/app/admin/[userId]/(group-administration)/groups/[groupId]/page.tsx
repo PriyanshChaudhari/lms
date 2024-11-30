@@ -32,6 +32,18 @@ const Group = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [group, setGroup] = useState<Group>({});
 
+  const [searchTerm, setSearchTerm] = useState<string>('');
+
+  const filteredUsers = searchTerm === ''
+    ? users
+    : users.filter(
+      (user) => (
+        user.userId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.last_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
+
   const getGroups = async () => {
     try {
       const res = await axios.get(`/api/groups/${groupId}`); // Added leading slash to the API path
@@ -42,20 +54,20 @@ const Group = () => {
     }
   };
 
-  useEffect(() => {
-    const getGroupMembers = async () => {
-      try {
-        const res = await axios.get(`/api/groups/${groupId}/members`);
-        if (res.data.success) {
-          setUsers(res.data.users);
-        } else {
-          setErrorMessage('Failed to fetch group members');
-        }
-      } catch (error) {
-        setErrorMessage('An error occurred while fetching group members');
+  const getGroupMembers = async () => {
+    try {
+      const res = await axios.get(`/api/groups/${groupId}/members`);
+      if (res.data.success) {
+        setUsers(res.data.users);
+      } else {
+        setErrorMessage('Failed to fetch group members');
       }
-    };
+    } catch (error) {
+      setErrorMessage('An error occurred while fetching group members');
+    }
+  };
 
+  useEffect(() => {
     getGroups();
     getGroupMembers();
   }, [groupId]);
@@ -66,7 +78,8 @@ const Group = () => {
       if (res.data.success) {
         setSuccessMessage('User removed successfully');
         setUsers(users.filter(user => user.userId !== userId));
-        setErrorMessage('');
+        setErrorMessage('');  
+
       } else {
         setErrorMessage('Failed to remove user');
       }
@@ -88,7 +101,7 @@ const Group = () => {
             <button
               onClick={() => setIsManageUserVisible(!isManageUserVisible)}
               className={`${isManageUserVisible ? 'hidden' : 'bg-blue-600 hover:bg-blue-700'
-                } text-white text-sm font-semibold py-2 px-4 rounded-lg transition duration-200`}
+                } text-white text-lg font-semibold py-2 px-4 rounded-lg transition duration-200`}
             >
               {isManageUserVisible ? 'Close' : 'Manage Members'}
             </button>
@@ -136,6 +149,14 @@ const Group = () => {
           </div>
         </div>
 
+        <input
+          type="text"
+          placeholder="Search Group Members..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full mb-6 px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-300 outline-none dark:bg-[#151b23]"
+        />
+
         {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}
         {successMessage && <p className="text-green-500 text-center mb-4">{successMessage}</p>}
 
@@ -150,7 +171,7 @@ const Group = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {filteredUsers.map((user) => (
               <tr key={user.userId}>
                 <td className="px-4 border py-2 border-b">{user.userId}</td>
                 <td className="px-4 border py-2 border-b">{user.first_name}</td>
@@ -167,7 +188,7 @@ const Group = () => {
                 <td className="border px-4 py-2 border-b text-center">
                   <div className="flex justify-center items-center">
                     <button
-                      className="bg-red-500 hover:bg-red-600 text-white flex items-center gap-2 py-2 px-5 rounded-[9px] transition-all duration-200 ease-in-out transform focus:outline-none"
+                      className="bg-red-500 hover:bg-red-600 text-white flex items-center gap-2 py-2 px-5  transition-all duration-200 ease-in-out transform focus:outline-none"
                       onClick={() => handleRemoveUser(user.userId)}
                     >
                       Remove

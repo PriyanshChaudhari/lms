@@ -184,14 +184,14 @@ const ManageCategories = () => {
                             <div className="flex">
                                 <button
                                     onClick={() => handleEdit(category)}
-                                    className="mr-2 py-2 bg-blue-500 hover:bg-blue-600 text-white flex items-center gap-1 px-3 rounded-[9px] transition-all duration-200 ease-in-out transform focus:outline-none"
+                                    className="mr-2 py-2 bg-blue-500 hover:bg-blue-600 text-white flex items-center gap-1 px-3  transition-all duration-200 ease-in-out transform focus:outline-none"
                                 >
                                     Edit
                                     <MdModeEdit className="text-white text-lg" />
                                 </button>
                                 <button
                                     onClick={() => handleDelete(category.id)}
-                                    className="mr-2 py-2 bg-red-500 hover:bg-red-600 text-white flex items-center gap-1 px-3 rounded-[9px] transition-all duration-200 ease-in-out transform focus:outline-none"
+                                    className="mr-2 py-2 bg-red-500 hover:bg-red-600 text-white flex items-center gap-1 px-3  transition-all duration-200 ease-in-out transform focus:outline-none"
                                 >
                                     Delete
                                     <MdDeleteForever className="text-white text-lg" />

@@ -83,7 +83,7 @@ const Groups = () => {
                     placeholder="Search Groups..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full mb-6 px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg-lg focus:ring-2 focus:ring-blue-500 dark:bg-[#151b23]"
+                    className="w-full mb-6 px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-300 outline-none dark:bg-[#151b23]"
                 />
                 {loading ?
                     (<div>Loading..</div>) : (
@@ -100,7 +100,7 @@ const Groups = () => {
                                 {filteredGroups.map((group) => (
                                     <tr key={group.id}>
                                         <td
-                                            
+
                                             className="border px-4 py-2 border-b text-center"
                                         >
                                             {group.group_name}
@@ -108,10 +108,10 @@ const Groups = () => {
                                         <td className="border px-4 py-2 border-b text-center">
                                             <div className="flex justify-center items-center">
                                                 <button
-                                                    className="bg-yellow-500 hover:bg-yellow-600 text-white flex items-center gap-2 py-2 px-5 rounded-[9px] transition-all duration-200 ease-in-out transform focus:outline-none"
+                                                    className="bg-yellow-500 hover:bg-yellow-600 text-white flex items-center gap-2 py-2 px-5 transition-all duration-200 ease-in-out transform focus:outline-none"
                                                     onClick={() => handleClick(group.id)}
                                                 >
-                                                    View 
+                                                    View
                                                     <TiGroup className="text-white text-lg" />
                                                 </button>
                                             </div>
@@ -119,7 +119,7 @@ const Groups = () => {
                                         <td className="border px-4 py-2 border-b text-center">
                                             <div className="flex justify-center items-center">
                                                 <button
-                                                    className="bg-blue-500 hover:bg-blue-600 text-white flex items-center gap-2 py-2 px-5 rounded-[9px] transition-all duration-200 ease-in-out transform focus:outline-none"
+                                                    className="bg-blue-500 hover:bg-blue-600 text-white flex items-center gap-2 py-2 px-5 transition-all duration-200 ease-in-out transform focus:outline-none"
                                                     onClick={() => handleEditGroup(group.id)}
                                                 >
                                                     Edit
@@ -130,7 +130,7 @@ const Groups = () => {
                                         <td className="border px-4 py-2 border-b text-center">
                                             <div className="flex justify-center items-center">
                                                 <button
-                                                    className="bg-red-500 hover:bg-red-600 text-white flex items-center gap-2 py-2 px-5 rounded-[9px] transition-all duration-200 ease-in-out transform focus:outline-none"
+                                                    className="bg-red-500 hover:bg-red-600 text-white flex items-center gap-2 py-2 px-5 transition-all duration-200 ease-in-out transform focus:outline-none"
                                                     onClick={() => handleDeleteGroup(group.id)}
                                                 >
                                                     Delete
