@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import CourseCard from "@/components/Teacher/CourseCard";
+import Image from "next/image";
 
 interface courses {
     course_id: string;
@@ -82,7 +83,15 @@ const MyCourse: React.FC = () => {
 
                                     {courses.map((course) => (
                                         <div key={course.course_id} className="border border-gray-300 dark:text-white  hover:bg-slate-100 dark:hover:bg-[#1a1a1a] rounded-lg-xl p-5 w-full max-w-xs shadow-sm cursor-pointer">
-                                            <img src={`${course.coursePicUrl}`} alt="img" className="rounded-lg mb-4"></img>
+                                            {/* <img src={`${course.coursePicUrl}`} alt="img" className="rounded-lg mb-4"></img> */}
+                                            <Image
+                                                src={course.coursePicUrl}
+                                                alt="Course image"
+                                                className="rounded-lg mb-4"
+                                                width={500} // Specify the width
+                                                height={300} // Specify the height
+                                                priority // Optional: for images important for LCP
+                                            />
                                             <p>{course.course_id}</p>
                                             <h3 className="text-lg font-semibold mb-2 underline" onClick={() => handleClick(course.course_id)}>{course.title}</h3>
                                             <p className="text-sm text-gray-600 mb-4">{course.description}</p>

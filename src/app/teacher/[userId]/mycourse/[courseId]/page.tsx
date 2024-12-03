@@ -19,6 +19,7 @@ interface users {
     last_name: string;
     role: string;
 }
+
 interface courses {
     course_id: string;
     title: string;
@@ -63,8 +64,9 @@ const CourseDetails = () => {
     const [addUser, setAddUser] = useState(false);  // Controls showing the add participants section
     const [showAddStudent, setShowAddStudent] = useState(true);  // Controls showing Add Student form
     const [showAddTeacher, setShowAddTeacher] = useState(false);  // Controls showing Add Teacher form
+    const [showAddGroup, setShowAddGroup] = useState(false);  // Controls showing Add Teacher form
     const [showMessage, setShowMessage] = useState(false); //
-    
+
 
     const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
 
@@ -88,54 +90,84 @@ const CourseDetails = () => {
         return () => clearTimeout(timer);
     }, []);
 
+    // useEffect(() => {
+    //     const section = searchParams.get('section');
+    //     if (section) {
+    //         setActiveSection(section);
+    //     }
+
+    //     const getCourse = async () => {
+    //         try {
+    //             const res = await axios.post(`/api/get/course-details`, { courseId })
+    //             setCourses(res.data.courseDetails)
+    //         } catch (error) {
+    //             console.log(error)
+    //         }
+    //     }
+    //     getCourse()
+
+    //     const getCourseModules = async () => {
+    //         try {
+    //             const res = await axios.post('/api/get/course-modules', { courseId })
+    //             setCourseModules(res.data.content)
+    //         } catch (error) {
+    //             console.log(error)
+    //         }
+    //     }
+    //     getCourseModules()
+
+    //     const getAssignments = async () => {
+    //         try {
+    //             const res = await axios.post('/api/get/assignments/all-assignments', { courseId });
+    //             setAssignments(res.data.assignments);  // Set as array or empty array
+    //             console.log(res.data.assignments || []);
+    //         } catch (error) {
+    //             console.log(error);
+    //         }
+    //     };
+    //     getAssignments();
+
+    //     const getParticipants = async () => {
+    //         try {
+    //             const res = await axios.post('/api/get/participants', { courseId })
+    //             setParticipantData(res.data.participants)
+    //             console.log(participantData)
+    //         } catch (error) {
+    //             console.log(error)
+    //         }
+    //     }
+    //     getParticipants()
+    // }, [courseId])
+
     useEffect(() => {
-        const section = searchParams.get('section');
-        if (section) {
-            setActiveSection(section);
-        }
-
-        const getCourse = async () => {
+        const fetchData = async () => {
             try {
-                const res = await axios.post(`/api/get/course-details`, { courseId })
-                setCourses(res.data.courseDetails)
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        getCourse()
+                const section = searchParams.get('section');
+                if (section) setActiveSection(section);
 
-        const getCourseModules = async () => {
-            try {
-                const res = await axios.post('/api/get/course-modules', { courseId })
-                setCourseModules(res.data.content)
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        getCourseModules()
+                // Fetch data concurrently
+                const [courseRes, modulesRes, assignmentsRes, participantsRes] = await Promise.all([
+                    axios.post('/api/get/course-details', { courseId }),
+                    axios.post('/api/get/course-modules', { courseId }),
+                    axios.post('/api/get/assignments/all-assignments', { courseId }),
+                    axios.post('/api/get/participants', { courseId }),
+                ]);
 
-        const getAssignments = async () => {
-            try {
-                const res = await axios.post('/api/get/assignments/all-assignments', { courseId });
-                setAssignments(res.data.assignments);  // Set as array or empty array
-                console.log(res.data.assignments || []);
+                // Update states with the fetched data
+                setCourses(courseRes.data.courseDetails);
+                setCourseModules(modulesRes.data.content);
+                setAssignments(assignmentsRes.data.assignments || []);
+                setParticipantData(participantsRes.data.participants);
             } catch (error) {
-                console.log(error);
+                console.error('Error fetching data:', error);
+                // You could set an error state here to display a user-friendly message
             }
         };
-        getAssignments();
 
-        const getParticipants = async () => {
-            try {
-                const res = await axios.post('/api/get/participants', { courseId })
-                setParticipantData(res.data.participants)
-                console.log(participantData)
-            } catch (error) {
-                console.log(error)
-            }
+        if (courseId) {
+            fetchData();
         }
-        getParticipants()
-    }, [courseId])
+    }, [courseId]); // Add searchParams to the dependency array
 
     const formatDate = (timestamp: any) => {
         const date = new Date(timestamp.seconds * 1000); // Convert seconds to milliseconds
@@ -143,9 +175,9 @@ const CourseDetails = () => {
     };
 
     const sortedModules = courseModules.sort((a, b) => {
-        const dateA = new Date(a.created_at);
-        const dateB = new Date(b.created_at);
-        return dateB - dateA; // Ascending order (earliest to latest)
+        const dateA = new Date(a.created_at.seconds * 1000)
+        const dateB = new Date(b.created_at.seconds * 1000)
+        return dateA - dateB; // Ascending order (earliest to latest)
     });
 
     const handleModuleClick = (moduleId: string) => {
@@ -463,6 +495,8 @@ const CourseDetails = () => {
                                                 onClick={() => {
                                                     setShowAddStudent(true);
                                                     setShowAddTeacher(false);
+                                                    setShowAddGroup(false);
+
                                                 }}
                                                 className={`px-4 py-2 rounded-lg transition-colors ${showAddStudent
                                                     ? 'bg-blue-500 text-white'
@@ -475,6 +509,8 @@ const CourseDetails = () => {
                                                 onClick={() => {
                                                     setShowAddStudent(false);
                                                     setShowAddTeacher(true);
+                                                    setShowAddGroup(false);
+
                                                 }}
                                                 className={`px-4 py-2 rounded-lg transition-colors ${showAddTeacher
                                                     ? 'bg-blue-500 text-white'
@@ -483,9 +519,23 @@ const CourseDetails = () => {
                                             >
                                                 Add Teacher
                                             </button>
+                                            <button
+                                                onClick={() => {
+                                                    setShowAddStudent(false);
+                                                    setShowAddTeacher(false);
+                                                    setShowAddGroup(true);
+                                                }}
+                                                className={`px-4 py-2 rounded-lg transition-colors ${showAddGroup
+                                                    ? 'bg-blue-500 text-white'
+                                                    : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
+                                                    }`}
+                                            >
+                                                Add Group
+                                            </button>
                                         </div>
                                         {showAddStudent && <AddOneStudent courseId={courseId} />}
                                         {showAddTeacher && <AddOneTeacher courseId={courseId} />}
+                                        {showAddGroup && <EnrollByGroupComponent />}
                                     </div>
                                 )}
                             </div>

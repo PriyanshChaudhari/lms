@@ -19,6 +19,7 @@ interface courses {
     description: string;
     teacher_id: string;
     category: string;
+
 }
 
 interface modules {
@@ -26,7 +27,7 @@ interface modules {
     course_id: string;
     title: string;
     description: string;
-    position: number;
+    created_at: Date;
 }
 
 interface assignments {
@@ -116,7 +117,11 @@ const CourseDetails = () => {
         return date.toLocaleDateString(); // Format the date as a readable string
     };
 
-    const sortedModules = courseModules.sort((a, b) => a.position - b.position);
+    const sortedModules = courseModules.sort((a, b) => {
+        const dateA = new Date(a.created_at.seconds * 1000)
+        const dateB = new Date(b.created_at.seconds * 1000)
+        return dateA - dateB; // Ascending order (earliest to latest)
+    });
 
     const handleModuleClick = (moduleId: string) => {
         router.push(`/student/${userId}/mycourse/${courseId}/modules/${moduleId}`);

@@ -25,6 +25,7 @@ interface content {
     title: string;
     description: string;
     position: number;
+    created_at:Date
 }
 
 export default function ViewModule() {
@@ -79,7 +80,11 @@ export default function ViewModule() {
         router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/content/${contentId}`);
     }
 
-    const sortedContent = courseContent.sort((a, b) => a.position - b.position);
+    const sortedContent = courseContent.sort((a, b) => {
+        const dateA = new Date(a.created_at.seconds * 1000)
+        const dateB = new Date(b.created_at.seconds * 1000)
+        return dateA - dateB; // Ascending order (earliest to latest)
+    });
 
     const handleEditModule = () => {
         router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/edit-module`)
@@ -130,7 +135,7 @@ export default function ViewModule() {
                                 <div className='flex justify-start gap-10 max-w-lg'>
                                     <button
                                         className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
-                                        onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments`)} 
+                                        onClick={() => router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments`)}
                                     >
                                         Assignments
                                     </button>

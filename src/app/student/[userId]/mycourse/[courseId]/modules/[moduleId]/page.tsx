@@ -24,7 +24,7 @@ interface contents {
     id: string;
     title: string;
     description: string;
-    position: number
+    created_at: Date
 }
 
 export default function ViewModule() {
@@ -75,7 +75,11 @@ export default function ViewModule() {
         router.push(`/student/${userId}/mycourse/${courseId}/modules/${moduleId}/content/${contentId}`);
     }
 
-    const sortedContent = courseContent.sort((a, b) => a.position - b.position);
+    const sortedContent = courseContent.sort((a, b) => {
+        const dateA = new Date(a.created_at.seconds * 1000)
+        const dateB = new Date(b.created_at.seconds * 1000)
+        return dateA - dateB; // Ascending order (earliest to latest)
+    });
 
     return (
         // <div className="border border-gray-300 m-5">
