@@ -89,7 +89,7 @@ export default function ViewModule() {
                     </ul>
                 </nav>
                 <div className="space-y-4 ">
-                    <div className="bg-white border border-gray-300 rounded-lg-xl p-6 shadow-md h-26">
+                    <div className="bg-white dark:bg-[#151b23]  rounded-lg-xl p-6 shadow-md h-26">
                     <h2 className="text-xl font-semibold mb-2">{oneContent?.title}</h2>
                         {oneContent?.attachments?.length > 0 && (
                             <div>

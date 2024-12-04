@@ -73,6 +73,8 @@ const TeacherContentComponent = ({ contentId, content, moduleId, courseId, userI
     const handleViewContent = () => {
         // Add your download content logic here
         console.log("View content");
+        router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/content/${contentId}`);
+
     };
 
     const handleEditContent = () => {
@@ -103,7 +105,7 @@ const TeacherContentComponent = ({ contentId, content, moduleId, courseId, userI
 
 
     return (
-        <div className="flex w-full dark:bg-transparent py-8 px-4 ">
+        <div className="flex w-full dark:bg-transparent  ">
             {/* Deletion Confirmation Modal */}
             {showdeleteConfirmation && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -143,7 +145,7 @@ const TeacherContentComponent = ({ contentId, content, moduleId, courseId, userI
                 </div>
             )}
 
-            <div className="max-w-7xl mx-auto p-4">
+            <div className="w-full  max-w-7xl mx-auto ">
                 <div className="flex flex-col gap-6">
                     <div key={content.id} className="flex items-center justify-between bg-white dark:bg-gray-800 shadow-md rounded-lg p-4">
                         <div className="flex items-center gap-4 w-full">

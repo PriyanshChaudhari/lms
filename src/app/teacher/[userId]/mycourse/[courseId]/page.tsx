@@ -238,7 +238,7 @@ const CourseDetails = () => {
                     </ul>
                 </nav>
 
-                <div className="space-y-6">
+                <div className="space-y-6 ">
                     {/* Module Section */}
                     {activeSection === 'modules' && (
                         <div>
@@ -258,7 +258,7 @@ const CourseDetails = () => {
                                         key={module.id}
                                         className="bg-white dark:bg-[#151b23] rounded-lg shadow-lg hover:shadow-2xl transition-shadow"
                                     >
-                                        <div className="flex flex-col items-center justify-between p-6">
+                                        <div className="flex flex-col items-center justify-between ">
                                            
                                             <TeacherModulesComponent moduleId={module.id} module={module} courseId={courseId} userId={userId} />
                                            

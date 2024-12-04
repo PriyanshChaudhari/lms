@@ -1,143 +1,107 @@
-"use client"
+"use client";
 
-import React, { useEffect, useId, useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
-import axios from 'axios';
-
-interface courses {
-    course_id: string;
-    title: string;
-    description: string;
-    teacher_id: string;
-    category: string;
-}
-
-interface modules {
-    id: string;
-    course_id: string;
-    title: string;
-    description: string;
-    position: number;
-}
+import React, { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import axios from "axios";
+import { Eye, Download } from "lucide-react";
+import { Tooltip } from "react-tooltip";
 
 interface contents {
-    id: string;
-    title: string;
-    description: string;
-    position: number
+  id: string;
+  title: string;
+  description: string;
+  position: number;
 }
 
 interface ModulesComponentProps {
-    userId: string,
-    courseId: string,
-    moduleId: string;
+  userId: string;
+  courseId: string;
+  moduleId: string;
 }
 
-export default function ModulesComponent({ userId, courseId, moduleId }: ModulesComponentProps) {
-    const router = useRouter();
-    const params = useParams();
-    // const userId = params.userId as string;
-    // const courseId = params.courseId as string;
-    // const moduleId = params.moduleId as string;
+export default function ModulesComponent({
+  userId,
+  courseId,
+  moduleId,
+}: ModulesComponentProps) {
+  const router = useRouter();
+  const params = useParams();
+  const [courseContent, setCourseContent] = useState<contents[]>([]);
 
-    const [oneModule, setOneModule] = useState<modules | null>(null);
-    const [courseContent, setCourseContent] = useState<contents[]>([])
-    const [course, setCourse] = useState<courses | null>(null)
+  useEffect(() => {
+    const getCourseContent = async () => {
+      try {
+        const res = await axios.post("/api/get/course-content", { moduleId });
+        setCourseContent(res.data.content);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getCourseContent();
+  }, [moduleId]);
 
-    useEffect(() => {
-        const getCourseDetails = async () => {
-            try {
-                const res = await axios.post('/api/get/course-details', { courseId })
-                setCourse(res.data.courseDetails)
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        getCourseDetails()
-
-        const getOneModule = async () => {
-            try {
-                const res = await axios.post('/api/get/one-module', { moduleId })
-                // console.log(res.data.module)
-                setOneModule(res.data.module);
-            } catch (error) {
-                console.error("Error fetching course module: ", error);
-            }
-        };
-        getOneModule()
-
-        const getCourseContent = async () => {
-            try {
-                const res = await axios.post('/api/get/course-content', { moduleId })
-                setCourseContent(res.data.content)
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        getCourseContent()
-    }, [moduleId, courseId]);
-
-    const handleViewClick = (contentId: string) => {
-        router.push(`/student/${userId}/mycourse/${courseId}/modules/${moduleId}/content/${contentId}`);
-    }
-
-    const handleDownloadClick = (contentId: string) => {
-        router.push(`/student/${userId}/mycourse/${courseId}/modules/${moduleId}/content/${contentId}`);
-    }
-
-    const sortedContent = courseContent ? courseContent.sort((a, b) => a.position - b.position) : [];
-
-    return (
-        <div className="flex w-full dark:bg-transparent py-8 px-4">
-            <div className="flex-auto max-w-7xl mx-auto">
-                <div className="flex gap-4 space-y-6">
-                    <div className='flex flex-col w-full'>
-                        <h2 className="text-xl font-bold my-2">Contents:</h2>
-                        <div className="grid gap-4 items-center mt-4">
-                            {sortedContent.map((content) => (
-                                <div key={content.id} className="space-y-4 w-full">
-                                    <div
-                                        className="w-full bg-white flex justify-between border border-gray-200 rounded-lg-xl p-4 shadow-sm hover:shadow-md transition-shadow min-h-6 dark:bg-gray-700">
-                                        {/* <h2 className="text-xl font-semibold">{content.title}</h2>
-                                        <h2 className="text-xl font-semibold">{content.description}</h2>
-                                        <h2 className="text-xl font-semibold">{content.position}</h2>
-                                        <div className='flex space-x-2'>
-                                            <div className='px-3 rounded-lg-xl cursor-pointer bg-gray-300 hover:bg-gray-200' onClick={() => handleViewClick(content.id)}>View</div>
-                                            <div className='px-3 rounded-lg-xl cursor-pointer bg-gray-300 hover:bg-gray-200' onClick={() => handleDownloadClick(content.id)}>Download</div>
-                                        </div> */}
-                                        {/* <div className='px-3 rounded-lg-xl cursor-pointer bg-gray-300  hover:bg-gray-200' onClick={() => handleContentClick(content.id)} > GO -&gt; </div> */}
-
-                                        <table className="min-w-full bg-white dark:bg-gray-700">
-                                            <thead>
-                                                <tr>
-                                                    <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-600">Title</th>
-                                                    <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-600">Description</th>
-                                                    <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-600">Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {sortedContent.map((content) => (
-                                                    <tr key={content.id}>
-                                                        <td className="py-2 px-4 text-center border-b border-gray-200 dark:border-gray-600">{content.title}</td>
-                                                        <td className="py-2 px-4 text-center border-b border-gray-200 dark:border-gray-600">{content.description}</td>
-                                                        <td className="py-2 px-4 flex items-center justify-center border-b border-gray-200 dark:border-gray-600 space-x-2">
-                                                            <div className=' bg-zinc-400 dark:bg-zinc-300 p-3 text-clip bg-opacity-20 text-sm text-gray-500 dark:text-gray-500  px-2 py-1 rounded-lg cursor-pointer' onClick={() => handleViewClick(content.id)}>View</div>
-                                                            {/* <div className='px-3 rounded-lg-xl cursor-pointer bg-gray-300 hover:bg-gray-200' onClick={() => handleDownloadClick(content.id)}>Download</div> */}
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
+  const handleViewClick = (contentId: string) => {
+    router.push(
+      `/student/${userId}/mycourse/${courseId}/modules/${moduleId}/content/${contentId}`
     );
+  };
+
+  const handleDownloadClick = (contentId: string) => {
+    console.log(`Download content with ID: ${contentId}`);
+  };
+
+  const sortedContent = courseContent.sort((a, b) => a.position - b.position);
+
+  return (
+    <div className="flex w-full dark:bg-transparent mt-4">
+      <div className="w-full max-w-7xl mx-auto">
+        <div className="flex flex-col gap-6">
+          {sortedContent.map((content) => (
+            <div
+              key={content.id}
+              className="flex items-center justify-between bg-white dark:bg-gray-800 shadow-md rounded-lg p-4 "
+            >
+              <div className="flex items-center gap-4 w-full">
+                <div className="w-12 h-12 flex items-center justify-center bg-blue-100 text-blue-600 rounded-full">
+                  <span className="text-xl font-semibold">{"C"}</span>
+                </div>
+                <div className="flex flex-col">
+                  <h3 className="font-semibold text-lg text-gray-900 dark:text-white">
+                    {content.title}
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    {content.description}
+                  </p>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3">
+                <div
+                  data-tooltip-id="view-content-tooltip"
+                  data-tooltip-content="View Content"
+                  className="p-2 cursor-pointer bg-gray-100 dark:bg-gray-700 rounded-md shadow hover:shadow-lg transition-shadow"
+                  onClick={() => handleViewClick(content.id)}
+                >
+                  <Eye className="text-blue-600" />
+                </div>
+
+                <div
+                  data-tooltip-id="download-content-tooltip"
+                  data-tooltip-content="Download Content"
+                  className="p-2 cursor-pointer bg-gray-100 dark:bg-gray-700 rounded-md shadow hover:shadow-lg transition-shadow"
+                  onClick={() => handleDownloadClick(content.id)}
+                >
+                  <Download className="text-green-500" />
+                </div>
+
+                <Tooltip id="view-content-tooltip" place="top" />
+                <Tooltip id="download-content-tooltip" place="top" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }
