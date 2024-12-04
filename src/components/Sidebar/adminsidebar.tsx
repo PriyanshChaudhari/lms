@@ -243,7 +243,7 @@ const Sidebar: React.FC = () => {
                   </Link>
                   <Link
                     href={`/admin/${userId}/groups`}
-                    className={`flex items-center p-2 text-sm text-gray-600 dar k:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded  transition-colors duration-200  ${isActive(`/admin/${userId}/groups`) ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"}
+                    className={`flex items-center p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded  transition-colors duration-200  ${isActive(`/admin/${userId}/groups`) ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"}
                     `}
                   >
                     → View Groups

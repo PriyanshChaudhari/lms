@@ -51,31 +51,6 @@ const TeacherModulesComponent = ({ moduleId, module, courseId, userId }: Teacher
     const [courseContent, setCourseContent] = useState<content[]>([]);
     const [showdeleteConfirmation, setShowDeleteConfirmation] = useState<boolean>(false);
 
-    // const [oneModule, setOneModule] = useState<modules | null>(null);
-    // const [course, setCourse] = useState<courses | null>(null);
-
-    // const getCourseDetails = async () => {
-    //     try {
-    //         const res = await axios.post('/api/get/course-details', { courseId });
-    //         setCourse(res.data.courseDetails);
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // };
-    // getCourseDetails();
-
-    // const getOneModule = async () => {
-    //     try {
-    //         const res = await axios.post('/api/get/one-module', { moduleId });
-    //         setOneModule(res.data.module);
-    //     } catch (error) {
-    //         console.error("Error fetching course module: ", error);
-    //     }
-    // };
-    // getOneModule();
-
-
-
     useEffect(() => {
         const getCourseContent = async () => {
             try {
@@ -112,6 +87,7 @@ const TeacherModulesComponent = ({ moduleId, module, courseId, userId }: Teacher
             const res = await axios.delete(`/api/delete/delete-module/${moduleId}`);
             console.log(res.data);
             setShowDeleteConfirmation(false);
+            window.location.href=`/teacher/${userId}/mycourse/${courseId}`;
             // router.push(`/teacher/${userId}/mycourse/${courseId}`);
         } catch (error) {
             console.log(error);

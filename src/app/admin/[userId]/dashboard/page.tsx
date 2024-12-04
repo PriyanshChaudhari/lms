@@ -121,7 +121,7 @@ export default function Dashboard() {
 
     return (
         <div className="bg-gray-50 dark:bg-[#212830] min-h-screen p-6">
-            <div className="bg-gray-100 rounded-lg shadow-md my-6 p-8">
+            <div className="bg-gray-100 dark:bg-[#151b23] rounded-lg shadow-md my-6 p-8">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {/* Total Users */}
                     <div className="flex flex-col items-center justify-center bg-blue-50 p-6 rounded-xl shadow-lg border border-blue-200 hover:shadow-2xl transition-shadow duration-300">
