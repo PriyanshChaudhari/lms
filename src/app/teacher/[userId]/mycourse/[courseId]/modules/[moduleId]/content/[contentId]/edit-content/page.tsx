@@ -120,8 +120,8 @@ const EditContent = () => {
     };
 
     return (
-        <div className="flex justify-center items-center h-screen">
-            <div className="w-full max-w-md mx-auto mt-8 p-6 dark:bg-[#151b23] rounded-lg shadow-md">
+        <div className=" flex justify-center items-center h-screen">
+            <div className="w-full max-w-md mx-auto mt-8 p-6 bg-white dark:bg-[#151b23] rounded-lg shadow-md">
                 <div className='flex justify-between mb-4 items-center'>
                     <div className="text-2xl font-semibold text-black dark:text-gray-300">Edit Content</div>
                     <div onClick={() => (router.back())}>
@@ -183,22 +183,7 @@ const EditContent = () => {
                         </select>
                     </div>
 
-                    {/* {content.content_type === "url" && (
-                        <div className="mb-4">
-                            <label htmlFor="attachments" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">
-                                Attachments:
-                            </label>
-                            <input
-                                type="text"
-                                id="attachments"
-                                name="attachments"
-                                value={content.attachments}
-                                onChange={handleChange}
-                                className="mt-1 p-2 w-full border border-gray-300 rounded-lg dark:bg-gray-700"
-
-                            />
-                        </div>
-                    )} */}
+                    
 
                     {content.content_type === "url" && (
                         <div className="mb-4">
@@ -217,16 +202,18 @@ const EditContent = () => {
                         </div>
                     )}
 
-                    <h3 className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Existing Attachments:</h3>
+                    <h3 className="block text-gray-700 dark:text-gray-300 font-semibold">Existing Attachments:</h3>
                     <ul>
                         {content.attachments?.map((fileUrl) => (
                             <li key={fileUrl}>
-                                <a href={fileUrl} target="_blank" rel="noopener noreferrer">
-                                    {extractTitleFromUrl(fileUrl)}  {/* Pass fileUrl directly as a string */}
+                                <div className="flex gap-4 items-center justify-between">
+                                <a href={fileUrl} className='font-light' target="_blank" rel="noopener noreferrer">
+                                    {extractTitleFromUrl(fileUrl)}  
                                 </a>
-                                <button type="button" onClick={() => handleDeleteAttachment(fileUrl)}>
+                                <button type="button" className=" p-2  text-red-500 font-semibold" onClick={() => handleDeleteAttachment(fileUrl)}>
                                     Delete
                                 </button>
+                                </div>
                             </li>
                         ))}
 
@@ -235,7 +222,7 @@ const EditContent = () => {
                     <div className="mb-4">
                         <button
                             type="submit"
-                            className='w-full py-2 px-4 rounded-lg bg-blue-500 hover:bg-blue-600 text-white'
+                            className='w-full py-2 px-4 rounded-lg bg-blue-500 hover:bg-blue-600 text-white mt-2'
                         >
                             Submit
                         </button>

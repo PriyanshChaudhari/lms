@@ -89,9 +89,9 @@ export default function ViewModule() {
     }
 
     return (
-        <div className=" flex justify-center items-center h-screen">
+        <div className=" flex justify-center items-center h-screen mt-2">
             <div className="w-full max-w-4xl mx-auto p-5">
-                <h1 className="text-3xl font-bold mb-4">{course?.title}</h1>
+                <h1 className="text-3xl font-bold mt-4">{course?.title}</h1>
                 <p className="text-lg text-gray-700 mb-6">{course?.description}</p>
                 <nav className="mb-6 p-2">
                     <ul className="flex justify-start space-x-4 list-none p-0">
@@ -101,8 +101,8 @@ export default function ViewModule() {
                     </ul>
                 </nav>
                 <div className="space-y-4 ">
-                    <div className="bg-white border border-gray-300 rounded-lg-xl p-6 shadow-md h-26">
-                        <h2 className="text-xl font-semibold mb-2">{oneContent?.title}</h2>
+                    <div className="bg-white dark:bg-[#151b23]  rounded-lg-xl p-6 shadow-md h-26">
+                        <h2 className="text-xl font-semibold mb-4">{oneContent?.title}</h2>
                         {oneContent?.attachments?.length > 0 && (
                             <div>
                                 {oneContent?.attachments.map((attachment, index) => (
@@ -111,7 +111,7 @@ export default function ViewModule() {
                                         <iframe
                                             src={attachment}
                                             width="100%"
-                                            height="300px"
+                                            height="400px"
                                             className="mb-4"
                                             title={`iframe-${index}`}
                                         ></iframe>
@@ -120,7 +120,8 @@ export default function ViewModule() {
                             </div>
                         )}
                         {/* Edit Content Button */}
-                        <button
+                       <div className="flex justify-between">
+                       <button
                             className="bg-blue-500 text-white px-4 py-2 rounded-lg-xl hover:bg-blue-600 mt-2"
                             onClick={handleEditContent} // Function to handle edit
                         >
@@ -133,6 +134,7 @@ export default function ViewModule() {
                         >
                             Delete Content
                         </button>
+                       </div>
                     </div>
                 </div>
             </div>
