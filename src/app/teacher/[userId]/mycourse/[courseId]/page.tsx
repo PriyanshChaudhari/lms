@@ -86,54 +86,6 @@ const CourseDetails = () => {
         return () => clearTimeout(timer);
     }, []);
 
-    // useEffect(() => {
-    //     const section = searchParams.get('section');
-    //     if (section) {
-    //         setActiveSection(section);
-    //     }
-
-    //     const getCourse = async () => {
-    //         try {
-    //             const res = await axios.post(`/api/get/course-details`, { courseId })
-    //             setCourses(res.data.courseDetails)
-    //         } catch (error) {
-    //             console.log(error)
-    //         }
-    //     }
-    //     getCourse()
-
-    //     const getCourseModules = async () => {
-    //         try {
-    //             const res = await axios.post('/api/get/course-modules', { courseId })
-    //             setCourseModules(res.data.content)
-    //         } catch (error) {
-    //             console.log(error)
-    //         }
-    //     }
-    //     getCourseModules()
-
-    //     const getAssignments = async () => {
-    //         try {
-    //             const res = await axios.post('/api/get/assignments/all-assignments', { courseId });
-    //             setAssignments(res.data.assignments);  // Set as array or empty array
-    //             console.log(res.data.assignments || []);
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     };
-    //     getAssignments();
-
-    //     const getParticipants = async () => {
-    //         try {
-    //             const res = await axios.post('/api/get/participants', { courseId })
-    //             setParticipantData(res.data.participants)
-    //             console.log(participantData)
-    //         } catch (error) {
-    //             console.log(error)
-    //         }
-    //     }
-    //     getParticipants()
-    // }, [courseId])
 
     useEffect(() => {
         const section = searchParams.get('section');
@@ -219,6 +171,10 @@ const CourseDetails = () => {
         setIsModalOpen(false);
     };
 
+    const closeMessage = () => {
+        window.location.href = `/teacher/${userId}/mycourse/${courseId}?section=participants`;
+    }
+
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-transparent py-8 px-4">
             {showMessage && (
@@ -233,10 +189,10 @@ const CourseDetails = () => {
 
                         <div className="flex gap-4">
                             <button
-                                onClick={() => setShowMessage(false)}
+                                onClick={closeMessage}
                                 className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg"
                             >
-                                Cancel (Closing in 5 seconds)
+                                Cancel 
                             </button>
 
                         </div>
@@ -303,26 +259,9 @@ const CourseDetails = () => {
                                         className="bg-white dark:bg-[#151b23] rounded-lg shadow-lg hover:shadow-2xl transition-shadow"
                                     >
                                         <div className="flex flex-col items-center justify-between p-6">
-                                            {/* <span className="flex items-center gap-6 w-full">
-                                                <span className="w-8 h-8 flex items-center justify-center bg-blue-100 text-blue-600 rounded-full">
-                                                    
-                                                </span>
-                                                <div>
-                                                    <h3 className="font-semibold text-lg text-gray-900 dark:text-white">
-                                                        {module.title}
-                                                    </h3>
-                                                    <p className="text-gray-600 dark:text-gray-300">
-                                                        {module.description}
-                                                    </p>
-                                                </div>
-                                            </span> */}
+                                           
                                             <TeacherModulesComponent moduleId={module.id} module={module} courseId={courseId} userId={userId} />
-                                            {/* <button
-                                                onClick={() => handleModuleClick(module.id)}
-                                                className="px-4 py-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
-                                            >
-                                                View Module →
-                                            </button> */}
+                                           
                                         </div>
                                     </div>
                                 ))}
@@ -388,12 +327,7 @@ const CourseDetails = () => {
                     {/* Grades Section */}
                     {activeSection === 'grades' && (
                         <div>
-                            {/* <button
-                                onClick={openModal}
-                                className="mb-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
-                            >
-                                Upload Grades
-                            </button> */}
+                            
                             <UploadGradesDialog courseId={courseId} />
                             <GradesTable courseId={courseId} teacherId={userId} />
                         </div>

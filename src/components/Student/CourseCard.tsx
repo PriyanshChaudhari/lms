@@ -2,6 +2,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import SkeletonCourseCard from "./SkeletonCourseCard";
 
 interface Course {
     course_id: string;

@@ -58,9 +58,7 @@ const EditModule = () => {
         try {
             setError("")
             const res = await axios.put(`/api/put/update-module/${moduleId}`, module);
-            console.log("Module updated:", res.data);
-            // Optionally, you can redirect the user after successful update
-            router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}`);
+            router.push(`/teacher/${userId}/mycourse/${courseId}`);
         } catch (error) {
             console.error("Error updating module:", error);
         }

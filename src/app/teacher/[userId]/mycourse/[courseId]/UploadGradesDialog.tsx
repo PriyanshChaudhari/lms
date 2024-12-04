@@ -10,7 +10,7 @@ const UploadGradesDialog: React.FC<UploadGradesDialogProps> = ({ courseId }) => 
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors my-2">
+                <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors mb-8">
                     Upload Grades
                 </button>
             </DialogTrigger>

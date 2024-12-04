@@ -72,7 +72,7 @@ const CreateCourseModule = () => {
     };
 
     const closeShowMessage = () => {
-        router.push(`/teacher/${userId}/mycourse/${courseId}/`)
+        window.location.href = `/teacher/${userId}/mycourse/${courseId}/`;
         setShowMessage(false);
     }
 

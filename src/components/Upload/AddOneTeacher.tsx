@@ -245,6 +245,7 @@ const SearchableTeacherEnrollment = ({ courseId }) => {
             });
             setGeneralError(null);
             setShowMessage(true);
+            window.location.href = `/teacher/${userId}/mycourse/${courseId}?section=participants`;
         } catch (error) {
             console.error('Error enrolling student:', error);
             setGeneralError(error.response?.data?.error || 'Failed to enroll student');
@@ -277,7 +278,7 @@ const SearchableTeacherEnrollment = ({ courseId }) => {
                                 onClick={() => setShowMessage(false)}
                                 className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg"
                             >
-                                Cancel (Closing in 5 seconds)
+                                Cancel 
                             </button>
                            
                         </div>

@@ -42,18 +42,21 @@ const CourseCard: React.FC<CourseCardProps> = ({ courses, userId }) => {
             alert('Deletion cancelled. Please type "confirm" to delete.');
             return;
         }
-
-        try {
-            const res = await axios.delete(`/api/delete/delete-course/${deleteConfirmation.courseId}`);
-            console.log(res.data);
-            // Reset delete confirmation state
-            setDeleteConfirmation({ courseId: null, confirmText: '' });
-            router.push(`/teacher/${userId}/mycourse`)
-        } catch (error) {
-            console.log(error)
-            // Reset delete confirmation state even if there's an error
-            setDeleteConfirmation({ courseId: null, confirmText: '' });
+        else{
+            try {
+                const res = await axios.delete(`/api/delete/delete-course/${deleteConfirmation.courseId}`);
+                setDeleteConfirmation({ courseId: null, confirmText: '' });
+                window.location.href = `/teacher/${userId}/dashboard`;
+               
+            } catch (error) {
+                console.log(error)
+                // Reset delete confirmation state even if there's an error
+                setDeleteConfirmation({ courseId: null, confirmText: '' });
+            }
         }
+     
+
+        
     }
 
     const initiateDeleteCourse = (course_id: string) => {

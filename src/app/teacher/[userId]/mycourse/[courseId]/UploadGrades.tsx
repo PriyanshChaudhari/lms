@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
 import axios from 'axios';
+import { useParams } from 'next/navigation';
 
 interface UploadGradesProps {
     courseId: string;
@@ -11,6 +12,8 @@ const UploadGrades: React.FC<UploadGradesProps> = ({ courseId }) => {
     const [eventName, setEventName] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [isUploaded, setIsUploaded] = useState<boolean>(false);
+    const params = useParams();
+    const userId = params.userId as string;
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
@@ -53,6 +56,7 @@ const UploadGrades: React.FC<UploadGradesProps> = ({ courseId }) => {
                     const response = await axios.post('/api/marks/upload-marks', formattedData);
                     console.log('Upload successful:', response.data);
                     setIsUploaded(true);
+                    window.location.href = `/teacher/${userId}/mycourse/${courseId}?section=grades`;
                 } catch (error) {
                     console.error('Error uploading grades:', error);
                     setError('Error uploading grades. Please try again.');
