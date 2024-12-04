@@ -75,7 +75,7 @@ const CreateContent = () => {
                 });
                 setFiles([]);
                 setShowModal(false);
-                router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/`);
+                router.push(`/teacher/${userId}/mycourse/${courseId}`);
             } catch (error) {
                 console.error(error);
             }

@@ -2,6 +2,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import SkeletonCourseCard from "../Skeleton/SkeletonCourseCard";
 
 interface Course {
     course_id: string;
@@ -86,8 +87,10 @@ const CourseCard: React.FC<CourseCardProps> = ({ courses, userId }) => {
                 </div>
 
                 {filteredCourses.length === 0 && searchTerm.length === 0 ? (
-                    <div className="text-center text-gray-500 dark:text-gray-400">
-                        Loading...
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {Array.from({ length: 6 }).map((_, index) => (
+                            <SkeletonCourseCard key={index} />
+                        ))}
                     </div>
                 ) : filteredCourses.length === 0 && searchTerm.length > 0 ? (
                     <div className="text-center text-gray-500 dark:text-gray-400">

@@ -3,6 +3,7 @@ import { useParams, useRouter } from 'next/navigation';
 import axios from 'axios';
 import { Edit, Trash2, Plus, FilePenLine } from 'lucide-react';
 import { Tooltip } from 'react-tooltip';
+import TeacherContentComponent from './TeacherContentComponent';
 
 interface courses {
     course_id: string;
@@ -17,14 +18,13 @@ interface modules {
     course_id: string;
     title: string;
     description: string;
-    position: number;
 }
 
 interface content {
     id: string;
     title: string;
     description: string;
-    position: number;
+    content_type: string;
 }
 
 interface module {
@@ -122,7 +122,11 @@ const TeacherModulesComponent = ({ moduleId, module, courseId, userId }: Teacher
         router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments/create-assignment`);
     };
 
-    const sortedContent = courseContent.sort((a, b) => a.position - b.position);
+    const sortedContent = courseContent.sort((a, b) => {
+        const dateA = new Date(a.created_at.seconds * 1000)
+        const dateB = new Date(b.created_at.seconds * 1000)
+        return dateA - dateB;
+    });
 
     return (
         <div className="flex w-full dark:bg-transparent py-8 px-4 ">
@@ -210,21 +214,25 @@ const TeacherModulesComponent = ({ moduleId, module, courseId, userId }: Teacher
                         <h2 className="text-xl font-bold my-2">Contents:</h2>
                         <div className="grid gap-4 items-center mt-2">
                             <table className="min-w-full bg-white dark:bg-gray-700">
-                                <thead>
+                                {/* <thead>
                                     <tr>
                                         <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-600">Title</th>
                                         <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-600">Description</th>
+                                        <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-600">Content Type</th>
                                         <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-600">Actions</th>
                                     </tr>
-                                </thead>
+                                </thead> */}
                                 <tbody>
                                     {sortedContent.map((content) => (
                                         <tr key={content.id}>
-                                            <td className="py-2 px-4 text-center border-b border-gray-200 dark:border-gray-600">{content.title}</td>
+                                            {/* <td className="py-2 px-4 text-center border-b border-gray-200 dark:border-gray-600">{content.title}</td>
                                             <td className="py-2 px-4 text-center border-b border-gray-200 dark:border-gray-600">{content.description}</td>
                                             <td className="py-2 px-4 flex items-center justify-center border-b border-gray-200 dark:border-gray-600 space-x-2">
                                                 <div className='bg-zinc-400 dark:bg-zinc-300 p-3 text-clip bg-opacity-20 text-sm text-gray-500 dark:text-gray-500  px-2 py-1 rounded-lg cursor-pointer' onClick={() => handleViewClick(content.id)}>View</div>
-                                            </td>
+                                            </td> */}
+                                            <div className="flex flex-col items-center justify-between p-6">
+                                                <TeacherContentComponent contentId={content.id} content={content} moduleId={moduleId} courseId={courseId} userId={userId} />
+                                            </div>
                                         </tr>
                                     ))}
                                 </tbody>

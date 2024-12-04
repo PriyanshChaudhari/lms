@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Image from "next/image";
-import SkeletonCourseCard from "./SkeletonCourseCard";
+import SkeletonCourseCard from "../Skeleton/SkeletonCourseCard";
 
 interface Course {
     course_id: string;
@@ -142,25 +142,25 @@ const CourseCard: React.FC<CourseCardProps> = ({ courses, userId }) => {
                             <SkeletonCourseCard key={index} />
                         ))}
                     </div>
-                    
+
                 ) : filteredCourses.length === 0 && searchTerm.length > 0 ? (
-                <div className="text-center text-gray-500 dark:text-gray-400">
-                    No courses found.
-                </div>
+                    <div className="text-center text-gray-500 dark:text-gray-400">
+                        No courses found.
+                    </div>
                 ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {filteredCourses.map((course) => (
-                        <div
-                            key={course.course_id}
-                            className="bg-white dark:bg-[#151b23] rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 p-6"
-                        >
-                            <div className="aspect-video relative overflow-hidden mb-2">
-                                <img
-                                    src={course.coursePicUrl}
-                                    alt={course.title}
-                                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
-                                />
-                                {/* <Image
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {filteredCourses.map((course) => (
+                            <div
+                                key={course.course_id}
+                                className="bg-white dark:bg-[#151b23] rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 p-6"
+                            >
+                                <div className="aspect-video relative overflow-hidden mb-2">
+                                    <img
+                                        src={course.coursePicUrl}
+                                        alt={course.title}
+                                        className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
+                                    />
+                                    {/* <Image
                                         src={course.coursePicUrl}
                                         alt="Course image"
                                         className="rounded-lg mb-4 w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
@@ -168,44 +168,44 @@ const CourseCard: React.FC<CourseCardProps> = ({ courses, userId }) => {
                                         height='200'// Specify the height
                                         priority // Optional: for images important for LCP
                                     /> */}
-                            </div>
+                                </div>
 
-                            <div className="">
-                                <h2
-                                    className="text-xl font-semibold text-gray-900 dark:text-white mb-2 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer truncate"
-                                    onClick={() => handleClick(course.course_id)}
-                                >
-                                    {course.title}
-                                </h2>
-
-                                <p className="text-gray-600 dark:text-gray-300 mb-6 line-clamp-2 text-sm">
-                                    {course.description}
-                                </p>
-
-                                <div className="flex gap-4">
-                                    <button
-                                        className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg transition-colors duration-200 text-sm"
+                                <div className="">
+                                    <h2
+                                        className="text-xl font-semibold text-gray-900 dark:text-white mb-2 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer truncate"
                                         onClick={() => handleClick(course.course_id)}
                                     >
-                                        View
-                                    </button>
-                                    <button
-                                        className="flex-1 px-4 py-2 bg-blue-100 hover:bg-blue-200 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-lg transition-colors duration-200 text-sm"
-                                        onClick={() => handleEditCourse(course.course_id)}
-                                    >
-                                        Edit
-                                    </button>
-                                    <button
-                                        className="flex-1 px-4 py-2 bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-700 dark:text-red-300 rounded-lg transition-colors duration-200 text-sm"
-                                        onClick={() => initiateDeleteCourse(course.course_id)}
-                                    >
-                                        Delete
-                                    </button>
+                                        {course.title}
+                                    </h2>
+
+                                    <p className="text-gray-600 dark:text-gray-300 mb-6 line-clamp-2 text-sm">
+                                        {course.description}
+                                    </p>
+
+                                    <div className="flex gap-4">
+                                        <button
+                                            className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg transition-colors duration-200 text-sm"
+                                            onClick={() => handleClick(course.course_id)}
+                                        >
+                                            View
+                                        </button>
+                                        <button
+                                            className="flex-1 px-4 py-2 bg-blue-100 hover:bg-blue-200 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-lg transition-colors duration-200 text-sm"
+                                            onClick={() => handleEditCourse(course.course_id)}
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            className="flex-1 px-4 py-2 bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-700 dark:text-red-300 rounded-lg transition-colors duration-200 text-sm"
+                                            onClick={() => initiateDeleteCourse(course.course_id)}
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
                 )}
             </div>
         </div>
