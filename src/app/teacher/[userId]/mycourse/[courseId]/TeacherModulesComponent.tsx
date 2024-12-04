@@ -48,33 +48,35 @@ const TeacherModulesComponent = ({ moduleId, module, courseId, userId }: Teacher
         confirmText: ''
     });
 
-    const [ showdeleteConfirmation ,setShowDeleteConfirmation ] = useState<boolean>(false);
-
-    const [oneModule, setOneModule] = useState<modules | null>(null);
     const [courseContent, setCourseContent] = useState<content[]>([]);
-    const [course, setCourse] = useState<courses | null>(null);
+    const [showdeleteConfirmation, setShowDeleteConfirmation] = useState<boolean>(false);
+
+    // const [oneModule, setOneModule] = useState<modules | null>(null);
+    // const [course, setCourse] = useState<courses | null>(null);
+
+    // const getCourseDetails = async () => {
+    //     try {
+    //         const res = await axios.post('/api/get/course-details', { courseId });
+    //         setCourse(res.data.courseDetails);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // };
+    // getCourseDetails();
+
+    // const getOneModule = async () => {
+    //     try {
+    //         const res = await axios.post('/api/get/one-module', { moduleId });
+    //         setOneModule(res.data.module);
+    //     } catch (error) {
+    //         console.error("Error fetching course module: ", error);
+    //     }
+    // };
+    // getOneModule();
+
+
 
     useEffect(() => {
-        const getCourseDetails = async () => {
-            try {
-                const res = await axios.post('/api/get/course-details', { courseId });
-                setCourse(res.data.courseDetails);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        getCourseDetails();
-
-        const getOneModule = async () => {
-            try {
-                const res = await axios.post('/api/get/one-module', { moduleId });
-                setOneModule(res.data.module);
-            } catch (error) {
-                console.error("Error fetching course module: ", error);
-            }
-        };
-        getOneModule();
-
         const getCourseContent = async () => {
             try {
                 const res = await axios.post('/api/get/course-content', { moduleId });
@@ -84,7 +86,9 @@ const TeacherModulesComponent = ({ moduleId, module, courseId, userId }: Teacher
             }
         };
         getCourseContent();
-    }, [moduleId, courseId]);
+
+
+    }, [moduleId]);
 
     const addContent = () => {
         router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/content/create-content`);
@@ -123,34 +127,34 @@ const TeacherModulesComponent = ({ moduleId, module, courseId, userId }: Teacher
     return (
         <div className="flex w-full dark:bg-transparent py-8 px-4 ">
             {/* Deletion Confirmation Modal */}
-            { showdeleteConfirmation && (
+            {showdeleteConfirmation && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white dark:bg-[#1e2631] p-6 rounded-lg shadow-xl w-96">
                         <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
                             Confirm Module Deletion
                         </h2>
                         <p className="text-gray-600 dark:text-gray-300 mb-4">
-                            Are you sure you want to delete this module? 
+                            Are you sure you want to delete this module?
                             Type "confirm" below to proceed.
                         </p>
-                        <input 
+                        <input
                             type="text"
                             value={deleteConfirmation.confirmText}
-                            onChange={(e) => setDeleteConfirmation({ 
-                                confirmText: e.target.value 
+                            onChange={(e) => setDeleteConfirmation({
+                                confirmText: e.target.value
                             })}
                             className="w-full px-3 py-2 border rounded-lg mb-4 dark:bg-[#151b23]"
                             placeholder="Type 'confirm' here"
                         />
                         <div className="flex gap-4">
-                            <button 
+                            <button
                                 onClick={() => setShowDeleteConfirmation(false)}
                                 className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg"
                             >
                                 Cancel
                             </button>
-                            <button 
-                                  
+                            <button
+
                                 onClick={handleDeleteModule}
                                 className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg"
                             >
@@ -160,7 +164,7 @@ const TeacherModulesComponent = ({ moduleId, module, courseId, userId }: Teacher
                     </div>
                 </div>
             )}
-            
+
             <div className="flex-auto max-w-7xl mx-auto">
                 <div className="flex flex-col gap-4 space-y-6 ">
                     <div className='flex justify-between items-center'>
@@ -189,10 +193,10 @@ const TeacherModulesComponent = ({ moduleId, module, courseId, userId }: Teacher
                                 </div>
 
                                 <div data-tooltip-id="edit-tooltip" data-tooltip-content="Edit Module" className='p-3 cursor-pointer  bg-white dark:bg-[#151b23] shadow-sm hover:shadow-md transition-shadow' onClick={handleEditModule}>
-                                    <Edit className="text-blue-500"/>
+                                    <Edit className="text-blue-500" />
                                 </div>
-                                <div data-tooltip-id="delete-tooltip" data-tooltip-content="Delete Module" className='p-3 cursor-pointer  bg-white dark:bg-[#151b23] shadow-sm hover:shadow-md transition-shadow' onClick={() =>  setShowDeleteConfirmation(true)}>
-                                    <Trash2 className="text-red-500"/>
+                                <div data-tooltip-id="delete-tooltip" data-tooltip-content="Delete Module" className='p-3 cursor-pointer  bg-white dark:bg-[#151b23] shadow-sm hover:shadow-md transition-shadow' onClick={() => setShowDeleteConfirmation(true)}>
+                                    <Trash2 className="text-red-500" />
                                 </div>
                                 <Tooltip id="edit-tooltip" place="top" />
                                 <Tooltip id="delete-tooltip" place="top" />

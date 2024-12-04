@@ -11,6 +11,7 @@ import UploadGrades from './UploadGrades';
 import UploadGradesDialog from './UploadGradesDialog';
 import TeacherModulesComponent from './TeacherModulesComponent';
 import { Plus } from 'lucide-react';
+import { Timestamp } from 'firebase/firestore';
 
 interface users {
     user_id: string;
@@ -56,18 +57,13 @@ const CourseDetails = () => {
     const [courseModules, setCourseModules] = useState<modules[]>([])
     const [assignments, setAssignments] = useState<assignments[]>([])
     const [participantData, setParticipantData] = useState<users[]>([]);
-
     const [activeSection, setActiveSection] = useState<string>('modules');
-
     const [searchTerm, setSearchTerm] = useState<string>(''); // New state for search term
-
     const [addUser, setAddUser] = useState(false);  // Controls showing the add participants section
     const [showAddStudent, setShowAddStudent] = useState(true);  // Controls showing Add Student form
     const [showAddTeacher, setShowAddTeacher] = useState(false);  // Controls showing Add Teacher form
     const [showAddGroup, setShowAddGroup] = useState(false);  // Controls showing Add Teacher form
     const [showMessage, setShowMessage] = useState(false); //
-
-
     const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
 
     const filteredParticipants = searchTerm === ''
@@ -140,36 +136,47 @@ const CourseDetails = () => {
     // }, [courseId])
 
     useEffect(() => {
+        const section = searchParams.get('section');
+        if (section) {
+            setActiveSection(section);
+        }
+
         const fetchData = async () => {
             try {
-                const section = searchParams.get('section');
-                if (section) setActiveSection(section);
-
-                // Fetch data concurrently
-                const [courseRes, modulesRes, assignmentsRes, participantsRes] = await Promise.all([
-                    axios.post('/api/get/course-details', { courseId }),
-                    axios.post('/api/get/course-modules', { courseId }),
-                    axios.post('/api/get/assignments/all-assignments', { courseId }),
-                    axios.post('/api/get/participants', { courseId }),
+                const responses = await Promise.allSettled([
+                    axios.post(`/api/get/course-details`, { courseId }),
+                    axios.post(`/api/get/course-modules`, { courseId }),
+                    axios.post(`/api/get/assignments/all-assignments`, { courseId }),
+                    axios.post(`/api/get/participants`, { courseId }),
                 ]);
 
-                // Update states with the fetched data
-                setCourses(courseRes.data.courseDetails);
-                setCourseModules(modulesRes.data.content);
-                setAssignments(assignmentsRes.data.assignments || []);
-                setParticipantData(participantsRes.data.participants);
+                // Handle results
+                const courseDetails = responses[0].status === 'fulfilled' ? responses[0].value.data.courseDetails : null;
+                const modulesContent = responses[1].status === 'fulfilled' ? responses[1].value.data.content : [];
+                const assignments = responses[2].status === 'fulfilled' ? responses[2].value.data.assignments : [];
+                const participants = responses[3].status === 'fulfilled' ? responses[3].value.data.participants : [];
+
+                // Update state only once
+                setCourses(courseDetails);
+                setCourseModules(modulesContent);
+                setAssignments(assignments);
+                setParticipantData(participants);
+
+                // Log errors, if any
+                responses.forEach((response, index) => {
+                    if (response.status === 'rejected') {
+                        console.error(`Request ${index} failed:`, response.reason);
+                    }
+                });
             } catch (error) {
-                console.error('Error fetching data:', error);
-                // You could set an error state here to display a user-friendly message
+                console.error("Unexpected error:", error);
             }
         };
 
-        if (courseId) {
-            fetchData();
-        }
-    }, [courseId]); // Add searchParams to the dependency array
+        fetchData();
+    }, [courseId, searchParams]);
 
-    const formatDate = (timestamp: any) => {
+    const formatDate = (timestamp: Timestamp) => {
         const date = new Date(timestamp.seconds * 1000); // Convert seconds to milliseconds
         return date.toLocaleDateString(); // Format the date as a readable string
     };
@@ -177,7 +184,7 @@ const CourseDetails = () => {
     const sortedModules = courseModules.sort((a, b) => {
         const dateA = new Date(a.created_at.seconds * 1000)
         const dateB = new Date(b.created_at.seconds * 1000)
-        return dateA - dateB; // Ascending order (earliest to latest)
+        return dateA - dateB;
     });
 
     const handleModuleClick = (moduleId: string) => {

@@ -87,10 +87,7 @@ const Dashboard: React.FC = () => {
   }, [userId]);
 
   return (
-    
-      <CourseCard courses={courses} userId={userId} />
-      
-
+    <CourseCard courses={courses} userId={userId} />
   );
 };
 
