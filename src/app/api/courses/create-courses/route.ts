@@ -70,8 +70,6 @@ export async function POST(req: NextRequest) {
         const firebaseStorageId = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET;
         const defaultCoursePicUrl = `https://firebasestorage.googleapis.com/v0/b/${firebaseStorageId}/o/default-course-pic.png?alt=media`;
 
-
-
         const file = formData.get('file') as File | null;
         if (file) {
             const arrayBuffer = await file.arrayBuffer();

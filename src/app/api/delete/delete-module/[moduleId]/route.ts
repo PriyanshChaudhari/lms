@@ -11,11 +11,11 @@ export async function DELETE(req: NextRequest, { params }: { params: { moduleId:
             return NextResponse.json({ error: "Module ID is required" }, { status: 400 });
         }
 
-        // await logAuditAction('DELETE_MODULE', moduleId,'Deleting modules and related data');
+        await logAuditAction('DELETE_MODULE', moduleId,'Deleting modules and related data');
 
-        // await deleteRelatedContent(moduleId);
+        await deleteRelatedContent(moduleId);
 
-        // await deleteRelatedAssignments(moduleId);
+        await deleteRelatedAssignments(moduleId);
 
         const moduleRef = doc(db, "course-module", moduleId);
         await deleteDoc(moduleRef);

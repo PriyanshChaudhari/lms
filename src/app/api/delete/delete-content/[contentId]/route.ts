@@ -8,6 +8,7 @@ import { app } from '@/lib/firebaseConfig';
 async function deleteFile(fileUrl: string) {
     const storage = getStorage(app);
     const fileRef = ref(storage, fileUrl);
+    console.log(fileUrl)
     return deleteObject(fileRef).catch((error) => {
         console.error(`Error deleting file from storage: ${error}`);
         throw new Error("Failed to delete file from storage");
@@ -25,8 +26,7 @@ async function deleteRelatedFiles(attachments: string[]) {
 export async function DELETE(req: NextRequest, { params }: { params: { contentId: string } }) {
     try {
         const { contentId } = params;
-        const { data } = await req.json();
-        const { courseId, moduleId } = data;
+        const { courseId, moduleId } = await req.json();
 
         if (!contentId || !courseId || !moduleId) {
             return NextResponse.json({ error: "Content ID, Course ID, and Module ID are required" }, { status: 400 });
@@ -45,7 +45,9 @@ export async function DELETE(req: NextRequest, { params }: { params: { contentId
         const attachments = existingContent.attachments || [];
 
         // Delete related files in Firebase Storage using the attachments array
-        await deleteRelatedFiles(attachments);
+        if (existingContent.content_type === 'file') {
+            await deleteRelatedFiles(attachments);
+        }
 
         // Delete the document from Firestore
         await deleteDoc(contentRef);

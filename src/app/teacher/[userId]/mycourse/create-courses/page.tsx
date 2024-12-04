@@ -92,11 +92,7 @@ const CreateCourse = () => {
             setError("Please Fill All Required Fields.")
             return false;
         }
-        // if (!file) {
-        //     setError('Please upload file.');
-        //     return false;
-        // }
-        return true;
+        return true
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -112,6 +108,7 @@ const CreateCourse = () => {
             formSubmissionData.append('description', course.description);
             formSubmissionData.append('teacher_id', course.teacher_id);
             formSubmissionData.append('category', course.category);
+            console.log(course.title,course.description,course.teacher_id,course.category)
 
             // Attach the image file to the form data
             if (file) {

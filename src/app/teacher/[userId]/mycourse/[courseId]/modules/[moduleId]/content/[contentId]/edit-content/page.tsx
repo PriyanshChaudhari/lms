@@ -113,7 +113,7 @@ const EditContent = () => {
             const res = await axios.put(`/api/put/update-content/${contentId}`, formData);
 
             console.log(res.data);
-            router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/content/${contentId}`);
+            router.push(`/teacher/${userId}/mycourse/${courseId}`);
         } catch (error) {
             console.error('Error updating content:', error);
         }

@@ -8,7 +8,7 @@ import { app } from '@/lib/firebaseConfig';
 async function uploadFile(fileBuffer: Uint8Array, fileName: string, contentType: string, contentId: string, courseId: string, moduleId: string) {
     const storageRef = getStorage(app);
     const fileExtension = fileName.split('.').pop();
-    const newFileName = `course_content_${contentId}_${fileName}.${fileExtension}`; // Append original file name to make it unique
+    const newFileName = `course_content_${contentId}_${fileName}`; // Append original file name to make it unique
     const fileRef = ref(storageRef, `courses/${courseId}/${moduleId}/course-content/${newFileName}`);
     const metadata = { contentType };
     const uploadTask = uploadBytesResumable(fileRef, fileBuffer, metadata);

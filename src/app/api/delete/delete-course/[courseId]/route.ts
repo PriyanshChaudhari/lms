@@ -2,7 +2,7 @@ import { db, storage } from "@/lib/firebaseConfig";
 import { doc, deleteDoc, getDoc } from "firebase/firestore";
 import { ref, deleteObject } from "firebase/storage";
 import { NextRequest, NextResponse } from "next/server";
-import { deleteRelatedModules, logAuditAction} from "@/lib/cascadeHelper";
+import { deleteRelatedEnrollments, deleteRelatedModules, logAuditAction} from "@/lib/cascadeHelper";
 
 // The handler for the DELETE request
 export async function DELETE(req: NextRequest, { params }: { params: { courseId: string } }) {
@@ -12,9 +12,11 @@ export async function DELETE(req: NextRequest, { params }: { params: { courseId:
             return NextResponse.json({ error: "Course ID is required" }, { status: 400 });
         }
 
-        // await logAuditAction('DELETE_COURSE', courseId, 'Deleting course and related data');
+        await logAuditAction('DELETE_COURSE', courseId, 'Deleting course and related data');
 
-        // await deleteRelatedModules(courseId);
+        await deleteRelatedModules(courseId);
+
+        await deleteRelatedEnrollments(courseId);
 
         const courseRef = doc(db, "courses", courseId);
         const courseDoc = await getDoc(courseRef);

@@ -8,7 +8,7 @@ async function uploadFile(fileBuffer: Uint8Array, fileName: string, contentType:
     console.log("upload file called")
     const storageRef = getStorage(app);
     const fileExtension = fileName.split('.').pop();
-    const newFileName = `course_content_${contentId}_${fileName}.${fileExtension}`; // Append original file name to make it unique
+    const newFileName = `course_content_${contentId}_${fileName}`; // Append original file name to make it unique
     const fileRef = ref(storageRef, `courses/${courseId}/${moduleId}/course-content/${newFileName}`);
     const metadata = { contentType };
     const uploadTask = uploadBytesResumable(fileRef, fileBuffer, metadata);
@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
 
         // If content_type is "url", store the URL as an attachment
         if (content_type === "url") {
-            const contentUrl = formData.get('text_content') as string; // Assuming the URL is provided under 'text_content'
+            const contentUrl = formData.get('attachments') as string; // Assuming the URL is provided under 'text_content'
             attachments.push(contentUrl); // Add the URL to attachments array
             await updateDoc(docRef, { attachments });
         }

@@ -202,7 +202,7 @@ const Sidebar: React.FC = () => {
                           <div className="mt-1 ">
                             {isLoadingModules ? (
                               <div className="p-2 text-gray-500 dark:text-gray-400">Loading modules...</div>
-                            ) : modules[course.course_id] ? (
+                            ) : modules[course.course_id] && modules[course.course_id].length > 0 ? (
                               <ul className="space-y-1 p-2">
                                 {modules[course.course_id].map((module) => (
                                   <Link

@@ -84,16 +84,22 @@ const TeacherContentComponent = ({ contentId, content, moduleId, courseId, userI
             alert('Deletion cancelled. Please type "confirm" to delete.');
             return;
         }
-
+    
         try {
-            const res = await axios.delete(`/api/delete/delete-content/${contentId}`, { data: { courseId, moduleId } });
+            console.log("Deleting content with:", { courseId, moduleId, contentId });
+    
+            const res = await axios.delete(`/api/delete/delete-content/${contentId}`, {
+                data: { courseId, moduleId },
+            });
+    
             console.log(res.data);
             setShowDeleteConfirmation(false);
             // router.push(`/teacher/${userId}/mycourse/${courseId}`);
         } catch (error) {
-            console.log(error);
+            console.error("Error deleting content:", error);
         }
     };
+    
 
 
     return (

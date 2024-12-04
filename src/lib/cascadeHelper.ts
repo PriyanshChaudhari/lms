@@ -50,7 +50,9 @@ export async function deleteRelatedContent(moduleId: string) {
         const attachments = existingContent.attachments || [];
 
         // Delete related files in Firebase Storage using the attachments array
-        await deleteContentRelatedFiles(attachments);
+        if (existingContent.content_type === 'file') {
+            await deleteContentRelatedFiles(attachments);
+        }
         await deleteDoc(contentDoc.ref);
     }
 }
@@ -120,6 +122,34 @@ export async function deleteRelatedSubmissions(assignmentId: string) {
         // Log submission deletion
         await logAuditAction('DELETE_SUBMISSION', submissionDoc.id, `Deleting submission for assignment ${assignmentId}`);
         await deleteDoc(submissionDoc.ref);
+    }
+}
+
+export async function deleteRelatedEnrollments(courseId:string) {
+    try {
+        // Query the `enrolled_at` collection for documents where `course_id` matches the given courseId
+        const enrollmentQuery = query(
+            collection(db, "enrolled_at"),
+            where("course_id", "==", courseId)
+        );
+        const enrollmentSnapshot = await getDocs(enrollmentQuery);
+
+        if (enrollmentSnapshot.empty) {
+            console.log(`No enrollments found for course ID: ${courseId}`);
+            return;
+        }
+
+        // Loop through the documents and delete each one
+        for (const enrollmentDoc of enrollmentSnapshot.docs) {
+            const enrollmentId = enrollmentDoc.id; // Get the document ID
+            await deleteDoc(enrollmentDoc.ref); // Delete the document
+            console.log(`Deleted enrollment ID: ${enrollmentId} for course ID: ${courseId}`);
+        }
+
+        console.log(`All enrollments deleted for course ID: ${courseId}`);
+    } catch (error) {
+        console.error(`Error deleting enrollments for course ID: ${courseId}`, error);
+        throw error; // Rethrow the error to handle it upstream
     }
 }
 
