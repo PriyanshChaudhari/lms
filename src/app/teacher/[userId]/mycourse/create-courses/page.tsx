@@ -36,14 +36,15 @@ const CreateCourse = () => {
         }
     };
 
-    useEffect(() => {
+   useEffect(() => {
+    if (showMessage) {
         const timer = setTimeout(() => {
             setShowMessage(false);
-        }, 5000); // 5 seconds delay
+        }, 5000);
 
-        // Cleanup the timer when the component unmounts or re-renders
-        return () => clearTimeout(timer);
-    }, []);
+        return () => clearTimeout(timer); // Cleanup the timer
+    }
+}, [showMessage]);
 
     useEffect(() => {
         fetchCategories();
@@ -130,7 +131,7 @@ const CreateCourse = () => {
                 
             }
         } catch (error) {
-            // setError('An error occurred. Please try again.');
+            setError('An error occurred. Please try again.');
         }
     };
 
@@ -192,7 +193,7 @@ const CreateCourse = () => {
                                 onClick={closeShowMessage}
                                 className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg"
                             >
-                                Cancel (Closing in 5 seconds)
+                               Close (Closing in 5 seconds)
                             </button>
 
                         </div>

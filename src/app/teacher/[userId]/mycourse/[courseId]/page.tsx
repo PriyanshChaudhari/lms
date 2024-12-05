@@ -77,14 +77,15 @@ const CourseDetails = () => {
                 item.user_id.includes(searchTerm)
         );
 
-    useEffect(() => {
+   useEffect(() => {
+    if (showMessage) {
         const timer = setTimeout(() => {
             setShowMessage(false);
-        }, 5000); // 5 seconds delay
+        }, 5000);
 
-        // Cleanup the timer when the component unmounts or re-renders
-        return () => clearTimeout(timer);
-    }, []);
+        return () => clearTimeout(timer); // Cleanup the timer
+    }
+}, [showMessage]);
 
 
     useEffect(() => {

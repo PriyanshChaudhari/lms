@@ -60,13 +60,15 @@ const EditCourse = () => {
     }, [courseId, userId, defaultCoursePicUrl]);
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-          setShowMessage(false);
-        }, 5000); // 5 seconds delay
+        if (showMessage) {
+            const timer = setTimeout(() => {
+                setShowMessage(false);
+            }, 5000);
     
-        // Cleanup the timer when the component unmounts or re-renders
-        return () => clearTimeout(timer);
-      }, []);
+            return () => clearTimeout(timer); // Cleanup the timer
+        }
+    }, [showMessage]);
+    
 
     const handleChange = (e: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -197,14 +199,14 @@ const EditCourse = () => {
                                 onClick={closeShowMessage}
                                 className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg"
                             >
-                                Cancel (Closing in 5 seconds)
+                               Close (Closing in 5 seconds)
                             </button>
 
                         </div>
                     </div>
                 </div>
             )}
-            <div className="w-full max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
+            <div className="w-full max-w-md mx-auto mt-8 p-6 bg-white dark:bg-[#151b23] rounded-lg shadow-md">
             <div className='flex justify-between mb-4 items-center'>
                     <div className="text-2xl font-semibold text-black dark:text-gray-300">Edit Course</div>
                     <div className=''
@@ -229,7 +231,7 @@ const EditCourse = () => {
                             name="title"
                             value={course.title}
                             onChange={handleChange}
-                            className="mt-1 p-2 w-full border border-gray-300 rounded-lg uppercase"
+                            className="mt-1 p-2 w-full border border-gray-300 rounded-lg uppercase bg-inherit"
                             required
                         />
                     </div>
@@ -243,7 +245,7 @@ const EditCourse = () => {
                             name="description"
                             value={course.description}
                             onChange={handleChange}
-                            className="mt-1 p-2 w-full border capitalize border-gray-300 rounded-lg"
+                            className="mt-1 p-2 w-full border capitalize border-gray-300 rounded-lg bg-inherit"
                             required
                         />
                     </div>
@@ -256,7 +258,7 @@ const EditCourse = () => {
                             type="file"
                             accept="image/png, image/jpeg"
                             onChange={handleFileChange}
-                            className="mt-1 p-2 w-full border"
+                            className="mt-1 p-2 w-full border bg-inherit"
                         />
                     </div>
 
