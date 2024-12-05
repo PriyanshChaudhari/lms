@@ -218,7 +218,7 @@ const StudentGrades: React.FC<StudentGradesProps> = ({ courseId, studentId }) =>
                 </div>
                 <button
                     onClick={downloadReport}
-                    className="w-1/5 mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
+                    className="max-w-fit mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
                 >
                     Download Report
                 </button>

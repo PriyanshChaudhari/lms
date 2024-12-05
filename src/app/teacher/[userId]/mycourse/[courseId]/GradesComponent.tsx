@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
-import './GradesComponent.css'; // Make sure to create and import this CSS file
+import './GradesComponent.css';
 import StudentGrades from '@/app/student/[userId]/mycourse/[courseId]/GradesComponent';
 
 interface Student {
@@ -51,6 +51,9 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
     const [assignments, setAssignments] = useState<Assignment[]>([]);
     const [grades, setGrades] = useState<Record<string, GradesResponse>>({});
     const [selectedStudent, setSelectedStudent] = useState<string | null>(null);
+    
+    // New state for search functionality
+    const [searchTerm, setSearchTerm] = useState<string>('');
 
     useEffect(() => {
         const fetchStudentsEventsAssignments = async () => {
@@ -60,7 +63,6 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
                 setStudents(filteredStudents);
 
                 const eventsResponse = await axios.get(`/api/get/events?course_id=${courseId}`);
-                console.log('Events Response:', eventsResponse.data.events); // Debugging log
                 setEvents(eventsResponse.data.events);
 
                 const assignmentsResponse = await axios.post('/api/get/assignments/all-assignments', { courseId });
@@ -81,7 +83,6 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
 
             for (const student of students) {
                 const eventMarksResponse = await axios.get<GradesResponse>(`/api/get/marks/one-student/course-events?user_id=${student.user_id}&course_id=${courseId}`);
-                console.log(`Event Marks for ${student.user_id}:`, eventMarksResponse.data.event_marks); // Debugging log
                 const assignmentMarksResponse = await axios.get<GradesResponse>(`/api/get/marks/one-student/course-assignments?user_id=${student.user_id}&course_id=${courseId}`);
 
                 gradesData[student.user_id] = {
@@ -130,7 +131,6 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
 
         const worksheet = XLSX.utils.json_to_sheet(data);
 
-        // Define the order of the columns
         const columnOrder = [
             'Student ID',
             'Student Name',
@@ -141,7 +141,6 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
             'Overall Total Marks'
         ];
 
-        // Reorder the columns in the worksheet
         worksheet['!cols'] = columnOrder.map(col => ({ wch: col.length }));
         const orderedData = data.map(row => {
             const orderedRow: any = {};
@@ -160,14 +159,33 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
         saveAs(dataBlob, 'Grades_Report.xlsx');
     };
 
+    // Filter students based on search term
+    const filteredStudents = students.filter(student => 
+        `${student.first_name} ${student.last_name}`.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    // Close modal
+    const closeModal = () => {
+        setSelectedStudent(null);
+    };
+
     return (
-        <div className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm ">
+        <div className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm">
             <div className="p-6 grid gap-4">
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                    Participants' Grades
-                </h2>
+                <div className="">
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white my-4">
+                        Participants' Grades
+                    </h2>
+                    <input
+                        type="text"
+                        placeholder="Search students..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="px-4 py-2 w-full max-w-7xl border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-[#151b23]"
+                    />
+                </div>
                 <div className="overflow-x-auto mt-4">
-                    <table className="min-w-full ">
+                    <table className="min-w-full">
                         <thead>
                             <tr className="bg-gray-50 dark:bg-gray-700 text-center">
                                 <th className="p-4 text-gray-700 dark:text-gray-300">Student Name</th>
@@ -175,21 +193,29 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {students.map(student => (
-                                <tr key={student.user_id} className="border-t border-gray-100 dark:border-gray-700 text-center">
-                                    <td className="p-4 text-gray-700 dark:text-gray-300">
-                                        {`${student.first_name} ${student.last_name}`}
-                                    </td>
-                                    <td className="p-4 text-gray-700 dark:text-gray-300">
-                                        <button
-                                            onClick={() => setSelectedStudent(student.user_id)}
-                                            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
-                                        >
-                                            View Grades Report
-                                        </button>
+                            {filteredStudents.length === 0 ? (
+                                <tr>
+                                    <td colSpan={2} className="p-4 text-center text-gray-500 dark:text-gray-400">
+                                        No students found
                                     </td>
                                 </tr>
-                            ))}
+                            ) : (
+                                filteredStudents.map(student => (
+                                    <tr key={student.user_id} className="border-t border-gray-100 dark:border-gray-700 text-center">
+                                        <td className="p-4 text-gray-700 dark:text-gray-300">
+                                            {`${student.first_name} ${student.last_name}`}
+                                        </td>
+                                        <td className="p-4 text-gray-700 dark:text-gray-300">
+                                            <button
+                                                onClick={() => setSelectedStudent(student.user_id)}
+                                                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
+                                            >
+                                                View Grades Report
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
                         </tbody>
                     </table>
                 </div>
@@ -199,13 +225,28 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
                 >
                     Download Report
                 </button>
+
+                {/* Modal for Student Grades */}
                 {selectedStudent && (
-                    <div className="mt-8">
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                            Grades Report for {students.find(student => student.user_id === selectedStudent)?.first_name} {students.find(student => student.user_id === selectedStudent)?.last_name}
-                        </h3>
-                        <div className="overflow-x-auto mt-4">
-                            <StudentGrades courseId={courseId} studentId={selectedStudent}/>
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                        <div className="bg-white dark:bg-[#1e2631] p-6 rounded-lg shadow-xl w-96 max-h-[90vh] overflow-y-auto">
+                            <div className="flex justify-between items-center mb-4">
+                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                                    Grades Report for {students.find(student => student.user_id === selectedStudent)?.first_name} {students.find(student => student.user_id === selectedStudent)?.last_name}
+                                </h3>
+                                <button 
+                                    onClick={closeModal}
+                                    className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+                                >
+                                    ✕
+                                </button>
+                            </div>
+                            <div className="w-full">
+                                <StudentGrades 
+                                    courseId={courseId} 
+                                    studentId={selectedStudent}
+                                />
+                            </div>
                         </div>
                     </div>
                 )}
