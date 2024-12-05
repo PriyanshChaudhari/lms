@@ -3,6 +3,9 @@ import { useParams, useRouter } from 'next/navigation';
 import axios from 'axios';
 import { Edit, Trash2, Eye, Download } from 'lucide-react';
 import { Tooltip } from 'react-tooltip';
+import { getDownloadURL, getStorage, ref } from 'firebase/storage';
+import { app, storage } from '@/lib/firebaseConfig'
+import Link from 'next/link';
 
 interface courses {
     course_id: string;
@@ -23,7 +26,8 @@ interface content {
     id: string;
     title: string;
     description: string;
-    content_type: string
+    content_type: string;
+    attachments: string[];
 }
 
 interface module {
@@ -65,17 +69,28 @@ const TeacherContentComponent = ({ contentId, content, moduleId, courseId, userI
 
     }, [moduleId]);
 
-    const handleDownloadContent = () => {
-        // Add your download content logic here
-        console.log("Download content");
+    const handleDownloadContent = async () => {
+        try {
+            const storage = getStorage(app);
+            const fileRef = ref(storage, `${content.attachments[0]}`); // Replace with the correct file path
+            const downloadUrl = await getDownloadURL(fileRef); // Get the file URL
+
+            // Open the file directly in a new tab or trigger the download
+            window.open(downloadUrl, '_blank'); // Opens in a new tab
+            console.log("Download content triggered");
+        } catch (error) {
+            console.error('Error downloading content:', error);
+        }
     };
+
 
     const handleViewContent = () => {
         // Add your download content logic here
         console.log("View content");
-        router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/content/${contentId}`);
-
+        const newTabUrl = `${content.attachments[0]}`;
+        window.open(newTabUrl, '_blank'); // Open in a new tab
     };
+
 
     const handleEditContent = () => {
         router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/content/${contentId}/edit-content`);
@@ -86,14 +101,14 @@ const TeacherContentComponent = ({ contentId, content, moduleId, courseId, userI
             alert('Deletion cancelled. Please type "confirm" to delete.');
             return;
         }
-    
+
         try {
             console.log("Deleting content with:", { courseId, moduleId, contentId });
-    
+
             const res = await axios.delete(`/api/delete/delete-content/${contentId}`, {
                 data: { courseId, moduleId },
             });
-    
+
             console.log(res.data);
             setShowDeleteConfirmation(false);
             // router.push(`/teacher/${userId}/mycourse/${courseId}`);
@@ -101,7 +116,7 @@ const TeacherContentComponent = ({ contentId, content, moduleId, courseId, userI
             console.error("Error deleting content:", error);
         }
     };
-    
+
 
 
     return (
@@ -159,12 +174,21 @@ const TeacherContentComponent = ({ contentId, content, moduleId, courseId, userI
                                 <p className="text-sm text-gray-600 dark:text-gray-300">
                                     {content.description}
                                 </p>
+                                {content.content_type === "url" && (
+                                    <Link
+                                        href={content.attachments[0]} // The internal route to navigate to
+                                        className="text-sm hover:underline text-gray-600 dark:text-gray-300"
+                                    >
+                                        {content.attachments[0]}
+                                    </Link>
+                                )}
                             </div>
                         </div>
 
                         {/* Action Buttons */}
                         <div className="flex gap-3">
-                            <div
+
+                            {content.content_type == "file" && <div
                                 data-tooltip-id="view-content-tooltip"
                                 data-tooltip-content="View Content"
                                 className="p-2 cursor-pointer bg-gray-100 dark:bg-gray-700 rounded-md shadow hover:shadow-lg transition-shadow"
@@ -172,15 +196,16 @@ const TeacherContentComponent = ({ contentId, content, moduleId, courseId, userI
                             >
                                 <Eye className="text-blue-600" />
                             </div>
+                            }
 
-                            <div
+                            {content.content_type == "file" && <div
                                 data-tooltip-id="download-content-tooltip"
                                 data-tooltip-content="Download Content"
                                 className="p-2 cursor-pointer bg-gray-100 dark:bg-gray-700 rounded-md shadow hover:shadow-lg transition-shadow"
                                 onClick={handleDownloadContent}
                             >
                                 <Download className="text-green-500" />
-                            </div>
+                            </div>}
 
                             <div
                                 data-tooltip-id="edit-tooltip"

@@ -175,7 +175,7 @@ const CreateContent = () => {
                             <label htmlFor="file" className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">
                                 Upload Files:
                             </label>
-                            <input type="file" name="file" required multiple onChange={handleFileChange} />
+                            <input type="file" name="file" required onChange={handleFileChange} />
                         </div>
                     )}
 

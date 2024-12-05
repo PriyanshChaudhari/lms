@@ -50,6 +50,12 @@ const TeacherModulesComponent = ({ moduleId, module, courseId, userId }: Teacher
 
     const [courseContent, setCourseContent] = useState<content[]>([]);
     const [showdeleteConfirmation, setShowDeleteConfirmation] = useState<boolean>(false);
+    const [showAllContent, setShowAllContent] = useState(false);
+
+    // Toggle visibility for all content
+    const toggleAllContentVisibility = () => {
+        setShowAllContent((prev) => !prev); // Toggle global visibility
+    };
 
     useEffect(() => {
         const getCourseContent = async () => {
@@ -87,7 +93,7 @@ const TeacherModulesComponent = ({ moduleId, module, courseId, userId }: Teacher
             const res = await axios.delete(`/api/delete/delete-module/${moduleId}`);
             console.log(res.data);
             setShowDeleteConfirmation(false);
-            window.location.href=`/teacher/${userId}/mycourse/${courseId}`;
+            window.location.href = `/teacher/${userId}/mycourse/${courseId}`;
             // router.push(`/teacher/${userId}/mycourse/${courseId}`);
         } catch (error) {
             console.log(error);
@@ -189,28 +195,34 @@ const TeacherModulesComponent = ({ moduleId, module, courseId, userId }: Teacher
                     <div className='flex flex-col w-full'>
                         <h2 className="text-xl font-bold my-2">Contents:</h2>
                         <div className="grid gap-4 items-center mt-2">
+                            <div className="mb-4 flex justify-end">
+                                <button
+                                    onClick={toggleAllContentVisibility}
+                                    className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                                >
+                                    {showAllContent ? "Hide All Content" : "Show All Content"}
+                                </button>
+                            </div>
                             <table className="min-w-full bg-white dark:bg-gray-700">
-                                {/* <thead>
-                                    <tr>
-                                        <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-600">Title</th>
-                                        <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-600">Description</th>
-                                        <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-600">Content Type</th>
-                                        <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-600">Actions</th>
-                                    </tr>
-                                </thead> */}
+
                                 <tbody>
-                                    {sortedContent.map((content) => (
-                                        <tr key={content.id}>
-                                            {/* <td className="py-2 px-4 text-center border-b border-gray-200 dark:border-gray-600">{content.title}</td>
-                                            <td className="py-2 px-4 text-center border-b border-gray-200 dark:border-gray-600">{content.description}</td>
-                                            <td className="py-2 px-4 flex items-center justify-center border-b border-gray-200 dark:border-gray-600 space-x-2">
-                                                <div className='bg-zinc-400 dark:bg-zinc-300 p-3 text-clip bg-opacity-20 text-sm text-gray-500 dark:text-gray-500  px-2 py-1 rounded-lg cursor-pointer' onClick={() => handleViewClick(content.id)}>View</div>
-                                            </td> */}
-                                            <div className="flex flex-col items-center justify-between p-6">
-                                                <TeacherContentComponent contentId={content.id} content={content} moduleId={moduleId} courseId={courseId} userId={userId} />
-                                            </div>
-                                        </tr>
-                                    ))}
+                                    {showAllContent &&
+                                        sortedContent.map((content) => (
+                                            <tr key={content.id}>
+
+                                                <td colSpan={4} className="py-2 px-4 border-b border-gray-200 dark:border-gray-600">
+                                                    <div className="flex flex-col items-center justify-between p-6">
+                                                        <TeacherContentComponent
+                                                            contentId={content.id}
+                                                            content={content}
+                                                            moduleId={moduleId}
+                                                            courseId={courseId}
+                                                            userId={userId}
+                                                        />
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
                                 </tbody>
                             </table>
                         </div>
