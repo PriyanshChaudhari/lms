@@ -13,7 +13,7 @@ interface courses {
   description: string;
   teacher_id: string;
   category: string;
-  thumbnail: string
+  coursePicUrl: string
 }
 
 const Dashboard: React.FC = () => {
@@ -40,8 +40,6 @@ const Dashboard: React.FC = () => {
 
   return (
     <CourseCard courses={courses} userId={userId} />
-    
-        
   );
 };
 

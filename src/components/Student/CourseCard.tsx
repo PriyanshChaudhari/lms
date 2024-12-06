@@ -3,6 +3,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import SkeletonCourseCard from "../Skeleton/SkeletonCourseCard";
+import Image from "next/image";
 
 interface Course {
     course_id: string;
@@ -70,10 +71,18 @@ const CourseCard: React.FC<CourseCardProps> = ({ courses, userId }) => {
                                 className="bg-white dark:bg-[#151b23] rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 p-6"
                             >
                                 <div className="aspect-video relative overflow-hidden mb-2">
-                                    <img
+                                    {/* <img
                                         src={course.coursePicUrl}
                                         alt={course.title}
                                         className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
+                                    /> */}
+                                    <Image
+                                        src={course.coursePicUrl}
+                                        alt="Course image"
+                                        className="rounded-lg mb-4 w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
+                                        width='400' // Specify the width
+                                        height='400'// Specify the height
+                                        priority // Optional: for images important for LCP
                                     />
                                 </div>
 

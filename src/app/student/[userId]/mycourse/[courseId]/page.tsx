@@ -19,7 +19,6 @@ interface courses {
     description: string;
     teacher_id: string;
     category: string;
-
 }
 
 interface modules {
@@ -118,8 +117,8 @@ const CourseDetails = () => {
     };
 
     const sortedModules = courseModules.sort((a, b) => {
-        const dateA = new Date(a.created_at.seconds * 1000)
-        const dateB = new Date(b.created_at.seconds * 1000)
+        const dateA = new Date(a.created_at).getTime()
+        const dateB = new Date(b.created_at).getTime()
         return dateA - dateB; // Ascending order (earliest to latest)
     });
 
@@ -134,7 +133,7 @@ const CourseDetails = () => {
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-transparent py-8 px-4">
             <div className="max-w-7xl mx-auto">
-                
+
                 <div className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm p-6 mb-8">
                     <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
                         {courses?.title}
@@ -142,7 +141,7 @@ const CourseDetails = () => {
                     <p className="text-gray-600 dark:text-gray-300">{courses?.description}</p>
                 </div>
 
-                
+
                 <nav className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm mb-8">
                     <ul className="flex p-2 gap-2">
                         {['modules', 'assignments', 'grades', 'participants'].map((section) => (
@@ -173,7 +172,7 @@ const CourseDetails = () => {
                 </nav>
 
                 <div className="space-y-6">
-                    
+
                     {activeSection === 'modules' && (
                         <div>
                             <div className="flex justify-end mb-6">
@@ -186,7 +185,7 @@ const CourseDetails = () => {
                                         className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm hover:shadow-md transition-shadow"
                                     >
                                         <div className="flex flex-col items-start justify-between p-6">
-                                            <span className="flex items-center gap-6 w-full">
+                                            {/* <span className="flex items-center gap-6 w-full">
                                                 <span className="w-8 h-8 flex items-center justify-center bg-blue-100 text-blue-600 rounded-full">
                                                     {module.position}
                                                 </span>
@@ -198,8 +197,8 @@ const CourseDetails = () => {
                                                         {module.description}
                                                     </p>
                                                 </div>
-                                            </span>
-                                            <ModulesComponent moduleId={module.id} courseId={courseId} userId={userId}/>
+                                            </span> */}
+                                            <ModulesComponent moduleId={module.id} module={module} courseId={courseId} userId={userId} />
                                             {/* <button
                                                 onClick={() => handleModuleClick(module.id)}
                                                 className="px-4 py-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg-lg transition-colors"
@@ -213,67 +212,67 @@ const CourseDetails = () => {
                         </div>
                     )}
 
-                    
+
                     {activeSection === 'assignments' && (
                         <div className="grid md:grid-cols-2 gap-6">
                             {assignments.length > 0 ? (
-                            assignments.map((assignment) => (
-                                <div
-                                    key={assignment.id}
-                                    onClick={() => handleAssignmentClick(assignment.id, assignment.module_id)}
-                                    className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer p-6"
-                                >
-                                    <div className="flex justify-between">
-                                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                                            {assignment.title}
-                                        </h3>
+                                assignments.map((assignment) => (
+                                    <div
+                                        key={assignment.id}
+                                        onClick={() => handleAssignmentClick(assignment.id, assignment.module_id)}
+                                        className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer p-6"
+                                    >
+                                        <div className="flex justify-between">
+                                            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                                                {assignment.title}
+                                            </h3>
                                             <div >
                                                 <span className="bg-zinc-300 dark:bg-gray-700 p-3 text-clip bg-opacity-20 text-sm text-gray-500 dark:text-gray-400  px-2 py-1 rounded-lg">
-                                                View
+                                                    View
                                                 </span>
                                             </div>
-                                    </div>
-                                    <div className="space-y-4">
-                                        <p className="text-gray-600 dark:text-gray-300">
-                                            {assignment.description}
-                                        </p>
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg-lg">
-                                                <p className="text-sm text-gray-500 dark:text-gray-400">
-                                                    Total Marks
-                                                </p>
-                                                <p className="font-semibold text-gray-900 dark:text-white">
-                                                    {assignment.total_marks}
-                                                </p>
-                                            </div>
-                                            <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg-lg">
-                                                <p className="text-sm text-gray-500 dark:text-gray-400">
-                                                    Due Date
-                                                </p>
-                                                <p className="font-semibold text-gray-900 dark:text-white">
-                                                    {formatDate(assignment.due_date)}
-                                                </p>
+                                        </div>
+                                        <div className="space-y-4">
+                                            <p className="text-gray-600 dark:text-gray-300">
+                                                {assignment.description}
+                                            </p>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg-lg">
+                                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                                        Total Marks
+                                                    </p>
+                                                    <p className="font-semibold text-gray-900 dark:text-white">
+                                                        {assignment.total_marks}
+                                                    </p>
+                                                </div>
+                                                <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg-lg">
+                                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                                        Due Date
+                                                    </p>
+                                                    <p className="font-semibold text-gray-900 dark:text-white">
+                                                        {formatDate(assignment.due_date)}
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                ))
+                            ) : (
+                                <div className="col-span-2 text-center">
+                                    <p className="text-gray-600 dark:text-gray-400 text-lg">
+                                        No assignments available.
+                                    </p>
                                 </div>
-                            ))
-                        ) : (
-                            <div className="col-span-2 text-center">
-                                <p className="text-gray-600 dark:text-gray-400 text-lg">
-                                    No assignments available.
-                                </p>
-                            </div>
-                        )}
+                            )}
                         </div>
                     )}
 
-                    
-                    {activeSection === 'grades' && (
-                    <StudentGrades courseId={courseId} studentId={userId} />
-                )}
 
-                    
+                    {activeSection === 'grades' && (
+                        <StudentGrades courseId={courseId} studentId={userId} />
+                    )}
+
+
                     {activeSection === 'participants' && (
                         <div className="bg-white dark:bg-[#151b23] rounded-lg-lg shadow-sm">
                             <div className="p-6">
@@ -306,31 +305,31 @@ const CourseDetails = () => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                            {filteredParticipants.length > 0 ? (
-                                                filteredParticipants.map((participant) => (
-                                                    <tr
-                                                        key={participant.user_id}
-                                                        className="border-t border-gray-100 dark:border-gray-700"
-                                                    >
-                                                        <td className="p-4 text-gray-700 dark:text-gray-300">
-                                                            {participant.user_id}
-                                                        </td>
-                                                        <td className="p-4 text-gray-700 dark:text-gray-300">
-                                                            {participant.first_name}
-                                                        </td>
-                                                        <td className="p-4 text-gray-700 dark:text-gray-300">
-                                                            {participant.last_name}
-                                                        </td>
-                                                        <td className="p-4 text-gray-700 dark:text-gray-300">
-                                                            {participant.email}
-                                                        </td>
-                                                        <td className="p-4 text-gray-700 dark:text-gray-300 capitalize">
-                                                            {participant.role}
-                                                        </td>
+                                                {filteredParticipants.length > 0 ? (
+                                                    filteredParticipants.map((participant) => (
+                                                        <tr
+                                                            key={participant.user_id}
+                                                            className="border-t border-gray-100 dark:border-gray-700"
+                                                        >
+                                                            <td className="p-4 text-gray-700 dark:text-gray-300">
+                                                                {participant.user_id}
+                                                            </td>
+                                                            <td className="p-4 text-gray-700 dark:text-gray-300">
+                                                                {participant.first_name}
+                                                            </td>
+                                                            <td className="p-4 text-gray-700 dark:text-gray-300">
+                                                                {participant.last_name}
+                                                            </td>
+                                                            <td className="p-4 text-gray-700 dark:text-gray-300">
+                                                                {participant.email}
+                                                            </td>
+                                                            <td className="p-4 text-gray-700 dark:text-gray-300 capitalize">
+                                                                {participant.role}
+                                                            </td>
 
-                                                    </tr>
-                                                ))
-                                            ): (
+                                                        </tr>
+                                                    ))
+                                                ) : (
                                                     <tr className="col-span-5 text-center">
                                                         <td></td>
                                                         <td></td>

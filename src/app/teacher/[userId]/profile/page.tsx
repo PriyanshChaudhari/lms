@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebaseConfig';
+import Image from 'next/image';
 
 interface UserProfile {
     userId: string;
@@ -35,21 +36,21 @@ const Profile = () => {
         }
     }, []);
 
-    useEffect(() => {
-        const fetchUserProfile = async () => {
-            if (!userId) return;
+    const fetchUserProfile = async () => {
+        if (!userId) return;
 
-            try {
-                const response = await fetch(`/api/get/one-user?userId=${userId}`);
-                if (!response.ok) throw new Error('Failed to fetch user profile');
-                const data = await response.json();
-                setUser(data.userData);
-                setProfilePicUrl(user?.profilePicUrl || DefaultProfilePic);
-            } catch (err) {
-                console.error('Error fetching user profile:', err);
-            }
-        };
+        try {
+            const response = await fetch(`/api/get/one-user?userId=${userId}`);
+            if (!response.ok) throw new Error('Failed to fetch user profile');
+            const data = await response.json();
+            setUser(data.userData);
+            setProfilePicUrl(user?.profilePicUrl || DefaultProfilePic);
+        } catch (err) {
+            console.error('Error fetching user profile:', err);
+        }
+    };
 
+    useEffect(() => {        
         if (userId) {
             fetchUserProfile();
         }
@@ -88,6 +89,7 @@ const Profile = () => {
             await updateDoc(userRef, { profilePicUrl: downloadUrl });
             setProfilePicUrl(downloadUrl);
             closePopup();
+            fetchUserProfile()
         } catch (error) {
             console.error('Error uploading profile picture:', error);
         }
@@ -130,10 +132,18 @@ const Profile = () => {
                                 onMouseLeave={handleMouseLeave}
                             >
                                 <div className="w-40 h-40 rounded-full ring-4 ring-white dark:ring-gray-700 shadow-lg overflow-hidden bg-white dark:bg-gray-700">
-                                    <img 
+                                    {/* <img 
                                         src={user?.profilePicUrl || DefaultProfilePic} 
                                         className="h-full w-full object-cover"
                                         alt="Profile"
+                                    /> */}
+                                    <Image
+                                        src={user?.profilePicUrl || DefaultProfilePic}
+                                        alt="Profile image"
+                                        className="h-full w-full object-cover"
+                                        width='400' // Specify the width
+                                        height='400'// Specify the height
+                                        priority // Optional: for images important for LCP
                                     />
                                 </div>
                                 {isHovering && (
@@ -251,11 +261,19 @@ const Profile = () => {
                             ) : (
                                 <div className="flex flex-col items-center space-y-4">
                                     <div className="w-32 h-32 rounded-full overflow-hidden ring-4 ring-gray-100 dark:ring-gray-700">
-                                        <img
+                                        {/* <img
                                             src={previewUrl || ''}
                                             alt="Preview"
                                             className="h-full w-full object-cover"
-                                        />
+                                        /> */}
+                                        <Image
+                                        src={previewUrl || ''}
+                                        alt="Preview image"
+                                        className="h-full w-full object-cover"
+                                        width='400' // Specify the width
+                                        height='400'// Specify the height
+                                        priority // Optional: for images important for LCP
+                                    />
                                     </div>
                                     <button 
                                         onClick={handleChangeImage}

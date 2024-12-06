@@ -3,36 +3,38 @@ import { useParams, useRouter } from 'next/navigation';
 import axios from 'axios';
 import { Edit, Trash2, Eye, Download } from 'lucide-react';
 import { Tooltip } from 'react-tooltip';
+import Link from 'next/link';
 
-interface courses {
-    course_id: string;
-    title: string;
-    description: string;
-    teacher_id: string;
-    category: string;
-}
+// interface courses {
+//     course_id: string;
+//     title: string;
+//     description: string;
+//     teacher_id: string;
+//     category: string;
+// }
 
-interface modules {
-    id: string;
-    course_id: string;
-    title: string;
-    description: string;
-}
+// interface modules {
+//     id: string;
+//     course_id: string;
+//     title: string;
+//     description: string;
+// }
 
 interface content {
     id: string;
     title: string;
     description: string;
-    content_type: string
+    content_type: string;
+    attachments: string[];
 }
 
-interface module {
-    id: string;
-    course_id: string;
-    title: string;
-    description: string;
-    created_at: Date
-}
+// interface module {
+//     id: string;
+//     course_id: string;
+//     title: string;
+//     description: string;
+//     created_at: Date
+// }
 
 interface TeacherContentsComponentProps {
     moduleId: string;
@@ -48,33 +50,30 @@ const TeacherContentComponent = ({ contentId, content, moduleId, courseId, userI
         confirmText: ''
     });
 
-    const [courseContent, setCourseContent] = useState<content[]>([]);
+    // const [courseContent, setCourseContent] = useState<content[]>([]);
     const [showdeleteConfirmation, setShowDeleteConfirmation] = useState<boolean>(false);
 
-    useEffect(() => {
-        const getCourseContent = async () => {
-            try {
-                const res = await axios.post('/api/get/course-content', { moduleId });
-                setCourseContent(res.data.content);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        getCourseContent();
+    // useEffect(() => {
+    //     const getCourseContent = async () => {
+    //         try {
+    //             const res = await axios.post('/api/get/course-content', { moduleId });
+    //             setCourseContent(res.data.content);
+    //         } catch (error) {
+    //             // console.log(error);
+    //         }
+    //     };
+    //     getCourseContent();
 
 
-    }, [moduleId]);
-
-    const handleDownloadContent = () => {
-        // Add your download content logic here
-        console.log("Download content");
-    };
+    // }, [moduleId]);
 
     const handleViewContent = () => {
-        // Add your download content logic here
-        console.log("View content");
-        router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/content/${contentId}`);
-
+        if (content.attachments && content.attachments[0]) {
+            const newTabUrl = content.attachments[0];
+            window.open(newTabUrl, '_blank'); // Open in a new tab
+        } else {
+            console.error("No attachment URL available");
+        }
     };
 
     const handleEditContent = () => {
@@ -86,14 +85,11 @@ const TeacherContentComponent = ({ contentId, content, moduleId, courseId, userI
             alert('Deletion cancelled. Please type "confirm" to delete.');
             return;
         }
-    
         try {
-            console.log("Deleting content with:", { courseId, moduleId, contentId });
-    
             const res = await axios.delete(`/api/delete/delete-content/${contentId}`, {
                 data: { courseId, moduleId },
             });
-    
+
             console.log(res.data);
             setShowDeleteConfirmation(false);
             // router.push(`/teacher/${userId}/mycourse/${courseId}`);
@@ -101,8 +97,9 @@ const TeacherContentComponent = ({ contentId, content, moduleId, courseId, userI
             console.error("Error deleting content:", error);
         }
     };
-    
 
+    const fileUrl = content.attachments?.[0] || '';
+    const downloadUrl = fileUrl ? `/api/download?url=${encodeURIComponent(fileUrl)}` : '';
 
     return (
         <div className="flex w-full dark:bg-transparent  ">
@@ -115,7 +112,7 @@ const TeacherContentComponent = ({ contentId, content, moduleId, courseId, userI
                         </h2>
                         <p className="text-gray-600 dark:text-gray-300 mb-4">
                             Are you sure you want to delete this content?
-                            Type "confirm" below to proceed.
+                            Type &quot;confirm&quot; below to proceed.
                         </p>
                         <input
                             type="text"
@@ -145,7 +142,7 @@ const TeacherContentComponent = ({ contentId, content, moduleId, courseId, userI
                 </div>
             )}
 
-            <div className="w-full  max-w-7xl mx-auto ">
+            <div className="w-full max-w-7xl mx-auto ">
                 <div className="flex flex-col gap-6">
                     <div key={content.id} className="flex items-center justify-between bg-white dark:bg-gray-800 shadow-md rounded-lg p-4">
                         <div className="flex items-center gap-4 w-full">
@@ -159,28 +156,41 @@ const TeacherContentComponent = ({ contentId, content, moduleId, courseId, userI
                                 <p className="text-sm text-gray-600 dark:text-gray-300">
                                     {content.description}
                                 </p>
+                                {content.content_type === "url" && content.attachments[0] && (
+                                    <Link
+                                        href={content.attachments[0]}
+                                        className="text-sm hover:underline text-gray-600 dark:text-gray-300"
+                                    >
+                                        {content.attachments[0]}
+                                    </Link>
+                                )}
                             </div>
                         </div>
 
                         {/* Action Buttons */}
                         <div className="flex gap-3">
-                            <div
-                                data-tooltip-id="view-content-tooltip"
-                                data-tooltip-content="View Content"
-                                className="p-2 cursor-pointer bg-gray-100 dark:bg-gray-700 rounded-md shadow hover:shadow-lg transition-shadow"
-                                onClick={handleViewContent}
-                            >
-                                <Eye className="text-blue-600" />
-                            </div>
+                            {content.content_type === "file" && (
+                                <div
+                                    data-tooltip-id="view-content-tooltip"
+                                    data-tooltip-content="View Content"
+                                    className="p-2 cursor-pointer bg-gray-100 dark:bg-gray-700 rounded-md shadow hover:shadow-lg transition-shadow"
+                                    onClick={handleViewContent}
+                                >
+                                    <Eye className="text-blue-600" />
+                                </div>
+                            )}
 
-                            <div
-                                data-tooltip-id="download-content-tooltip"
-                                data-tooltip-content="Download Content"
-                                className="p-2 cursor-pointer bg-gray-100 dark:bg-gray-700 rounded-md shadow hover:shadow-lg transition-shadow"
-                                onClick={handleDownloadContent}
-                            >
-                                <Download className="text-green-500" />
-                            </div>
+                            {content.content_type === "file" && downloadUrl && (
+                                <div
+                                    data-tooltip-id="download-content-tooltip"
+                                    data-tooltip-content="Download Content"
+                                    className="p-2 cursor-pointer bg-gray-100 dark:bg-gray-700 rounded-md shadow hover:shadow-lg transition-shadow"
+                                >
+                                    <a href={downloadUrl} download>
+                                        <Download className="text-green-500" />
+                                    </a>
+                                </div>
+                            )}
 
                             <div
                                 data-tooltip-id="edit-tooltip"
