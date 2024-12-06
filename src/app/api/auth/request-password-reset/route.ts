@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
         console.log(email)
         await sendPasswordResetEmail(email, resetLink);
 
-        return NextResponse.json({ message: 'Password reset email sent' });
+        return NextResponse.json({ message: 'Password reset email sent.' });
     } catch (error) {
         console.error('Error processing password reset request:', error);
         return NextResponse.json({ message: 'An error occurred while processing the request' }, { status: 500 });
