@@ -3,24 +3,22 @@ import { useParams, useRouter } from 'next/navigation';
 import axios from 'axios';
 import { Edit, Trash2, Eye, Download } from 'lucide-react';
 import { Tooltip } from 'react-tooltip';
-import { getDownloadURL, getStorage, ref } from 'firebase/storage';
-import { app, storage } from '@/lib/firebaseConfig'
 import Link from 'next/link';
 
-interface courses {
-    course_id: string;
-    title: string;
-    description: string;
-    teacher_id: string;
-    category: string;
-}
+// interface courses {
+//     course_id: string;
+//     title: string;
+//     description: string;
+//     teacher_id: string;
+//     category: string;
+// }
 
-interface modules {
-    id: string;
-    course_id: string;
-    title: string;
-    description: string;
-}
+// interface modules {
+//     id: string;
+//     course_id: string;
+//     title: string;
+//     description: string;
+// }
 
 interface content {
     id: string;
@@ -30,13 +28,13 @@ interface content {
     attachments: string[];
 }
 
-interface module {
-    id: string;
-    course_id: string;
-    title: string;
-    description: string;
-    created_at: Date
-}
+// interface module {
+//     id: string;
+//     course_id: string;
+//     title: string;
+//     description: string;
+//     created_at: Date
+// }
 
 interface TeacherContentsComponentProps {
     moduleId: string;
@@ -52,41 +50,41 @@ const TeacherContentComponent = ({ contentId, content, moduleId, courseId, userI
         confirmText: ''
     });
 
-    const [courseContent, setCourseContent] = useState<content[]>([]);
+    // const [courseContent, setCourseContent] = useState<content[]>([]);
     const [showdeleteConfirmation, setShowDeleteConfirmation] = useState<boolean>(false);
 
-    useEffect(() => {
-        const getCourseContent = async () => {
-            try {
-                const res = await axios.post('/api/get/course-content', { moduleId });
-                setCourseContent(res.data.content);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        getCourseContent();
+    // useEffect(() => {
+    //     const getCourseContent = async () => {
+    //         try {
+    //             const res = await axios.post('/api/get/course-content', { moduleId });
+    //             setCourseContent(res.data.content);
+    //         } catch (error) {
+    //             // console.log(error);
+    //         }
+    //     };
+    //     getCourseContent();
 
 
-    }, [moduleId]);
+    // }, [moduleId]);
 
-    const handleDownloadContent = async () => {
-        try {
-            const storage = getStorage(app);
-            const fileRef = ref(storage, `${content.attachments[0]}`); // Replace with the correct file path
-            const downloadUrl = await getDownloadURL(fileRef); // Get the file URL
+    // const handleDownloadContent = async () => {
+    //     try {
+    //         const storage = getStorage(app);
+    //         const fileRef = ref(storage, `${content.attachments[0]}`); // Replace with the correct file path
+    //         const downloadUrl = await getDownloadURL(fileRef); // Get the file URL
 
-            // Open the file directly in a new tab or trigger the download
-            window.open(downloadUrl, '_blank'); // Opens in a new tab
-            console.log("Download content triggered");
-        } catch (error) {
-            console.error('Error downloading content:', error);
-        }
-    };
+    //         // Open the file directly in a new tab or trigger the download
+    //         window.open(downloadUrl, '_blank'); // Opens in a new tab
+    //         console.log("Download content triggered");
+    //     } catch (error) {
+    //         console.error('Error downloading content:', error);
+    //     }
+    // };
 
 
     const handleViewContent = () => {
         // Add your download content logic here
-        console.log("View content");
+        // console.log("View content");
         const newTabUrl = `${content.attachments[0]}`;
         window.open(newTabUrl, '_blank'); // Open in a new tab
     };
@@ -103,7 +101,7 @@ const TeacherContentComponent = ({ contentId, content, moduleId, courseId, userI
         }
 
         try {
-            console.log("Deleting content with:", { courseId, moduleId, contentId });
+            // console.log("Deleting content with:", { courseId, moduleId, contentId });
 
             const res = await axios.delete(`/api/delete/delete-content/${contentId}`, {
                 data: { courseId, moduleId },
@@ -116,8 +114,8 @@ const TeacherContentComponent = ({ contentId, content, moduleId, courseId, userI
             console.error("Error deleting content:", error);
         }
     };
-
-
+    const fileUrl = content.attachments[0];
+    const downloadUrl = `/api/download?url=${encodeURIComponent(fileUrl)}`;
 
     return (
         <div className="flex w-full dark:bg-transparent  ">
@@ -130,7 +128,7 @@ const TeacherContentComponent = ({ contentId, content, moduleId, courseId, userI
                         </h2>
                         <p className="text-gray-600 dark:text-gray-300 mb-4">
                             Are you sure you want to delete this content?
-                            Type "confirm" below to proceed.
+                            Type &quot;confirm&quot; below to proceed.
                         </p>
                         <input
                             type="text"
@@ -202,9 +200,11 @@ const TeacherContentComponent = ({ contentId, content, moduleId, courseId, userI
                                 data-tooltip-id="download-content-tooltip"
                                 data-tooltip-content="Download Content"
                                 className="p-2 cursor-pointer bg-gray-100 dark:bg-gray-700 rounded-md shadow hover:shadow-lg transition-shadow"
-                                onClick={handleDownloadContent}
+                            // onClick={handleDownloadContent}
                             >
-                                <Download className="text-green-500" />
+                                <a  href={downloadUrl} download>
+                                    <Download className="text-green-500" />
+                                </a>
                             </div>}
 
                             <div
