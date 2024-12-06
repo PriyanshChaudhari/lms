@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { MdDeleteForever, MdModeEdit } from 'react-icons/md';
 import { FaChevronDown, FaChevronRight } from 'react-icons/fa';
 import CreateCategory from '../create/page';
+import ParentCategoryDisplay from './ParentCategoryDisplay';
 
 interface Category {
     id: string;
@@ -117,6 +118,19 @@ const ManageCategories = () => {
         }
     };
 
+    const getParentHierarchy = (parentId: string | null): Category[] => {
+        const hierarchy: Category[] = [];
+        let currentCategory = categories.find((cat) => cat.id === parentId);
+
+        while (currentCategory) {
+            hierarchy.unshift(currentCategory); // Add parent to the beginning of the list
+            currentCategory = categories.find((cat) => cat.id === currentCategory.parent_category_id);
+        }
+
+        return hierarchy;
+    };
+
+
     const handleDeleteSubmit = async () => {
         if (!deletingCategoryId) return;
 
@@ -180,6 +194,14 @@ const ManageCategories = () => {
                                 >
                                     {category.category_name}
                                 </span>
+                                {/* <p className="text-sm text-gray-600 dark:text-gray-400">
+                                    Parent:{" "}
+                                    {category.parent_category_id
+                                        ? categories.find((cat) => cat.id === category.parent_category_id)
+                                            ?.category_name || "Unknown"
+                                        : "None"}
+                                </p> */}
+
                             </div>
                             <div className="flex">
                                 <button
@@ -200,9 +222,9 @@ const ManageCategories = () => {
                         </div>
                         {/* Render children if expanded */}
                         {expandedCategories[category.id] && renderCategoryTree(category.id, level + 1)}
-                    </li>
+                    </li >
                 ))}
-            </ul>
+            </ul >
         );
     }
 
@@ -245,11 +267,11 @@ const ManageCategories = () => {
             </div>
 
             {/* Edit Modal */}
-            {isEditModalOpen && editingCategory && (
+            {/* {isEditModalOpen && editingCategory && (
                 <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
                     <div className="bg-white p-6 rounded-lg shadow-md">
                         <h2 className="text-2xl font-bold mb-4">Edit Category</h2>
-                        
+
                         <form onSubmit={handleEditSubmit}>
                             {error && (
                                 <div className="mb-4 text-red-500 font-semibold text-left">
@@ -284,10 +306,17 @@ const ManageCategories = () => {
                                     <option value="">No Parent (Top-Level Category)</option>
                                     {categories.filter(cat => cat.id !== editingCategory.id).map(cat => (
                                         <option key={cat.id} value={cat.id}>
-                                            {cat.category_name} {cat.parent_category_id}
+                                            {cat.category_name}
                                         </option>
                                     ))}
+
                                 </select>
+                                {currentCategoryId && (
+                                    <ParentCategoryDisplay
+                                        categories={categories}
+                                        currentCategoryId={currentCategoryId}
+                                    />
+                                )}
                             </div>
                             <div className="flex justify-end">
                                 <button type="button" onClick={() => setIsEditModalOpen(false)} className="mr-2 px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
@@ -300,8 +329,97 @@ const ManageCategories = () => {
                         </form>
                     </div>
                     {/* <CreateCategory editingCategory={editingCategory} /> */}
+            {/* </div>
+            )}  */}
+
+            {isEditModalOpen && editingCategory && (
+                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+                    <div className="bg-white p-6 rounded-lg shadow-md max-w-lg w-full">
+                        <h2 className="text-2xl font-bold mb-4">Edit Category</h2>
+
+                        <form onSubmit={handleEditSubmit}>
+                            {error && (
+                                <div className="mb-4 text-red-500 font-semibold text-left">
+                                    {error}
+                                </div>
+                            )}
+                            {/* Category Name Field */}
+                            <div className="mb-4">
+                                <label htmlFor="category_name" className="block text-sm font-medium text-gray-700">
+                                    Category Name
+                                </label>
+                                <input
+                                    type="text"
+                                    id="category_name"
+                                    name="category_name"
+                                    value={editingCategory.category_name}
+                                    onChange={handleEditInputChange}
+                                    className="mt-1 p-2 w-full uppercase border border-gray-300 rounded-lg"
+                                    required
+                                />
+                            </div>
+
+                            {/* Parent Category Dropdown */}
+                            <div className="mb-4">
+                                <label htmlFor="parent_category_id" className="block text-sm font-medium text-gray-700">
+                                    Parent Category
+                                </label>
+                                <select
+                                    id="parent_category_id"
+                                    name="parent_category_id"
+                                    value={editingCategory.parent_category_id || ""}
+                                    onChange={handleEditInputChange}
+                                    className="mt-1 p-2 w-full border border-gray-300 rounded-lg"
+                                >
+                                    <option value="">No Parent (Top-Level Category)</option>
+                                    {categories
+                                        .filter((cat) => cat.id !== editingCategory.id) // Exclude current category to avoid circular reference
+                                        .map((cat) => (
+                                            <option key={cat.id} value={cat.id}>
+                                                <span>{cat.category_name}</span>
+                                            </option>
+                                        ))}
+                                </select>
+                            </div>
+
+                            {/* Parent Category Hierarchy Display */}
+                            <div className="mt-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Parent Hierarchy
+                                </label>
+                                <div className="flex flex-wrap gap-2">
+                                    {getParentHierarchy(editingCategory.parent_category_id).map((parent, index) => (
+                                        <div
+                                            key={parent.id}
+                                            className="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg shadow-md"
+                                        >
+                                            {parent.category_name}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Buttons */}
+                            <div className="flex justify-end mt-6">
+                                <button
+                                    type="button"
+                                    onClick={() => setIsEditModalOpen(false)}
+                                    className="mr-2 px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                                >
+                                    Save
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             )}
+
 
             {/* Delete Modal */}
             {isDeleteModalOpen && deletingCategoryId && (

@@ -188,7 +188,7 @@ const CreateCategory = ({ editingCategory = null }: { editingCategory?: any }) =
                         </div>
                     )}
                     <div className="mb-6">
-                        <label htmlFor="category_name" className="block text-sm font-medium text-gray-700 dark:text-gray-100">
+                        <label htmlFor="category_name" className="block  text-sm font-medium text-gray-700 dark:text-gray-100">
                             Category Name
                         </label>
                         <input
@@ -197,7 +197,7 @@ const CreateCategory = ({ editingCategory = null }: { editingCategory?: any }) =
                             name="category_name"
                             value={category.category_name}
                             onChange={handleNameChange}
-                            className=" p-2 w-full border border-gray-300 rounded-lg dark:bg-[#151b23] mt-4"
+                            className=" p-2 w-full border uppercase border-gray-300 rounded-lg dark:bg-[#151b23] mt-4"
                             required
                         />
                     </div>

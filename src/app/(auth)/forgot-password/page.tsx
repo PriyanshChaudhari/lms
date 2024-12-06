@@ -93,7 +93,7 @@ export default function ForgotPassword() {
                             </button>
                         </div>
                     </div>
-                    {message && <p>{message}</p>}
+                    {message && <p className='mt-2'>{message}</p>}
                 </div>
             </div>
         </div>
