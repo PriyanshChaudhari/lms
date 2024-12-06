@@ -30,7 +30,7 @@ const Group = () => {
   const [isAddOneMember, setIsAddOneMember] = useState(false);
   const [isExcelUpload, setIsExcelUpload] = useState(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const [group, setGroup] = useState<Group>({});
+  const [group, setGroup] = useState<Group>({ id: '', group_name: '' });
 
   const [searchTerm, setSearchTerm] = useState<string>('');
 
