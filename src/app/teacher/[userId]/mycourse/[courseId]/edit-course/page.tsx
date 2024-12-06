@@ -162,7 +162,7 @@ const EditCourse = () => {
     };
 
     // Helper function to get the category path (i.e., top-level to sub-level) for pre-selection
-    const getCategoryPath = (categoryId: string, categories: { id: string; category_name: string; parent_category_id: string | null }[]) => {
+    const getCategoryPath = (categoryId: string | null, categories: { id: string; category_name: string; parent_category_id: string | null }[]) => {
         const path = [];
         let currentCategoryId = categoryId;
         while (currentCategoryId) {
