@@ -43,11 +43,9 @@
 //     <MyCourse/>
 //       );
 // };
-
 //       export default Dashboard;
-
-
 // pages/student/dashboard/dashboard.tsx
+
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -61,7 +59,7 @@ interface courses {
   description: string;
   teacher_id: string;
   category: string;
-  thumbnail: string
+  coursePicUrl: string
 }
 
 const Dashboard: React.FC = () => {

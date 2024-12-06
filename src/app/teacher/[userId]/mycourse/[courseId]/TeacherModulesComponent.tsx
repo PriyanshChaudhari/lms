@@ -25,6 +25,8 @@ interface content {
     title: string;
     description: string;
     content_type: string;
+    attachments: string[];
+    created_at: Date;
 }
 
 interface module {
@@ -32,7 +34,7 @@ interface module {
     course_id: string;
     title: string;
     description: string;
-    created_at: Date
+    created_at: Date;
 }
 
 interface TeacherModulesComponentProps {
@@ -75,9 +77,9 @@ const TeacherModulesComponent = ({ moduleId, module, courseId, userId }: Teacher
         router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/content/create-content`);
     };
 
-    const handleViewClick = (contentId: string) => {
-        router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/content/${contentId}`);
-    };
+    // const handleViewClick = (contentId: string) => {
+    //     router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/content/${contentId}`);
+    // };
 
     const handleEditModule = () => {
         router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/edit-module`);
@@ -105,9 +107,9 @@ const TeacherModulesComponent = ({ moduleId, module, courseId, userId }: Teacher
     };
 
     const sortedContent = courseContent.sort((a, b) => {
-        const dateA = new Date(a.created_at.seconds * 1000)
-        const dateB = new Date(b.created_at.seconds * 1000)
-        return dateA - dateB;
+        const dateA = new Date(a.created_at).getTime()
+        const dateB = new Date(b.created_at).getTime()
+        return dateA - dateB; // Ascending order (earliest to latest)
     });
 
     return (
@@ -193,9 +195,8 @@ const TeacherModulesComponent = ({ moduleId, module, courseId, userId }: Teacher
                     </div>
 
                     <div className='flex flex-col w-full'>
-                        <h2 className="text-xl font-bold my-2">Contents:</h2>
                         <div className="grid gap-4 items-center mt-2">
-                            <div className="mb-4 flex justify-end">
+                            <div className="flex justify-end">
                                 <button
                                     onClick={toggleAllContentVisibility}
                                     className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
@@ -204,12 +205,10 @@ const TeacherModulesComponent = ({ moduleId, module, courseId, userId }: Teacher
                                 </button>
                             </div>
                             <table className="min-w-full bg-white dark:bg-gray-700">
-
                                 <tbody>
                                     {showAllContent &&
                                         sortedContent.map((content) => (
                                             <tr key={content.id}>
-
                                                 <td colSpan={4} className="py-2 px-4 border-b border-gray-200 dark:border-gray-600">
                                                     <div className="flex flex-col items-center justify-between p-6">
                                                         <TeacherContentComponent
@@ -223,6 +222,11 @@ const TeacherModulesComponent = ({ moduleId, module, courseId, userId }: Teacher
                                                 </td>
                                             </tr>
                                         ))}
+                                    {!showAllContent && (
+                                        <p className="text-gray-500 dark:text-gray-400 text-center">
+                                            Click &quot;Show All Content&quot; to display the module contents.
+                                        </p>
+                                    )}
                                 </tbody>
                             </table>
                         </div>

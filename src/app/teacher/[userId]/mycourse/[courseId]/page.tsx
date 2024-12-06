@@ -40,7 +40,7 @@ interface modules {
 interface assignments {
     id: string;
     title: string;
-    due_date: object;
+    due_date: Timestamp;
     module_id: string;
     description: string;
     total_marks: number;
@@ -77,15 +77,15 @@ const CourseDetails = () => {
                 item.user_id.includes(searchTerm)
         );
 
-   useEffect(() => {
-    if (showMessage) {
-        const timer = setTimeout(() => {
-            setShowMessage(false);
-        }, 5000);
+    useEffect(() => {
+        if (showMessage) {
+            const timer = setTimeout(() => {
+                setShowMessage(false);
+            }, 5000);
 
-        return () => clearTimeout(timer); // Cleanup the timer
-    }
-}, [showMessage]);
+            return () => clearTimeout(timer); // Cleanup the timer
+        }
+    }, [showMessage]);
 
 
     useEffect(() => {
@@ -135,9 +135,9 @@ const CourseDetails = () => {
     };
 
     const sortedModules = courseModules.sort((a, b) => {
-        const dateA = new Date(a.created_at.seconds * 1000)
-        const dateB = new Date(b.created_at.seconds * 1000)
-        return dateA - dateB;
+        const dateA = new Date(a.created_at).getTime()
+        const dateB = new Date(b.created_at).getTime()
+        return dateA - dateB; // Ascending order (earliest to latest)
     });
 
     const handleModuleClick = (moduleId: string) => {
@@ -193,7 +193,7 @@ const CourseDetails = () => {
                                 onClick={closeMessage}
                                 className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg"
                             >
-                                Cancel 
+                                Cancel
                             </button>
 
                         </div>
@@ -260,9 +260,9 @@ const CourseDetails = () => {
                                         className="bg-white dark:bg-[#151b23] rounded-lg shadow-lg hover:shadow-2xl transition-shadow"
                                     >
                                         <div className="flex flex-col items-center justify-between ">
-                                           
+
                                             <TeacherModulesComponent moduleId={module.id} module={module} courseId={courseId} userId={userId} />
-                                           
+
                                         </div>
                                     </div>
                                 ))}
@@ -328,7 +328,7 @@ const CourseDetails = () => {
                     {/* Grades Section */}
                     {activeSection === 'grades' && (
                         <div>
-                            
+
                             <UploadGradesDialog courseId={courseId} />
                             <GradesTable courseId={courseId} teacherId={userId} />
                         </div>
