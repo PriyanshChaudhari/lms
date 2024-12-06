@@ -4,6 +4,7 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import './GradesComponent.css';
 import StudentGrades from '@/app/student/[userId]/mycourse/[courseId]/GradesComponent';
+import { IoMdClose } from 'react-icons/io';
 
 interface Student {
     user_id: string;
@@ -23,7 +24,7 @@ interface Assignment {
 
 interface EventGrade {
     event_id: string;
-    event_name: string;
+    // event_name: string;
     marks: string;
 }
 
@@ -80,20 +81,35 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
     const fetchGrades = async (students: Student[], courseId: string) => {
         try {
             const gradesData: Record<string, GradesResponse> = {};
+    
+            const gradePromises = students.map(async (student) => {
+                try {
+                    const [eventMarksResponse, assignmentMarksResponse] = await Promise.all([
+                        axios.get<GradesResponse>(`/api/get/marks/one-student/course-events?user_id=${student.user_id}&course_id=${courseId}`),
+                        axios.get<GradesResponse>(`/api/get/marks/one-student/course-assignments?user_id=${student.user_id}&course_id=${courseId}`)
+                    ]);
+                    console.log(eventMarksResponse)
+                    gradesData[student.user_id] = {
+                        event_marks: eventMarksResponse.data,
+                        assignment_marks: assignmentMarksResponse.data.assignment_marks
+                    };
 
-            for (const student of students) {
-                const eventMarksResponse = await axios.get<GradesResponse>(`/api/get/marks/one-student/course-events?user_id=${student.user_id}&course_id=${courseId}`);
-                const assignmentMarksResponse = await axios.get<GradesResponse>(`/api/get/marks/one-student/course-assignments?user_id=${student.user_id}&course_id=${courseId}`);
-
-                gradesData[student.user_id] = {
-                    ...eventMarksResponse.data,
-                    assignment_marks: assignmentMarksResponse.data.assignment_marks
-                };
-            }
-
+                } catch (error) {
+                    console.error(`Error fetching grades for student ${student.user_id}:`, error);
+                    // Optionally, you can set a default/empty grade structure
+                    gradesData[student.user_id] = {
+                        user_id: student.user_id,
+                        course_id: courseId,
+                        event_marks: [],
+                        assignment_marks: []
+                    };
+                }
+            });
+    
+            await Promise.all(gradePromises);
             setGrades(gradesData);
         } catch (error) {
-            console.error('Error fetching grades:', error);
+            console.error('Error in fetchGrades:', error);
         }
     };
 
@@ -238,7 +254,7 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
                                     onClick={closeModal}
                                     className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                                 >
-                                    ✕
+                                     <IoMdClose className='font-semibold text-3xl cursor-pointer hover:scale-125 transition-transform ease-linear text-red-500' />
                                 </button>
                             </div>
                             <div className="w-full">
