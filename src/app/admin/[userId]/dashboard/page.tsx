@@ -2,7 +2,7 @@
 import axios from 'axios';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useCallback } from 'react';
 import { FaUser, FaUserTie, FaUserGraduate } from "react-icons/fa";
 import { GiTeacher } from "react-icons/gi";
 import { IoBookSharp } from "react-icons/io5";
@@ -87,15 +87,7 @@ export default function Dashboard() {
         fetchData();
     }, []);
 
-    if (!isLoaded) {
-        return <p className="text-center text-gray-500">Loading...</p>;
-    }
-
-    const teachers = users.filter((user) => user.role === 'Teacher');
-    const admins = users.filter((user) => user.role === 'Admin');
-    const students = users.filter((user) => user.role === 'Student');
-
-    const fetchParticipantCount = async (courseId: string) => {
+    const fetchParticipantCount = useCallback(async (courseId: string) => {
         if (participantCounts[courseId] === undefined) {
             try {
                 const response = await axios.post(`/api/get/count/participant`, { courseId: courseId });
@@ -117,7 +109,55 @@ export default function Dashboard() {
                 console.error('Error fetching participant count and roles:', error);
             }
         }
-    };
+    }, [participantCounts]);
+
+    useEffect(() => {
+        filteredCourses.forEach((course) => {
+            fetchParticipantCount(course.id);
+        });
+    }, [filteredCourses, fetchParticipantCount]);
+
+    if (!isLoaded) {
+        return <p className="text-center text-gray-500">Loading...</p>;
+    }
+
+    const teachers = users.filter((user) => user.role === 'Teacher');
+    const admins = users.filter((user) => user.role === 'Admin');
+    const students = users.filter((user) => user.role === 'Student');
+
+    // useEffect(() => {
+    //     const fetchParticipantCount = async (courseId: string) => {
+    //         if (participantCounts[courseId] === undefined) {
+    //             try {
+    //                 const response = await axios.post(`/api/get/count/participant`, { courseId: courseId });
+    //                 const data = response.data;
+
+    //                 setParticipantCounts(prevCounts => ({
+    //                     ...prevCounts,
+    //                     [courseId]: data.participantCount
+    //                 }));
+    //                 setParticipantRoles(prevRoles => ({
+    //                     ...prevRoles,
+    //                     [courseId]: data.participants
+    //                 }));
+    //                 setParticipantRolesCount(prevRolesCount => ({
+    //                     ...prevRolesCount,
+    //                     [courseId]: data.roleCount
+    //                 }));
+    //             } catch (error) {
+    //                 console.error('Error fetching participant count and roles:', error);
+    //             }
+    //         }
+    //     };
+    //     {
+    //         filteredCourses.map((course) => (
+    //             fetchParticipantCount(course.id)
+    //         )
+    //         )
+    //     }
+
+
+    // }, [filteredCourses]);
 
     return (
         <div className="bg-gray-50 dark:bg-[#212830] min-h-screen p-6">
@@ -225,31 +265,13 @@ export default function Dashboard() {
                                     <td className="border px-4 py-2 text-gray-700 text-center dark:text-gray-300">{course.title}</td>
                                     <td className="border px-4 py-2 text-gray-700 text-center dark:text-gray-300">{course.teacher_id}</td>
                                     <td className="border px-4 py-2 text-gray-700 text-center dark:text-gray-300">
-                                        {participantCounts[course.id] !== undefined ? (
-                                            <>
-                                                {participantCounts[course.id]}
-                                                {/* <ul>
-                                                    {participantRoles[course.id]?.map((participant) => (
-                                                        <li key={participant.userId}>
-                                                            {participant.userId} - {participant.role}
-                                                        </li>
-                                                    ))}
-                                                </ul> */}
-                                            </>
-                                        ) : (
-                                            <button
-                                                onClick={() => fetchParticipantCount(course.id)}
-                                                className="text-blue-500 hover:underline"
-                                            >
-                                                Load Count
-                                            </button>
-                                        )}
+                                        {participantCounts[course.id]}
                                     </td>
                                     <td className="border px-4 py-2 text-gray-700 text-center dark:text-gray-300">
-                                        {participantRolesCount[course.id]?.students ?? 'Loading...'}
+                                        {participantRolesCount[course.id]?.students}
                                     </td>
                                     <td className="border px-4 py-2 text-gray-700 text-center dark:text-gray-300">
-                                        {participantRolesCount[course.id]?.teachers ?? 'Loading...'}
+                                        {participantRolesCount[course.id]?.teachers}
                                     </td>
                                 </tr>
                             ))}
