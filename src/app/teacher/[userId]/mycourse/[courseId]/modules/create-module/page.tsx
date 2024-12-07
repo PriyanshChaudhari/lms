@@ -124,7 +124,7 @@ const CreateCourseModule = () => {
                             name="title"
                             value={module.title}
                             onChange={handleChange}
-                            className="mt-1 p-2 w-full border border-gray-300 rounded-lg dark:bg-[#151b23]"
+                            className="mt-1 p-2 w-full border uppercase border-gray-300 rounded-lg dark:bg-[#151b23]"
                             required
                         />
                     </div>

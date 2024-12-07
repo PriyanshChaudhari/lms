@@ -335,9 +335,9 @@ const Navbar: React.FC = () => {
       const teacherId = user.userId;
       router.push(`/teacher/${teacherId}/dashboard`);
     }
-    else {
-      router.push('/dashboard');
-    }
+    // else {
+    //   router.push('/dashboard');
+    // }
   };
 
   return (
