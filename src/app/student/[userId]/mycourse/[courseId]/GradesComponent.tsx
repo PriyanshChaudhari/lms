@@ -62,7 +62,7 @@ const StudentGrades: React.FC<StudentGradesProps> = ({ courseId, studentId }) =>
 
                 const eventMarksResponse = await axios.get<GradesResponse>(`/api/get/marks/one-student/course-events?user_id=${studentId}&course_id=${courseId}`);
                 // console.log("emarks: ", eventMarksResponse.data.event_marks[0].marks);
-                const assignmentMarksResponse = await axios.get<GradesResponse>(`/api/get/marks/course-assignments?user_id=${studentId}&course_id=${courseId}`);
+                const assignmentMarksResponse = await axios.get<GradesResponse>(`/api/get/marks/one-student/course-assignments?user_id=${studentId}&course_id=${courseId}`);
 
                 setGrades({
                     ...eventMarksResponse.data,

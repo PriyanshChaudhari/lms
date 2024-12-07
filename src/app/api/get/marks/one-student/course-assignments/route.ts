@@ -1,6 +1,26 @@
-import { NextResponse, NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/firebaseConfig'; // Your Firebase config
 import { collection, query, where, getDocs } from 'firebase/firestore';
+
+export async function GET(req: NextRequest) {
+    try {
+        const { searchParams } = new URL(req.url);
+        const userId = searchParams.get('user_id');
+        const courseId = searchParams.get('course_id');
+
+        if (!userId || !courseId) {
+            return NextResponse.json({ error: 'UserId and CourseId are required' }, { status: 400 });
+        }
+
+        const assignmentMarks = await fetchAssignmentMarksByCourse(userId, courseId);
+
+        // Return the array of assignment marks
+        return NextResponse.json({ user_id: userId, course_id: courseId, assignment_marks: assignmentMarks }, { status: 200 });
+    } catch (error) {
+        console.error('Error fetching assignment marks:', error);
+        return NextResponse.json({ error: 'Failed to fetch assignment marks' }, { status: 500 });
+    }
+}
 
 async function fetchAssignmentMarksByCourse(userId: string, courseId: string) {
     // Step 1: Query to get modules based on courseId
@@ -19,7 +39,7 @@ async function fetchAssignmentMarksByCourse(userId: string, courseId: string) {
         moduleIds = modulesSnapshot.docs.map(doc => doc.id);
     }
 
-    let assignments = [];
+    let marksData = [];
     if (moduleIds.length > 0) {
         // Step 2: Query to get assignments based on module IDs
         const assignmentsQuery = query(
@@ -32,55 +52,37 @@ async function fetchAssignmentMarksByCourse(userId: string, courseId: string) {
         const assignmentsSnapshot = await getDocs(assignmentsQuery);
 
         if (!assignmentsSnapshot.empty) {
-            // Map through the assignments snapshot and return an array of assignments
-            assignments = assignmentsSnapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
+            // Map through the assignments snapshot and fetch obtained marks from submissions
+            for (const assignmentDoc of assignmentsSnapshot.docs) {
+                const assignmentData = assignmentDoc.data();
+                const assignmentId = assignmentDoc.id;
+
+                // Query to get submissions based on assignment ID and user ID
+                const submissionsQuery = query(
+                    collection(db, 'submissions'), // Adjust the collection name if needed
+                    where('assignment_id', '==', assignmentId), // Use the assignment ID
+                    where('user_id', '==', userId) // Use the user ID
+                );
+
+                // Fetch the documents from the submissions query
+                const submissionsSnapshot = await getDocs(submissionsQuery);
+
+                let obtainedMarks = null;
+                if (!submissionsSnapshot.empty) {
+                    // Assuming there is only one submission per assignment per user
+                    console.log("submission marks: ", submissionsSnapshot.docs[0].data())
+                    obtainedMarks = submissionsSnapshot.docs[0].data().marks_obtained;
+                }
+
+                marksData.push({
+                    assessment_id: assignmentId,
+                    obtained_marks: obtainedMarks,
+                    total_marks: assignmentData.total_marks
+                });
+            }
         }
     }
 
-    return assignments;
-}
-
-async function fetchParticipantsByCourse(courseId: string) {
-    // Example: Fetch participants based on courseId
-    const participantsQuery = query(
-        collection(db, 'participants'), // Adjust the collection name if needed
-        where('course_id', '==', courseId)
-    );
-
-    const participantsSnapshot = await getDocs(participantsQuery);
-
-    let participants = [];
-
-    if (!participantsSnapshot.empty) {
-        participants = participantsSnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data(),
-        }));
-    }
-
-    return participants;
-}
-
-export async function GET(req: NextRequest) {
-    try {
-        const { searchParams } = new URL(req.url);
-        const userId = searchParams.get('user_id');
-        const courseId = searchParams.get('course_id');
-
-        if (!userId || !courseId) {
-            return NextResponse.json({ error: 'UserId and CourseId are required' }, { status: 400 });
-        }
-
-        const assignmentMarks = await fetchAssignmentMarksByCourse(userId, courseId);
-        const participants = await fetchParticipantsByCourse(courseId);
-
-        // Return the array of assignments and participants
-        return NextResponse.json({ assignments: assignmentMarks, participants, status: 200 });
-    } catch (error) {
-        console.error('Error fetching data:', error);
-        return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 });
-    }
+    console.log("marksData: ", marksData)
+    return marksData;
 }
