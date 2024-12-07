@@ -93,7 +93,7 @@ export default function CreateAssignment() {
                     due_date: '',
                     attachments: [], // Reset attachments
                 });
-                router.push(`/teacher/${userId}/mycourse/${courseId}/modules/${moduleId}/assignments`);
+                router.back();
             } else {
                 setError(data.error || 'Failed to add assessment');
             }

@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Image from "next/image";
@@ -14,6 +14,12 @@ interface Course {
     coursePicUrl: string;
 }
 
+interface Category {
+    id: string;
+    category_name: string;
+    parent_category_id: string | null;
+}
+
 interface CourseCardProps {
     courses: Course[];
     userId: string;
@@ -26,6 +32,22 @@ const CourseCard: React.FC<CourseCardProps> = ({ courses, userId }) => {
         confirmText: ''
     });
     const router = useRouter()
+    // const [categories, setCategories] = useState<Category[]>([]);
+
+    // useEffect(() => {
+    //     fetchCategories();
+    // }, []);
+
+    // const fetchCategories = async () => {
+    //     try {
+    //         const res = await axios.get('/api/get/categories');
+    //         setCategories(res.data.categories);
+    //         console.log(categories)
+
+    //     } catch (error) {
+    //         console.error('Error fetching categories:', error);
+    //     }
+    // };
 
     const handleClick = (course_id: string) => {
         router.push(`/teacher/${userId}/mycourse/${course_id}`);
@@ -54,9 +76,6 @@ const CourseCard: React.FC<CourseCardProps> = ({ courses, userId }) => {
                 setDeleteConfirmation({ courseId: null, confirmText: '' });
             }
         }
-
-
-
     }
 
     const initiateDeleteCourse = (course_id: string) => {
@@ -71,6 +90,19 @@ const CourseCard: React.FC<CourseCardProps> = ({ courses, userId }) => {
     const filteredCourses = courses.filter(course =>
         course.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    // const getFullCategoryHierarchy = (categoryId: string): string[] => {
+    //     const hierarchy: string[] = [];
+    //     let currentCategory = categories.find((cat) => cat.id === categoryId);
+
+    //     while (currentCategory) {
+    //         hierarchy.unshift(currentCategory.category_name); // Add current category name to the start of the array
+    //         currentCategory = categories.find((cat) => cat.id === currentCategory?.parent_category_id); // Move up the hierarchy
+    //     }
+
+    //     return hierarchy;
+    // };
+
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-transparent p-8">
@@ -136,7 +168,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ courses, userId }) => {
                     </button>
                 </div>
 
-                {filteredCourses.length === 0 && searchTerm.length === 0 ? (
+                {filteredCourses.length === 0 && courses.length > 0 && searchTerm.length === 0 ? (
                     // <div className="text-center text-gray-500 dark:text-gray-400">
                     //     Courses Loading...
                     // </div>
@@ -146,7 +178,8 @@ const CourseCard: React.FC<CourseCardProps> = ({ courses, userId }) => {
                         ))}
                     </div>
 
-                ) : filteredCourses.length === 0 && searchTerm.length > 0 ? (
+                ) : (filteredCourses.length === 0 && courses.length === 0) || (filteredCourses.length === 0 && searchTerm.length > 0) ? (
+                    // Show "No courses found" message
                     <div className="text-center text-gray-500 dark:text-gray-400">
                         No courses found.
                     </div>
@@ -158,19 +191,19 @@ const CourseCard: React.FC<CourseCardProps> = ({ courses, userId }) => {
                                 className="bg-white dark:bg-[#151b23] rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 p-6"
                             >
                                 <div className="aspect-video relative overflow-hidden mb-2">
-                                    <img
+                                    {/* <img
                                         src={course.coursePicUrl}
                                         alt={course.title}
                                         className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
-                                    />
-                                    {/* <Image
+                                    /> */}
+                                    <Image
                                         src={course.coursePicUrl}
                                         alt="Course image"
                                         className="rounded-lg mb-4 w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
-                                        width='200' // Specify the width
-                                        height='200'// Specify the height
+                                        width='400' // Specify the width
+                                        height='400'// Specify the height
                                         priority // Optional: for images important for LCP
-                                    /> */}
+                                    />
                                 </div>
 
                                 <div className="">
@@ -184,6 +217,28 @@ const CourseCard: React.FC<CourseCardProps> = ({ courses, userId }) => {
                                     <p className="text-gray-600 dark:text-gray-300 mb-6 line-clamp-2 text-sm">
                                         {course.description}
                                     </p>
+
+                                    {/* <p className="text-gray-600 dark:text-gray-300 mb-6 line-clamp-2 text-sm">
+                                        {course.category}
+                                        {getFullCategoryHierarchy(course.category).join(" > ")}
+                                    </p> */}
+
+                                    {/* <div className="mt-4">
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            Parent Hierarchy
+                                        </label>
+                                        <div className="flex flex-wrap gap-2">
+                                            {getFullCategoryHierarchy(course.category).map((parent, index) => (
+                                                <div
+                                                    key={course.category}
+                                                    className="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg shadow-md"
+                                                >
+                                                    {parent.category_name}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div> */}
+
 
                                     <div className="flex gap-4">
                                         <button

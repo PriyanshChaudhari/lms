@@ -63,6 +63,7 @@ const CourseDetails = () => {
     const [showAddStudent, setShowAddStudent] = useState(true);  // Controls showing Add Student form
     const [showAddTeacher, setShowAddTeacher] = useState(false);  // Controls showing Add Teacher form
     const [showAddGroup, setShowAddGroup] = useState(false);  // Controls showing Add Teacher form
+    const [showExcel, setShowExcel] = useState(false);  // Controls showing Add Teacher form
     const [showMessage, setShowMessage] = useState(false); //
     const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
 
@@ -438,7 +439,7 @@ const CourseDetails = () => {
                                                     setShowAddStudent(true);
                                                     setShowAddTeacher(false);
                                                     setShowAddGroup(false);
-
+                                                    setShowExcel(false)
                                                 }}
                                                 className={`px-4 py-2 rounded-lg transition-colors ${showAddStudent
                                                     ? 'bg-blue-500 text-white'
@@ -452,7 +453,7 @@ const CourseDetails = () => {
                                                     setShowAddStudent(false);
                                                     setShowAddTeacher(true);
                                                     setShowAddGroup(false);
-
+                                                    setShowExcel(false)
                                                 }}
                                                 className={`px-4 py-2 rounded-lg transition-colors ${showAddTeacher
                                                     ? 'bg-blue-500 text-white'
@@ -466,6 +467,8 @@ const CourseDetails = () => {
                                                     setShowAddStudent(false);
                                                     setShowAddTeacher(false);
                                                     setShowAddGroup(true);
+                                                    setShowExcel(false)
+
                                                 }}
                                                 className={`px-4 py-2 rounded-lg transition-colors ${showAddGroup
                                                     ? 'bg-blue-500 text-white'
@@ -474,10 +477,25 @@ const CourseDetails = () => {
                                             >
                                                 Add Group
                                             </button>
+                                            {/* <button
+                                                onClick={() => {
+                                                    setShowAddStudent(false);
+                                                    setShowAddTeacher(false);
+                                                    setShowAddGroup(false);
+                                                    setShowExcel(true)
+                                                }}
+                                                className={`px-4 py-2 rounded-lg transition-colors ${showExcel
+                                                    ? 'bg-blue-500 text-white'
+                                                    : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
+                                                    }`}
+                                            >
+                                                Add By Excel
+                                            </button> */}
                                         </div>
                                         {showAddStudent && <AddOneStudent courseId={courseId} />}
                                         {showAddTeacher && <AddOneTeacher courseId={courseId} />}
                                         {showAddGroup && <EnrollByGroupComponent />}
+                                        {/* {showExcel && <ExcelEnrollComponent />} */}
                                     </div>
                                 )}
                             </div>

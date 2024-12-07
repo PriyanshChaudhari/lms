@@ -128,7 +128,7 @@ const CreateCourse = () => {
                 });
                 setFile(null);
                 setShowMessage(true);
-                
+                router.push(`/teacher/${userId}/dashboard`)                
             }
         } catch (error) {
             setError('An error occurred. Please try again.');

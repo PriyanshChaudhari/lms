@@ -52,7 +52,7 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
     const [assignments, setAssignments] = useState<Assignment[]>([]);
     const [grades, setGrades] = useState<Record<string, GradesResponse>>({});
     const [selectedStudent, setSelectedStudent] = useState<string | null>(null);
-    
+
     // New state for search functionality
     const [searchTerm, setSearchTerm] = useState<string>('');
 
@@ -81,7 +81,7 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
     const fetchGrades = async (students: Student[], courseId: string) => {
         try {
             const gradesData: Record<string, GradesResponse> = {};
-    
+
             const gradePromises = students.map(async (student) => {
                 try {
                     const [eventMarksResponse, assignmentMarksResponse] = await Promise.all([
@@ -105,7 +105,7 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
                     };
                 }
             });
-    
+
             await Promise.all(gradePromises);
             setGrades(gradesData);
         } catch (error) {
@@ -176,7 +176,7 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
     };
 
     // Filter students based on search term
-    const filteredStudents = students.filter(student => 
+    const filteredStudents = students.filter(student =>
         `${student.first_name} ${student.last_name}`.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -250,16 +250,16 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
                                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                                     Grades Report for {students.find(student => student.user_id === selectedStudent)?.first_name} {students.find(student => student.user_id === selectedStudent)?.last_name}
                                 </h3>
-                                <button 
+                                <button
                                     onClick={closeModal}
                                     className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                                 >
-                                     <IoMdClose className='font-semibold text-3xl cursor-pointer hover:scale-125 transition-transform ease-linear text-red-500' />
+                                    <IoMdClose className='font-semibold text-3xl cursor-pointer hover:scale-125 transition-transform ease-linear text-red-500' />
                                 </button>
                             </div>
                             <div className="w-full">
-                                <StudentGrades 
-                                    courseId={courseId} 
+                                <StudentGrades
+                                    courseId={courseId}
                                     studentId={selectedStudent}
                                 />
                             </div>

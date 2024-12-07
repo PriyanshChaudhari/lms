@@ -10,6 +10,7 @@ interface UploadGradesProps {
 const UploadGrades: React.FC<UploadGradesProps> = ({ courseId }) => {
     const [file, setFile] = useState<File | null>(null);
     const [eventName, setEventName] = useState<string>('');
+    const [totalMarks, setTotalMarks] = useState<number | ''>('');
     const [error, setError] = useState<string>('');
     const [isUploaded, setIsUploaded] = useState<boolean>(false);
     const params = useParams();
@@ -33,6 +34,11 @@ const UploadGrades: React.FC<UploadGradesProps> = ({ courseId }) => {
             return;
         }
 
+        if (!totalMarks) {
+            setError('Please enter total marks.');
+            return;
+        }
+
         const reader = new FileReader();
         reader.onload = async (e: ProgressEvent<FileReader>) => {
             const result = e.target?.result;
@@ -49,7 +55,8 @@ const UploadGrades: React.FC<UploadGradesProps> = ({ courseId }) => {
                     user_id: row['Student ID'],
                     course_id: courseId,
                     marks: row['Marks'],
-                    event_name: eventName
+                    event_name: eventName,
+                    total_marks: totalMarks
                 }));
 
                 try {
@@ -84,9 +91,6 @@ const UploadGrades: React.FC<UploadGradesProps> = ({ courseId }) => {
 
     return (
         <div>
-            {/* <h2 className="text-2xl font-semibold mb-4 text-center">Upload Grades</h2>
-            <p className="mb-6 text-center text-gray-600">Select and upload the Excel file of your choice</p> */}
-
             <div className="mb-4">
                 <label htmlFor="event-name" className="block text-gray-700 dark:text-gray-300 mb-2">
                     Event Name
@@ -96,6 +100,19 @@ const UploadGrades: React.FC<UploadGradesProps> = ({ courseId }) => {
                     id="event-name"
                     value={eventName}
                     onChange={(e) => setEventName(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-[#151b23] dark:border-gray-700 dark:text-gray-300"
+                />
+            </div>
+
+            <div className="mb-4">
+                <label htmlFor="total-marks" className="block text-gray-700 dark:text-gray-300 mb-2">
+                    Total Marks
+                </label>
+                <input
+                    type="number"
+                    id="total-marks"
+                    value={totalMarks}
+                    onChange={(e) => setTotalMarks(Number(e.target.value))}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-[#151b23] dark:border-gray-700 dark:text-gray-300"
                 />
             </div>

@@ -124,7 +124,7 @@ const ManageCategories = () => {
 
         while (currentCategory) {
             hierarchy.unshift(currentCategory); // Add parent to the beginning of the list
-            currentCategory = categories.find((cat) => cat.id === currentCategory.parent_category_id);
+            currentCategory = categories.find((cat) => cat.id === currentCategory?.parent_category_id);
         }
 
         return hierarchy;
