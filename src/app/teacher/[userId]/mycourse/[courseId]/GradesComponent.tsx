@@ -245,7 +245,7 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
                 {/* Modal for Student Grades */}
                 {selectedStudent && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                        <div className="bg-white dark:bg-[#1e2631] p-6 rounded-lg shadow-xl w-96 max-h-[90vh] overflow-y-auto">
+                        <div className="bg-white dark:bg-[#1e2631] p-6 rounded-lg shadow-xl max-w-xl max-h-[90vh] overflow-y-auto">
                             <div className="flex justify-between items-center mb-4">
                                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                                     Grades Report for {students.find(student => student.user_id === selectedStudent)?.first_name} {students.find(student => student.user_id === selectedStudent)?.last_name}
