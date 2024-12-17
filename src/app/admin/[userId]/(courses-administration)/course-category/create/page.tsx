@@ -3,7 +3,7 @@ import React, { ChangeEvent, useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
 
-const CreateCategory = ({ editingCategory = null }: { editingCategory?: any }) => {
+const CreateCategory = () => {
     const router = useRouter();
     const params = useParams();
     const userId = params.userId as string;
@@ -13,7 +13,7 @@ const CreateCategory = ({ editingCategory = null }: { editingCategory?: any }) =
     });
 
     const [error, setError] = useState<string | null>(null);
-    const [showMessage, setShowMessage] = useState(false);
+
     const [categories, setCategories] = useState<{ id: string; category_name: string; parent_category_id: string | null }[]>([]);
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
@@ -26,38 +26,8 @@ const CreateCategory = ({ editingCategory = null }: { editingCategory?: any }) =
         }
     };
 
-   useEffect(() => {
-    if (showMessage) {
-        const timer = setTimeout(() => {
-            setShowMessage(false);
-        }, 5000);
-
-        return () => clearTimeout(timer); // Cleanup the timer
-    }
-}, [showMessage]);
-
     useEffect(() => {
         fetchCategories();
-
-        if (editingCategory) {
-            // Set initial category data for editing
-            setCategory({
-                category_name: editingCategory.category_name,
-                parent_category_id: editingCategory.parent_category_id || "",
-            });
-
-            // Populate selectedCategories for dropdowns
-            const initialSelectedCategories = [];
-            let currentParentId = editingCategory.parent_category_id;
-
-            while (currentParentId) {
-                initialSelectedCategories.unshift(currentParentId);
-                const parent = categories.find((cat) => cat.id === currentParentId);
-                currentParentId = parent ? parent.parent_category_id : null;
-            }
-
-            setSelectedCategories(initialSelectedCategories);
-        }
     }, []);
 
     const handleCategoryChange = (index: number, e: ChangeEvent<HTMLSelectElement>) => {
@@ -84,30 +54,23 @@ const CreateCategory = ({ editingCategory = null }: { editingCategory?: any }) =
         }
         else {
             try {
-                if (editingCategory) {
-                    // Update existing category
-                    await axios.put(`/api/course-category/${editingCategory.id}`, category);
-                    alert("Category updated successfully!");
-                }
-                else {
-                    const res = await axios.post('/api/course-category/', category);
-                    const data = res.data.categories;
-                    console.log(data);
+                const res = await axios.post('/api/course-category/', category);
+                const data = res.data.categories;
+                console.log(data);
 
-                    // Reset the form
-                    setCategory({
-                        category_name: "",
-                        parent_category_id: ""
-                    });
-                    setSelectedCategories([]);
+                // Reset the form
+                setCategory({
+                    category_name: "",
+                    parent_category_id: ""
+                });
+                setSelectedCategories([]);
 
-                    // Fetch updated categories
-                    await fetchCategories();
+                // Fetch updated categories
+                await fetchCategories();
 
-                    // Optionally, show a success message
-                    setShowMessage(true);
-                   
-                }
+                // Optionally, show a success message
+                alert("Category created successfully!");
+                router.push(`/admin/${userId}/dashboard`);
             } catch (error) {
                 console.error(error);
                 // Optionally, show an error message
@@ -115,11 +78,6 @@ const CreateCategory = ({ editingCategory = null }: { editingCategory?: any }) =
             }
         }
     };
-
-    const closeShowMessage = () => {
-        router.push(`/admin/${userId}/course-category/manage`);
-        setShowMessage(false);
-    }
 
     const renderCategoryDropdowns = () => {
         let availableCategories = categories.filter(cat => !cat.parent_category_id);
@@ -157,30 +115,8 @@ const CreateCategory = ({ editingCategory = null }: { editingCategory?: any }) =
 
     return (
         <div className='flex h-screen justify-center items-center'>
-            {showMessage && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white dark:bg-[#1e2631] p-6 rounded-lg shadow-xl w-96">
-                        <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
-                            Course Created Sucessfully
-                        </h2>
-                        <p className="text-gray-600 dark:text-gray-300 mb-4">
-                            course added sucessfully.
-                        </p>
-
-                        <div className="flex gap-4">
-                            <button
-                                onClick={closeShowMessage}
-                                className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg"
-                            >
-                               Close (Closing in 5 seconds)
-                            </button>
-
-                        </div>
-                    </div>
-                </div>
-            )}
             <div className="w-full max-w-md mx-auto mt-8 p-6 dark:bg-[#151b23] rounded-lg shadow-md">
-                <h2 className="text-2xl font-semibold text-black dark:text-gray-300 mb-4">{editingCategory ? "Edit Category" : "Create New Category"}</h2>
+                <h2 className="text-2xl font-bold mb-4">Create a New Category</h2>
                 <form onSubmit={handleSubmit}>
                     {error && (
                         <div className="mb-4 text-red-500 font-semibold text-left">
@@ -188,7 +124,7 @@ const CreateCategory = ({ editingCategory = null }: { editingCategory?: any }) =
                         </div>
                     )}
                     <div className="mb-6">
-                        <label htmlFor="category_name" className="block  text-sm font-medium text-gray-700 dark:text-gray-100">
+                        <label htmlFor="category_name" className="block text-sm font-medium text-gray-700 dark:text-gray-100">
                             Category Name
                         </label>
                         <input
@@ -197,7 +133,7 @@ const CreateCategory = ({ editingCategory = null }: { editingCategory?: any }) =
                             name="category_name"
                             value={category.category_name}
                             onChange={handleNameChange}
-                            className=" p-2 w-full border uppercase border-gray-300 rounded-lg dark:bg-[#151b23] mt-4"
+                            className=" p-2 w-full border border-gray-300 rounded-lg dark:bg-[#151b23] mt-4"
                             required
                         />
                     </div>
@@ -209,7 +145,7 @@ const CreateCategory = ({ editingCategory = null }: { editingCategory?: any }) =
                             type="submit"
                             className="w-full bg-blue-600 text-white py-2 px-4 mt-4 rounded-lg hover:bg-blue-700"
                         >
-                            {editingCategory ? "Update Category" : "Create Category"}
+                            Create Category
                         </button>
                     </div>
                 </form>
