@@ -110,7 +110,7 @@ const EditCourse = () => {
             const formSubmissionData = new FormData();
             formSubmissionData.append('title', course.title);
             formSubmissionData.append('description', course.description);
-            formSubmissionData.append('teacher_id', course.teacher_id);
+            formSubmissionData.append('teacher_id', course.teacher_id as string);
             formSubmissionData.append('category', course.category);
 
             // Attach the image file to the form data

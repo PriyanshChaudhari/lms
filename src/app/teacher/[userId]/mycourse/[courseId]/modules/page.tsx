@@ -11,7 +11,14 @@ export default function ViewModules() {
     const userId = params.userId as string;
     const courseId = params.courseId as string;
 
-    const [courseModules, setCourseModules] = useState([])
+    interface Module {
+        id: string;
+        position: number;
+        description: string;
+        title: string;
+    }
+
+    const [courseModules, setCourseModules] = useState<Module[]>([])
 
     useEffect(() => {
         const getCourseModules = async () => {
@@ -49,7 +56,7 @@ export default function ViewModules() {
                             <h2 className="text-xl font-semibold">{module.position}</h2>
                             <h2 className="text-xl font-semibold">{module.description}</h2>
                             <h2 className="text-xl font-semibold">{module.title}</h2>
-                            <div className='px-3 rounded-lg flex items-center cursor-pointer bg-gray-400  hover:bg-gray-500' onClick={() => handleModuleClick(module.id)} > GO -> </div>
+                            <div className='px-3 rounded-lg flex items-center cursor-pointer bg-gray-400  hover:bg-gray-500' onClick={() => handleModuleClick(module.id)} > GO -&gt; </div>
                         </div>
 
                     </div>

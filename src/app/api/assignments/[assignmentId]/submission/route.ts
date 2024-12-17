@@ -43,6 +43,8 @@ export async function POST(req: Request): Promise<NextResponse> {
             submissionsSnapshot.docs.map(async (docSnapshot) => {
                 const submissionData: Submission = {
                     submission_id: docSnapshot.id,
+                    assignment_id: docSnapshot.data().assignment_id,
+                    user_id: docSnapshot.data().user_id,
                     ...docSnapshot.data(),
                 };
 

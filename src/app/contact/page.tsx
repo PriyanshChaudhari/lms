@@ -41,7 +41,7 @@ const Contact = () => {
 			<div className='text-black contact overflow-x-hidden pt-14  py-7' id='contact'>
 				<div className='z-10 w-full sm:w-[650px] m-auto p-8 rounded-lg-2xl'>
 					<p className='font-light dark:text-gray-100'>REACH OUT TO US</p>
-					<h2 className='text-5xl font-extrabold mt-2 bg-clip-text text-transparent bg-gradient-to-r dark:bg-[#212830] dark:bg-gray-100'>Contact.</h2>
+					<h2 className='text-5xl font-extrabold mt-2 bg-clip-text text-transparent bg-gradient-to-r dark:bg-[#212830]'>Contact.</h2>
 					<form
 						ref={formRef}
 						onSubmit={handleSubmit}
@@ -86,7 +86,7 @@ const Contact = () => {
 
 						<button
 							type='submit'
-							className='pt-3 px-8 w-fit font-bold dark:text-black dark:bg-[#212830] dark:bg-slate-100 hover:dark:bg-white text-white p-3 rounded-lg-xl hover:bg-[#1a1a1a]'
+							className='pt-3 px-8 w-fit font-bold dark:text-black dark:bg-[#212830] hover:dark:bg-white text-white p-3 rounded-lg-xl hover:bg-[#1a1a1a]'
 						>
 							{loading ? "Sending..." : "Send"}
 						</button>

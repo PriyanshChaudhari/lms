@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
         const existingSubmissionQuery = query(collection(db, "submissions"), where("user_id", "==", user_id), where("assignment_id", "==", assignmentId));
         const existingSubmissions = await getDocs(existingSubmissionQuery);
 
-        let file_url: string | null
+        let file_url: string | null = null;
 
         // Upload the new file
         if (file) {

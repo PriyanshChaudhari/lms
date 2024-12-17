@@ -1,5 +1,15 @@
 import { NextResponse } from 'next/server';
+
+interface Assignment {
+    id: string;
+    [key: string]: any; // Adjust the properties as needed
+}
 import { db } from '@/lib/firebaseConfig'; // Your Firebase config
+
+interface Participant {
+    id: string;
+    [key: string]: any; // Adjust the properties as needed
+}
 import { collection, query, where, getDocs } from 'firebase/firestore';
 
 export async function POST(req: Request) {
@@ -27,7 +37,7 @@ export async function POST(req: Request) {
             moduleIds = modulesSnapshot.docs.map(doc => doc.id);
         }
 
-        let assignments = [];
+        let assignments: Assignment[] = [];
         if (moduleIds.length > 0) {
             // Step 2: Query to get assignments based on module IDs
             const assignmentsQuery = query(
@@ -59,7 +69,7 @@ export async function POST(req: Request) {
 
         const participantsSnapshot = await getDocs(participantsQuery);
 
-        let participants = [];
+        let participants: Participant[] = [];
 
         if (!participantsSnapshot.empty) {
             participants = participantsSnapshot.docs.map(doc => ({

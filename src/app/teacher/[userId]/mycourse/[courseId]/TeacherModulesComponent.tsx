@@ -123,7 +123,7 @@ const TeacherModulesComponent = ({ moduleId, module, courseId, userId }: Teacher
                         </h2>
                         <p className="text-gray-600 dark:text-gray-300 mb-4">
                             Are you sure you want to delete this module?
-                            Type "confirm" below to proceed.
+                            Type &quot;confirm&quot; below to proceed.
                         </p>
                         <input
                             type="text"

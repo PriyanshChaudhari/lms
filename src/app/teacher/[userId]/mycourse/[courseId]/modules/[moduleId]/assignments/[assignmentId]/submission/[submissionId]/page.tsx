@@ -106,7 +106,7 @@ export default function ReviewSubmission() {
             {success && <p className="text-green-500 mb-4">{success}</p>}
 
             <p className="mb-2"><strong>Student ID:</strong> {submission.student_id}</p>
-            <p className="mb-2"><strong>Submission Date:</strong> {new Date(submission.submission_date.seconds * 1000).toLocaleDateString()}</p>
+            <p className="mb-2"><strong>Submission Date:</strong> {new Date(submission.submission_date).toLocaleDateString()}</p>
             <a href={submission.file_url} className="text-blue-500 hover:underline mb-6 block" target="_blank" rel="noopener noreferrer">
                 View Submitted File
             </a>

@@ -204,10 +204,14 @@ import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import axios from 'axios';
 
-const SearchableTeacherEnrollment = ({ courseId }) => {
-    const [teachers, setTeachers] = useState([]);
+interface SearchableTeacherEnrollmentProps {
+    courseId: string;
+}
+
+const SearchableTeacherEnrollment = ({ courseId }: SearchableTeacherEnrollmentProps) => {
+    const [teachers, setTeachers] = useState<Teacher[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
-    const [generalError, setGeneralError] = useState(null);
+    const [generalError, setGeneralError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const userId = localStorage.getItem('user_id');
     const [showMessage, setShowMessage] = useState(false);
@@ -229,14 +233,20 @@ const SearchableTeacherEnrollment = ({ courseId }) => {
 
     useEffect(() => {
         const timer = setTimeout(() => {
-          setShowMessage(false);
+            setShowMessage(false);
         }, 5000); // 5 seconds delay
-    
+
         // Cleanup the timer when the component unmounts or re-renders
         return () => clearTimeout(timer);
-      }, []);
+    }, []);
 
-    const handleEnroll = async (teacherId) => {
+    interface Teacher {
+        id: string;
+        first_name: string;
+        last_name: string;
+    }
+
+    const handleEnroll = async (teacherId: string) => {
         setLoading(true);
         try {
             await axios.post('/api/enrollment', {
@@ -246,7 +256,7 @@ const SearchableTeacherEnrollment = ({ courseId }) => {
             setGeneralError(null);
             setShowMessage(true);
             window.location.href = `/teacher/${userId}/mycourse/${courseId}?section=participants`;
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error enrolling student:', error);
             setGeneralError(error.response?.data?.error || 'Failed to enroll student');
         } finally {
@@ -263,7 +273,7 @@ const SearchableTeacherEnrollment = ({ courseId }) => {
 
     return (
         <div className="w-full max-w-4xl mx-auto p-6 space-y-6">
-             {showMessage && (
+            {showMessage && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white dark:bg-[#1e2631] p-6 rounded-lg shadow-xl w-96">
                         <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
@@ -272,15 +282,15 @@ const SearchableTeacherEnrollment = ({ courseId }) => {
                         <p className="text-gray-600 dark:text-gray-300 mb-4">
                             The participant has been enrolled to the course.
                         </p>
-                    
+
                         <div className="flex gap-4">
                             <button
                                 onClick={() => setShowMessage(false)}
                                 className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg"
                             >
-                                Cancel 
+                                Cancel
                             </button>
-                           
+
                         </div>
                     </div>
                 </div>
@@ -330,10 +340,10 @@ const SearchableTeacherEnrollment = ({ courseId }) => {
                                                 >
                                                     Enroll
                                                 </button>
-                                           
-                                        </td>
+
+                                            </td>
                                         </>
-                                   )}
+                                    )}
                                 </tr>
 
                             </>

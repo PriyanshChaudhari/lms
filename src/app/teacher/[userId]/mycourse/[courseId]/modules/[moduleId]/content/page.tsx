@@ -12,7 +12,14 @@ export default function ViewContent() {
     const courseId = params.courseId as string;
     const moduleId = params.moduleId as string;
 
-    const [courseContent, setCourseContent] = useState([])
+    interface CourseContent {
+        id: string;
+        title: string;
+        description: string;
+        position: number;
+    }
+
+    const [courseContent, setCourseContent] = useState<CourseContent[]>([])
 
     useEffect(() => {
         const getCourseContent = async () => {
@@ -39,7 +46,7 @@ export default function ViewContent() {
     return (
         <div className=" h-screen flex justify-center items-center">
             <div className="w-full max-w-4xl mx-auto p-5 grid gap-4">
-               <div> <button className='bg-blue-500 hover:bg-blue-600 text-white  p-2' onClick={createContent}>Add Content</button></div>
+                <div> <button className='bg-blue-500 hover:bg-blue-600 text-white  p-2' onClick={createContent}>Add Content</button></div>
                 {sortedContent.map((content) => (
                     <div key={content.id} className="space-y-4 grid gap-4">
                         <div
@@ -47,7 +54,7 @@ export default function ViewContent() {
                             <h2 className="text-xl font-semibold">{content.title}</h2>
                             <h2 className="text-xl font-semibold">{content.description}</h2>
                             <h2 className="text-xl font-semibold">{content.position}</h2>
-                            <div className='px-3 rounded-lg-xl cursor-pointer bg-gray-300  hover:bg-gray-200' onClick={() => handleContentClick(content.id)} > GO -> </div>
+                            <div className='px-3 rounded-lg-xl cursor-pointer bg-gray-300  hover:bg-gray-200' onClick={() => handleContentClick(content.id)} > GO -&gt; </div>
                         </div>
 
                     </div>

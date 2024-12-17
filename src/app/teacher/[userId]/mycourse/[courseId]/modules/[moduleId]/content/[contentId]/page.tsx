@@ -103,7 +103,7 @@ export default function ViewModule() {
                 <div className="space-y-4 ">
                     <div className="bg-white dark:bg-[#151b23]  rounded-lg-xl p-6 shadow-md h-26">
                         <h2 className="text-xl font-semibold mb-4">{oneContent?.title}</h2>
-                        {oneContent?.attachments?.length > 0 && (
+                        {(oneContent?.attachments?.length ?? 0) > 0 && (
                             <div>
                                 {oneContent?.attachments.map((attachment, index) => (
                                     <div key={index} className="mb-4">
@@ -120,21 +120,21 @@ export default function ViewModule() {
                             </div>
                         )}
                         {/* Edit Content Button */}
-                       <div className="flex justify-between">
-                       <button
-                            className="bg-blue-500 text-white px-4 py-2 rounded-lg-xl hover:bg-blue-600 mt-2"
-                            onClick={handleEditContent} // Function to handle edit
-                        >
-                            Edit Content
-                        </button>
-                        <p></p>
-                        <button
-                            className="bg-red-500 text-white px-4 py-2 rounded-lg-xl hover:bg-red-600 mt-2"
-                            onClick={handleDeleteContent} // Function to handle edit
-                        >
-                            Delete Content
-                        </button>
-                       </div>
+                        <div className="flex justify-between">
+                            <button
+                                className="bg-blue-500 text-white px-4 py-2 rounded-lg-xl hover:bg-blue-600 mt-2"
+                                onClick={handleEditContent} // Function to handle edit
+                            >
+                                Edit Content
+                            </button>
+                            <p></p>
+                            <button
+                                className="bg-red-500 text-white px-4 py-2 rounded-lg-xl hover:bg-red-600 mt-2"
+                                onClick={handleDeleteContent} // Function to handle edit
+                            >
+                                Delete Content
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

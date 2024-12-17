@@ -90,7 +90,9 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
                     ]);
                     console.log(eventMarksResponse)
                     gradesData[student.user_id] = {
-                        event_marks: eventMarksResponse.data,
+                        user_id: student.user_id,
+                        course_id: courseId,
+                        event_marks: eventMarksResponse.data.event_marks,
                         assignment_marks: assignmentMarksResponse.data.assignment_marks
                     };
 
@@ -120,7 +122,7 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
         const eventTotal = studentGrades.event_marks.reduce((sum, grade) => sum + parseFloat(grade.marks), 0);
         const assignmentTotal = studentGrades.assignment_marks.reduce((sum, grade) => sum + grade.obtained_marks, 0);
         const totalAssignmentMarks = studentGrades.assignment_marks.reduce((sum, grade) => sum + grade.total_marks, 0);
-        const totalEventMarks = studentGrades.event_marks.reduce((sum, grade) => sum + parseFloat(grade.total_marks), 0);
+        const totalEventMarks = studentGrades.event_marks.reduce((sum, grade) => sum + parseFloat(grade.marks), 0);
         const overallTotal = eventTotal + assignmentTotal;
 
         return { eventTotal, assignmentTotal, overallTotal, totalAssignmentMarks, totalEventMarks };
@@ -131,7 +133,7 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
             const { eventTotal, assignmentTotal, overallTotal } = calculateTotalMarks(student.user_id);
             const studentGrades = grades[student.user_id];
 
-            const eventMarks = events.map(event => studentGrades?.event_marks.find(g => g.event_name === event.event_name)?.marks || '-');
+            const eventMarks = events.map(event => studentGrades?.event_marks.find(g => g.event_id === event.id)?.marks || '-');
             const assignmentMarks = assignments.map(assignment => studentGrades?.assignment_marks.find(g => g.assessment_id === assignment.id)?.obtained_marks || '-');
 
             return {
@@ -159,9 +161,9 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
 
         worksheet['!cols'] = columnOrder.map(col => ({ wch: col.length }));
         const orderedData = data.map(row => {
-            const orderedRow: any = {};
-            columnOrder.forEach(col => {
-                orderedRow[col] = row[col];
+            const orderedRow: Record<string, any> = {};
+            columnOrder.forEach((col: string) => {
+                orderedRow[col] = row[col as keyof typeof row];
             });
             return orderedRow;
         });
@@ -190,7 +192,7 @@ const GradesTable: React.FC<GradesTableProps> = ({ courseId, teacherId }) => {
             <div className="p-6 grid gap-4">
                 <div className="">
                     <h2 className="text-xl font-semibold text-gray-900 dark:text-white my-4">
-                        Participants' Grades
+                        Participants&apos; Grades
                     </h2>
                     <input
                         type="text"

@@ -81,9 +81,9 @@ export default function ViewModule() {
     }
 
     const sortedContent = courseContent.sort((a, b) => {
-        const dateA = new Date(a.created_at.seconds * 1000)
-        const dateB = new Date(b.created_at.seconds * 1000)
-        return dateA - dateB; // Ascending order (earliest to latest)
+        const dateA = new Date(a.created_at)
+        const dateB = new Date(b.created_at)
+        return dateA.getTime() - dateB.getTime(); // Ascending order (earliest to latest)
     });
 
     const handleEditModule = () => {
@@ -175,7 +175,7 @@ export default function ViewModule() {
                                                 <h2 className="text-xl font-semibold">{content.title}</h2>
                                                 <h2 className="text-xl font-semibold">{content.description}</h2>
                                                 <h2 className="text-xl font-semibold">{content.position}</h2>
-                                                <div className='px-3 rounded-lg-xl cursor-pointer bg-gray-300  hover:bg-gray-200' onClick={() => handleContentClick(content.id)} > GO -> </div>
+                                                <div className='px-3 rounded-lg-xl cursor-pointer bg-gray-300  hover:bg-gray-200' onClick={() => handleContentClick(content.id)} > GO -&gt; </div>
                                             </div>
                                         </div>
                                     ))}

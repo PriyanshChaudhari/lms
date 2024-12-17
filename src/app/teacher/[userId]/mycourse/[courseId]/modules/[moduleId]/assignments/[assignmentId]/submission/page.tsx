@@ -38,7 +38,18 @@ export default function ViewSubmissions() {
     const params = useParams();
     const router = useRouter()
     const { userId, courseId, moduleId, assignmentId } = params;
-    const [submissions, setSubmissions] = useState([]);
+    interface Submission {
+        user: {
+            id: string;
+            first_name: string;
+        };
+        submission_date: {
+            seconds: number;
+        };
+        submission_id: string;
+    }
+
+    const [submissions, setSubmissions] = useState<Submission[]>([]);
     const [error, setError] = useState('');
     const [oneAssignment, setOneAssignment] = useState<assignments | null>(null);
     const [oneModule, setOneModule] = useState<modules | null>(null);

@@ -7,8 +7,8 @@ interface CalenderComponentProps {
 }
 const Calendar: React.FC<CalenderComponentProps> = ({ onClose }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [events, setEvents] = useState({});
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [events, setEvents] = useState<{ [key: string]: { id: string; title: string; description: string; notifiedUserIds: string[] }[] }>({});
   const [showAddEvent, setShowAddEvent] = useState(false);
   const [newEvent, setNewEvent] = useState({ title: '', description: '' });
   const userId = sessionStorage.getItem('userId');
@@ -31,7 +31,7 @@ const Calendar: React.FC<CalenderComponentProps> = ({ onClose }) => {
   const { daysInMonth, firstDay } = getDaysInMonth();
 
   // Check if a date is today
-  const isToday = (day) => {
+  const isToday = (day: number) => {
     const today = new Date();
     return (
       day === today.getDate() &&
@@ -41,7 +41,7 @@ const Calendar: React.FC<CalenderComponentProps> = ({ onClose }) => {
   };
 
   // Handle date selection
-  const handleDateClick = (day) => {
+  const handleDateClick = (day: number) => {
     const dateStr = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${day}`;
     setSelectedDate(dateStr);
   };
@@ -129,7 +129,7 @@ const Calendar: React.FC<CalenderComponentProps> = ({ onClose }) => {
     try {
       const response = await axios.get(`/api/get/calendar-events/by-userid?userId=${userId}`);
       if (response.status === 200) {
-        const formattedEvents = response.data.reduce((acc, event) => {
+        const formattedEvents = response.data.reduce((acc: { [x: string]: { id: any; title: any; description: any; notifiedUserIds: any; }[]; }, event: { date: { seconds: number; }; id: any; event_title: any; description: any; notified_user_ids: any; }) => {
           // Ensure the date is properly parsed before converting to ISO string
           const eventDate = new Date(event.date.seconds * 1000); // Convert Firestore timestamp to JS Date
           const dateKey = eventDate.toISOString().split('T')[0];
@@ -278,7 +278,7 @@ const Calendar: React.FC<CalenderComponentProps> = ({ onClose }) => {
           <div className="mt-6">
             <h3 className="text-lg font-medium mb-3">Events for {selectedDate}</h3>
             <div className="">
-              {events[selectedDate].map((event, index) => (
+              {events[selectedDate].map((event: { title: string | number | bigint | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined; description: string | number | bigint | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined; id: string; }, index: React.Key | null | undefined) => (
                 <div key={index} className="p-6 justify-evenly w-full bg-white dark:bg-gray-800 rounded-lg shadow">
                   <div className="pb-4  grid grid-rows-2 gap-2 items-center justify-between">
                     <h4 className="font-medium">{event.title}</h4>

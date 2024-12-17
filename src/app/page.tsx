@@ -24,7 +24,7 @@ export default function Home() {
           <p className="text-xl mb-8">
             Your one-stop solution for online learning and course management.
           </p>
-          <Link className="hover:bg-[#1a1a1a] dark:bg-[#212830] dark:bg-slate-200 dark:text-black font-semibold text-white px-8 py-4 rounded-lg-full shadow-md " href='/login'>
+          <Link className="hover:bg-[#1a1a1a] dark:bg-[#212830] dark:text-black font-semibold text-white px-8 py-4 rounded-lg-full shadow-md " href='/login'>
             Get Started
           </Link>
         </section>
@@ -84,19 +84,19 @@ export default function Home() {
               <div className="flex items-center mb-4">
                 <h4 className="text-xl font-semibold">Organisation 1</h4>
               </div>
-              <p>"LMS is a great tool for online education delivery"</p>
+              <p>&quot;LMS is a great tool for online education delivery&quot;</p>
             </div>
             <div className="bg-white dark:bg-[#1a1a1a] p-6 rounded-lg-lg shadow-lg">
               <div className="flex items-center mb-4">
                 <h4 className="text-xl font-semibold">Organisation 2</h4>
               </div>
-              <p>"The courses are well-structured and easy to follow."</p>
+              <p>&quot;The courses are well-structured and easy to follow.&quot;</p>
             </div>
             <div className="bg-white dark:bg-[#1a1a1a] p-6 rounded-lg-lg shadow-lg">
               <div className="flex items-center mb-4">
                 <h4 className="text-xl font-semibold">Organisation 3</h4>
               </div>
-              <p>"The courses are well-structured and easy to follow."</p>
+              <p>&quot;The courses are well-structured and easy to follow.&quot;</p>
             </div>
           </div>
         </section>

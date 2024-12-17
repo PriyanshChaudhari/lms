@@ -4,15 +4,21 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import axios from 'axios';
 
-const SearchableStudentEnrollment = ({ courseId }) => {
+const SearchableStudentEnrollment = ({ courseId }: { courseId: string }) => {
     const params = useParams();
-    const [students, setStudents] = useState([]);
+    interface Student {
+        id: string;
+        first_name: string;
+        last_name: string;
+    }
+    
+    const [students, setStudents] = useState<Student[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
-    const [generalError, setGeneralError] = useState(null);
+    const [generalError, setGeneralError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [showMessage, setShowMessage] = useState(false);
     const userId = params.userId;
-    
+
 
     useEffect(() => {
         const fetchStudents = async () => {
@@ -30,14 +36,14 @@ const SearchableStudentEnrollment = ({ courseId }) => {
 
     useEffect(() => {
         const timer = setTimeout(() => {
-          setShowMessage(false);
+            setShowMessage(false);
         }, 5000); // 5 seconds delay
-    
+
         // Cleanup the timer when the component unmounts or re-renders
         return () => clearTimeout(timer);
-      }, []);
+    }, []);
 
-    const handleEnroll = async (studentId) => {
+    const handleEnroll = async (studentId: any) => {
         setLoading(true);
         try {
             await axios.post('/api/enrollment', {
@@ -49,7 +55,11 @@ const SearchableStudentEnrollment = ({ courseId }) => {
             window.location.href = `/teacher/${userId}/mycourse/${courseId}?section=participants`;
         } catch (error) {
             console.error('Error enrolling student:', error);
-            setGeneralError(error.response?.data?.error || 'Failed to enroll student');
+            if (axios.isAxiosError(error)) {
+                setGeneralError(error.response?.data?.error || 'Failed to enroll student');
+            } else {
+                setGeneralError('Failed to enroll student');
+            }
         } finally {
             setLoading(false);
         }
@@ -73,15 +83,15 @@ const SearchableStudentEnrollment = ({ courseId }) => {
                         <p className="text-gray-600 dark:text-gray-300 mb-4">
                             The participant has been enrolled to the course.
                         </p>
-                    
+
                         <div className="flex gap-4">
                             <button
                                 onClick={() => setShowMessage(false)}
                                 className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg"
                             >
-                               Cancel 
+                                Cancel
                             </button>
-                           
+
                         </div>
                     </div>
                 </div>

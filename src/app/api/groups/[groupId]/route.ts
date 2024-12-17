@@ -98,7 +98,7 @@ async function deleteRelatedDocuments(collectionName: string, field: string, gro
 
     if (!querySnapshot.empty) {
         await batch.commit();
-        console.log(`Deleted documents from ${collectionName} for userId ${userId}.`);
+        console.log(`Deleted documents from ${collectionName} for groupId ${groupId}.`);
     }
 }
 

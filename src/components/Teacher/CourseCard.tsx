@@ -115,7 +115,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ courses, userId }) => {
                         </h2>
                         <p className="text-gray-600 dark:text-gray-300 mb-4">
                             Are you sure you want to delete this course?
-                            Type "confirm" below to proceed.
+                            Type &quot;confirm&quot; below to proceed.
                         </p>
                         <input
                             type="text"

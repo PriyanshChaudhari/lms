@@ -6,10 +6,13 @@ export async function GET(req: NextRequest) {
     try {
         const usersCollectionRef = collection(db, 'users');
         const usersSnapshot = await getDocs(usersCollectionRef);
-        const usersList = usersSnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-        })).filter(user => user.role === "Student");
+        const usersList = usersSnapshot.docs.map(doc => {
+            const data = doc.data() as { id: string, role: string };
+            return {
+                ...data,
+                id: doc.id
+            };
+        }).filter(user => user.role === "Student");
 
         // Return the list of users as JSON
         return NextResponse.json(usersList);
