@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { query, where, getDocs, collection, doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebaseConfig';
-import bcrypt from 'bcryptjs'
+import bcrypt from 'bcryptjs';
 
-export default function ResetPassword() {
+const ResetPassword = () => {
     const searchParams = useSearchParams();
     const [newPassword, setNewPassword] = useState<string>('');
     const [message, setMessage] = useState<string>('');
@@ -39,9 +39,9 @@ export default function ResetPassword() {
                 setMessage('Token has expired.');
                 return;
             }
-            console.log(`new pass : ${newPassword}`)
+            console.log(`new pass : ${newPassword}`);
             const hashedPassword = await bcrypt.hash(newPassword, 10);
-            console.log(hashedPassword)
+            console.log(hashedPassword);
             // Update the password in the user's document with the hashed password
             await updateDoc(userDoc.ref, { password: hashedPassword });
 
@@ -100,4 +100,12 @@ export default function ResetPassword() {
             </div>
         </div>
     );
-}
+};
+
+const ResetPasswordPage = () => (
+    <Suspense fallback={<div>Loading...</div>}>
+        <ResetPassword />
+    </Suspense>
+);
+
+export default ResetPasswordPage;
